@@ -11,7 +11,7 @@
     </head>
     <body ng-controller="GameTimelineController as ctrl">
         <timeline>
-            <timeline-event ng-repeat="game in ctrl.games" side="">
+            <timeline-event ng-repeat="game in games" side="">
                 <timeline-badge class="info">
                     <i class="glyphicon glyphicon-check"></i>
                 </timeline-badge>
@@ -24,5 +24,6 @@
                 </timeline-panel>
             </timeline-event>
         </timeline>
+        <button ng-click="reorder()" type="button" style="position: fixed; bottom: 35px;">Sort</button>
     </body>
 </html>
