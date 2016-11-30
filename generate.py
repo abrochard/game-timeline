@@ -47,7 +47,7 @@ def parseFields(game, data, fields):
 def setCover(game, data):
     if 'cover' in data:
         game['cloudHash']=data['cover']['cloudinary_id']
-        game['coverURL']='https://res.cloudinary.com/igdb/image/upload/t_cover_big/' + game['cloudHash'] + '.jpg'
+        game['coverURL']='https://images.igdb.com/igdb/image/upload/t_cover_big/' + game['cloudHash'] + '.jpg'
     else:
         game['cloudHash']=''
         game['coverURL']='#'
