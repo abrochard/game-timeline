@@ -46,7 +46,7 @@
         </script>
     </head>
     <body ng-controller="GameTimelineController as ctrl">
-        <div style="margin-left: 20px;margin-right: 20px;margin-top: 20px;" ng-cloak>
+        <div class="timeline-container" ng-cloak>
             <timeline>
                 <timeline-event ng-repeat="game in games.filter(isVisible)" side="">
                     <timeline-badge class="info">
@@ -59,14 +59,14 @@
                         <p>{{game.date}}</p>
                         <md-chips ng-model="game.support" readonly="true" md-removable="false"></md-chips>
                         <md-chips ng-model="game.genre" readonly="true" md-removable="false"></md-chips>
-                        <p><a href="{{game.url}}"><img src="covers/{{game.slug}}.jpg" style="width:100%;"/></a></p>
+                        <p><a href="{{game.url}}"><img src="covers/{{game.slug}}.jpg" class="game-covers"/></a></p>
                     </timeline-panel>
                 </timeline-event>
             </timeline>
 
-            <md-fab-speed-dial md-open="isOpen" md-direction="up" class="md-fling" style="position:fixed; bottom:10px; z-index:999;">
+            <md-fab-speed-dial md-open="isOpen" md-direction="up" class="md-fling speed-dial-menu">
                 <md-fab-trigger>
-                    <md-button aria-label="menu" class="md-fab md-warn" style="background-color:forestgreen;">
+                    <md-button aria-label="menu" class="md-fab md-warn speed-dial-menu-button">
                         <i class="glyphicon glyphicon-menu-hamburger"></i>
                     </md-button>
                 </md-fab-trigger>
