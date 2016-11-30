@@ -48,14 +48,16 @@
         <timeline>
             <timeline-event ng-repeat="game in games.filter(isVisible)" side="">
                 <timeline-badge class="info">
-                    <i class="glyphicon glyphicon-check"></i>
+                    <i class="glyphicon {{ game.completed ? 'glyphicon-check' : 'glyphicon-file' }}"></i>
                 </timeline-badge>
                 <timeline-panel class="info">
                     <timeline-heading>
                         <h4>{{game.title}}</h4>
                     </timeline-heading>
                     <p>{{game.date}}</p>
-                    <p><img src="covers/{{game.slug}}.jpg"/></p>
+                    <md-chips ng-model="game.support" readonly="true" md-removable="false"></md-chips>
+                    <md-chips ng-model="game.genre" readonly="true" md-removable="false"></md-chips>
+                    <p><a href="{{game.url}}"><img src="covers/{{game.slug}}.jpg"/></a></p>
                 </timeline-panel>
             </timeline-event>
         </timeline>
