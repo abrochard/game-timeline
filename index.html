@@ -17,6 +17,8 @@
 
 
         <script src="bower_components/angular/angular.min.js"></script>
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
         <script src="bower_components/angular-timeline/dist/angular-timeline.js"></script>
         <script src="bower_components/angular-animate/angular-animate.min.js"></script>
         <script src="bower_components/angular-scroll-animate/dist/angular-scroll-animate.js"></script>
@@ -31,7 +33,6 @@
         <link rel="stylesheet" href="bower_components/angular-timeline/dist/angular-timeline-bootstrap.css" />
         <link rel="stylesheet" href="bower_components/angular-timeline/dist/angular-timeline-animations.css" />
         <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
-        <link rel="stylesheet" href="bower_components/angular-timeline/dist/angular-timeline-bootstrap.css" />
 
         <!-- Google Analytics -->
         <script>
@@ -45,27 +46,29 @@
         </script>
     </head>
     <body ng-controller="GameTimelineController as ctrl">
-        <timeline>
-            <timeline-event ng-repeat="game in games.filter(isVisible)" side="">
-                <timeline-badge class="info">
-                    <i class="glyphicon {{ game.completed ? 'glyphicon-check' : 'glyphicon-file' }}"></i>
-                </timeline-badge>
-                <timeline-panel class="info">
-                    <timeline-heading>
-                        <h4>{{game.title}}</h4>
-                    </timeline-heading>
-                    <p>{{game.date}}</p>
-                    <md-chips ng-model="game.support" readonly="true" md-removable="false"></md-chips>
-                    <md-chips ng-model="game.genre" readonly="true" md-removable="false"></md-chips>
-                    <p><a href="{{game.url}}"><img src="covers/{{game.slug}}.jpg"/></a></p>
-                </timeline-panel>
-            </timeline-event>
-        </timeline>
-        <md-switch ng-model="filters.completedOnly" style="position: fixed; bottom: 65px;" aria-label="Completed Only" ng-change="completedOnly(filters.completedOnly)">
-            Completed Only {{ filters.completedOnly }}
-        </md-switch>
-        <md-switch ng-model="filters.alphaAsc" style="position: fixed; bottom: 35px;" aria-label="Sort Alpha" ng-change="sortAlpha(filters.alphaAsc)">
-            Alphabetical {{ filters.alphaAsc == true ? 'asc' : 'desc'}}
-        </md-switch>
+        <div style="margin-left: 20px;margin-right: 20px;margin-top: 20px;">
+            <timeline>
+                <timeline-event ng-repeat="game in games.filter(isVisible)" side="">
+                    <timeline-badge class="info">
+                        <i class="glyphicon {{ game.completed ? 'glyphicon-check' : 'glyphicon-file' }}"></i>
+                    </timeline-badge>
+                    <timeline-panel class="info">
+                        <timeline-heading>
+                            <h4>{{game.title}}</h4>
+                        </timeline-heading>
+                        <p>{{game.date}}</p>
+                        <md-chips ng-model="game.support" readonly="true" md-removable="false"></md-chips>
+                        <md-chips ng-model="game.genre" readonly="true" md-removable="false"></md-chips>
+                        <p><a href="{{game.url}}"><img src="covers/{{game.slug}}.jpg"/></a></p>
+                    </timeline-panel>
+                </timeline-event>
+            </timeline>
+            <md-switch ng-model="filters.completedOnly" style="position: fixed; bottom: 65px;" aria-label="Completed Only" ng-change="completedOnly(filters.completedOnly)">
+                Completed Only {{ filters.completedOnly }}
+            </md-switch>
+            <md-switch ng-model="filters.alphaAsc" style="position: fixed; bottom: 35px;" aria-label="Sort Alpha" ng-change="sortAlpha(filters.alphaAsc)">
+                Alphabetical {{ filters.alphaAsc == true ? 'asc' : 'desc'}}
+            </md-switch>
+        </div>
     </body>
 </html>
