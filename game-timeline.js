@@ -17,6 +17,10 @@ angular.module('gameApp',
       return clone;
     }
 
+    $scope.refresh = function() {
+      $scope.games = games;
+    };
+
     $scope.reorder = function() {
       if ($scope.filters.alphabetical == true) {
         $scope.games = clone($scope.backup);
