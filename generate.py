@@ -4,6 +4,7 @@ import os.path
 import hashlib
 import urllib
 import json
+from subprocess import call
 
 import private
 # IGDB = {'KEY': 'XXXXXXXXXXXXXXXXXXXXXXXXXX',
@@ -79,9 +80,7 @@ def getGameCover(game):
     if os.path.isfile(dest) or ('coverURL' not in game) or game['coverURL']=='#' or game['coverURL']=='':
         return False
     url=game['coverURL']
-    f=open(dest, 'wb')
-    f.write(urllib.request.urlopen(url).read())
-    f.close()
+    call(["wget", url, "-O", dest])
     return True
 
 def md5(fname):
