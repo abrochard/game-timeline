@@ -40,6 +40,14 @@ angular.module('gameApp',
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
     }
 
+    function sortFinishedAsc(a, b) {
+      return a.date > b.date;
+    }
+
+    function sortFinishedDesc(a, b) {
+      return a.date < b.date;
+    }
+
     $scope.isVisible = function(g) {
       return g.visible == true;
     };
