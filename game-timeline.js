@@ -13,12 +13,26 @@ angular.module('gameApp',
       alphaAsc: false
     };
 
+    $scope.isOpen = false;
+
     function clone(obj) {
       var clone = [];
       for (var i = 0; i < obj.length; i++) {
         clone[i] = obj[i];
       }
       return clone;
+    }
+
+    function shuffle(a) {
+      var j;
+      var x;
+      var i;
+      for (i = a.length; i; i--) {
+        j = Math.floor(Math.random() * i);
+        x = a[i - 1];
+        a[i - 1] = a[j];
+        a[j] = x;
+      }
     }
 
     function setAllVisible(list) {
@@ -56,23 +70,31 @@ angular.module('gameApp',
       $scope.games = games;
     };
 
-    $scope.sortAlpha = function(b) {
-      if (b) {
+    $scope.sortAlpha = function() {
+      if ($scope.filters.alphaAsc == false) {
         $scope.games.sort(sortAlphaAsc);
+        $scope.filters.alphaAsc = true;
       } else {
         $scope.games.sort(sortAlphaDesc);
+        $scope.filters.alphaAsc = false;
       }
     };
 
-    $scope.completedOnly = function(b) {
-      if (b) {
+    $scope.completedOnly = function() {
+      if ($scope.filters.completedOnly == false) {
         for (var i = 0; i < $scope.games.length; i++) {
           if ($scope.games[i].completed != true) {
             $scope.games[i].visible = false;
           }
         }
+        $scope.filters.completedOnly = true;
       } else {
         $scope.games = setAllVisible($scope.games);
+        $scope.filters.completedOnly = false;
       }
+    };
+
+    $scope.random = function() {
+      shuffle($scope.games);
     };
   });

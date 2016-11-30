@@ -46,11 +46,11 @@
         </script>
     </head>
     <body ng-controller="GameTimelineController as ctrl">
-        <div style="margin-left: 20px;margin-right: 20px;margin-top: 20px;">
+        <div style="margin-left: 20px;margin-right: 20px;margin-top: 20px;" ng-cloak>
             <timeline>
                 <timeline-event ng-repeat="game in games.filter(isVisible)" side="">
                     <timeline-badge class="info">
-                        <i class="glyphicon {{ game.completed ? 'glyphicon-check' : 'glyphicon-file' }}"></i>
+                        <i class="glyphicon {{ game.completed ? 'glyphicon-check' : 'glyphicon-unchecked' }}"></i>
                     </timeline-badge>
                     <timeline-panel class="info">
                         <timeline-heading>
@@ -63,12 +63,26 @@
                     </timeline-panel>
                 </timeline-event>
             </timeline>
-            <md-switch ng-model="filters.completedOnly" style="position: fixed; bottom: 65px;" aria-label="Completed Only" ng-change="completedOnly(filters.completedOnly)">
-                Completed Only {{ filters.completedOnly }}
-            </md-switch>
-            <md-switch ng-model="filters.alphaAsc" style="position: fixed; bottom: 35px;" aria-label="Sort Alpha" ng-change="sortAlpha(filters.alphaAsc)">
-                Alphabetical {{ filters.alphaAsc == true ? 'asc' : 'desc'}}
-            </md-switch>
+
+            <md-fab-speed-dial md-open="isOpen" md-direction="up" class="md-fling" style="position:fixed; bottom:10px; z-index:999;">
+                <md-fab-trigger>
+                    <md-button aria-label="menu" class="md-fab md-warn" style="background-color:forestgreen;">
+                        <i class="glyphicon glyphicon-menu-hamburger"></i>
+                    </md-button>
+                </md-fab-trigger>
+
+                <md-fab-actions>
+                    <md-button aria-label="Alpha" class="md-fab md-raised md-mini" ng-click="sortAlpha()">
+                        <i class="glyphicon {{filters.alphaAsc ? 'glyphicon-sort-by-alphabet' : 'glyphicon-sort-by-alphabet-alt'}}"></i>
+                    </md-button>
+                    <md-button aria-label="Completed" class="md-fab md-raised md-mini" ng-click="completedOnly()">
+                        <i class="glyphicon {{filters.completedOnly ? 'glyphicon-unchecked' : 'glyphicon-check' }}"></i>
+                    </md-button>
+                    <md-button aria-label="Random" class="md-fab md-raised md-mini" ng-click="random()">
+                        <i class="glyphicon glyphicon-random"></i>
+                    </md-button>
+                </md-fab-actions>
+            </md-fab-speed-dial>
         </div>
     </body>
 </html>
