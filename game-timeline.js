@@ -1,13 +1,17 @@
 angular.module('gameApp',
                [
                  'angular-timeline',
-                 'angular-scroll-animate'
+                 'angular-scroll-animate',
+                 'ngMaterial'
                ])
   .controller('GameTimelineController', function($scope) {
 
-    $scope.games = games;
+    $scope.games = setAllVisible(games).sort(sortAlphaDesc);;
     $scope.backup = clone(games);
-    $scope.filters = {};
+    $scope.filters = {
+      completedOnly: false,
+      alphaAsc: false
+    };
 
     function clone(obj) {
       var clone = [];
@@ -17,31 +21,50 @@ angular.module('gameApp',
       return clone;
     }
 
+    function setAllVisible(list) {
+      for (var i = 0; i < list.length; i++) {
+        list[i].visible = true;
+      }
+      return list;
+    }
+
+    function sortAlphaAsc(a, b) {
+      var textA = a.title.toUpperCase();
+      var textB = b.title.toUpperCase();
+      return (textA < textB) ? 1 : (textA > textB) ? -1 : 0;
+    }
+
+    function sortAlphaDesc(a, b) {
+      var textA = a.title.toUpperCase();
+      var textB = b.title.toUpperCase();
+      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    }
+
+    $scope.isVisible = function(g) {
+      return g.visible == true;
+    };
+
     $scope.refresh = function() {
       $scope.games = games;
     };
 
-    $scope.reorder = function() {
-      if ($scope.filters.alphabetical == true) {
-        $scope.games = clone($scope.backup);
-        $scope.filters.alphabetical = false;
+    $scope.sortAlpha = function(b) {
+      if (b) {
+        $scope.games.sort(sortAlphaAsc);
       } else {
-        $scope.games.sort(function(a, b) {
-          return a.title > b.title;
-        });
-        $scope.filters.alphabetical = true;
+        $scope.games.sort(sortAlphaDesc);
       }
     };
 
-    $scope.completedOnly = function() {
-      if ($scope.filters.completedOnly == true) {
-        $scope.games = $scope.backup;
-        $scope.filters.completedOnly = false;
+    $scope.completedOnly = function(b) {
+      if (b) {
+        for (var i = 0; i < $scope.games.length; i++) {
+          if ($scope.games[i].completed != true) {
+            $scope.games[i].visible = false;
+          }
+        }
       } else {
-        $scope.games = $scope.games.filter(function(g) {
-          return g.completed == true;
-        });
-        $scope.filters.completedOnly = true;
+        $scope.games = setAllVisible($scope.games);
       }
     };
   });
