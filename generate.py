@@ -29,6 +29,9 @@ AIRTABLE_FIELDS = {'airtableId' :['id'],
                    'completed'  :['fields', 'Completed'],
                    'igdbId'     :['fields', 'IGDB ID']}
 
+IGDB_COVERS_BASE = 'https://images.igdb.com/igdb/image/upload/'
+IGDB_COVERS_SIZES = ['cover_big', 'cover_small']
+
 def parseFields(game, data, fields):
     for key in fields:
         path=fields[key]
@@ -47,11 +50,14 @@ def parseFields(game, data, fields):
 
 def setCover(game, data):
     if 'cover' in data:
-        game['cloudHash']=data['cover']['cloudinary_id']
-        game['coverURL']='https://images.igdb.com/igdb/image/upload/t_cover_big/' + game['cloudHash'] + '.jpg'
+        h=data['cover']['cloudinary_id']
+        game['cloudHash']=h
+        game['coverURL']=[]
+        for size in IGDB_COVERS_SIZES:
+            game['coverURL'].append({'size': size, 'url': IGDB_COVERS_BASE + 't_' + size + '/' + h + '.jpg'})
     else:
         game['cloudHash']=''
-        game['coverURL']='#'
+        game['coverURL']=[]
     return game
 
 def igdbSearch(title):
@@ -76,11 +82,10 @@ def getAllRecords(records=[], offset=''):
         return records
 
 def getGameCover(game):
-    dest='covers/'+game['slug']+'.jpg'
-    if os.path.isfile(dest) or ('coverURL' not in game) or game['coverURL']=='#' or game['coverURL']=='':
-        return False
-    url=game['coverURL']
-    call(["wget", url, "-O", dest])
+    for cover in game['coverURL']:
+        dest='covers/'+cover['size']+'/'+game['slug']+'.jpg'
+        if os.path.isfile(dest) == False:
+            call(["wget", cover['url'], "-O", dest])
     return True
 
 def md5(fname):
@@ -144,6 +149,12 @@ def loadGames():
             games = pickle.load(f)
         print('Games loaded')
         return games
+
+    if not os.path.exists('covers/'):
+        os.makedirs('covers/')
+    for size in IGDB_COVERS_SIZES:
+        if not os.path.exists('covers/'+size):
+            os.makedirs('covers/'+size)
 
     records=loadRecords()
     games=parseRecords(records)

@@ -3,3 +3,5 @@
 /airtable.data.pickle
 /__pycache__/
 /.jscsrc
+/private.pyc
+/py3env/
