@@ -112,12 +112,9 @@ def matchIGDB(game):
         r = getGameData([game])
     else:
         r=igdbSearch(game['title'])
-    if len(r)==0:
-        return game
-    else:
-        game = parseFields(game, r[0], IGDB_FIELDS)
-        game = setCover(game, r[0])
-        return game
+    game = parseFields(game, r[0], IGDB_FIELDS)
+    game = setCover(game, r[0])
+    return game
 
 def getGameData(games):
     url= private.IGDB['HOST']
