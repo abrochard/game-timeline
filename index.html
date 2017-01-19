@@ -59,7 +59,7 @@
                         <p>{{game.date}}</p>
                         <md-chips ng-model="game.support" readonly="true" md-removable="false"></md-chips>
                         <md-chips ng-model="game.genre" readonly="true" md-removable="false"></md-chips>
-                        <p><a href="{{game.url}}"><img src="covers/cover_big/{{game.slug}}.jpg" class="game-covers"/></a></p>
+                        <p><a href="{{game.url}}"><img src="covers/{{isMobile() ? 'cover_small' : 'cover_big'}}/{{game.slug}}.jpg" class="game-covers"/></a></p>
                     </timeline-panel>
                 </timeline-event>
             </timeline>
@@ -77,6 +77,9 @@
                     </md-button>
                     <md-button aria-label="Completed" class="md-fab md-raised md-mini" ng-click="completedOnly()">
                         <i class="glyphicon {{filters.completedOnly ? 'glyphicon-unchecked' : 'glyphicon-check' }}"></i>
+                    </md-button>
+                    <md-button aria-label="Date played" class="md-fab md-raised md-mini" ng-click="playedDate()">
+                        <i class="glyphicon glyphicon-calendar"></i>
                     </md-button>
                     <md-button aria-label="Random" class="md-fab md-raised md-mini" ng-click="random()">
                         <i class="glyphicon glyphicon-random"></i>

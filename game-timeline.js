@@ -6,14 +6,19 @@ angular.module('gameApp',
                ])
   .controller('GameTimelineController', function($scope) {
 
-    $scope.games = setAllVisible(games).sort(sortAlphaDesc);;
+    $scope.games = setAllVisible(games).sort(sortAlphaDesc);
     $scope.backup = clone(games);
     $scope.filters = {
       completedOnly: false,
-      alphaAsc: false
+      alphaAsc: false,
+      playedDate: false
     };
 
     $scope.isOpen = false;
+
+    $scope.isMobile = function() {
+      return window.innerWidth <= 800;
+    };
 
     function clone(obj) {
       var clone = [];
@@ -54,16 +59,32 @@ angular.module('gameApp',
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
     }
 
-    function sortFinishedAsc(a, b) {
-      return a.date > b.date;
+    function sortPlayedDateAsc(a, b) {
+      if (a.date === '' && b.date === '') {
+        return sortAlphaDesc(a, b);
+      } else if (a.date === '') {
+        return 1;
+      } else if (b.date === '') {
+        return -1;
+      }
+      return (new Date(a.date) < new Date(b.date)) ?
+        1 : (new Date(a.date) > new Date(b.date)) ? -1 : 0;
     }
 
-    function sortFinishedDesc(a, b) {
-      return a.date < b.date;
+    function sortPlayedDateDesc(a, b) {
+      if (a.date === '' && b.date === '') {
+        return sortAlphaDesc(a, b);
+      } else if (a.date === '') {
+        return 1;
+      } else if (b.date === '') {
+        return -1;
+      }
+      return (new Date(a.date) < new Date(b.date)) ?
+        -1 : (new Date(a.date) > new Date(b.date)) ? 1 : 0;
     }
 
     $scope.isVisible = function(g) {
-      return g.visible == true;
+      return g.visible === true;
     };
 
     $scope.refresh = function() {
@@ -71,7 +92,7 @@ angular.module('gameApp',
     };
 
     $scope.sortAlpha = function() {
-      if ($scope.filters.alphaAsc == false) {
+      if ($scope.filters.alphaAsc === false) {
         $scope.games.sort(sortAlphaAsc);
         $scope.filters.alphaAsc = true;
       } else {
@@ -81,9 +102,9 @@ angular.module('gameApp',
     };
 
     $scope.completedOnly = function() {
-      if ($scope.filters.completedOnly == false) {
+      if ($scope.filters.completedOnly === false) {
         for (var i = 0; i < $scope.games.length; i++) {
-          if ($scope.games[i].completed != true) {
+          if ($scope.games[i].completed !== true) {
             $scope.games[i].visible = false;
           }
         }
@@ -91,6 +112,16 @@ angular.module('gameApp',
       } else {
         $scope.games = setAllVisible($scope.games);
         $scope.filters.completedOnly = false;
+      }
+    };
+
+    $scope.playedDate = function() {
+      if ($scope.filters.playedDate === false) {
+        $scope.games.sort(sortPlayedDateAsc);
+        $scope.filters.playedDate = true;
+      } else {
+        $scope.games.sort(sortPlayedDateDesc);
+        $scope.filters.playedDate = false;
       }
     };
 
