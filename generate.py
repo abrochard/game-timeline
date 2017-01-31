@@ -103,7 +103,7 @@ def parseRecords(records):
     return games
 
 def titleDiff(title, slug):
-    lt = len(title.split(' '))
+    lt = len(title.replace('-', ' ').replace("'", ' ').split(' '))
     ls = len(slug.split('-'))
     return ls - lt
 
