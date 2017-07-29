@@ -63,7 +63,7 @@ def setCover(game, data):
 def igdbSearch(title):
     title = title.replace(' ', '+')
     url = private.IGDB['HOST'] + '?fields=*&limit=1&search=' + title
-    headers = {'X-Mashape-Key': private.IGDB['KEY'],
+    headers = {'user-key': private.IGDB['KEY'],
                'Accept': 'application/json'}
     r = requests.get(url, headers=headers)
     return r.json()
@@ -122,7 +122,7 @@ def getGameData(games):
         url += str(g['igdbId']) + ','
         url = url[:-1] # remove final char
         url += '?fields=*'
-        headers = {'X-Mashape-Key': private.IGDB['KEY'],
+        headers = {'user-key': private.IGDB['KEY'],
                    'Accept': 'application/json'}
         r = requests.get(url, headers=headers)
     return r.json()
