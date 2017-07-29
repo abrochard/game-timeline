@@ -51,10 +51,12 @@ def parseFields(game, data, fields):
 def setCover(game, data):
     if 'cover' in data:
         h=data['cover']['cloudinary_id']
+        url=data['cover']['url']
         game['cloudHash']=h
         game['coverURL']=[]
         for size in IGDB_COVERS_SIZES:
-            game['coverURL'].append({'size': size, 'url': IGDB_COVERS_BASE + 't_' + size + '/' + h + '.jpg'})
+            #game['coverURL'].append({'size': size, 'url': IGDB_COVERS_BASE + 't_' + size + '/' + h + '.jpg'})
+            game['coverURL'].append({'size': size, 'url': 'https:' + url.replace('t_thumb', 't_' + size)})
     else:
         game['cloudHash']=''
         game['coverURL']=[]
