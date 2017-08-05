@@ -32,6 +32,8 @@ AIRTABLE_FIELDS = {'airtableId' :['id'],
 IGDB_COVERS_BASE = 'https://images.igdb.com/igdb/image/upload/'
 IGDB_COVERS_SIZES = ['cover_big', 'cover_small']
 
+MAX_CHUNKS = 50
+
 def parseFields(game, data, fields):
     for key in fields:
         path=fields[key]
@@ -108,25 +110,53 @@ def titleDiff(title, slug):
     lt = len(title.replace('-', ' ').replace("'", ' ').split(' '))
     ls = len(slug.split('-'))
     return ls - lt
+	
+def has_id(game):
+    return game['igdbId'] != ''
 
-def matchIGDB(game):
-    if game['igdbId'] != '':
-        r = getGameData([game])
-    else:
-        r=igdbSearch(game['title'])
-    game = parseFields(game, r[0], IGDB_FIELDS)
-    game = setCover(game, r[0])
-    return game
+def no_id(game):
+    return game['igdbId'] == ''
+
+def split_chunks(l, n):
+    chunks = []
+    for i in xrange(0, len(l), n):
+        chunks.append(l[i:i+n])
+    return chunks
+
+def matchIGDB(games):
+    with_id = filter(has_id, games)
+    without_id = filter(no_id, games)
+
+    chunks = split_chunks(with_id, MAX_CHUNKS)
+    data = []
+    for chunk in chunks:
+        data = data + getGameData(chunk)
+
+    for i in range(len(with_id)):
+        with_id[i] = parseFields(with_id[i], data[i], IGDB_FIELDS)
+        with_id[i] = setCover(with_id[i], data[i])
+		
+    for i in range(len(without_id)):
+        r = igdbSearch(without_id[i]['title'])
+        without_id[i] = parseFields(without_id[i], r[0], IGDB_FIELDS)
+        without_id[i] = setCover(without_id[i], r[0])
+	
+    games = with_id + without_id
+    for g in games:
+        if titleDiff(g['title'], g['slug']) > 0:
+            print(g['title'], g['slug'])
+
+    return games
 
 def getGameData(games):
     url= private.IGDB['HOST']
     for g in games:
         url += str(g['igdbId']) + ','
-        url = url[:-1] # remove final char
-        url += '?fields=*'
-        headers = {'user-key': private.IGDB['KEY'],
-                   'Accept': 'application/json'}
-        r = requests.get(url, headers=headers)
+    url = url[:-1] # remove final char
+    url += '?fields=*'
+    headers = {'user-key': private.IGDB['KEY'],
+               'Accept': 'application/json'}
+    r = requests.get(url, headers=headers)
     return r.json()
 
 def loadRecords():
@@ -157,13 +187,11 @@ def loadGames():
 
     records=loadRecords()
     games=parseRecords(records)
+    games = matchIGDB(games)
 
     for i in range(len(games)):
-        games[i]=matchIGDB(games[i])
+        #games[i]=matchIGDB(games[i])
         getGameCover(games[i])
-        g = games[i]
-        if titleDiff(g['title'], g['slug']) > 0:
-            print(g['title'], g['slug'])
 
     with open('games.data.pickle', 'wb') as f:
         pickle.dump(games, f, pickle.HIGHEST_PROTOCOL)
