@@ -1,7 +1,7 @@
 <!doctype html>
 <html ng-app="gameApp">
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
         <title>Game Timeline</title>
 
         <!-- favicon thanks to freefavicon.com -->
@@ -27,6 +27,7 @@
         <script src="bower_components/angular-material/angular-material.min.js"></script>
         <script src="game-timeline-data.js"></script>
         <script src="game-timeline.js"></script>
+	<script src="node_modules/ng-infinite-scroll/build/ng-infinite-scroll.min.js"></script>
         <link rel="stylesheet" href="game-timeline.css">
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
         <link rel="stylesheet" href="bower_components/angular-timeline/dist/angular-timeline.css"/>
@@ -48,6 +49,7 @@
     <body ng-controller="GameTimelineController as ctrl">
         <div class="timeline-container" ng-cloak>
             <timeline>
+	    <div infinite-scroll='loadMore()' infinite-scroll-distance='2'>
                 <timeline-event ng-repeat="game in games.filter(isVisible)" side="">
                     <timeline-badge class="info">
                         <i class="glyphicon {{ game.completed ? 'glyphicon-check' : 'glyphicon-unchecked' }}"></i>
@@ -59,9 +61,13 @@
                         <p>{{game.date}}</p>
                         <md-chips ng-model="game.support" readonly="true" md-removable="false"></md-chips>
                         <md-chips ng-model="game.genre" readonly="true" md-removable="false"></md-chips>
-                        <p><a href="{{game.url}}"><img src="covers/{{isMobile() ? 'cover_small' : 'cover_big'}}/{{game.slug}}.jpg" class="game-covers"/></a></p>
+                        <p>
+			    <!--<a href="{{game.url}}"><img src="covers/{{isMobile() ? 'cover_small' : 'cover_big'}}/{{game.slug}}.jpg" class="game-covers"/></a>-->
+			    <a href="{{game.url}}"><img src="covers/cover_big/{{game.slug}}.jpg" class="game-covers"/></a>
+			</p>
                     </timeline-panel>
                 </timeline-event>
+		</div>
             </timeline>
 
             <md-fab-speed-dial md-open="isOpen" md-direction="up" class="md-fling speed-dial-menu">

@@ -2,11 +2,23 @@ angular.module('gameApp',
                [
                  'angular-timeline',
                  'angular-scroll-animate',
-                 'ngMaterial'
+                 'ngMaterial',
+		 'infinite-scroll'
                ])
   .controller('GameTimelineController', function($scope) {
+    
+    $scope.pageSize = 10;
+    $scope.page = 0;
+    $scope.allGames = setAllVisible(games).sort(sortAlphaDesc);
+    $scope.games = [];
 
-    $scope.games = setAllVisible(games).sort(sortAlphaDesc);
+    $scope.loadMore = function() {
+      $scope.games = $scope.games.concat($scope.allGames.slice($scope.page, $scope.page + $scope.pageSize));
+      $scope.page += $scope.pageSize;
+    };
+
+
+    $scope.loadMore();
     $scope.backup = clone(games);
     $scope.filters = {
       completedOnly: false,
@@ -15,6 +27,12 @@ angular.module('gameApp',
     };
 
     $scope.isOpen = false;
+    
+    var resetPage = function() {
+      $scope.page = 0;
+      $scope.games = [];
+      $scope.loadMore();
+    };
 
     $scope.isMobile = function() {
       return window.innerWidth <= 800;
@@ -93,39 +111,44 @@ angular.module('gameApp',
 
     $scope.sortAlpha = function() {
       if ($scope.filters.alphaAsc === false) {
-        $scope.games.sort(sortAlphaAsc);
+        $scope.allGames.sort(sortAlphaAsc);
         $scope.filters.alphaAsc = true;
       } else {
         $scope.games.sort(sortAlphaDesc);
-        $scope.filters.alphaAsc = false;
+        $scope.allGames.alphaAsc = false;
       }
+
+      resetPage();
     };
 
     $scope.completedOnly = function() {
       if ($scope.filters.completedOnly === false) {
-        for (var i = 0; i < $scope.games.length; i++) {
-          if ($scope.games[i].completed !== true) {
-            $scope.games[i].visible = false;
+        for (var i = 0; i < $scope.allGames.length; i++) {
+          if ($scope.allGames[i].completed !== true) {
+            $scope.allGames[i].visible = false;
           }
         }
         $scope.filters.completedOnly = true;
       } else {
-        $scope.games = setAllVisible($scope.games);
+        $scope.allGames = setAllVisible($scope.allGames);
         $scope.filters.completedOnly = false;
       }
+      resetPage();
     };
 
     $scope.playedDate = function() {
       if ($scope.filters.playedDate === false) {
-        $scope.games.sort(sortPlayedDateAsc);
+        $scope.allGames.sort(sortPlayedDateAsc);
         $scope.filters.playedDate = true;
       } else {
-        $scope.games.sort(sortPlayedDateDesc);
+        $scope.allGames.sort(sortPlayedDateDesc);
         $scope.filters.playedDate = false;
       }
+      resetPage();
     };
 
     $scope.random = function() {
-      shuffle($scope.games);
+      shuffle($scope.allGames);
+      resetPage();
     };
   });
