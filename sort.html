@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+	<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+        <title>Game Sorter</title>
+		
+		<script src="game-timeline-data.js"></script>
+		<script src="Sorter.js"></script>
+		<script src="bower_components/jquery/dist/jquery.min.js"></script>
+		<script>
+			var shuffle = function(array) {
+				var i = 0;
+				var j = 0;
+				var temp = null;
+
+			  for (i = array.length - 1; i > 0; i -= 1) {
+				j = Math.floor(Math.random() * (i + 1))
+				temp = array[i]
+				array[i] = array[j]
+				array[j] = temp
+			  }
+			  
+			  return array;
+			};	
+				
+			var showGame = function(side, game) {
+				$('#'+side+' img').attr('src', 'covers/cover_big/'+game.slug+'.jpg')
+				$('#'+side+' .title').text(game.title);
+				$('#'+side+' .support').text(game.support);
+			};
+			
+			var showResult = function(arr) {
+				$('.Row').hide();
+				$('.results').show();
+				
+				var output = arr.map((x) => {
+					return '<li>' + x['title'] + '</li>';
+				});				
+				
+				$('ol').html(output);
+			};
+			
+			var initSorter = function(n) {
+				var subset = [];
+				if (n>=2) {
+					subset = shuffle(games).slice(0, n);
+				} else {
+					subset = games;
+				}
+				
+				var sorter = new Sorter(
+					subset, 
+					function(game) { showGame('left', game); }, 
+					function(game) { showGame('right', game) }, 
+					showResult
+				);
+		
+				var picker = sorter.pickerFunctions();
+				
+				$('#left').click(picker.left);
+				$('#right').click(picker.right);
+				$('.Row').show();
+			};
+			
+			function keypressInBox(e) {
+				var code = (e.keyCode ? e.keyCode : e.which);
+				if (code == 13) { //Enter keycode                        
+					e.preventDefault();
+
+					var n = parseInt($('#number').val());
+					$('.picker').hide();
+					initSorter(n);
+				}
+			};
+			
+			$( document ).ready(function() {
+				$("#number").bind("keypress", {}, keypressInBox);
+			});
+        </script>
+		<style>
+			.Row
+			{
+				display: table;
+				width: 100%; /*Optional*/
+				table-layout: fixed; /*Optional*/
+				border-spacing: 10px; /*Optional*/
+			}
+			.Column
+			{
+				display: table-cell;
+			}
+		</style>
+	</head>
+	<body>
+		<div class='picker'>
+			<span>
+				Number of games to sort:
+				<input id="number" type="number">
+			</span>
+		</div>
+		<div class='Row' style="display:none;">
+			<div id='left' class='Column'>
+				<img/>
+				<div class='title'></div>
+				<div class='support'></div>
+			</div>
+			<div id='right' class='Column'>
+				<img src=''/>
+				<div class='title'></div>
+				<div class='support'></div>
+			</div>
+		</div>
+		<div class='results' style="display:none;">
+			<ol>			
+			</ol>
+		</div>
+	</body>
+</html>
