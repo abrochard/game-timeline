@@ -1,0 +1,320 @@
+[
+   {
+      "rating":86.6666666666667,
+      "slug":"kingdom-hearts-ii",
+      "cloudHash":"kawgvnfqvcmjixnnr53i",
+      "title":"Kingdom Hearts II",
+      "url":"https://www.igdb.com/games/kingdom-hearts-ii",
+      "support":[
+         "PS2"
+      ],
+      "summary":"Kingdom Hearts II is an action role-playing game, and the primary entry to the series since the 2002 Disney Interactive and Square collaboration; Kingdom Hearts.\nSora, Donald, and Goofy wake from their slumber and prepare for the journey ahead. They must face Organization XIII, protect the Keyblade’s power, and resume their search for the special people they have lost.\nThe game's setting is a collection of various levels (referred to in-game as \"worlds\") that the player progresses through. As in the first game, it II allows the player to travel to locales from various Disney works, along with original worlds specifically created for the series.",
+      "coverURL":[
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_big/kawgvnfqvcmjixnnr53i.jpg",
+            "size":"cover_big"
+         },
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_small/kawgvnfqvcmjixnnr53i.jpg",
+            "size":"cover_small"
+         }
+      ],
+      "airtableId":"recGp3AHnmalkdah6",
+      "igdbName":"Kingdom Hearts II",
+      "genre":[
+         "Action RPG"
+      ],
+      "date":"",
+      "developers":[
+         799
+      ],
+      "completed":true,
+      "igdbId":1221
+   },
+   {
+      "rating":79.6,
+      "slug":"prince-of-persia-warrior-within",
+      "cloudHash":"nekoulva6r7aob4xl3nw",
+      "title":"Prince of Persia: Warrior Within",
+      "url":"https://www.igdb.com/games/prince-of-persia-warrior-within",
+      "support":[
+         "PS2"
+      ],
+      "summary":"Prince of Persia: Warrior Within is a video game and sequel to Prince of Persia: The Sands of Time. Warrior Within was developed and published by Ubisoft, and released on December 2, 2004 for the Xbox, PlayStation 2, GameCube, and Microsoft Windows. It picks up where The Sands of Time left off, adding new features, specifically, options in combat. The Prince now has the ability to wield two weapons at a time as well as the ability to steal his enemies' weapons and throw them. The Prince's repertoire of combat moves has been expanded into varying strings that allow players to attack enemies with more complexity than was possible in the previous game. Warrior Within has a darker tone than its predecessor adding in the ability for the Prince to dispatch his enemies with various finishing moves. In addition to the rewind, slow-down, and speed-up powers from The Sands of Time, the Prince also has a new sand power: a circular \"wave\" of sand that knocks down all surrounding enemies as well as damaging them. The dark tone, a vastly increased level of blood and violence as well as sexualized female NPCs earned the game an M ESRB rating.",
+      "coverURL":[
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_big/nekoulva6r7aob4xl3nw.jpg",
+            "size":"cover_big"
+         },
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_small/nekoulva6r7aob4xl3nw.jpg",
+            "size":"cover_small"
+         }
+      ],
+      "airtableId":"recKbOp5OzUQmsrqW",
+      "igdbName":"Prince of Persia: Warrior Within",
+      "genre":"",
+      "date":"",
+      "developers":[
+         38,
+         680
+      ],
+      "completed":true,
+      "igdbId":837
+   },
+   {
+      "rating":90,
+      "slug":"castlevania-symphony-of-the-night",
+      "cloudHash":"dse3d8ru59e9aojtsn7p",
+      "title":"Castlevania: Symphony of the Night",
+      "url":"https://www.igdb.com/games/castlevania-symphony-of-the-night",
+      "support":[
+         "PS1"
+      ],
+      "summary":"Single Player, HD (High Definition). Uncover all the mysteries of Dracula’s castle with the full version including achievements, leaderboards, and multiple endings. Have you uncovered the true secret behind Dracula’s power? There are no refunds for this item. For more information, see www.xbox.com/live/accounts.",
+      "coverURL":[
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_big/dse3d8ru59e9aojtsn7p.jpg",
+            "size":"cover_big"
+         },
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_small/dse3d8ru59e9aojtsn7p.jpg",
+            "size":"cover_small"
+         }
+      ],
+      "airtableId":"recSFhxF9s9aUyQ2f",
+      "igdbName":"Castlevania: Symphony of the Night",
+      "genre":[
+         "Metroidvania"
+      ],
+      "date":"",
+      "developers":[
+         159,
+         1822
+      ],
+      "completed":true,
+      "igdbId":1128
+   },
+   {
+      "rating":93.25,
+      "slug":"uncharted-3-drake-s-deception",
+      "cloudHash":"kbqksee2ydek2azrugcq",
+      "title":"Uncharted 3 Drake's Deception",
+      "url":"https://www.igdb.com/games/uncharted-3-drake-s-deception",
+      "support":[
+         "PS3"
+      ],
+      "summary":"A search for the fabled \"Atlantis of the Sands\" propels fortune hunter Nathan Drake on a trek into the heart of the Arabian Desert. When the terrible secrets of this lost city are unearthed, Drake's quest descends into a desperate bid for survival that strains the limits of his endurance and forces him to confront his deepest fears.",
+      "coverURL":[
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_big/kbqksee2ydek2azrugcq.jpg",
+            "size":"cover_big"
+         },
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_small/kbqksee2ydek2azrugcq.jpg",
+            "size":"cover_small"
+         }
+      ],
+      "airtableId":"recccOfXhSMMSTa5v",
+      "igdbName":"Uncharted 3: Drake's Deception",
+      "genre":[
+         "TPS",
+         "3D platform"
+      ],
+      "date":"2015-06-25",
+      "developers":[
+         401
+      ],
+      "completed":true,
+      "igdbId":512
+   },
+   {
+      "rating":80,
+      "slug":"prince-of-persia-the-two-thrones",
+      "cloudHash":"sttkyb7cnw3di7hnrxhk",
+      "title":"Prince of Persia: The Two Thrones",
+      "url":"https://www.igdb.com/games/prince-of-persia-the-two-thrones",
+      "support":[
+         "PC"
+      ],
+      "summary":"Prince of Persia: The Two Thrones is an action-adventure video game developed and published by Ubisoft Montreal. It was released in December, 2005 in North America for the Xbox, Microsoft Windows, PlayStation 2, and the Nintendo GameCube. It was ported to the PlayStation Portable and Wii, under the title Prince of Persia: Rival Swords with the Wii version utilizing the motion-sensing functionality of its controller, while the PSP version added exclusive content. A remastered, high-definition, version of The Two Thrones was released on the PlayStation Network for the PlayStation 3 on December 21, 2010. \nFollowing Warrior Within, The Two Thrones is the closing chapter in the Sands of Time saga. Prince of Persia: Warrior Within, in which the Prince kills the Dahaka, essentially saving Kaileena. The game opens with the Prince and Kaileena about to sail into Babylon's port. Kaileena offers narration of the events passed and the story following, similar to the Prince's role as both protagonist and narrator in The Sands of Time.",
+      "coverURL":[
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_big/sttkyb7cnw3di7hnrxhk.jpg",
+            "size":"cover_big"
+         },
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_small/sttkyb7cnw3di7hnrxhk.jpg",
+            "size":"cover_small"
+         }
+      ],
+      "airtableId":"recID4BrkRpxLZNju",
+      "igdbName":"Prince of Persia: The Two Thrones",
+      "genre":"",
+      "date":"",
+      "developers":[
+         38,
+         680
+      ],
+      "completed":true,
+      "igdbId":2437
+   },
+   {
+      "rating":91.2,
+      "slug":"batman-arkham-city",
+      "cloudHash":"fjc1l63oe0w0enamzjjo",
+      "title":"Batman Arkham City",
+      "url":"https://www.igdb.com/games/batman-arkham-city",
+      "support":[
+         "PC"
+      ],
+      "summary":"After the events of Batman: Arkham Asylum (2009), a section of the city of Gotham has been turned into a prison, designed to keep the scum of the city away from the people. Bruce Wayne protests this prison but is shortly kidnapped by the despicable Hugo Strange, thus having to face the city's most powerful villains as the Batman while trying to uncover Strange's plans.",
+      "coverURL":[
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_big/fjc1l63oe0w0enamzjjo.jpg",
+            "size":"cover_big"
+         },
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_small/fjc1l63oe0w0enamzjjo.jpg",
+            "size":"cover_small"
+         }
+      ],
+      "airtableId":"recywR7FF0IT6Kq20",
+      "igdbName":"Batman: Arkham City",
+      "genre":"",
+      "date":"2013-12-30",
+      "developers":[
+         164
+      ],
+      "completed":true,
+      "igdbId":501
+   },
+   {
+      "rating":85,
+      "slug":"just-cause-2",
+      "cloudHash":"oqp72hl5iyz5qypcxnoa",
+      "title":"Just Cause 2",
+      "url":"https://www.igdb.com/games/just-cause-2",
+      "support":[
+         "PC"
+      ],
+      "summary":"In a lawless open-world paradise, use whatever means necessary to achieve your objective. Use land, sea and air to your advantage and use a wide range of weaponry to cause as much chaos as possible.",
+      "coverURL":[
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_big/oqp72hl5iyz5qypcxnoa.jpg",
+            "size":"cover_big"
+         },
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_small/oqp72hl5iyz5qypcxnoa.jpg",
+            "size":"cover_small"
+         }
+      ],
+      "airtableId":"rec9qXK0zbFd6AiGv",
+      "igdbName":"Just Cause 2",
+      "genre":"",
+      "date":"2016-02-07",
+      "developers":[
+         437
+      ],
+      "completed":true,
+      "igdbId":558
+   },
+   {
+      "rating":95.6,
+      "slug":"mass-effect-2",
+      "cloudHash":"dounkrfjdfmgkb0w8pfh",
+      "title":"Mass Effect 2",
+      "url":"https://www.igdb.com/games/mass-effect-2",
+      "support":[
+         "PC"
+      ],
+      "summary":"The Mass Effect trilogy is an emotionally charged science fiction adventure set in a vast universe filled with dangerous alien life and mysterious, uncharted planets. \n \nIn Mass Effect 2, players will once again step into the role of the heroic Commander Shepard, commanding their crew of some of the most dangerous operatives from across the galaxy on a mission so challenging that it's potentially suicidal. Featuring intense shooter action, a rich futuristic storyline, space exploration and emotionally engaging character interaction, the game delivers an unparalleled cinematic experience.",
+      "coverURL":[
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_big/dounkrfjdfmgkb0w8pfh.jpg",
+            "size":"cover_big"
+         },
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_small/dounkrfjdfmgkb0w8pfh.jpg",
+            "size":"cover_small"
+         }
+      ],
+      "airtableId":"recjUBOoqxxZ0EqZw",
+      "igdbName":"Mass Effect 2",
+      "genre":[
+         "Action RPG"
+      ],
+      "date":"",
+      "developers":[
+         2,
+         222
+      ],
+      "completed":true,
+      "igdbId":74
+   },
+   {
+      "rating":90,
+      "slug":"metroid-zero-mission",
+      "cloudHash":"yzh3dugptuqkv1jbqu4u",
+      "title":"Metroid Zero Mission",
+      "url":"https://www.igdb.com/games/metroid-zero-mission",
+      "support":[
+         "GBA"
+      ],
+      "summary":"The full story of Samus Aran's first mission finally unfolds... \n \nThe first Metroid game just scratched the surface of the cataclysmic events on planet Zebes, and at long last the rest of the tale has come to light. Experience the first of Samus's legendary adventures through all-new cut-scenes and action sequences as the bounty hunter races through the deeps toward her showdown with the leader of the Space Pirates. But will the end of Mother Brain really mean the end of the story...? \n \nCompletion of the game unlocks an emulated version of the original Metroid game. Zero Mission also allow players to unlock the Metroid Fusion picture gallery by linking between Zero Mission and Fusion cartridges via the Game Boy Advance Game Link Cable.",
+      "coverURL":[
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_big/yzh3dugptuqkv1jbqu4u.jpg",
+            "size":"cover_big"
+         },
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_small/yzh3dugptuqkv1jbqu4u.jpg",
+            "size":"cover_small"
+         }
+      ],
+      "airtableId":"recIcXoHIVSP3bBej",
+      "igdbName":"Metroid: Zero Mission",
+      "genre":[
+         "Metroidvania"
+      ],
+      "date":"",
+      "developers":[
+         761
+      ],
+      "completed":true,
+      "igdbId":1107
+   },
+   {
+      "rating":95.375,
+      "slug":"uncharted-2-among-thieves",
+      "cloudHash":"olsgi4vho5pjuynuu3g8",
+      "title":"Uncharted 2 Among Thieves",
+      "url":"https://www.igdb.com/games/uncharted-2-among-thieves",
+      "support":[
+         "PS3"
+      ],
+      "summary":"In the sequel to Drake's Fortune, Nathan Drake comes across a map that showcases the location of Marco Polo's missing ships. It takes him on a journey to find the infamous Cintamani Stone, and uncover the truth behind it.",
+      "coverURL":[
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_big/olsgi4vho5pjuynuu3g8.jpg",
+            "size":"cover_big"
+         },
+         {
+            "url":"https://images.igdb.com/igdb/image/upload/t_cover_small/olsgi4vho5pjuynuu3g8.jpg",
+            "size":"cover_small"
+         }
+      ],
+      "airtableId":"rec8CwPJ72tBO0BFn",
+      "igdbName":"Uncharted 2: Among Thieves",
+      "genre":[
+         "3D platform",
+         "TPS"
+      ],
+      "date":"2015-06-24",
+      "developers":[
+         401
+      ],
+      "completed":true,
+      "igdbId":565
+   }
+]

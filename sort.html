@@ -6,7 +6,9 @@
 		
 		<script src="game-timeline-data.js"></script>
 		<script src="Sorter.js"></script>
-		<script src="bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="bower_components/jquery/dist/jquery.min.js"></script>		
+        <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
 		<script>
 			var shuffle = function(array) {
 				var i = 0;
@@ -24,24 +26,24 @@
 			};	
 				
 			var showGame = function(side, game) {
-				$('#'+side+' img').attr('src', 'covers/cover_big/'+game.slug+'.jpg')
-				$('#'+side+' .title').text(game.title);
-				$('#'+side+' .support').text(game.support);
+				$('#'+side+' .card .card-img-top').attr('src', 'covers/cover_big/'+game.slug+'.jpg');
+				$('#'+side+' .card .card-title').text(game.title);
+				$('#'+side+' .card .card-text').text(game.support);
 			};
 			
 			var showResult = function(arr) {
-				$('.Row').hide();
-				$('.results').show();
+				console.log(arr);
+				$('.table').show();
 				
-				var output = arr.map((x) => {
-					return '<li>' + x['title'] + '</li>';
-				});				
-				
-				$('ol').html(output);
+				var output = arr.map((x, i) => {
+					return '<tr><th scope="row">'+(i+1)+'</th><td>'+x['title']+'</td><td>'+x['support']+'</td><td>'+Math.round(x['rating'])+'%</td></tr>';
+				});
+				$('.table tbody').html(output);
 			};
 			
-			var initSorter = function(n) {
+			var initSorter = function(top, n) {
 				var subset = [];
+
 				if (n>=2) {
 					subset = shuffle(games).slice(0, n);
 				} else {
@@ -52,67 +54,90 @@
 					subset, 
 					function(game) { showGame('left', game); }, 
 					function(game) { showGame('right', game) }, 
-					showResult
+					showResult,
+					top
 				);
 		
 				var picker = sorter.pickerFunctions();
 				
-				$('#left').click(picker.left);
-				$('#right').click(picker.right);
-				$('.Row').show();
-			};
-			
-			function keypressInBox(e) {
-				var code = (e.keyCode ? e.keyCode : e.which);
-				if (code == 13) { //Enter keycode                        
-					e.preventDefault();
-
-					var n = parseInt($('#number').val());
-					$('.picker').hide();
-					initSorter(n);
-				}
+				$('#left .card').click(picker.left);
+				$('#right .card').click(picker.right);
+				$('.row').show();
 			};
 			
 			$( document ).ready(function() {
-				$("#number").bind("keypress", {}, keypressInBox);
+				$("#button").click(function(e) {
+					initSorter($('#top').val(), $('#subset').val());
+				});
 			});
         </script>
 		<style>
-			.Row
-			{
-				display: table;
-				width: 100%; /*Optional*/
-				table-layout: fixed; /*Optional*/
-				border-spacing: 10px; /*Optional*/
+			.picker {
+				text-align: center;
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 25px;
+				margin-bottom: 60px;
 			}
-			.Column
-			{
-				display: table-cell;
+			.card {
+				text-align: center;
+				border: 1px solid black;
+				max-width: 400px;
+				min-height: 450px;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			.table {
+				margin-top: 20px;
+				margin-left: auto;
+				margin-right: auto;
+				max-width: 80%;
 			}
 		</style>
 	</head>
 	<body>
 		<div class='picker'>
 			<span>
-				Number of games to sort:
-				<input id="number" type="number">
+				I want a top
+				<input id="top" type="number" value=5>
+				Of a random subset of 
+				<input id="subset" type="number" value=30>
+				<input id="button" type="button" value="Go" class="btn btn-primary">
 			</span>
 		</div>
-		<div class='Row' style="display:none;">
-			<div id='left' class='Column'>
-				<img/>
-				<div class='title'></div>
-				<div class='support'></div>
-			</div>
-			<div id='right' class='Column'>
-				<img src=''/>
-				<div class='title'></div>
-				<div class='support'></div>
+		<div class="container">
+			<div class='row' style="display:none;">
+				<div id='left' class='col-md-6'>
+					<div class="card">
+					  <img class="card-img-top" alt="Card image cap">
+					  <div class="card-block">
+						<h4 class="card-title"></h4>
+						<p class="card-text"></p>
+					  </div>
+					</div>
+				</div>
+				<div id='right' class='col-md-6'>
+					<div class="card">
+					  <img class="card-img-top" alt="Card image cap">
+					  <div class="card-block">
+						<h4 class="card-title"></h4>
+						<p class="card-text"></p>
+					  </div>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class='results' style="display:none;">
-			<ol>			
-			</ol>
-		</div>
+		<table class="table" style="display:none;">
+		  <thead>
+			<tr>
+			  <th>#</th>
+			  <th>Title</th>
+			  <th>Platform</th>
+			  <th>IGDB Rating</th>
+			</tr>
+		  </thead>
+		  <tbody>
+		  </tbody>
+		</table>
 	</body>
 </html>

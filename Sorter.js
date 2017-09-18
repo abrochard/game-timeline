@@ -1,4 +1,4 @@
-var Sorter = function(elements, displayLeft, displayRight, showResult) {
+var Sorter = function(elements, displayLeft, displayRight, onSorted, top = 0) {
 	var self = this;
 	self.result = [];
 	self.left = [];
@@ -11,7 +11,9 @@ var Sorter = function(elements, displayLeft, displayRight, showResult) {
 	
 	self.displayLeft = displayLeft;
 	self.displayRight = displayRight;
-	self.showResult = showResult;
+	self.onSorted = onSorted;
+	
+	self.top = top == 0 ? elements.length : top;
 	
 	var shuffle = function(arr) {
 		var i = 0;
@@ -29,7 +31,7 @@ var Sorter = function(elements, displayLeft, displayRight, showResult) {
 	};	
 
 	self.done = function() {
-		self.sorted.push(self.result);
+		self.sorted.push(self.result.slice(0, self.top));
 		if (self.unsortedIndex + 1 < self.unsorted.length) {
 			self.setupUnsorted();
 			return;
@@ -48,12 +50,14 @@ var Sorter = function(elements, displayLeft, displayRight, showResult) {
 		}
 		
 		// DONE
-		self.showResult(self.sorted[0]);
+		self.onSorted(self.sorted[0]);
 	};
 	
 	self.concatResult = function() {
-		self.result = self.result.concat(self.left.slice(self.leftIndex, self.left.length))
-				.concat(self.right.slice(self.rightIndex, self.right.length));
+		if (self.result.length < self.top ) {
+			self.result = self.result.concat(self.left.slice(self.leftIndex, self.left.length))
+					.concat(self.right.slice(self.rightIndex, self.right.length));
+		}
 	};
 	
 	self.pickedLeft = function() {
@@ -64,7 +68,7 @@ var Sorter = function(elements, displayLeft, displayRight, showResult) {
 			next = self.left[self.leftIndex];
 		}
 		
-		if (next !== false) {
+		if (next !== false && self.result.length < self.top) {
 			displayLeft(next);
 		} else {
 			self.concatResult();
@@ -80,7 +84,7 @@ var Sorter = function(elements, displayLeft, displayRight, showResult) {
 			next = self.right[self.rightIndex];
 		}
 		
-		if (next !== false) {
+		if (next !== false && self.result.length < self.top) {
 			displayRight(next);
 		} else {
 			self.concatResult();
