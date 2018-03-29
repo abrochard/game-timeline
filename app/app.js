@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Timeline, TimelineEvent } from 'react-event-timeline';
-import ActionButton from 'react-native-action-button';
+import Button from 'material-ui/Button';
+import Menu, { MenuItem } from 'material-ui/Menu';
 import LazyLoad from 'react-lazyload';
 import GamesJSON from './games.json';
 
@@ -12,7 +13,7 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {anchor: null};
   }
 
   renderGame(game) {
@@ -43,6 +44,10 @@ class App extends Component {
     );
   }
 
+  click(event) {
+    this.setState({anchor: event.currentTarget});
+  }
+
   sort(event) {
     event.preventDefault();
     console.log('sort', event);
@@ -50,17 +55,20 @@ class App extends Component {
 
   renderMenu() {
     return (
-      <ActionButton buttonColor="rgba(231,76,60,1)">
-        <ActionButton.Item buttonColor='#9b59b6' title="New Task" onPress={() => console.log("notes tapped!")}>
-          -
-        </ActionButton.Item>
-        <ActionButton.Item buttonColor='#3498db' title="Notifications" onPress={() => {}}>
+      <div>
+        <Button variant="fab" color="primary" aria-label="add" onClick={this.click.bind(this)}>
           +
-        </ActionButton.Item>
-        <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => {}}>
-          +
-        </ActionButton.Item>
-      </ActionButton>
+        </Button>
+        <Menu
+          id="simple-menu"
+          anchorEl={this.state.anchor}
+          open={Boolean(this.state.anchor)}
+          >
+          <MenuItem>Profile</MenuItem>
+          <MenuItem>My account</MenuItem>
+          <MenuItem>Logout</MenuItem>
+        </Menu>
+      </div>
     );
   }
 

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 19);
+/******/ 	return __webpack_require__(__webpack_require__.s = 112);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -261,15 +261,314 @@ process.umask = function() { return 0; };
 /* WEBPACK VAR INJECTION */(function(process) {
 
 if (process.env.NODE_ENV === 'production') {
-  module.exports = __webpack_require__(20);
+  module.exports = __webpack_require__(113);
 } else {
-  module.exports = __webpack_require__(21);
+  module.exports = __webpack_require__(114);
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/**
+ * Copyright 2014-2015, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
+
+
+
+/**
+ * Similar to invariant but only logs a warning if the condition is not met.
+ * This can be used to log issues in development environments in critical
+ * paths. Removing the logging code for production environments will keep the
+ * same logic and follow the same code paths.
+ */
+
+var warning = function() {};
+
+if (process.env.NODE_ENV !== 'production') {
+  warning = function(condition, format, args) {
+    var len = arguments.length;
+    args = new Array(len > 2 ? len - 2 : 0);
+    for (var key = 2; key < len; key++) {
+      args[key - 2] = arguments[key];
+    }
+    if (format === undefined) {
+      throw new Error(
+        '`warning(condition, format, ...args)` requires a warning ' +
+        'message argument'
+      );
+    }
+
+    if (format.length < 10 || (/^[s\W]*$/).test(format)) {
+      throw new Error(
+        'The warning format should be able to uniquely identify this ' +
+        'warning. Please, use a more descriptive format than: ' + format
+      );
+    }
+
+    if (!condition) {
+      var argIndex = 0;
+      var message = 'Warning: ' +
+        format.replace(/%s/g, function() {
+          return args[argIndex++];
+        });
+      if (typeof console !== 'undefined') {
+        console.error(message);
+      }
+      try {
+        // This error was thrown as a convenience so that you can use this stack
+        // to find the callsite that caused this warning to fire.
+        throw new Error(message);
+      } catch(x) {}
+    }
+  };
+}
+
+module.exports = warning;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process) {/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+if (process.env.NODE_ENV !== 'production') {
+  var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' &&
+    Symbol.for &&
+    Symbol.for('react.element')) ||
+    0xeac7;
+
+  var isValidElement = function(object) {
+    return typeof object === 'object' &&
+      object !== null &&
+      object.$$typeof === REACT_ELEMENT_TYPE;
+  };
+
+  // By explicitly using `prop-types` you are opting into new development behavior.
+  // http://fb.me/prop-types-in-prod
+  var throwOnDirectAccess = true;
+  module.exports = __webpack_require__(126)(isValidElement, throwOnDirectAccess);
+} else {
+  // By explicitly using `prop-types` you are opting into new production behavior.
+  // http://fb.me/prop-types-in-prod
+  module.exports = __webpack_require__(127)();
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+var core = module.exports = { version: '2.5.4' };
+if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var global = __webpack_require__(8);
+var core = __webpack_require__(4);
+var ctx = __webpack_require__(15);
+var hide = __webpack_require__(14);
+var has = __webpack_require__(18);
+var PROTOTYPE = 'prototype';
+
+var $export = function (type, name, source) {
+  var IS_FORCED = type & $export.F;
+  var IS_GLOBAL = type & $export.G;
+  var IS_STATIC = type & $export.S;
+  var IS_PROTO = type & $export.P;
+  var IS_BIND = type & $export.B;
+  var IS_WRAP = type & $export.W;
+  var exports = IS_GLOBAL ? core : core[name] || (core[name] = {});
+  var expProto = exports[PROTOTYPE];
+  var target = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE];
+  var key, own, out;
+  if (IS_GLOBAL) source = name;
+  for (key in source) {
+    // contains in native
+    own = !IS_FORCED && target && target[key] !== undefined;
+    if (own && has(exports, key)) continue;
+    // export native or passed
+    out = own ? target[key] : source[key];
+    // prevent global pollution for namespaces
+    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
+    // bind timers to global for call from export context
+    : IS_BIND && own ? ctx(out, global)
+    // wrap global constructors for prevent change them in library
+    : IS_WRAP && target[key] == out ? (function (C) {
+      var F = function (a, b, c) {
+        if (this instanceof C) {
+          switch (arguments.length) {
+            case 0: return new C();
+            case 1: return new C(a);
+            case 2: return new C(a, b);
+          } return new C(a, b, c);
+        } return C.apply(this, arguments);
+      };
+      F[PROTOTYPE] = C[PROTOTYPE];
+      return F;
+    // make static versions for prototype methods
+    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
+    if (IS_PROTO) {
+      (exports.virtual || (exports.virtual = {}))[key] = out;
+      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
+      if (type & $export.R && expProto && !expProto[key]) hide(expProto, key, out);
+    }
+  }
+};
+// type bitmap
+$export.F = 1;   // forced
+$export.G = 2;   // global
+$export.S = 4;   // static
+$export.P = 8;   // proto
+$export.B = 16;  // bind
+$export.W = 32;  // wrap
+$export.U = 64;  // safe
+$export.R = 128; // real proto method for `library`
+module.exports = $export;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var store = __webpack_require__(58)('wks');
+var uid = __webpack_require__(33);
+var Symbol = __webpack_require__(8).Symbol;
+var USE_SYMBOL = typeof Symbol == 'function';
+
+var $exports = module.exports = function (name) {
+  return store[name] || (store[name] =
+    USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : uid)('Symbol.' + name));
+};
+
+$exports.store = store;
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var anObject = __webpack_require__(16);
+var IE8_DOM_DEFINE = __webpack_require__(81);
+var toPrimitive = __webpack_require__(52);
+var dP = Object.defineProperty;
+
+exports.f = __webpack_require__(9) ? Object.defineProperty : function defineProperty(O, P, Attributes) {
+  anObject(O);
+  P = toPrimitive(P, true);
+  anObject(Attributes);
+  if (IE8_DOM_DEFINE) try {
+    return dP(O, P, Attributes);
+  } catch (e) { /* empty */ }
+  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
+  if ('value' in Attributes) O[P] = Attributes.value;
+  return O;
+};
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != 'undefined' && window.Math == Math
+  ? window : typeof self != 'undefined' && self.Math == Math ? self
+  // eslint-disable-next-line no-new-func
+  : Function('return this')();
+if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Thank's IE8 for his funny defineProperty
+module.exports = !__webpack_require__(17)(function () {
+  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
+});
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+exports.default = function (obj, keys) {
+  var target = {};
+
+  for (var i in obj) {
+    if (keys.indexOf(i) >= 0) continue;
+    if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+    target[i] = obj[i];
+  }
+
+  return target;
+};
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _assign = __webpack_require__(134);
+
+var _assign2 = _interopRequireDefault(_assign);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _assign2.default || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+module.exports = function (it) {
+  return typeof it === 'object' ? it !== null : typeof it === 'function';
+};
+
+
+/***/ }),
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -311,7 +610,277 @@ emptyFunction.thatReturnsArgument = function (arg) {
 module.exports = emptyFunction;
 
 /***/ }),
-/* 3 */
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var dP = __webpack_require__(7);
+var createDesc = __webpack_require__(26);
+module.exports = __webpack_require__(9) ? function (object, key, value) {
+  return dP.f(object, key, createDesc(1, value));
+} : function (object, key, value) {
+  object[key] = value;
+  return object;
+};
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// optional / simple context binding
+var aFunction = __webpack_require__(80);
+module.exports = function (fn, that, length) {
+  aFunction(fn);
+  if (that === undefined) return fn;
+  switch (length) {
+    case 1: return function (a) {
+      return fn.call(that, a);
+    };
+    case 2: return function (a, b) {
+      return fn.call(that, a, b);
+    };
+    case 3: return function (a, b, c) {
+      return fn.call(that, a, b, c);
+    };
+  }
+  return function (/* ...args */) {
+    return fn.apply(that, arguments);
+  };
+};
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(12);
+module.exports = function (it) {
+  if (!isObject(it)) throw TypeError(it + ' is not an object!');
+  return it;
+};
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+module.exports = function (exec) {
+  try {
+    return !!exec();
+  } catch (e) {
+    return true;
+  }
+};
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports) {
+
+var hasOwnProperty = {}.hasOwnProperty;
+module.exports = function (it, key) {
+  return hasOwnProperty.call(it, key);
+};
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// to indexed object, toObject with fallback for non-array-like ES3 strings
+var IObject = __webpack_require__(53);
+var defined = __webpack_require__(55);
+module.exports = function (it) {
+  return IObject(defined(it));
+};
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.1.13 ToObject(argument)
+var defined = __webpack_require__(55);
+module.exports = function (it) {
+  return Object(defined(it));
+};
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+var _toCss = __webpack_require__(69);
+
+var _toCss2 = _interopRequireDefault(_toCss);
+
+var _toCssValue = __webpack_require__(45);
+
+var _toCssValue2 = _interopRequireDefault(_toCssValue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var StyleRule = function () {
+  function StyleRule(key, style, options) {
+    _classCallCheck(this, StyleRule);
+
+    this.type = 'style';
+    this.isProcessed = false;
+    var sheet = options.sheet,
+        Renderer = options.Renderer,
+        selector = options.selector;
+
+    this.key = key;
+    this.options = options;
+    this.style = style;
+    if (selector) this.selectorText = selector;
+    this.renderer = sheet ? sheet.renderer : new Renderer();
+  }
+
+  /**
+   * Set selector string.
+   * Attention: use this with caution. Most browsers didn't implement
+   * selectorText setter, so this may result in rerendering of entire Style Sheet.
+   */
+
+
+  _createClass(StyleRule, [{
+    key: 'prop',
+
+
+    /**
+     * Get or set a style property.
+     */
+    value: function prop(name, value) {
+      // It's a getter.
+      if (value === undefined) return this.style[name];
+
+      // Don't do anything if the value has not changed.
+      if (this.style[name] === value) return this;
+
+      value = this.options.jss.plugins.onChangeValue(value, name, this);
+
+      var isEmpty = value == null || value === false;
+      var isDefined = name in this.style;
+
+      // Value is empty and wasn't defined before.
+      if (isEmpty && !isDefined) return this;
+
+      // We are going to remove this value.
+      var remove = isEmpty && isDefined;
+
+      if (remove) delete this.style[name];else this.style[name] = value;
+
+      // Renderable is defined if StyleSheet option `link` is true.
+      if (this.renderable) {
+        if (remove) this.renderer.removeProperty(this.renderable, name);else this.renderer.setProperty(this.renderable, name, value);
+        return this;
+      }
+
+      var sheet = this.options.sheet;
+
+      if (sheet && sheet.attached) {
+        (0, _warning2['default'])(false, 'Rule is not linked. Missing sheet option "link: true".');
+      }
+      return this;
+    }
+
+    /**
+     * Apply rule to an element inline.
+     */
+
+  }, {
+    key: 'applyTo',
+    value: function applyTo(renderable) {
+      var json = this.toJSON();
+      for (var prop in json) {
+        this.renderer.setProperty(renderable, prop, json[prop]);
+      }return this;
+    }
+
+    /**
+     * Returns JSON representation of the rule.
+     * Fallbacks are not supported.
+     * Useful for inline styles.
+     */
+
+  }, {
+    key: 'toJSON',
+    value: function toJSON() {
+      var json = {};
+      for (var prop in this.style) {
+        var value = this.style[prop];
+        if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) !== 'object') json[prop] = value;else if (Array.isArray(value)) json[prop] = (0, _toCssValue2['default'])(value);
+      }
+      return json;
+    }
+
+    /**
+     * Generates a CSS string.
+     */
+
+  }, {
+    key: 'toString',
+    value: function toString(options) {
+      var sheet = this.options.sheet;
+
+      var link = sheet ? sheet.options.link : false;
+      var opts = link ? _extends({}, options, { allowEmpty: true }) : options;
+      return (0, _toCss2['default'])(this.selector, this.style, opts);
+    }
+  }, {
+    key: 'selector',
+    set: function set(selector) {
+      if (selector === this.selectorText) return;
+
+      this.selectorText = selector;
+
+      if (!this.renderable) return;
+
+      var hasChanged = this.renderer.setSelector(this.renderable, selector);
+
+      // If selector setter is not implemented, rerender the rule.
+      if (!hasChanged && this.renderable) {
+        var renderable = this.renderer.replaceRule(this.renderable, this);
+        if (renderable) this.renderable = renderable;
+      }
+    }
+
+    /**
+     * Get selector string.
+     */
+    ,
+    get: function get() {
+      return this.selectorText;
+    }
+  }]);
+
+  return StyleRule;
+}();
+
+exports['default'] = StyleRule;
+
+/***/ }),
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -408,7 +977,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 4 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -468,7 +1037,370 @@ module.exports = invariant;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 5 */
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+function checkDCE() {
+  /* global __REACT_DEVTOOLS_GLOBAL_HOOK__ */
+  if (
+    typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === 'undefined' ||
+    typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE !== 'function'
+  ) {
+    return;
+  }
+  if (process.env.NODE_ENV !== 'production') {
+    // This branch is unreachable because this function is only called
+    // in production, but the condition is true only in development.
+    // Therefore if the branch is still here, dead code elimination wasn't
+    // properly applied.
+    // Don't change the message. React DevTools relies on it. Also make sure
+    // this message doesn't occur elsewhere in this function, or it will cause
+    // a false positive.
+    throw new Error('^_^');
+  }
+  try {
+    // Verify that the code above has been dead code eliminated (DCE'd).
+    __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE(checkDCE);
+  } catch (err) {
+    // DevTools shouldn't crash React, no matter what.
+    // We should still report in case we break this code.
+    console.error(err);
+  }
+}
+
+if (process.env.NODE_ENV === 'production') {
+  // DCE check should happen before ReactDOM bundle executes so that
+  // DevTools can report bad minification during injection.
+  checkDCE();
+  module.exports = __webpack_require__(115);
+} else {
+  module.exports = __webpack_require__(118);
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _defineProperty = __webpack_require__(79);
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (obj, key, value) {
+  if (key in obj) {
+    (0, _defineProperty2.default)(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+};
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
+module.exports = function (bitmap, value) {
+  return {
+    enumerable: !(bitmap & 1),
+    configurable: !(bitmap & 2),
+    writable: !(bitmap & 4),
+    value: value
+  };
+};
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.14 / 15.2.3.14 Object.keys(O)
+var $keys = __webpack_require__(83);
+var enumBugKeys = __webpack_require__(59);
+
+module.exports = Object.keys || function keys(O) {
+  return $keys(O, enumBugKeys);
+};
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
+
+module.exports = {};
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _createRule = __webpack_require__(46);
+
+var _createRule2 = _interopRequireDefault(_createRule);
+
+var _linkRule = __webpack_require__(105);
+
+var _linkRule2 = _interopRequireDefault(_linkRule);
+
+var _StyleRule = __webpack_require__(21);
+
+var _StyleRule2 = _interopRequireDefault(_StyleRule);
+
+var _escape = __webpack_require__(195);
+
+var _escape2 = _interopRequireDefault(_escape);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Contains rules objects and allows adding/removing etc.
+ * Is used for e.g. by `StyleSheet` or `ConditionalRule`.
+ */
+var RuleList = function () {
+
+  // Original styles object.
+  function RuleList(options) {
+    _classCallCheck(this, RuleList);
+
+    this.map = {};
+    this.raw = {};
+    this.index = [];
+
+    this.options = options;
+    this.classes = options.classes;
+  }
+
+  /**
+   * Create and register rule.
+   *
+   * Will not render after Style Sheet was rendered the first time.
+   */
+
+
+  // Used to ensure correct rules order.
+
+  // Rules registry for access by .get() method.
+  // It contains the same rule registered by name and by selector.
+
+
+  _createClass(RuleList, [{
+    key: 'add',
+    value: function add(name, decl, options) {
+      var _options = this.options,
+          parent = _options.parent,
+          sheet = _options.sheet,
+          jss = _options.jss,
+          Renderer = _options.Renderer,
+          generateClassName = _options.generateClassName;
+
+
+      options = _extends({
+        classes: this.classes,
+        parent: parent,
+        sheet: sheet,
+        jss: jss,
+        Renderer: Renderer,
+        generateClassName: generateClassName
+      }, options);
+
+      if (!options.selector && this.classes[name]) {
+        options.selector = '.' + (0, _escape2['default'])(this.classes[name]);
+      }
+
+      this.raw[name] = decl;
+
+      var rule = (0, _createRule2['default'])(name, decl, options);
+
+      var className = void 0;
+
+      if (!options.selector && rule instanceof _StyleRule2['default']) {
+        className = generateClassName(rule, sheet);
+        rule.selector = '.' + (0, _escape2['default'])(className);
+      }
+
+      this.register(rule, className);
+
+      var index = options.index === undefined ? this.index.length : options.index;
+      this.index.splice(index, 0, rule);
+
+      return rule;
+    }
+
+    /**
+     * Get a rule.
+     */
+
+  }, {
+    key: 'get',
+    value: function get(name) {
+      return this.map[name];
+    }
+
+    /**
+     * Delete a rule.
+     */
+
+  }, {
+    key: 'remove',
+    value: function remove(rule) {
+      this.unregister(rule);
+      this.index.splice(this.indexOf(rule), 1);
+    }
+
+    /**
+     * Get index of a rule.
+     */
+
+  }, {
+    key: 'indexOf',
+    value: function indexOf(rule) {
+      return this.index.indexOf(rule);
+    }
+
+    /**
+     * Run `onProcessRule()` plugins on every rule.
+     */
+
+  }, {
+    key: 'process',
+    value: function process() {
+      var plugins = this.options.jss.plugins;
+      // We need to clone array because if we modify the index somewhere else during a loop
+      // we end up with very hard-to-track-down side effects.
+
+      this.index.slice(0).forEach(plugins.onProcessRule, plugins);
+    }
+
+    /**
+     * Register a rule in `.map` and `.classes` maps.
+     */
+
+  }, {
+    key: 'register',
+    value: function register(rule, className) {
+      this.map[rule.key] = rule;
+      if (rule instanceof _StyleRule2['default']) {
+        this.map[rule.selector] = rule;
+        if (className) this.classes[rule.key] = className;
+      }
+    }
+
+    /**
+     * Unregister a rule.
+     */
+
+  }, {
+    key: 'unregister',
+    value: function unregister(rule) {
+      delete this.map[rule.key];
+      if (rule instanceof _StyleRule2['default']) {
+        delete this.map[rule.selector];
+        delete this.classes[rule.key];
+      }
+    }
+
+    /**
+     * Update the function values with a new data.
+     */
+
+  }, {
+    key: 'update',
+    value: function update(name, data) {
+      var _options2 = this.options,
+          plugins = _options2.jss.plugins,
+          sheet = _options2.sheet;
+
+      if (typeof name === 'string') {
+        plugins.onUpdate(data, this.get(name), sheet);
+        return;
+      }
+
+      for (var index = 0; index < this.index.length; index++) {
+        plugins.onUpdate(name, this.index[index], sheet);
+      }
+    }
+
+    /**
+     * Link renderable rules with CSSRuleList.
+     */
+
+  }, {
+    key: 'link',
+    value: function link(cssRules) {
+      var map = this.options.sheet.renderer.getUnescapedKeysMap(this.index);
+
+      for (var i = 0; i < cssRules.length; i++) {
+        var cssRule = cssRules[i];
+        var _key = this.options.sheet.renderer.getKey(cssRule);
+        if (map[_key]) _key = map[_key];
+        var rule = this.map[_key];
+        if (rule) (0, _linkRule2['default'])(rule, cssRule);
+      }
+    }
+
+    /**
+     * Convert rules to a CSS string.
+     */
+
+  }, {
+    key: 'toString',
+    value: function toString(options) {
+      var str = '';
+      var sheet = this.options.sheet;
+
+      var link = sheet ? sheet.options.link : false;
+
+      for (var index = 0; index < this.index.length; index++) {
+        var rule = this.index[index];
+        var css = rule.toString(options);
+
+        // No need to render an empty rule.
+        if (!css && !link) continue;
+
+        if (str) str += '\n';
+        str += css;
+      }
+
+      return str;
+    }
+  }]);
+
+  return RuleList;
+}();
+
+exports['default'] = RuleList;
+
+/***/ }),
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -492,7 +1424,7 @@ module.exports = emptyObject;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 6 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -506,7 +1438,7 @@ module.exports = emptyObject;
 
 
 
-var emptyFunction = __webpack_require__(2);
+var emptyFunction = __webpack_require__(13);
 
 /**
  * Similar to invariant but only logs a warning if the condition is not met.
@@ -561,42 +1493,518 @@ module.exports = warning;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 7 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(process) {/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
+// 7.1.15 ToLength
+var toInteger = __webpack_require__(56);
+var min = Math.min;
+module.exports = function (it) {
+  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+};
 
-if (process.env.NODE_ENV !== 'production') {
-  var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' &&
-    Symbol.for &&
-    Symbol.for('react.element')) ||
-    0xeac7;
-
-  var isValidElement = function(object) {
-    return typeof object === 'object' &&
-      object !== null &&
-      object.$$typeof === REACT_ELEMENT_TYPE;
-  };
-
-  // By explicitly using `prop-types` you are opting into new development behavior.
-  // http://fb.me/prop-types-in-prod
-  var throwOnDirectAccess = true;
-  module.exports = __webpack_require__(33)(isValidElement, throwOnDirectAccess);
-} else {
-  // By explicitly using `prop-types` you are opting into new production behavior.
-  // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(34)();
-}
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 8 */
+/* 33 */
+/***/ (function(module, exports) {
+
+var id = 0;
+var px = Math.random();
+module.exports = function (key) {
+  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+};
+
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports) {
+
+exports.f = {}.propertyIsEnumerable;
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+  Copyright (c) 2016 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+	'use strict';
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg)) {
+				classes.push(classNames.apply(null, arg));
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = classNames;
+	} else if (true) {
+		// register as 'classnames', consistent with npm package name
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+			return classNames;
+		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {
+		window.classNames = classNames;
+	}
+}());
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(140), __esModule: true };
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(142), __esModule: true };
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+exports.default = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _defineProperty = __webpack_require__(79);
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      (0, _defineProperty2.default)(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _typeof2 = __webpack_require__(62);
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && ((typeof call === "undefined" ? "undefined" : (0, _typeof3.default)(call)) === "object" || typeof call === "function") ? call : self;
+};
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+var anObject = __webpack_require__(16);
+var dPs = __webpack_require__(148);
+var enumBugKeys = __webpack_require__(59);
+var IE_PROTO = __webpack_require__(57)('IE_PROTO');
+var Empty = function () { /* empty */ };
+var PROTOTYPE = 'prototype';
+
+// Create object with fake `null` prototype: use iframe Object with cleared prototype
+var createDict = function () {
+  // Thrash, waste and sodomy: IE GC bug
+  var iframe = __webpack_require__(82)('iframe');
+  var i = enumBugKeys.length;
+  var lt = '<';
+  var gt = '>';
+  var iframeDocument;
+  iframe.style.display = 'none';
+  __webpack_require__(149).appendChild(iframe);
+  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
+  // createDict = iframe.contentWindow.Object;
+  // html.removeChild(iframe);
+  iframeDocument = iframe.contentWindow.document;
+  iframeDocument.open();
+  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
+  iframeDocument.close();
+  createDict = iframeDocument.F;
+  while (i--) delete createDict[PROTOTYPE][enumBugKeys[i]];
+  return createDict();
+};
+
+module.exports = Object.create || function create(O, Properties) {
+  var result;
+  if (O !== null) {
+    Empty[PROTOTYPE] = anObject(O);
+    result = new Empty();
+    Empty[PROTOTYPE] = null;
+    // add "__proto__" for Object.getPrototypeOf polyfill
+    result[IE_PROTO] = O;
+  } else result = createDict();
+  return Properties === undefined ? result : dPs(result, Properties);
+};
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var def = __webpack_require__(7).f;
+var has = __webpack_require__(18);
+var TAG = __webpack_require__(6)('toStringTag');
+
+module.exports = function (it, tag, stat) {
+  if (it && !has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
+};
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _setPrototypeOf = __webpack_require__(159);
+
+var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
+
+var _create = __webpack_require__(163);
+
+var _create2 = _interopRequireDefault(_create);
+
+var _typeof2 = __webpack_require__(62);
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : (0, _typeof3.default)(superClass)));
+  }
+
+  subClass.prototype = (0, _create2.default)(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf2.default ? (0, _setPrototypeOf2.default)(subClass, superClass) : subClass.__proto__ = superClass;
+};
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var ctx = __webpack_require__(15);
+var call = __webpack_require__(95);
+var isArrayIter = __webpack_require__(96);
+var anObject = __webpack_require__(16);
+var toLength = __webpack_require__(32);
+var getIterFn = __webpack_require__(97);
+var BREAK = {};
+var RETURN = {};
+var exports = module.exports = function (iterable, entries, fn, that, ITERATOR) {
+  var iterFn = ITERATOR ? function () { return iterable; } : getIterFn(iterable);
+  var f = ctx(fn, that, entries ? 2 : 1);
+  var index = 0;
+  var length, step, iterator, result;
+  if (typeof iterFn != 'function') throw TypeError(iterable + ' is not iterable!');
+  // fast case for arrays with default iterator
+  if (isArrayIter(iterFn)) for (length = toLength(iterable.length); length > index; index++) {
+    result = entries ? f(anObject(step = iterable[index])[0], step[1]) : f(iterable[index]);
+    if (result === BREAK || result === RETURN) return result;
+  } else for (iterator = iterFn.call(iterable); !(step = iterator.next()).done;) {
+    result = call(iterator, f, step.value, entries);
+    if (result === BREAK || result === RETURN) return result;
+  }
+};
+exports.BREAK = BREAK;
+exports.RETURN = RETURN;
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = toCssValue;
+var join = function join(value, by) {
+  var result = '';
+  for (var i = 0; i < value.length; i++) {
+    // Remove !important from the value, it will be readded later.
+    if (value[i] === '!important') break;
+    if (result) result += by;
+    result += value[i];
+  }
+  return result;
+};
+
+/**
+ * Converts array values to string.
+ *
+ * `margin: [['5px', '10px']]` > `margin: 5px 10px;`
+ * `border: ['1px', '2px']` > `border: 1px, 2px;`
+ * `margin: [['5px', '10px'], '!important']` > `margin: 5px 10px !important;`
+ * `color: ['red', !important]` > `color: red !important;`
+ */
+function toCssValue(value) {
+  var ignoreImportant = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+  if (!Array.isArray(value)) return value;
+
+  var cssValue = '';
+
+  // Support space separated values via `[['5px', '10px']]`.
+  if (Array.isArray(value[0])) {
+    for (var i = 0; i < value.length; i++) {
+      if (value[i] === '!important') break;
+      if (cssValue) cssValue += ', ';
+      cssValue += join(value[i], ' ');
+    }
+  } else cssValue = join(value, ', ');
+
+  // Add !important, because it was ignored.
+  if (!ignoreImportant && value[value.length - 1] === '!important') {
+    cssValue += ' !important';
+  }
+
+  return cssValue;
+}
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = createRule;
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+var _StyleRule = __webpack_require__(21);
+
+var _StyleRule2 = _interopRequireDefault(_StyleRule);
+
+var _cloneStyle = __webpack_require__(191);
+
+var _cloneStyle2 = _interopRequireDefault(_cloneStyle);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/**
+ * Create a rule instance.
+ */
+function createRule() {
+  var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'unnamed';
+  var decl = arguments[1];
+  var options = arguments[2];
+  var jss = options.jss;
+
+  var declCopy = (0, _cloneStyle2['default'])(decl);
+
+  var rule = jss.plugins.onCreateRule(name, declCopy, options);
+  if (rule) return rule;
+
+  // It is an at-rule and it has no instance.
+  if (name[0] === '@') {
+    (0, _warning2['default'])(false, '[JSS] Unknown at-rule %s', name);
+  }
+
+  return new _StyleRule2['default'](name, declCopy, options);
+}
+
+/***/ }),
+/* 47 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isBrowser", function() { return isBrowser; });
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var isBrowser = (typeof window === "undefined" ? "undefined" : _typeof(window)) === "object" && (typeof document === "undefined" ? "undefined" : _typeof(document)) === 'object' && document.nodeType === 9;
+
+/* harmony default export */ __webpack_exports__["default"] = (isBrowser);
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+var isMergeableObject = function isMergeableObject(value) {
+	return isNonNullObject(value)
+		&& !isSpecial(value)
+};
+
+function isNonNullObject(value) {
+	return !!value && typeof value === 'object'
+}
+
+function isSpecial(value) {
+	var stringValue = Object.prototype.toString.call(value);
+
+	return stringValue === '[object RegExp]'
+		|| stringValue === '[object Date]'
+		|| isReactElement(value)
+}
+
+// see https://github.com/facebook/react/blob/b5ac963fb791d1298e7f396236383bc955f916c1/src/isomorphic/classic/element/ReactElement.js#L21-L25
+var canUseSymbol = typeof Symbol === 'function' && Symbol.for;
+var REACT_ELEMENT_TYPE = canUseSymbol ? Symbol.for('react.element') : 0xeac7;
+
+function isReactElement(value) {
+	return value.$$typeof === REACT_ELEMENT_TYPE
+}
+
+function emptyTarget(val) {
+	return Array.isArray(val) ? [] : {}
+}
+
+function cloneUnlessOtherwiseSpecified(value, options) {
+	return (options.clone !== false && options.isMergeableObject(value))
+		? deepmerge(emptyTarget(value), value, options)
+		: value
+}
+
+function defaultArrayMerge(target, source, options) {
+	return target.concat(source).map(function(element) {
+		return cloneUnlessOtherwiseSpecified(element, options)
+	})
+}
+
+function mergeObject(target, source, options) {
+	var destination = {};
+	if (options.isMergeableObject(target)) {
+		Object.keys(target).forEach(function(key) {
+			destination[key] = cloneUnlessOtherwiseSpecified(target[key], options);
+		});
+	}
+	Object.keys(source).forEach(function(key) {
+		if (!options.isMergeableObject(source[key]) || !target[key]) {
+			destination[key] = cloneUnlessOtherwiseSpecified(source[key], options);
+		} else {
+			destination[key] = deepmerge(target[key], source[key], options);
+		}
+	});
+	return destination
+}
+
+function deepmerge(target, source, options) {
+	options = options || {};
+	options.arrayMerge = options.arrayMerge || defaultArrayMerge;
+	options.isMergeableObject = options.isMergeableObject || isMergeableObject;
+
+	var sourceIsArray = Array.isArray(source);
+	var targetIsArray = Array.isArray(target);
+	var sourceAndTargetTypesMatch = sourceIsArray === targetIsArray;
+
+	if (!sourceAndTargetTypesMatch) {
+		return cloneUnlessOtherwiseSpecified(source, options)
+	} else if (sourceIsArray) {
+		return options.arrayMerge(target, source, options)
+	} else {
+		return mergeObject(target, source, options)
+	}
+}
+
+deepmerge.all = function deepmergeAll(array, options) {
+	if (!Array.isArray(array)) {
+		throw new Error('first argument should be an array')
+	}
+
+	return array.reduce(function(prev, next) {
+		return deepmerge(prev, next, options)
+	}, {})
+};
+
+var deepmerge_1 = deepmerge;
+
+/* harmony default export */ __webpack_exports__["default"] = (deepmerge_1);
+
+
+/***/ }),
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -610,9 +2018,9 @@ if (process.env.NODE_ENV !== 'production') {
 
 
 if (process.env.NODE_ENV !== 'production') {
-  var invariant = __webpack_require__(4);
-  var warning = __webpack_require__(6);
-  var ReactPropTypesSecret = __webpack_require__(9);
+  var invariant = __webpack_require__(23);
+  var warning = __webpack_require__(31);
+  var ReactPropTypesSecret = __webpack_require__(50);
   var loggedTypeFailures = {};
 }
 
@@ -663,7 +2071,7 @@ module.exports = checkPropTypes;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 9 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -682,7 +2090,7 @@ module.exports = ReactPropTypesSecret;
 
 
 /***/ }),
-/* 10 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -831,53 +2239,933 @@ var style = {
 exports.default = style;
 
 /***/ }),
-/* 11 */
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.1.1 ToPrimitive(input [, PreferredType])
+var isObject = __webpack_require__(12);
+// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+// and the second argument - flag - preferred type is a string
+module.exports = function (it, S) {
+  if (!isObject(it)) return it;
+  var fn, val;
+  if (S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
+  if (typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it))) return val;
+  if (!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
+  throw TypeError("Can't convert object to primitive value");
+};
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// fallback for non-array-like ES3 and non-enumerable old V8 strings
+var cof = __webpack_require__(54);
+// eslint-disable-next-line no-prototype-builtins
+module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
+  return cof(it) == 'String' ? it.split('') : Object(it);
+};
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports) {
+
+var toString = {}.toString;
+
+module.exports = function (it) {
+  return toString.call(it).slice(8, -1);
+};
+
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports) {
+
+// 7.2.1 RequireObjectCoercible(argument)
+module.exports = function (it) {
+  if (it == undefined) throw TypeError("Can't call method on  " + it);
+  return it;
+};
+
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports) {
+
+// 7.1.4 ToInteger
+var ceil = Math.ceil;
+var floor = Math.floor;
+module.exports = function (it) {
+  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+};
+
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var shared = __webpack_require__(58)('keys');
+var uid = __webpack_require__(33);
+module.exports = function (key) {
+  return shared[key] || (shared[key] = uid(key));
+};
+
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var global = __webpack_require__(8);
+var SHARED = '__core-js_shared__';
+var store = global[SHARED] || (global[SHARED] = {});
+module.exports = function (key) {
+  return store[key] || (store[key] = {});
+};
+
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports) {
+
+// IE 8- don't enum bug keys
+module.exports = (
+  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
+).split(',');
+
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports) {
+
+exports.f = Object.getOwnPropertySymbols;
+
+
+/***/ }),
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
-function checkDCE() {
-  /* global __REACT_DEVTOOLS_GLOBAL_HOOK__ */
-  if (
-    typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === 'undefined' ||
-    typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE !== 'function'
-  ) {
-    return;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.sheetsManager = undefined;
+
+var _keys = __webpack_require__(36);
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _getPrototypeOf = __webpack_require__(37);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(40);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(43);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _map = __webpack_require__(166);
+
+var _map2 = _interopRequireDefault(_map);
+
+var _minSafeInteger = __webpack_require__(182);
+
+var _minSafeInteger2 = _interopRequireDefault(_minSafeInteger);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+var _hoistNonReactStatics = __webpack_require__(185);
+
+var _hoistNonReactStatics2 = _interopRequireDefault(_hoistNonReactStatics);
+
+var _getDisplayName = __webpack_require__(100);
+
+var _getDisplayName2 = _interopRequireDefault(_getDisplayName);
+
+var _wrapDisplayName = __webpack_require__(186);
+
+var _wrapDisplayName2 = _interopRequireDefault(_wrapDisplayName);
+
+var _contextTypes = __webpack_require__(187);
+
+var _contextTypes2 = _interopRequireDefault(_contextTypes);
+
+var _jss = __webpack_require__(102);
+
+var _ns = __webpack_require__(101);
+
+var ns = _interopRequireWildcard(_ns);
+
+var _jssPreset = __webpack_require__(209);
+
+var _jssPreset2 = _interopRequireDefault(_jssPreset);
+
+var _createMuiTheme = __webpack_require__(222);
+
+var _createMuiTheme2 = _interopRequireDefault(_createMuiTheme);
+
+var _themeListener = __webpack_require__(239);
+
+var _themeListener2 = _interopRequireDefault(_themeListener);
+
+var _createGenerateClassName = __webpack_require__(240);
+
+var _createGenerateClassName2 = _interopRequireDefault(_createGenerateClassName);
+
+var _getStylesCreator = __webpack_require__(241);
+
+var _getStylesCreator2 = _interopRequireDefault(_getStylesCreator);
+
+var _getThemeProps = __webpack_require__(242);
+
+var _getThemeProps2 = _interopRequireDefault(_getThemeProps);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Default JSS instance.
+var jss = (0, _jss.create)((0, _jssPreset2.default)());
+
+// Use a singleton or the provided one by the context.
+var generateClassName = (0, _createGenerateClassName2.default)();
+
+// Global index counter to preserve source order.
+// We create the style sheet during at the creation of the component,
+// children are handled after the parents, so the order of style elements would be parent->child.
+// It is a problem though when a parent passes a className
+// which needs to override any childs styles.
+// StyleSheet of the child has a higher specificity, because of the source order.
+// So our solution is to render sheets them in the reverse order child->sheet, so
+// that parent has a higher specificity.
+var indexCounter = _minSafeInteger2.default;
+
+var sheetsManager = exports.sheetsManager = new _map2.default();
+
+// We use the same empty object to ref count the styles that don't need a theme object.
+var noopTheme = {};
+
+// In order to have self-supporting components, we rely on default theme when not provided.
+var defaultTheme = void 0;
+
+function getDefaultTheme() {
+  if (defaultTheme) {
+    return defaultTheme;
   }
-  if (process.env.NODE_ENV !== 'production') {
-    // This branch is unreachable because this function is only called
-    // in production, but the condition is true only in development.
-    // Therefore if the branch is still here, dead code elimination wasn't
-    // properly applied.
-    // Don't change the message. React DevTools relies on it. Also make sure
-    // this message doesn't occur elsewhere in this function, or it will cause
-    // a false positive.
-    throw new Error('^_^');
-  }
-  try {
-    // Verify that the code above has been dead code eliminated (DCE'd).
-    __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE(checkDCE);
-  } catch (err) {
-    // DevTools shouldn't crash React, no matter what.
-    // We should still report in case we break this code.
-    console.error(err);
-  }
+
+  defaultTheme = (0, _createMuiTheme2.default)();
+  return defaultTheme;
 }
 
-if (process.env.NODE_ENV === 'production') {
-  // DCE check should happen before ReactDOM bundle executes so that
-  // DevTools can report bad minification during injection.
-  checkDCE();
-  module.exports = __webpack_require__(22);
-} else {
-  module.exports = __webpack_require__(25);
-}
+// Link a style sheet with a component.
+// It does not modify the component passed to it;
+// instead, it returns a new component, with a `classes` property.
+var withStyles = function withStyles(stylesOrCreator) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  return function (Component) {
+    var _options$withTheme = options.withTheme,
+        withTheme = _options$withTheme === undefined ? false : _options$withTheme,
+        _options$flip = options.flip,
+        flip = _options$flip === undefined ? null : _options$flip,
+        name = options.name,
+        styleSheetOptions = (0, _objectWithoutProperties3.default)(options, ['withTheme', 'flip', 'name']);
 
+    var stylesCreator = (0, _getStylesCreator2.default)(stylesOrCreator);
+    var listenToTheme = stylesCreator.themingEnabled || withTheme || typeof name === 'string';
+
+    indexCounter += 1;
+    stylesCreator.options.index = indexCounter;
+
+    process.env.NODE_ENV !== "production" ? (0, _warning2.default)(indexCounter < 0, ['Material-UI: you might have a memory leak.', 'The indexCounter is not supposed to grow that much.'].join(' ')) : void 0;
+
+    var WithStyles = function (_React$Component) {
+      (0, _inherits3.default)(WithStyles, _React$Component);
+
+      function WithStyles(props, context) {
+        (0, _classCallCheck3.default)(this, WithStyles);
+
+        var _this = (0, _possibleConstructorReturn3.default)(this, (WithStyles.__proto__ || (0, _getPrototypeOf2.default)(WithStyles)).call(this, props, context));
+
+        _this.state = {};
+        _this.disableStylesGeneration = false;
+        _this.jss = null;
+        _this.sheetOptions = null;
+        _this.sheetsManager = sheetsManager;
+        _this.stylesCreatorSaved = null;
+        _this.theme = null;
+        _this.unsubscribeId = null;
+
+
+        _this.jss = _this.context[ns.jss] || jss;
+
+        var muiThemeProviderOptions = _this.context.muiThemeProviderOptions;
+
+        if (muiThemeProviderOptions) {
+          if (muiThemeProviderOptions.sheetsManager) {
+            _this.sheetsManager = muiThemeProviderOptions.sheetsManager;
+          }
+
+          _this.disableStylesGeneration = muiThemeProviderOptions.disableStylesGeneration;
+        }
+
+        // Attach the stylesCreator to the instance of the component as in the context
+        // of react-hot-loader the hooks can be executed in a different closure context:
+        // https://github.com/gaearon/react-hot-loader/blob/master/src/patch.dev.js#L107
+        _this.stylesCreatorSaved = stylesCreator;
+        _this.sheetOptions = (0, _extends3.default)({
+          generateClassName: generateClassName
+        }, _this.context[ns.sheetOptions]);
+        // We use || as the function call is lazy evaluated.
+        _this.theme = listenToTheme ? _themeListener2.default.initial(context) || getDefaultTheme() : noopTheme;
+
+        _this.attach(_this.theme);
+        return _this;
+      }
+
+      (0, _createClass3.default)(WithStyles, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+          var _this2 = this;
+
+          if (!listenToTheme) {
+            return;
+          }
+
+          this.unsubscribeId = _themeListener2.default.subscribe(this.context, function (theme) {
+            var oldTheme = _this2.theme;
+            _this2.theme = theme;
+            _this2.attach(_this2.theme);
+
+            // Rerender the component so the underlying component gets the theme update.
+            // By theme update we mean receiving and applying the new class names.
+            _this2.setState({}, function () {
+              _this2.detach(oldTheme);
+            });
+          });
+        }
+      }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps() {
+          // react-hot-loader specific logic
+          if (this.stylesCreatorSaved === stylesCreator || process.env.NODE_ENV === 'production') {
+            return;
+          }
+
+          this.detach(this.theme);
+          this.stylesCreatorSaved = stylesCreator;
+          this.attach(this.theme);
+        }
+      }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+          this.detach(this.theme);
+
+          if (this.unsubscribeId !== null) {
+            _themeListener2.default.unsubscribe(this.context, this.unsubscribeId);
+          }
+        }
+      }, {
+        key: 'attach',
+        value: function attach(theme) {
+          if (this.disableStylesGeneration) {
+            return;
+          }
+
+          var stylesCreatorSaved = this.stylesCreatorSaved;
+          var sheetManager = this.sheetsManager.get(stylesCreatorSaved);
+
+          if (!sheetManager) {
+            sheetManager = new _map2.default();
+            this.sheetsManager.set(stylesCreatorSaved, sheetManager);
+          }
+
+          var sheetManagerTheme = sheetManager.get(theme);
+
+          if (!sheetManagerTheme) {
+            sheetManagerTheme = {
+              refs: 0,
+              sheet: null
+            };
+            sheetManager.set(theme, sheetManagerTheme);
+          }
+
+          if (sheetManagerTheme.refs === 0) {
+            var styles = stylesCreatorSaved.create(theme, name);
+            var meta = name;
+
+            if (process.env.NODE_ENV !== 'production' && !meta) {
+              meta = (0, _getDisplayName2.default)(Component);
+            }
+
+            var sheet = this.jss.createStyleSheet(styles, (0, _extends3.default)({
+              meta: meta,
+              classNamePrefix: meta,
+              flip: typeof flip === 'boolean' ? flip : theme.direction === 'rtl',
+              link: false
+            }, this.sheetOptions, stylesCreatorSaved.options, {
+              name: name
+            }, styleSheetOptions));
+
+            sheetManagerTheme.sheet = sheet;
+            sheet.attach();
+
+            var sheetsRegistry = this.context[ns.sheetsRegistry];
+            if (sheetsRegistry) {
+              sheetsRegistry.add(sheet);
+            }
+          }
+
+          sheetManagerTheme.refs += 1;
+        }
+      }, {
+        key: 'detach',
+        value: function detach(theme) {
+          if (this.disableStylesGeneration) {
+            return;
+          }
+
+          var stylesCreatorSaved = this.stylesCreatorSaved;
+          var sheetManager = this.sheetsManager.get(stylesCreatorSaved);
+          var sheetManagerTheme = sheetManager.get(theme);
+
+          sheetManagerTheme.refs -= 1;
+
+          if (sheetManagerTheme.refs === 0) {
+            sheetManager.delete(theme);
+            this.jss.removeStyleSheet(sheetManagerTheme.sheet);
+            var sheetsRegistry = this.context[ns.sheetsRegistry];
+            if (sheetsRegistry) {
+              sheetsRegistry.remove(sheetManagerTheme.sheet);
+            }
+          }
+        }
+      }, {
+        key: 'render',
+        value: function render() {
+          var _this3 = this;
+
+          var _props = this.props,
+              classesProp = _props.classes,
+              innerRef = _props.innerRef,
+              other = (0, _objectWithoutProperties3.default)(_props, ['classes', 'innerRef']);
+
+
+          var classes = void 0;
+          var renderedClasses = {};
+
+          if (!this.disableStylesGeneration) {
+            var sheetManager = this.sheetsManager.get(this.stylesCreatorSaved);
+            var sheetsManagerTheme = sheetManager.get(this.theme);
+            renderedClasses = sheetsManagerTheme.sheet.classes;
+          }
+
+          if (classesProp) {
+            classes = (0, _extends3.default)({}, renderedClasses, (0, _keys2.default)(classesProp).reduce(function (accumulator, key) {
+              process.env.NODE_ENV !== "production" ? (0, _warning2.default)(renderedClasses[key] || _this3.disableStylesGeneration, ['Material-UI: the key `' + key + '` ' + ('provided to the classes property is not implemented in ' + (0, _getDisplayName2.default)(Component) + '.'), 'You can only override one of the following: ' + (0, _keys2.default)(renderedClasses).join(',')].join('\n')) : void 0;
+
+              process.env.NODE_ENV !== "production" ? (0, _warning2.default)(!classesProp[key] || typeof classesProp[key] === 'string', ['Material-UI: the key `' + key + '` ' + ('provided to the classes property is not valid for ' + (0, _getDisplayName2.default)(Component) + '.'), 'You need to provide a non empty string instead of: ' + classesProp[key] + '.'].join('\n')) : void 0;
+
+              if (classesProp[key]) {
+                accumulator[key] = renderedClasses[key] + ' ' + classesProp[key];
+              }
+
+              return accumulator;
+            }, {}));
+          } else {
+            classes = renderedClasses;
+          }
+
+          var more = (0, _getThemeProps2.default)({ theme: this.theme, name: name });
+
+          // Provide the theme to the wrapped component.
+          // So we don't have to use the `withTheme()` Higher-order Component.
+          if (withTheme) {
+            more.theme = this.theme;
+          }
+
+          return _react2.default.createElement(Component, (0, _extends3.default)({}, more, { classes: classes, ref: innerRef }, other));
+        }
+      }]);
+      return WithStyles;
+    }(_react2.default.Component);
+
+    WithStyles.propTypes = process.env.NODE_ENV !== "production" ? {
+      /**
+       * Useful to extend the style applied to components.
+       */
+      classes: _propTypes2.default.object,
+      /**
+       * Use that property to pass a ref callback to the decorated component.
+       */
+      innerRef: _propTypes2.default.func
+    } : {};
+
+    WithStyles.contextTypes = (0, _extends3.default)({
+      muiThemeProviderOptions: _propTypes2.default.object
+    }, _contextTypes2.default, listenToTheme ? _themeListener2.default.contextTypes : {});
+
+    if (process.env.NODE_ENV !== 'production') {
+      WithStyles.displayName = (0, _wrapDisplayName2.default)(Component, 'WithStyles');
+    }
+
+    (0, _hoistNonReactStatics2.default)(WithStyles, Component);
+
+    if (process.env.NODE_ENV !== 'production') {
+      // Exposed for test purposes.
+      WithStyles.Naked = Component;
+      WithStyles.options = options;
+    }
+
+    return WithStyles;
+  };
+};
+
+exports.default = withStyles;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 12 */
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _iterator = __webpack_require__(144);
+
+var _iterator2 = _interopRequireDefault(_iterator);
+
+var _symbol = __webpack_require__(152);
+
+var _symbol2 = _interopRequireDefault(_symbol);
+
+var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj; };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
+  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
+} : function (obj) {
+  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
+};
+
+/***/ }),
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $at = __webpack_require__(146)(true);
+
+// 21.1.3.27 String.prototype[@@iterator]()
+__webpack_require__(64)(String, 'String', function (iterated) {
+  this._t = String(iterated); // target
+  this._i = 0;                // next index
+// 21.1.5.2.1 %StringIteratorPrototype%.next()
+}, function () {
+  var O = this._t;
+  var index = this._i;
+  var point;
+  if (index >= O.length) return { value: undefined, done: true };
+  point = $at(O, index);
+  this._i += point.length;
+  return { value: point, done: false };
+});
+
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var LIBRARY = __webpack_require__(65);
+var $export = __webpack_require__(5);
+var redefine = __webpack_require__(86);
+var hide = __webpack_require__(14);
+var Iterators = __webpack_require__(28);
+var $iterCreate = __webpack_require__(147);
+var setToStringTag = __webpack_require__(42);
+var getPrototypeOf = __webpack_require__(85);
+var ITERATOR = __webpack_require__(6)('iterator');
+var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
+var FF_ITERATOR = '@@iterator';
+var KEYS = 'keys';
+var VALUES = 'values';
+
+var returnThis = function () { return this; };
+
+module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED) {
+  $iterCreate(Constructor, NAME, next);
+  var getMethod = function (kind) {
+    if (!BUGGY && kind in proto) return proto[kind];
+    switch (kind) {
+      case KEYS: return function keys() { return new Constructor(this, kind); };
+      case VALUES: return function values() { return new Constructor(this, kind); };
+    } return function entries() { return new Constructor(this, kind); };
+  };
+  var TAG = NAME + ' Iterator';
+  var DEF_VALUES = DEFAULT == VALUES;
+  var VALUES_BUG = false;
+  var proto = Base.prototype;
+  var $native = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
+  var $default = $native || getMethod(DEFAULT);
+  var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
+  var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
+  var methods, key, IteratorPrototype;
+  // Fix native
+  if ($anyNative) {
+    IteratorPrototype = getPrototypeOf($anyNative.call(new Base()));
+    if (IteratorPrototype !== Object.prototype && IteratorPrototype.next) {
+      // Set @@toStringTag to native iterators
+      setToStringTag(IteratorPrototype, TAG, true);
+      // fix for some old engines
+      if (!LIBRARY && typeof IteratorPrototype[ITERATOR] != 'function') hide(IteratorPrototype, ITERATOR, returnThis);
+    }
+  }
+  // fix Array#{values, @@iterator}.name in V8 / FF
+  if (DEF_VALUES && $native && $native.name !== VALUES) {
+    VALUES_BUG = true;
+    $default = function values() { return $native.call(this); };
+  }
+  // Define iterator
+  if ((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])) {
+    hide(proto, ITERATOR, $default);
+  }
+  // Plug for library
+  Iterators[NAME] = $default;
+  Iterators[TAG] = returnThis;
+  if (DEFAULT) {
+    methods = {
+      values: DEF_VALUES ? $default : getMethod(VALUES),
+      keys: IS_SET ? $default : getMethod(KEYS),
+      entries: $entries
+    };
+    if (FORCED) for (key in methods) {
+      if (!(key in proto)) redefine(proto, key, methods[key]);
+    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
+  }
+  return methods;
+};
+
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports) {
+
+module.exports = true;
+
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports.f = __webpack_require__(6);
+
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var META = __webpack_require__(33)('meta');
+var isObject = __webpack_require__(12);
+var has = __webpack_require__(18);
+var setDesc = __webpack_require__(7).f;
+var id = 0;
+var isExtensible = Object.isExtensible || function () {
+  return true;
+};
+var FREEZE = !__webpack_require__(17)(function () {
+  return isExtensible(Object.preventExtensions({}));
+});
+var setMeta = function (it) {
+  setDesc(it, META, { value: {
+    i: 'O' + ++id, // object ID
+    w: {}          // weak collections IDs
+  } });
+};
+var fastKey = function (it, create) {
+  // return primitive with prefix
+  if (!isObject(it)) return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
+  if (!has(it, META)) {
+    // can't set metadata to uncaught frozen object
+    if (!isExtensible(it)) return 'F';
+    // not necessary to add metadata
+    if (!create) return 'E';
+    // add missing metadata
+    setMeta(it);
+  // return object ID
+  } return it[META].i;
+};
+var getWeak = function (it, create) {
+  if (!has(it, META)) {
+    // can't set metadata to uncaught frozen object
+    if (!isExtensible(it)) return true;
+    // not necessary to add metadata
+    if (!create) return false;
+    // add missing metadata
+    setMeta(it);
+  // return hash weak collections IDs
+  } return it[META].w;
+};
+// add metadata on freeze-family methods calling
+var onFreeze = function (it) {
+  if (FREEZE && meta.NEED && isExtensible(it) && !has(it, META)) setMeta(it);
+  return it;
+};
+var meta = module.exports = {
+  KEY: META,
+  NEED: false,
+  fastKey: fastKey,
+  getWeak: getWeak,
+  onFreeze: onFreeze
+};
+
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var global = __webpack_require__(8);
+var core = __webpack_require__(4);
+var LIBRARY = __webpack_require__(65);
+var wksExt = __webpack_require__(66);
+var defineProperty = __webpack_require__(7).f;
+module.exports = function (name) {
+  var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
+  if (name.charAt(0) != '_' && !(name in $Symbol)) defineProperty($Symbol, name, { value: wksExt.f(name) });
+};
+
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = toCss;
+
+var _toCssValue = __webpack_require__(45);
+
+var _toCssValue2 = _interopRequireDefault(_toCssValue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/**
+ * Indent a string.
+ * http://jsperf.com/array-join-vs-for
+ */
+function indentStr(str, indent) {
+  var result = '';
+  for (var index = 0; index < indent; index++) {
+    result += '  ';
+  }return result + str;
+}
+
+/**
+ * Converts a Rule to CSS string.
+ */
+
+function toCss(selector, style) {
+  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+  var result = '';
+
+  if (!style) return result;
+
+  var _options$indent = options.indent,
+      indent = _options$indent === undefined ? 0 : _options$indent;
+  var fallbacks = style.fallbacks;
+
+
+  indent++;
+
+  // Apply fallbacks first.
+  if (fallbacks) {
+    // Array syntax {fallbacks: [{prop: value}]}
+    if (Array.isArray(fallbacks)) {
+      for (var index = 0; index < fallbacks.length; index++) {
+        var fallback = fallbacks[index];
+        for (var prop in fallback) {
+          var value = fallback[prop];
+          if (value != null) {
+            result += '\n' + indentStr(prop + ': ' + (0, _toCssValue2['default'])(value) + ';', indent);
+          }
+        }
+      }
+    } else {
+      // Object syntax {fallbacks: {prop: value}}
+      for (var _prop in fallbacks) {
+        var _value = fallbacks[_prop];
+        if (_value != null) {
+          result += '\n' + indentStr(_prop + ': ' + (0, _toCssValue2['default'])(_value) + ';', indent);
+        }
+      }
+    }
+  }
+
+  for (var _prop2 in style) {
+    var _value2 = style[_prop2];
+    if (_value2 != null && _prop2 !== 'fallbacks') {
+      result += '\n' + indentStr(_prop2 + ': ' + (0, _toCssValue2['default'])(_value2) + ';', indent);
+    }
+  }
+
+  // Allow empty style in this case, because properties will be added dynamically.
+  if (!result && !options.allowEmpty) return result;
+
+  indent--;
+  result = indentStr(selector + ' {' + result + '\n', indent) + indentStr('}', indent);
+
+  return result;
+}
+
+/***/ }),
+/* 70 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _SheetsRegistry = __webpack_require__(103);
+
+var _SheetsRegistry2 = _interopRequireDefault(_SheetsRegistry);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/**
+ * This is a global sheets registry. Only DomRenderer will add sheets to it.
+ * On the server one should use an own SheetsRegistry instance and add the
+ * sheets to it, because you need to make sure to create a new registry for
+ * each request in order to not leak sheets across requests.
+ */
+exports['default'] = new _SheetsRegistry2['default']();
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _isInBrowser = __webpack_require__(47);
+
+var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var js = ''; /**
+              * Export javascript style and css style vendor prefixes.
+              * Based on "transform" support test.
+              */
+
+var css = '';
+
+// We should not do anything if required serverside.
+if (_isInBrowser2['default']) {
+  // Order matters. We need to check Webkit the last one because
+  // other vendors use to add Webkit prefixes to some properties
+  var jsCssMap = {
+    Moz: '-moz-',
+    // IE did it wrong again ...
+    ms: '-ms-',
+    O: '-o-',
+    Webkit: '-webkit-'
+  };
+  var style = document.createElement('p').style;
+  var testProp = 'Transform';
+
+  for (var key in jsCssMap) {
+    if (key + testProp in style) {
+      js = key;
+      css = jsCssMap[key];
+      break;
+    }
+  }
+}
+
+/**
+ * Vendor prefix string for the current browser.
+ *
+ * @type {{js: String, css: String}}
+ * @api public
+ */
+exports['default'] = { js: js, css: css };
+
+/***/ }),
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -916,7 +3204,7 @@ var ExecutionEnvironment = {
 module.exports = ExecutionEnvironment;
 
 /***/ }),
-/* 13 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -931,7 +3219,7 @@ module.exports = ExecutionEnvironment;
  * @typechecks
  */
 
-var emptyFunction = __webpack_require__(2);
+var emptyFunction = __webpack_require__(13);
 
 /**
  * Upstream version of event listener. Does not take into account specific
@@ -997,7 +3285,7 @@ module.exports = EventListener;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 14 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1039,7 +3327,7 @@ function getActiveElement(doc) /*?DOMElement*/{
 module.exports = getActiveElement;
 
 /***/ }),
-/* 15 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1110,7 +3398,7 @@ function shallowEqual(objA, objB) {
 module.exports = shallowEqual;
 
 /***/ }),
-/* 16 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1125,7 +3413,7 @@ module.exports = shallowEqual;
  * 
  */
 
-var isTextNode = __webpack_require__(23);
+var isTextNode = __webpack_require__(116);
 
 /*eslint-disable no-bitwise */
 
@@ -1153,7 +3441,7 @@ function containsNode(outerNode, innerNode) {
 module.exports = containsNode;
 
 /***/ }),
-/* 17 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1183,7 +3471,1346 @@ function focusNode(node) {
 module.exports = focusNode;
 
 /***/ }),
-/* 18 */
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(132), __esModule: true };
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports) {
+
+module.exports = function (it) {
+  if (typeof it != 'function') throw TypeError(it + ' is not a function!');
+  return it;
+};
+
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = !__webpack_require__(9) && !__webpack_require__(17)(function () {
+  return Object.defineProperty(__webpack_require__(82)('div'), 'a', { get: function () { return 7; } }).a != 7;
+});
+
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(12);
+var document = __webpack_require__(8).document;
+// typeof document.createElement is 'object' in old IE
+var is = isObject(document) && isObject(document.createElement);
+module.exports = function (it) {
+  return is ? document.createElement(it) : {};
+};
+
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var has = __webpack_require__(18);
+var toIObject = __webpack_require__(19);
+var arrayIndexOf = __webpack_require__(138)(false);
+var IE_PROTO = __webpack_require__(57)('IE_PROTO');
+
+module.exports = function (object, names) {
+  var O = toIObject(object);
+  var i = 0;
+  var result = [];
+  var key;
+  for (key in O) if (key != IE_PROTO) has(O, key) && result.push(key);
+  // Don't enum bug & hidden keys
+  while (names.length > i) if (has(O, key = names[i++])) {
+    ~arrayIndexOf(result, key) || result.push(key);
+  }
+  return result;
+};
+
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// most Object methods by ES6 should accept primitives
+var $export = __webpack_require__(5);
+var core = __webpack_require__(4);
+var fails = __webpack_require__(17);
+module.exports = function (KEY, exec) {
+  var fn = (core.Object || {})[KEY] || Object[KEY];
+  var exp = {};
+  exp[KEY] = exec(fn);
+  $export($export.S + $export.F * fails(function () { fn(1); }), 'Object', exp);
+};
+
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
+var has = __webpack_require__(18);
+var toObject = __webpack_require__(20);
+var IE_PROTO = __webpack_require__(57)('IE_PROTO');
+var ObjectProto = Object.prototype;
+
+module.exports = Object.getPrototypeOf || function (O) {
+  O = toObject(O);
+  if (has(O, IE_PROTO)) return O[IE_PROTO];
+  if (typeof O.constructor == 'function' && O instanceof O.constructor) {
+    return O.constructor.prototype;
+  } return O instanceof Object ? ObjectProto : null;
+};
+
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(14);
+
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(150);
+var global = __webpack_require__(8);
+var hide = __webpack_require__(14);
+var Iterators = __webpack_require__(28);
+var TO_STRING_TAG = __webpack_require__(6)('toStringTag');
+
+var DOMIterables = ('CSSRuleList,CSSStyleDeclaration,CSSValueList,ClientRectList,DOMRectList,DOMStringList,' +
+  'DOMTokenList,DataTransferItemList,FileList,HTMLAllCollection,HTMLCollection,HTMLFormElement,HTMLSelectElement,' +
+  'MediaList,MimeTypeArray,NamedNodeMap,NodeList,PaintRequestList,Plugin,PluginArray,SVGLengthList,SVGNumberList,' +
+  'SVGPathSegList,SVGPointList,SVGStringList,SVGTransformList,SourceBufferList,StyleSheetList,TextTrackCueList,' +
+  'TextTrackList,TouchList').split(',');
+
+for (var i = 0; i < DOMIterables.length; i++) {
+  var NAME = DOMIterables[i];
+  var Collection = global[NAME];
+  var proto = Collection && Collection.prototype;
+  if (proto && !proto[TO_STRING_TAG]) hide(proto, TO_STRING_TAG, NAME);
+  Iterators[NAME] = Iterators.Array;
+}
+
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports) {
+
+module.exports = function (done, value) {
+  return { value: value, done: !!done };
+};
+
+
+/***/ }),
+/* 89 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.2.2 IsArray(argument)
+var cof = __webpack_require__(54);
+module.exports = Array.isArray || function isArray(arg) {
+  return cof(arg) == 'Array';
+};
+
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
+var $keys = __webpack_require__(83);
+var hiddenKeys = __webpack_require__(59).concat('length', 'prototype');
+
+exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
+  return $keys(O, hiddenKeys);
+};
+
+
+/***/ }),
+/* 91 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var pIE = __webpack_require__(34);
+var createDesc = __webpack_require__(26);
+var toIObject = __webpack_require__(19);
+var toPrimitive = __webpack_require__(52);
+var has = __webpack_require__(18);
+var IE8_DOM_DEFINE = __webpack_require__(81);
+var gOPD = Object.getOwnPropertyDescriptor;
+
+exports.f = __webpack_require__(9) ? gOPD : function getOwnPropertyDescriptor(O, P) {
+  O = toIObject(O);
+  P = toPrimitive(P, true);
+  if (IE8_DOM_DEFINE) try {
+    return gOPD(O, P);
+  } catch (e) { /* empty */ }
+  if (has(O, P)) return createDesc(!pIE.f.call(O, P), O[P]);
+};
+
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var hide = __webpack_require__(14);
+module.exports = function (target, src, safe) {
+  for (var key in src) {
+    if (safe && target[key]) target[key] = src[key];
+    else hide(target, key, src[key]);
+  } return target;
+};
+
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports) {
+
+module.exports = function (it, Constructor, name, forbiddenField) {
+  if (!(it instanceof Constructor) || (forbiddenField !== undefined && forbiddenField in it)) {
+    throw TypeError(name + ': incorrect invocation!');
+  } return it;
+};
+
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// call something on iterator step with safe closing on error
+var anObject = __webpack_require__(16);
+module.exports = function (iterator, fn, value, entries) {
+  try {
+    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
+  // 7.4.6 IteratorClose(iterator, completion)
+  } catch (e) {
+    var ret = iterator['return'];
+    if (ret !== undefined) anObject(ret.call(iterator));
+    throw e;
+  }
+};
+
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// check on default Array iterator
+var Iterators = __webpack_require__(28);
+var ITERATOR = __webpack_require__(6)('iterator');
+var ArrayProto = Array.prototype;
+
+module.exports = function (it) {
+  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
+};
+
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var classof = __webpack_require__(98);
+var ITERATOR = __webpack_require__(6)('iterator');
+var Iterators = __webpack_require__(28);
+module.exports = __webpack_require__(4).getIteratorMethod = function (it) {
+  if (it != undefined) return it[ITERATOR]
+    || it['@@iterator']
+    || Iterators[classof(it)];
+};
+
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// getting tag from 19.1.3.6 Object.prototype.toString()
+var cof = __webpack_require__(54);
+var TAG = __webpack_require__(6)('toStringTag');
+// ES3 wrong here
+var ARG = cof(function () { return arguments; }()) == 'Arguments';
+
+// fallback for IE11 Script Access Denied error
+var tryGet = function (it, key) {
+  try {
+    return it[key];
+  } catch (e) { /* empty */ }
+};
+
+module.exports = function (it) {
+  var O, T, B;
+  return it === undefined ? 'Undefined' : it === null ? 'Null'
+    // @@toStringTag case
+    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
+    // builtinTag case
+    : ARG ? cof(O)
+    // ES3 arguments fallback
+    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+};
+
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(12);
+module.exports = function (it, TYPE) {
+  if (!isObject(it) || it._t !== TYPE) throw TypeError('Incompatible receiver, ' + TYPE + ' required!');
+  return it;
+};
+
+
+/***/ }),
+/* 100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+var getDisplayName = function getDisplayName(Component) {
+  if (typeof Component === 'string') {
+    return Component;
+  }
+
+  if (!Component) {
+    return undefined;
+  }
+
+  return Component.displayName || Component.name || 'Component';
+};
+
+exports.default = getDisplayName;
+
+/***/ }),
+/* 101 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Namespaces to avoid conflicts on the context.
+ */
+var jss = exports.jss = '64a55d578f856d258dc345b094a2a2b3';
+var sheetsRegistry = exports.sheetsRegistry = 'd4bd0baacbc52bbd48bbb9eb24344ecd';
+var managers = exports.managers = 'b768b78919504fba9de2c03545c5cd3a';
+var sheetOptions = exports.sheetOptions = '6fc570d6bd61383819d0f9e7407c452d';
+
+/***/ }),
+/* 102 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.create = exports.createGenerateClassName = exports.sheets = exports.RuleList = exports.SheetsManager = exports.SheetsRegistry = exports.toCssValue = exports.getDynamicStyles = undefined;
+
+var _getDynamicStyles = __webpack_require__(189);
+
+Object.defineProperty(exports, 'getDynamicStyles', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_getDynamicStyles)['default'];
+  }
+});
+
+var _toCssValue = __webpack_require__(45);
+
+Object.defineProperty(exports, 'toCssValue', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_toCssValue)['default'];
+  }
+});
+
+var _SheetsRegistry = __webpack_require__(103);
+
+Object.defineProperty(exports, 'SheetsRegistry', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_SheetsRegistry)['default'];
+  }
+});
+
+var _SheetsManager = __webpack_require__(190);
+
+Object.defineProperty(exports, 'SheetsManager', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_SheetsManager)['default'];
+  }
+});
+
+var _RuleList = __webpack_require__(29);
+
+Object.defineProperty(exports, 'RuleList', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_RuleList)['default'];
+  }
+});
+
+var _sheets = __webpack_require__(71);
+
+Object.defineProperty(exports, 'sheets', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_sheets)['default'];
+  }
+});
+
+var _createGenerateClassName = __webpack_require__(106);
+
+Object.defineProperty(exports, 'createGenerateClassName', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_createGenerateClassName)['default'];
+  }
+});
+
+var _Jss = __webpack_require__(197);
+
+var _Jss2 = _interopRequireDefault(_Jss);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/**
+ * Creates a new instance of Jss.
+ */
+var create = exports.create = function create(options) {
+  return new _Jss2['default'](options);
+};
+
+/**
+ * A global Jss instance.
+ */
+exports['default'] = create();
+
+/***/ }),
+/* 103 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Sheets registry to access them all at one place.
+ */
+var SheetsRegistry = function () {
+  function SheetsRegistry() {
+    _classCallCheck(this, SheetsRegistry);
+
+    this.registry = [];
+  }
+
+  _createClass(SheetsRegistry, [{
+    key: 'add',
+
+
+    /**
+     * Register a Style Sheet.
+     */
+    value: function add(sheet) {
+      var registry = this.registry;
+      var index = sheet.options.index;
+
+
+      if (registry.indexOf(sheet) !== -1) return;
+
+      if (registry.length === 0 || index >= this.index) {
+        registry.push(sheet);
+        return;
+      }
+
+      // Find a position.
+      for (var i = 0; i < registry.length; i++) {
+        if (registry[i].options.index > index) {
+          registry.splice(i, 0, sheet);
+          return;
+        }
+      }
+    }
+
+    /**
+     * Reset the registry.
+     */
+
+  }, {
+    key: 'reset',
+    value: function reset() {
+      this.registry = [];
+    }
+
+    /**
+     * Remove a Style Sheet.
+     */
+
+  }, {
+    key: 'remove',
+    value: function remove(sheet) {
+      var index = this.registry.indexOf(sheet);
+      this.registry.splice(index, 1);
+    }
+
+    /**
+     * Convert all attached sheets to a CSS string.
+     */
+
+  }, {
+    key: 'toString',
+    value: function toString(options) {
+      return this.registry.filter(function (sheet) {
+        return sheet.attached;
+      }).map(function (sheet) {
+        return sheet.toString(options);
+      }).join('\n');
+    }
+  }, {
+    key: 'index',
+
+
+    /**
+     * Current highest index number.
+     */
+    get: function get() {
+      return this.registry.length === 0 ? 0 : this.registry[this.registry.length - 1].options.index;
+    }
+  }]);
+
+  return SheetsRegistry;
+}();
+
+exports['default'] = SheetsRegistry;
+
+/***/ }),
+/* 104 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _symbolObservable = __webpack_require__(192);
+
+var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+exports['default'] = function (value) {
+  return value && value[_symbolObservable2['default']] && value === value[_symbolObservable2['default']]();
+};
+
+/***/ }),
+/* 105 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = linkRule;
+/**
+ * Link rule with CSSStyleRule and nested rules with corresponding nested cssRules if both exists.
+ */
+function linkRule(rule, cssRule) {
+  rule.renderable = cssRule;
+  if (rule.rules && cssRule.cssRules) rule.rules.link(cssRule.cssRules);
+}
+
+/***/ }),
+/* 106 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+var _StyleSheet = __webpack_require__(107);
+
+var _StyleSheet2 = _interopRequireDefault(_StyleSheet);
+
+var _moduleId = __webpack_require__(196);
+
+var _moduleId2 = _interopRequireDefault(_moduleId);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var maxRules = 1e10;
+
+
+var env = process.env.NODE_ENV;
+
+/**
+ * Returns a function which generates unique class names based on counters.
+ * When new generator function is created, rule counter is reseted.
+ * We need to reset the rule counter for SSR for each request.
+ */
+
+exports['default'] = function () {
+  var ruleCounter = 0;
+  var defaultPrefix = env === 'production' ? 'c' : '';
+
+  return function (rule, sheet) {
+    ruleCounter += 1;
+
+    if (ruleCounter > maxRules) {
+      (0, _warning2['default'])(false, '[JSS] You might have a memory leak. Rule counter is at %s.', ruleCounter);
+    }
+
+    var prefix = defaultPrefix;
+    var jssId = '';
+
+    if (sheet) {
+      prefix = sheet.options.classNamePrefix || defaultPrefix;
+      if (sheet.options.jss.id != null) jssId += sheet.options.jss.id;
+    }
+
+    if (env === 'production') {
+      return '' + prefix + _moduleId2['default'] + jssId + ruleCounter;
+    }
+
+    return prefix + rule.key + '-' + _moduleId2['default'] + (jssId && '-' + jssId) + '-' + ruleCounter;
+  };
+};
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 107 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _linkRule = __webpack_require__(105);
+
+var _linkRule2 = _interopRequireDefault(_linkRule);
+
+var _RuleList = __webpack_require__(29);
+
+var _RuleList2 = _interopRequireDefault(_RuleList);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var StyleSheet = function () {
+  function StyleSheet(styles, options) {
+    _classCallCheck(this, StyleSheet);
+
+    this.attached = false;
+    this.deployed = false;
+    this.linked = false;
+    this.classes = {};
+    this.options = _extends({}, options, {
+      sheet: this,
+      parent: this,
+      classes: this.classes
+    });
+    this.renderer = new options.Renderer(this);
+    this.rules = new _RuleList2['default'](this.options);
+
+    for (var name in styles) {
+      this.rules.add(name, styles[name]);
+    }
+
+    this.rules.process();
+  }
+
+  /**
+   * Attach renderable to the render tree.
+   */
+
+
+  _createClass(StyleSheet, [{
+    key: 'attach',
+    value: function attach() {
+      if (this.attached) return this;
+      if (!this.deployed) this.deploy();
+      this.renderer.attach();
+      if (!this.linked && this.options.link) this.link();
+      this.attached = true;
+      return this;
+    }
+
+    /**
+     * Remove renderable from render tree.
+     */
+
+  }, {
+    key: 'detach',
+    value: function detach() {
+      if (!this.attached) return this;
+      this.renderer.detach();
+      this.attached = false;
+      return this;
+    }
+
+    /**
+     * Add a rule to the current stylesheet.
+     * Will insert a rule also after the stylesheet has been rendered first time.
+     */
+
+  }, {
+    key: 'addRule',
+    value: function addRule(name, decl, options) {
+      var queue = this.queue;
+
+      // Plugins can create rules.
+      // In order to preserve the right order, we need to queue all `.addRule` calls,
+      // which happen after the first `rules.add()` call.
+
+      if (this.attached && !queue) this.queue = [];
+
+      var rule = this.rules.add(name, decl, options);
+      this.options.jss.plugins.onProcessRule(rule);
+
+      if (this.attached) {
+        if (!this.deployed) return rule;
+        // Don't insert rule directly if there is no stringified version yet.
+        // It will be inserted all together when .attach is called.
+        if (queue) queue.push(rule);else {
+          this.insertRule(rule);
+          if (this.queue) {
+            this.queue.forEach(this.insertRule, this);
+            this.queue = undefined;
+          }
+        }
+        return rule;
+      }
+
+      // We can't add rules to a detached style node.
+      // We will redeploy the sheet once user will attach it.
+      this.deployed = false;
+
+      return rule;
+    }
+
+    /**
+     * Insert rule into the StyleSheet
+     */
+
+  }, {
+    key: 'insertRule',
+    value: function insertRule(rule) {
+      var renderable = this.renderer.insertRule(rule);
+      if (renderable && this.options.link) (0, _linkRule2['default'])(rule, renderable);
+    }
+
+    /**
+     * Create and add rules.
+     * Will render also after Style Sheet was rendered the first time.
+     */
+
+  }, {
+    key: 'addRules',
+    value: function addRules(styles, options) {
+      var added = [];
+      for (var name in styles) {
+        added.push(this.addRule(name, styles[name], options));
+      }
+      return added;
+    }
+
+    /**
+     * Get a rule by name.
+     */
+
+  }, {
+    key: 'getRule',
+    value: function getRule(name) {
+      return this.rules.get(name);
+    }
+
+    /**
+     * Delete a rule by name.
+     * Returns `true`: if rule has been deleted from the DOM.
+     */
+
+  }, {
+    key: 'deleteRule',
+    value: function deleteRule(name) {
+      var rule = this.rules.get(name);
+
+      if (!rule) return false;
+
+      this.rules.remove(rule);
+
+      if (this.attached && rule.renderable) {
+        return this.renderer.deleteRule(rule.renderable);
+      }
+
+      return true;
+    }
+
+    /**
+     * Get index of a rule.
+     */
+
+  }, {
+    key: 'indexOf',
+    value: function indexOf(rule) {
+      return this.rules.indexOf(rule);
+    }
+
+    /**
+     * Deploy pure CSS string to a renderable.
+     */
+
+  }, {
+    key: 'deploy',
+    value: function deploy() {
+      this.renderer.deploy();
+      this.deployed = true;
+      return this;
+    }
+
+    /**
+     * Link renderable CSS rules from sheet with their corresponding models.
+     */
+
+  }, {
+    key: 'link',
+    value: function link() {
+      var cssRules = this.renderer.getRules();
+
+      // Is undefined when VirtualRenderer is used.
+      if (cssRules) this.rules.link(cssRules);
+      this.linked = true;
+      return this;
+    }
+
+    /**
+     * Update the function values with a new data.
+     */
+
+  }, {
+    key: 'update',
+    value: function update(name, data) {
+      this.rules.update(name, data);
+      return this;
+    }
+
+    /**
+     * Convert rules to a CSS string.
+     */
+
+  }, {
+    key: 'toString',
+    value: function toString(options) {
+      return this.rules.toString(options);
+    }
+  }]);
+
+  return StyleSheet;
+}();
+
+exports['default'] = StyleSheet;
+
+/***/ }),
+/* 108 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.convertHexToRGB = convertHexToRGB;
+exports.decomposeColor = decomposeColor;
+exports.recomposeColor = recomposeColor;
+exports.getContrastRatio = getContrastRatio;
+exports.getLuminance = getLuminance;
+exports.emphasize = emphasize;
+exports.fade = fade;
+exports.darken = darken;
+exports.lighten = lighten;
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Returns a number whose value is limited to the given range.
+ *
+ * @param {number} value The value to be clamped
+ * @param {number} min The lower boundary of the output range
+ * @param {number} max The upper boundary of the output range
+ * @returns {number} A number in the range [min, max]
+ */
+function clamp(value) {
+  var min = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+  var max = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
+
+  process.env.NODE_ENV !== "production" ? (0, _warning2.default)(value >= min && value <= max, 'Material-UI: the value provided ' + value + ' is out of range [' + min + ', ' + max + '].') : void 0;
+
+  if (value < min) {
+    return min;
+  }
+  if (value > max) {
+    return max;
+  }
+  return value;
+}
+
+/**
+ * Converts a color from CSS hex format to CSS rgb format.
+ *
+ * @param {string} color - Hex color, i.e. #nnn or #nnnnnn
+ * @returns {string} A CSS rgb color string
+ */
+//  weak
+/* eslint-disable no-use-before-define */
+
+function convertHexToRGB(color) {
+  color = color.substr(1);
+
+  var re = new RegExp('.{1,' + color.length / 3 + '}', 'g');
+  var colors = color.match(re);
+
+  if (colors && colors[0].length === 1) {
+    colors = colors.map(function (n) {
+      return n + n;
+    });
+  }
+
+  return colors ? 'rgb(' + colors.map(function (n) {
+    return parseInt(n, 16);
+  }).join(', ') + ')' : '';
+}
+
+/**
+ * Returns an object with the type and values of a color.
+ *
+ * Note: Does not support rgb % values.
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @returns {object} - A MUI color object: {type: string, values: number[]}
+ */
+function decomposeColor(color) {
+  if (color.charAt(0) === '#') {
+    return decomposeColor(convertHexToRGB(color));
+  }
+
+  var marker = color.indexOf('(');
+  var type = color.substring(0, marker);
+  var values = color.substring(marker + 1, color.length - 1).split(',');
+  values = values.map(function (value) {
+    return parseFloat(value);
+  });
+
+  if (process.env.NODE_ENV !== 'production') {
+    if (['rgb', 'rgba', 'hsl', 'hsla'].indexOf(type) === -1) {
+      throw new Error(['Material-UI: unsupported `' + color + '` color.', 'We support the following formats: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla().'].join('\n'));
+    }
+  }
+
+  return { type: type, values: values };
+}
+
+/**
+ * Converts a color object with type and values to a string.
+ *
+ * @param {object} color - Decomposed color
+ * @param {string} color.type - One of: 'rgb', 'rgba', 'hsl', 'hsla'
+ * @param {array} color.values - [n,n,n] or [n,n,n,n]
+ * @returns {string} A CSS color string
+ */
+function recomposeColor(color) {
+  var type = color.type;
+  var values = color.values;
+
+
+  if (type.indexOf('rgb') !== -1) {
+    // Only convert the first 3 values to int (i.e. not alpha)
+    values = values.map(function (n, i) {
+      return i < 3 ? parseInt(n, 10) : n;
+    });
+  }
+
+  if (type.indexOf('hsl') !== -1) {
+    values[1] = values[1] + '%';
+    values[2] = values[2] + '%';
+  }
+
+  return color.type + '(' + values.join(', ') + ')';
+}
+
+/**
+ * Calculates the contrast ratio between two colors.
+ *
+ * Formula: https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
+ *
+ * @param {string} foreground - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @param {string} background - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @returns {number} A contrast ratio value in the range 0 - 21.
+ */
+function getContrastRatio(foreground, background) {
+  var lumA = getLuminance(foreground);
+  var lumB = getLuminance(background);
+  return (Math.max(lumA, lumB) + 0.05) / (Math.min(lumA, lumB) + 0.05);
+}
+
+/**
+ * The relative brightness of any point in a color space,
+ * normalized to 0 for darkest black and 1 for lightest white.
+ *
+ * Formula: https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @returns {number} The relative brightness of the color in the range 0 - 1
+ */
+function getLuminance(color) {
+  var decomposedColor = decomposeColor(color);
+
+  if (decomposedColor.type.indexOf('rgb') !== -1) {
+    var rgb = decomposedColor.values.map(function (val) {
+      val /= 255; // normalized
+      return val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
+    });
+    // Truncate at 3 digits
+    return Number((0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]).toFixed(3));
+  }
+
+  // else if (decomposedColor.type.indexOf('hsl') !== -1)
+  return decomposedColor.values[2] / 100;
+}
+
+/**
+ * Darken or lighten a colour, depending on its luminance.
+ * Light colors are darkened, dark colors are lightened.
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @param {number} coefficient=0.15 - multiplier in the range 0 - 1
+ * @returns {string} A CSS color string. Hex input values are returned as rgb
+ */
+function emphasize(color) {
+  var coefficient = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.15;
+
+  return getLuminance(color) > 0.5 ? darken(color, coefficient) : lighten(color, coefficient);
+}
+
+/**
+ * Set the absolute transparency of a color.
+ * Any existing alpha values are overwritten.
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @param {number} value - value to set the alpha channel to in the range 0 -1
+ * @returns {string} A CSS color string. Hex input values are returned as rgb
+ */
+function fade(color, value) {
+  process.env.NODE_ENV !== "production" ? (0, _warning2.default)(color, 'Material-UI: missing color argument in fade(' + color + ', ' + value + ').') : void 0;
+
+  if (!color) return color;
+
+  color = decomposeColor(color);
+  value = clamp(value);
+
+  if (color.type === 'rgb' || color.type === 'hsl') {
+    color.type += 'a';
+  }
+  color.values[3] = value;
+
+  return recomposeColor(color);
+}
+
+/**
+ * Darkens a color.
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @param {number} coefficient - multiplier in the range 0 - 1
+ * @returns {string} A CSS color string. Hex input values are returned as rgb
+ */
+function darken(color, coefficient) {
+  process.env.NODE_ENV !== "production" ? (0, _warning2.default)(color, 'Material-UI: missing color argument in darken(' + color + ', ' + coefficient + ').') : void 0;
+
+  if (!color) return color;
+
+  color = decomposeColor(color);
+  coefficient = clamp(coefficient);
+
+  if (color.type.indexOf('hsl') !== -1) {
+    color.values[2] *= 1 - coefficient;
+  } else if (color.type.indexOf('rgb') !== -1) {
+    for (var i = 0; i < 3; i += 1) {
+      color.values[i] *= 1 - coefficient;
+    }
+  }
+  return recomposeColor(color);
+}
+
+/**
+ * Lightens a color.
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @param {number} coefficient - multiplier in the range 0 - 1
+ * @returns {string} A CSS color string. Hex input values are returned as rgb
+ */
+function lighten(color, coefficient) {
+  process.env.NODE_ENV !== "production" ? (0, _warning2.default)(color, 'Material-UI: missing color argument in lighten(' + color + ', ' + coefficient + ').') : void 0;
+
+  if (!color) return color;
+
+  color = decomposeColor(color);
+  coefficient = clamp(coefficient);
+
+  if (color.type.indexOf('hsl') !== -1) {
+    color.values[2] += (100 - color.values[2]) * coefficient;
+  } else if (color.type.indexOf('rgb') !== -1) {
+    for (var i = 0; i < 3; i += 1) {
+      color.values[i] += (255 - color.values[i]) * coefficient;
+    }
+  }
+
+  return recomposeColor(color);
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 109 */
+/***/ (function(module, exports) {
+
+// Source: http://jsfiddle.net/vWx8V/
+// http://stackoverflow.com/questions/5603195/full-list-of-javascript-keycodes
+
+/**
+ * Conenience method returns corresponding value for given keyName or keyCode.
+ *
+ * @param {Mixed} keyCode {Number} or keyName {String}
+ * @return {Mixed}
+ * @api public
+ */
+
+function keyCode(searchInput) {
+  // Keyboard Events
+  if (searchInput && 'object' === typeof searchInput) {
+    var hasKeyCode = searchInput.which || searchInput.keyCode || searchInput.charCode
+    if (hasKeyCode) searchInput = hasKeyCode
+  }
+
+  // Numbers
+  if ('number' === typeof searchInput) return names[searchInput]
+
+  // Everything else (cast to string)
+  var search = String(searchInput)
+
+  // check codes
+  var foundNamedKey = codes[search.toLowerCase()]
+  if (foundNamedKey) return foundNamedKey
+
+  // check aliases
+  var foundNamedKey = aliases[search.toLowerCase()]
+  if (foundNamedKey) return foundNamedKey
+
+  // weird character?
+  if (search.length === 1) return search.charCodeAt(0)
+
+  return undefined
+}
+
+/**
+ * Compares a keyboard event with a given keyCode or keyName.
+ *
+ * @param {Event} event Keyboard event that should be tested
+ * @param {Mixed} keyCode {Number} or keyName {String}
+ * @return {Boolean}
+ * @api public
+ */
+keyCode.isEventKey = function isEventKey(event, nameOrCode) {
+  if (event && 'object' === typeof event) {
+    var keyCode = event.which || event.keyCode || event.charCode
+    if (keyCode === null || keyCode === undefined) { return false; }
+    if (typeof nameOrCode === 'string') {
+      // check codes
+      var foundNamedKey = codes[nameOrCode.toLowerCase()]
+      if (foundNamedKey) { return foundNamedKey === keyCode; }
+    
+      // check aliases
+      var foundNamedKey = aliases[nameOrCode.toLowerCase()]
+      if (foundNamedKey) { return foundNamedKey === keyCode; }
+    } else if (typeof nameOrCode === 'number') {
+      return nameOrCode === keyCode;
+    }
+    return false;
+  }
+}
+
+exports = module.exports = keyCode;
+
+/**
+ * Get by name
+ *
+ *   exports.code['enter'] // => 13
+ */
+
+var codes = exports.code = exports.codes = {
+  'backspace': 8,
+  'tab': 9,
+  'enter': 13,
+  'shift': 16,
+  'ctrl': 17,
+  'alt': 18,
+  'pause/break': 19,
+  'caps lock': 20,
+  'esc': 27,
+  'space': 32,
+  'page up': 33,
+  'page down': 34,
+  'end': 35,
+  'home': 36,
+  'left': 37,
+  'up': 38,
+  'right': 39,
+  'down': 40,
+  'insert': 45,
+  'delete': 46,
+  'command': 91,
+  'left command': 91,
+  'right command': 93,
+  'numpad *': 106,
+  'numpad +': 107,
+  'numpad -': 109,
+  'numpad .': 110,
+  'numpad /': 111,
+  'num lock': 144,
+  'scroll lock': 145,
+  'my computer': 182,
+  'my calculator': 183,
+  ';': 186,
+  '=': 187,
+  ',': 188,
+  '-': 189,
+  '.': 190,
+  '/': 191,
+  '`': 192,
+  '[': 219,
+  '\\': 220,
+  ']': 221,
+  "'": 222
+}
+
+// Helper aliases
+
+var aliases = exports.aliases = {
+  'windows': 91,
+  '⇧': 16,
+  '⌥': 18,
+  '⌃': 17,
+  '⌘': 91,
+  'ctl': 17,
+  'control': 17,
+  'option': 18,
+  'pause': 19,
+  'break': 19,
+  'caps': 20,
+  'return': 13,
+  'escape': 27,
+  'spc': 32,
+  'spacebar': 32,
+  'pgup': 33,
+  'pgdn': 34,
+  'ins': 45,
+  'del': 46,
+  'cmd': 91
+}
+
+/*!
+ * Programatically add the following
+ */
+
+// lower case chars
+for (i = 97; i < 123; i++) codes[String.fromCharCode(i)] = i - 32
+
+// numbers
+for (var i = 48; i < 58; i++) codes[i - 48] = i
+
+// function keys
+for (i = 1; i < 13; i++) codes['f'+i] = i + 111
+
+// numpad keys
+for (i = 0; i < 10; i++) codes['numpad '+i] = i + 96
+
+/**
+ * Get by code
+ *
+ *   exports.name[13] // => 'Enter'
+ */
+
+var names = exports.names = exports.title = {} // title for backward compat
+
+// Create reverse mapping
+for (i in codes) names[codes[i]] = i
+
+// Add aliases
+for (var alias in aliases) {
+  codes[alias] = aliases[alias]
+}
+
+
+/***/ }),
+/* 110 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = ownerDocument;
+function ownerDocument(node) {
+  return node && node.ownerDocument || document;
+}
+module.exports = exports["default"];
+
+/***/ }),
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1200,29 +4827,29 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(11);
+var _reactDom = __webpack_require__(24);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _propTypes = __webpack_require__(7);
+var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _event = __webpack_require__(38);
+var _event = __webpack_require__(263);
 
-var _scrollParent = __webpack_require__(39);
+var _scrollParent = __webpack_require__(264);
 
 var _scrollParent2 = _interopRequireDefault(_scrollParent);
 
-var _debounce = __webpack_require__(40);
+var _debounce = __webpack_require__(265);
 
 var _debounce2 = _interopRequireDefault(_debounce);
 
-var _throttle = __webpack_require__(41);
+var _throttle = __webpack_require__(266);
 
 var _throttle2 = _interopRequireDefault(_throttle);
 
-var _decorator = __webpack_require__(42);
+var _decorator = __webpack_require__(267);
 
 var _decorator2 = _interopRequireDefault(_decorator);
 
@@ -1550,16 +5177,16 @@ exports.forceCheck = lazyLoadHandler;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 19 */
+/* 112 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_js__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_js__ = __webpack_require__(123);
 
 
 
@@ -1568,7 +5195,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__app_js__["a" /* default */], null), document.getElementById('root'));
 
 /***/ }),
-/* 20 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1581,7 +5208,7 @@ __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
  * LICENSE file in the root directory of this source tree.
  */
 
-var m=__webpack_require__(3),n=__webpack_require__(5),p=__webpack_require__(2),q="function"===typeof Symbol&&Symbol["for"],r=q?Symbol["for"]("react.element"):60103,t=q?Symbol["for"]("react.call"):60104,u=q?Symbol["for"]("react.return"):60105,v=q?Symbol["for"]("react.portal"):60106,w=q?Symbol["for"]("react.fragment"):60107,x="function"===typeof Symbol&&Symbol.iterator;
+var m=__webpack_require__(22),n=__webpack_require__(30),p=__webpack_require__(13),q="function"===typeof Symbol&&Symbol["for"],r=q?Symbol["for"]("react.element"):60103,t=q?Symbol["for"]("react.call"):60104,u=q?Symbol["for"]("react.return"):60105,v=q?Symbol["for"]("react.portal"):60106,w=q?Symbol["for"]("react.fragment"):60107,x="function"===typeof Symbol&&Symbol.iterator;
 function y(a){for(var b=arguments.length-1,e="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,c=0;c<b;c++)e+="\x26args[]\x3d"+encodeURIComponent(arguments[c+1]);b=Error(e+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}
 var z={isMounted:function(){return!1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}};function A(a,b,e){this.props=a;this.context=b;this.refs=n;this.updater=e||z}A.prototype.isReactComponent={};A.prototype.setState=function(a,b){"object"!==typeof a&&"function"!==typeof a&&null!=a?y("85"):void 0;this.updater.enqueueSetState(this,a,b,"setState")};A.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate")};
 function B(a,b,e){this.props=a;this.context=b;this.refs=n;this.updater=e||z}function C(){}C.prototype=A.prototype;var D=B.prototype=new C;D.constructor=B;m(D,A.prototype);D.isPureReactComponent=!0;function E(a,b,e){this.props=a;this.context=b;this.refs=n;this.updater=e||z}var F=E.prototype=new C;F.constructor=E;m(F,A.prototype);F.unstable_isAsyncReactComponent=!0;F.render=function(){return this.props.children};var G={current:null},H=Object.prototype.hasOwnProperty,I={key:!0,ref:!0,__self:!0,__source:!0};
@@ -1596,7 +5223,7 @@ isValidElement:K,version:"16.2.0",__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_F
 
 
 /***/ }),
-/* 21 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1617,12 +5244,12 @@ if (process.env.NODE_ENV !== "production") {
   (function() {
 'use strict';
 
-var _assign = __webpack_require__(3);
-var emptyObject = __webpack_require__(5);
-var invariant = __webpack_require__(4);
-var warning = __webpack_require__(6);
-var emptyFunction = __webpack_require__(2);
-var checkPropTypes = __webpack_require__(8);
+var _assign = __webpack_require__(22);
+var emptyObject = __webpack_require__(30);
+var invariant = __webpack_require__(23);
+var warning = __webpack_require__(31);
+var emptyFunction = __webpack_require__(13);
+var checkPropTypes = __webpack_require__(49);
 
 // TODO: this is special because it gets imported during build.
 
@@ -2961,7 +6588,7 @@ module.exports = react;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 22 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2977,7 +6604,7 @@ module.exports = react;
 /*
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(1),l=__webpack_require__(12),B=__webpack_require__(3),C=__webpack_require__(2),ba=__webpack_require__(13),da=__webpack_require__(14),ea=__webpack_require__(15),fa=__webpack_require__(16),ia=__webpack_require__(17),D=__webpack_require__(5);
+var aa=__webpack_require__(1),l=__webpack_require__(73),B=__webpack_require__(22),C=__webpack_require__(13),ba=__webpack_require__(74),da=__webpack_require__(75),ea=__webpack_require__(76),fa=__webpack_require__(77),ia=__webpack_require__(78),D=__webpack_require__(30);
 function E(a){for(var b=arguments.length-1,c="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,d=0;d<b;d++)c+="\x26args[]\x3d"+encodeURIComponent(arguments[d+1]);b=Error(c+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}aa?void 0:E("227");
 var oa={children:!0,dangerouslySetInnerHTML:!0,defaultValue:!0,defaultChecked:!0,innerHTML:!0,suppressContentEditableWarning:!0,suppressHydrationWarning:!0,style:!0};function pa(a,b){return(a&b)===b}
 var ta={MUST_USE_PROPERTY:1,HAS_BOOLEAN_VALUE:4,HAS_NUMERIC_VALUE:8,HAS_POSITIVE_NUMERIC_VALUE:24,HAS_OVERLOADED_BOOLEAN_VALUE:32,HAS_STRING_BOOLEAN_VALUE:64,injectDOMPropertyConfig:function(a){var b=ta,c=a.Properties||{},d=a.DOMAttributeNamespaces||{},e=a.DOMAttributeNames||{};a=a.DOMMutationMethods||{};for(var f in c){ua.hasOwnProperty(f)?E("48",f):void 0;var g=f.toLowerCase(),h=c[f];g={attributeName:g,attributeNamespace:null,propertyName:f,mutationMethod:null,mustUseProperty:pa(h,b.MUST_USE_PROPERTY),
@@ -3197,7 +6824,7 @@ Z.injectIntoDevTools({findFiberByHostInstance:pb,bundleType:0,version:"16.2.0",r
 
 
 /***/ }),
-/* 23 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3212,7 +6839,7 @@ Z.injectIntoDevTools({findFiberByHostInstance:pb,bundleType:0,version:"16.2.0",r
  * @typechecks
  */
 
-var isNode = __webpack_require__(24);
+var isNode = __webpack_require__(117);
 
 /**
  * @param {*} object The object to check.
@@ -3225,7 +6852,7 @@ function isTextNode(object) {
 module.exports = isTextNode;
 
 /***/ }),
-/* 24 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3253,7 +6880,7 @@ function isNode(object) {
 module.exports = isNode;
 
 /***/ }),
-/* 25 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3275,20 +6902,20 @@ if (process.env.NODE_ENV !== "production") {
 'use strict';
 
 var React = __webpack_require__(1);
-var invariant = __webpack_require__(4);
-var warning = __webpack_require__(6);
-var ExecutionEnvironment = __webpack_require__(12);
-var _assign = __webpack_require__(3);
-var emptyFunction = __webpack_require__(2);
-var EventListener = __webpack_require__(13);
-var getActiveElement = __webpack_require__(14);
-var shallowEqual = __webpack_require__(15);
-var containsNode = __webpack_require__(16);
-var focusNode = __webpack_require__(17);
-var emptyObject = __webpack_require__(5);
-var checkPropTypes = __webpack_require__(8);
-var hyphenateStyleName = __webpack_require__(26);
-var camelizeStyleName = __webpack_require__(28);
+var invariant = __webpack_require__(23);
+var warning = __webpack_require__(31);
+var ExecutionEnvironment = __webpack_require__(73);
+var _assign = __webpack_require__(22);
+var emptyFunction = __webpack_require__(13);
+var EventListener = __webpack_require__(74);
+var getActiveElement = __webpack_require__(75);
+var shallowEqual = __webpack_require__(76);
+var containsNode = __webpack_require__(77);
+var focusNode = __webpack_require__(78);
+var emptyObject = __webpack_require__(30);
+var checkPropTypes = __webpack_require__(49);
+var hyphenateStyleName = __webpack_require__(119);
+var camelizeStyleName = __webpack_require__(121);
 
 /**
  * WARNING: DO NOT manually require this module.
@@ -18655,7 +22282,7 @@ module.exports = reactDom;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 26 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18670,7 +22297,7 @@ module.exports = reactDom;
 
 
 
-var hyphenate = __webpack_require__(27);
+var hyphenate = __webpack_require__(120);
 
 var msPattern = /^ms-/;
 
@@ -18697,7 +22324,7 @@ function hyphenateStyleName(string) {
 module.exports = hyphenateStyleName;
 
 /***/ }),
-/* 27 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18733,7 +22360,7 @@ function hyphenate(string) {
 module.exports = hyphenate;
 
 /***/ }),
-/* 28 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18748,7 +22375,7 @@ module.exports = hyphenate;
 
 
 
-var camelize = __webpack_require__(29);
+var camelize = __webpack_require__(122);
 
 var msPattern = /^-ms-/;
 
@@ -18776,7 +22403,7 @@ function camelizeStyleName(string) {
 module.exports = camelizeStyleName;
 
 /***/ }),
-/* 29 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18811,22 +22438,24 @@ function camelize(string) {
 module.exports = camelize;
 
 /***/ }),
-/* 30 */
+/* 123 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_event_timeline__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_event_timeline__ = __webpack_require__(124);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_event_timeline___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_event_timeline__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_native_action_button__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_native_action_button___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_native_action_button__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_lazyload__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_lazyload___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_react_lazyload__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__games_json__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__games_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__games_json__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__index_css__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__index_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__index_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_material_ui_Button__ = __webpack_require__(130);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_material_ui_Button___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_material_ui_Button__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_material_ui_Menu__ = __webpack_require__(287);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_material_ui_Menu___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_material_ui_Menu__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react_lazyload__ = __webpack_require__(111);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react_lazyload___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_react_lazyload__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__games_json__ = __webpack_require__(268);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__games_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__games_json__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__index_css__ = __webpack_require__(269);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__index_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__index_css__);
 
 
 
@@ -18835,13 +22464,14 @@ module.exports = camelize;
 
 
 
-const Games = __WEBPACK_IMPORTED_MODULE_4__games_json___default.a;
+
+const Games = __WEBPACK_IMPORTED_MODULE_5__games_json___default.a;
 
 class App extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = { anchor: null };
   }
 
   renderGame(game) {
@@ -18851,7 +22481,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     }
 
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-      __WEBPACK_IMPORTED_MODULE_3_react_lazyload___default.a,
+      __WEBPACK_IMPORTED_MODULE_4_react_lazyload___default.a,
       { height: 200, key: game.slug },
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_1_react_event_timeline__["TimelineEvent"],
@@ -18878,6 +22508,10 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     );
   }
 
+  click(event) {
+    this.setState({ anchor: event.currentTarget });
+  }
+
   sort(event) {
     event.preventDefault();
     console.log('sort', event);
@@ -18885,22 +22519,35 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 
   renderMenu() {
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-      __WEBPACK_IMPORTED_MODULE_2_react_native_action_button__["default"],
-      { buttonColor: 'rgba(231,76,60,1)' },
+      'div',
+      null,
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        __WEBPACK_IMPORTED_MODULE_2_react_native_action_button__["default"].Item,
-        { buttonColor: '#9b59b6', title: 'New Task', onPress: () => console.log("notes tapped!") },
-        '-'
-      ),
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        __WEBPACK_IMPORTED_MODULE_2_react_native_action_button__["default"].Item,
-        { buttonColor: '#3498db', title: 'Notifications', onPress: () => {} },
+        __WEBPACK_IMPORTED_MODULE_2_material_ui_Button___default.a,
+        { variant: 'fab', color: 'primary', 'aria-label': 'add', onClick: this.click.bind(this) },
         '+'
       ),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        __WEBPACK_IMPORTED_MODULE_2_react_native_action_button__["default"].Item,
-        { buttonColor: '#1abc9c', title: 'All Tasks', onPress: () => {} },
-        '+'
+        __WEBPACK_IMPORTED_MODULE_3_material_ui_Menu___default.a,
+        {
+          id: 'simple-menu',
+          anchorEl: this.state.anchor,
+          open: Boolean(this.state.anchor)
+        },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_3_material_ui_Menu__["MenuItem"],
+          null,
+          'Profile'
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_3_material_ui_Menu__["MenuItem"],
+          null,
+          'My account'
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_3_material_ui_Menu__["MenuItem"],
+          null,
+          'Logout'
+        )
       )
     );
   }
@@ -18922,7 +22569,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 /* harmony default export */ __webpack_exports__["a"] = (App);
 
 /***/ }),
-/* 31 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18933,15 +22580,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.TimelineBlip = exports.TimelineEvent = exports.Timeline = undefined;
 
-var _Timeline = __webpack_require__(32);
+var _Timeline = __webpack_require__(125);
 
 var _Timeline2 = _interopRequireDefault(_Timeline);
 
-var _TimelineEvent = __webpack_require__(35);
+var _TimelineEvent = __webpack_require__(128);
 
 var _TimelineEvent2 = _interopRequireDefault(_TimelineEvent);
 
-var _TimelineBlip = __webpack_require__(36);
+var _TimelineBlip = __webpack_require__(129);
 
 var _TimelineBlip2 = _interopRequireDefault(_TimelineBlip);
 
@@ -18952,7 +22599,7 @@ exports.TimelineEvent = _TimelineEvent2.default;
 exports.TimelineBlip = _TimelineBlip2.default;
 
 /***/ }),
-/* 32 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18970,11 +22617,11 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(7);
+var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _styles = __webpack_require__(10);
+var _styles = __webpack_require__(51);
 
 var _styles2 = _interopRequireDefault(_styles);
 
@@ -19038,7 +22685,7 @@ Timeline.propTypes = {
 exports.default = Timeline;
 
 /***/ }),
-/* 33 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19051,13 +22698,13 @@ exports.default = Timeline;
 
 
 
-var emptyFunction = __webpack_require__(2);
-var invariant = __webpack_require__(4);
-var warning = __webpack_require__(6);
-var assign = __webpack_require__(3);
+var emptyFunction = __webpack_require__(13);
+var invariant = __webpack_require__(23);
+var warning = __webpack_require__(31);
+var assign = __webpack_require__(22);
 
-var ReactPropTypesSecret = __webpack_require__(9);
-var checkPropTypes = __webpack_require__(8);
+var ReactPropTypesSecret = __webpack_require__(50);
+var checkPropTypes = __webpack_require__(49);
 
 module.exports = function(isValidElement, throwOnDirectAccess) {
   /* global Symbol */
@@ -19588,7 +23235,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 34 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19601,9 +23248,9 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
 
 
-var emptyFunction = __webpack_require__(2);
-var invariant = __webpack_require__(4);
-var ReactPropTypesSecret = __webpack_require__(9);
+var emptyFunction = __webpack_require__(13);
+var invariant = __webpack_require__(23);
+var ReactPropTypesSecret = __webpack_require__(50);
 
 module.exports = function() {
   function shim(props, propName, componentName, location, propFullName, secret) {
@@ -19653,7 +23300,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 35 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19671,11 +23318,11 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(7);
+var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _styles = __webpack_require__(10);
+var _styles = __webpack_require__(51);
 
 var _styles2 = _interopRequireDefault(_styles);
 
@@ -19842,7 +23489,7 @@ TimelineEvent.defaultProps = {
 exports.default = TimelineEvent;
 
 /***/ }),
-/* 36 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19860,11 +23507,11 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(7);
+var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _styles = __webpack_require__(10);
+var _styles = __webpack_require__(51);
 
 var _styles2 = _interopRequireDefault(_styles);
 
@@ -19956,13 +23603,8060 @@ TimelineBlip.defaultProps = {
 exports.default = TimelineBlip;
 
 /***/ }),
-/* 37 */
-/***/ (function(module, exports) {
+/* 130 */
+/***/ (function(module, exports, __webpack_require__) {
 
-throw new Error("Module parse failed: Unexpected token (97:6)\nYou may need an appropriate loader to handle this file type.\n|   render() {\n|     return (\n|       <View\n|         pointerEvents=\"box-none\"\n|         style={[this.getOverlayStyles(), this.props.style]}");
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Button = __webpack_require__(131);
+
+Object.defineProperty(exports, 'default', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Button).default;
+  }
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ }),
-/* 38 */
+/* 131 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styles = undefined;
+
+var _defineProperty2 = __webpack_require__(25);
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = __webpack_require__(35);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _withStyles = __webpack_require__(61);
+
+var _withStyles2 = _interopRequireDefault(_withStyles);
+
+var _colorManipulator = __webpack_require__(108);
+
+var _ButtonBase = __webpack_require__(243);
+
+var _ButtonBase2 = _interopRequireDefault(_ButtonBase);
+
+var _helpers = __webpack_require__(262);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = exports.styles = function styles(theme) {
+  return {
+    root: (0, _extends3.default)({}, theme.typography.button, {
+      lineHeight: '1.4em', // Improve readability for multiline button.
+      boxSizing: 'border-box',
+      minWidth: theme.spacing.unit * 11,
+      minHeight: 36,
+      padding: theme.spacing.unit + 'px ' + theme.spacing.unit * 2 + 'px',
+      borderRadius: 2,
+      color: theme.palette.text.primary,
+      transition: theme.transitions.create(['background-color', 'box-shadow'], {
+        duration: theme.transitions.duration.short
+      }),
+      '&:hover': {
+        textDecoration: 'none',
+        // Reset on mouse devices
+        backgroundColor: (0, _colorManipulator.fade)(theme.palette.text.primary, 0.12),
+        '@media (hover: none)': {
+          backgroundColor: 'transparent'
+        },
+        '&$disabled': {
+          backgroundColor: 'transparent'
+        }
+      }
+    }),
+    label: {
+      width: '100%',
+      display: 'inherit',
+      alignItems: 'inherit',
+      justifyContent: 'inherit'
+    },
+    flatPrimary: {
+      color: theme.palette.primary.main,
+      '&:hover': {
+        backgroundColor: (0, _colorManipulator.fade)(theme.palette.primary.main, 0.12),
+        // Reset on mouse devices
+        '@media (hover: none)': {
+          backgroundColor: 'transparent'
+        }
+      }
+    },
+    flatSecondary: {
+      color: theme.palette.secondary.main,
+      '&:hover': {
+        backgroundColor: (0, _colorManipulator.fade)(theme.palette.secondary.main, 0.12),
+        // Reset on mouse devices
+        '@media (hover: none)': {
+          backgroundColor: 'transparent'
+        }
+      }
+    },
+    colorInherit: {
+      color: 'inherit'
+    },
+    raised: {
+      color: theme.palette.getContrastText(theme.palette.grey[300]),
+      backgroundColor: theme.palette.grey[300],
+      boxShadow: theme.shadows[2],
+      '&$keyboardFocused': {
+        boxShadow: theme.shadows[6]
+      },
+      '&:active': {
+        boxShadow: theme.shadows[8]
+      },
+      '&$disabled': {
+        boxShadow: theme.shadows[0],
+        backgroundColor: theme.palette.action.disabledBackground
+      },
+      '&:hover': {
+        backgroundColor: theme.palette.grey.A100,
+        // Reset on mouse devices
+        '@media (hover: none)': {
+          backgroundColor: theme.palette.grey[300]
+        },
+        '&$disabled': {
+          backgroundColor: theme.palette.action.disabledBackground
+        }
+      }
+    },
+    keyboardFocused: {},
+    raisedPrimary: {
+      color: theme.palette.primary.contrastText,
+      backgroundColor: theme.palette.primary.main,
+      '&:hover': {
+        backgroundColor: theme.palette.primary.dark,
+        // Reset on mouse devices
+        '@media (hover: none)': {
+          backgroundColor: theme.palette.primary.main
+        }
+      }
+    },
+    raisedSecondary: {
+      color: theme.palette.secondary.contrastText,
+      backgroundColor: theme.palette.secondary.main,
+      '&:hover': {
+        backgroundColor: theme.palette.secondary.dark,
+        // Reset on mouse devices
+        '@media (hover: none)': {
+          backgroundColor: theme.palette.secondary.main
+        }
+      }
+    },
+    disabled: {
+      color: theme.palette.action.disabled
+    },
+    fab: {
+      borderRadius: '50%',
+      padding: 0,
+      minWidth: 0,
+      width: 56,
+      fontSize: 24,
+      height: 56,
+      boxShadow: theme.shadows[6],
+      '&:active': {
+        boxShadow: theme.shadows[12]
+      }
+    },
+    mini: {
+      width: 40,
+      height: 40
+    },
+    sizeSmall: {
+      padding: theme.spacing.unit - 1 + 'px ' + theme.spacing.unit + 'px',
+      minWidth: theme.spacing.unit * 8,
+      minHeight: 32,
+      fontSize: theme.typography.pxToRem(13)
+    },
+    sizeLarge: {
+      padding: theme.spacing.unit + 'px ' + theme.spacing.unit * 3 + 'px',
+      minWidth: theme.spacing.unit * 14,
+      minHeight: 40,
+      fontSize: theme.typography.pxToRem(15)
+    },
+    fullWidth: {
+      width: '100%'
+    }
+  };
+}; // @inheritedComponent ButtonBase
+
+function Button(props) {
+  var _classNames;
+
+  var children = props.children,
+      classes = props.classes,
+      classNameProp = props.className,
+      color = props.color,
+      disabled = props.disabled,
+      disableFocusRipple = props.disableFocusRipple,
+      fullWidth = props.fullWidth,
+      mini = props.mini,
+      size = props.size,
+      variant = props.variant,
+      other = (0, _objectWithoutProperties3.default)(props, ['children', 'classes', 'className', 'color', 'disabled', 'disableFocusRipple', 'fullWidth', 'mini', 'size', 'variant']);
+
+
+  var fab = variant === 'fab';
+  var raised = variant === 'raised';
+  var flat = !raised && !fab;
+  var className = (0, _classnames2.default)(classes.root, (_classNames = {}, (0, _defineProperty3.default)(_classNames, classes.raised, raised || fab), (0, _defineProperty3.default)(_classNames, classes.fab, fab), (0, _defineProperty3.default)(_classNames, classes.mini, fab && mini), (0, _defineProperty3.default)(_classNames, classes.colorInherit, color === 'inherit'), (0, _defineProperty3.default)(_classNames, classes.flatPrimary, flat && color === 'primary'), (0, _defineProperty3.default)(_classNames, classes.flatSecondary, flat && color === 'secondary'), (0, _defineProperty3.default)(_classNames, classes.raisedPrimary, !flat && color === 'primary'), (0, _defineProperty3.default)(_classNames, classes.raisedSecondary, !flat && color === 'secondary'), (0, _defineProperty3.default)(_classNames, classes['size' + (0, _helpers.capitalize)(size)], size !== 'medium'), (0, _defineProperty3.default)(_classNames, classes.disabled, disabled), (0, _defineProperty3.default)(_classNames, classes.fullWidth, fullWidth), _classNames), classNameProp);
+
+  return _react2.default.createElement(
+    _ButtonBase2.default,
+    (0, _extends3.default)({
+      className: className,
+      disabled: disabled,
+      focusRipple: !disableFocusRipple,
+      classes: {
+        keyboardFocused: classes.keyboardFocused
+      }
+    }, other),
+    _react2.default.createElement(
+      'span',
+      { className: classes.label },
+      children
+    )
+  );
+}
+
+Button.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * The content of the button.
+   */
+  children: _propTypes2.default.node.isRequired,
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * @ignore
+   */
+  className: _propTypes2.default.string,
+  /**
+   * The color of the component. It supports those theme colors that make sense for this component.
+   */
+  color: _propTypes2.default.oneOf(['default', 'inherit', 'primary', 'secondary']),
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   * The default value is a `button`.
+   */
+  component: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  /**
+   * If `true`, the button will be disabled.
+   */
+  disabled: _propTypes2.default.bool,
+  /**
+   * If `true`, the  keyboard focus ripple will be disabled.
+   * `disableRipple` must also be true.
+   */
+  disableFocusRipple: _propTypes2.default.bool,
+  /**
+   * If `true`, the ripple effect will be disabled.
+   */
+  disableRipple: _propTypes2.default.bool,
+  /**
+   * If `true`, the button will take up the full width of its container.
+   */
+  fullWidth: _propTypes2.default.bool,
+  /**
+   * The URL to link to when the button is clicked.
+   * If defined, an `a` element will be used as the root node.
+   */
+  href: _propTypes2.default.string,
+  /**
+   * If `true`, and `variant` is `'fab'`, will use mini floating action button styling.
+   */
+  mini: _propTypes2.default.bool,
+  /**
+   * The size of the button.
+   * `small` is equivalent to the dense button styling.
+   */
+  size: _propTypes2.default.oneOf(['small', 'medium', 'large']),
+  /**
+   * @ignore
+   */
+  type: _propTypes2.default.string,
+  /**
+   * The type of button.
+   */
+  variant: _propTypes2.default.oneOf(['flat', 'raised', 'fab'])
+} : {};
+
+Button.defaultProps = {
+  color: 'default',
+  disabled: false,
+  disableFocusRipple: false,
+  fullWidth: false,
+  mini: false,
+  size: 'medium',
+  type: 'button',
+  variant: 'flat'
+};
+
+exports.default = (0, _withStyles2.default)(styles, { name: 'MuiButton' })(Button);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 132 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(133);
+var $Object = __webpack_require__(4).Object;
+module.exports = function defineProperty(it, key, desc) {
+  return $Object.defineProperty(it, key, desc);
+};
+
+
+/***/ }),
+/* 133 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $export = __webpack_require__(5);
+// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+$export($export.S + $export.F * !__webpack_require__(9), 'Object', { defineProperty: __webpack_require__(7).f });
+
+
+/***/ }),
+/* 134 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(135), __esModule: true };
+
+/***/ }),
+/* 135 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(136);
+module.exports = __webpack_require__(4).Object.assign;
+
+
+/***/ }),
+/* 136 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.3.1 Object.assign(target, source)
+var $export = __webpack_require__(5);
+
+$export($export.S + $export.F, 'Object', { assign: __webpack_require__(137) });
+
+
+/***/ }),
+/* 137 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// 19.1.2.1 Object.assign(target, source, ...)
+var getKeys = __webpack_require__(27);
+var gOPS = __webpack_require__(60);
+var pIE = __webpack_require__(34);
+var toObject = __webpack_require__(20);
+var IObject = __webpack_require__(53);
+var $assign = Object.assign;
+
+// should work with symbols and should have deterministic property order (V8 bug)
+module.exports = !$assign || __webpack_require__(17)(function () {
+  var A = {};
+  var B = {};
+  // eslint-disable-next-line no-undef
+  var S = Symbol();
+  var K = 'abcdefghijklmnopqrst';
+  A[S] = 7;
+  K.split('').forEach(function (k) { B[k] = k; });
+  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
+}) ? function assign(target, source) { // eslint-disable-line no-unused-vars
+  var T = toObject(target);
+  var aLen = arguments.length;
+  var index = 1;
+  var getSymbols = gOPS.f;
+  var isEnum = pIE.f;
+  while (aLen > index) {
+    var S = IObject(arguments[index++]);
+    var keys = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S);
+    var length = keys.length;
+    var j = 0;
+    var key;
+    while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
+  } return T;
+} : $assign;
+
+
+/***/ }),
+/* 138 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// false -> Array#indexOf
+// true  -> Array#includes
+var toIObject = __webpack_require__(19);
+var toLength = __webpack_require__(32);
+var toAbsoluteIndex = __webpack_require__(139);
+module.exports = function (IS_INCLUDES) {
+  return function ($this, el, fromIndex) {
+    var O = toIObject($this);
+    var length = toLength(O.length);
+    var index = toAbsoluteIndex(fromIndex, length);
+    var value;
+    // Array#includes uses SameValueZero equality algorithm
+    // eslint-disable-next-line no-self-compare
+    if (IS_INCLUDES && el != el) while (length > index) {
+      value = O[index++];
+      // eslint-disable-next-line no-self-compare
+      if (value != value) return true;
+    // Array#indexOf ignores holes, Array#includes - not
+    } else for (;length > index; index++) if (IS_INCLUDES || index in O) {
+      if (O[index] === el) return IS_INCLUDES || index || 0;
+    } return !IS_INCLUDES && -1;
+  };
+};
+
+
+/***/ }),
+/* 139 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toInteger = __webpack_require__(56);
+var max = Math.max;
+var min = Math.min;
+module.exports = function (index, length) {
+  index = toInteger(index);
+  return index < 0 ? max(index + length, 0) : min(index, length);
+};
+
+
+/***/ }),
+/* 140 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(141);
+module.exports = __webpack_require__(4).Object.keys;
+
+
+/***/ }),
+/* 141 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.14 Object.keys(O)
+var toObject = __webpack_require__(20);
+var $keys = __webpack_require__(27);
+
+__webpack_require__(84)('keys', function () {
+  return function keys(it) {
+    return $keys(toObject(it));
+  };
+});
+
+
+/***/ }),
+/* 142 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(143);
+module.exports = __webpack_require__(4).Object.getPrototypeOf;
+
+
+/***/ }),
+/* 143 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.9 Object.getPrototypeOf(O)
+var toObject = __webpack_require__(20);
+var $getPrototypeOf = __webpack_require__(85);
+
+__webpack_require__(84)('getPrototypeOf', function () {
+  return function getPrototypeOf(it) {
+    return $getPrototypeOf(toObject(it));
+  };
+});
+
+
+/***/ }),
+/* 144 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(145), __esModule: true };
+
+/***/ }),
+/* 145 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(63);
+__webpack_require__(87);
+module.exports = __webpack_require__(66).f('iterator');
+
+
+/***/ }),
+/* 146 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toInteger = __webpack_require__(56);
+var defined = __webpack_require__(55);
+// true  -> String#at
+// false -> String#codePointAt
+module.exports = function (TO_STRING) {
+  return function (that, pos) {
+    var s = String(defined(that));
+    var i = toInteger(pos);
+    var l = s.length;
+    var a, b;
+    if (i < 0 || i >= l) return TO_STRING ? '' : undefined;
+    a = s.charCodeAt(i);
+    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
+      ? TO_STRING ? s.charAt(i) : a
+      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
+  };
+};
+
+
+/***/ }),
+/* 147 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var create = __webpack_require__(41);
+var descriptor = __webpack_require__(26);
+var setToStringTag = __webpack_require__(42);
+var IteratorPrototype = {};
+
+// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
+__webpack_require__(14)(IteratorPrototype, __webpack_require__(6)('iterator'), function () { return this; });
+
+module.exports = function (Constructor, NAME, next) {
+  Constructor.prototype = create(IteratorPrototype, { next: descriptor(1, next) });
+  setToStringTag(Constructor, NAME + ' Iterator');
+};
+
+
+/***/ }),
+/* 148 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var dP = __webpack_require__(7);
+var anObject = __webpack_require__(16);
+var getKeys = __webpack_require__(27);
+
+module.exports = __webpack_require__(9) ? Object.defineProperties : function defineProperties(O, Properties) {
+  anObject(O);
+  var keys = getKeys(Properties);
+  var length = keys.length;
+  var i = 0;
+  var P;
+  while (length > i) dP.f(O, P = keys[i++], Properties[P]);
+  return O;
+};
+
+
+/***/ }),
+/* 149 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var document = __webpack_require__(8).document;
+module.exports = document && document.documentElement;
+
+
+/***/ }),
+/* 150 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var addToUnscopables = __webpack_require__(151);
+var step = __webpack_require__(88);
+var Iterators = __webpack_require__(28);
+var toIObject = __webpack_require__(19);
+
+// 22.1.3.4 Array.prototype.entries()
+// 22.1.3.13 Array.prototype.keys()
+// 22.1.3.29 Array.prototype.values()
+// 22.1.3.30 Array.prototype[@@iterator]()
+module.exports = __webpack_require__(64)(Array, 'Array', function (iterated, kind) {
+  this._t = toIObject(iterated); // target
+  this._i = 0;                   // next index
+  this._k = kind;                // kind
+// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
+}, function () {
+  var O = this._t;
+  var kind = this._k;
+  var index = this._i++;
+  if (!O || index >= O.length) {
+    this._t = undefined;
+    return step(1);
+  }
+  if (kind == 'keys') return step(0, index);
+  if (kind == 'values') return step(0, O[index]);
+  return step(0, [index, O[index]]);
+}, 'values');
+
+// argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
+Iterators.Arguments = Iterators.Array;
+
+addToUnscopables('keys');
+addToUnscopables('values');
+addToUnscopables('entries');
+
+
+/***/ }),
+/* 151 */
+/***/ (function(module, exports) {
+
+module.exports = function () { /* empty */ };
+
+
+/***/ }),
+/* 152 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(153), __esModule: true };
+
+/***/ }),
+/* 153 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(154);
+__webpack_require__(92);
+__webpack_require__(157);
+__webpack_require__(158);
+module.exports = __webpack_require__(4).Symbol;
+
+
+/***/ }),
+/* 154 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// ECMAScript 6 symbols shim
+var global = __webpack_require__(8);
+var has = __webpack_require__(18);
+var DESCRIPTORS = __webpack_require__(9);
+var $export = __webpack_require__(5);
+var redefine = __webpack_require__(86);
+var META = __webpack_require__(67).KEY;
+var $fails = __webpack_require__(17);
+var shared = __webpack_require__(58);
+var setToStringTag = __webpack_require__(42);
+var uid = __webpack_require__(33);
+var wks = __webpack_require__(6);
+var wksExt = __webpack_require__(66);
+var wksDefine = __webpack_require__(68);
+var enumKeys = __webpack_require__(155);
+var isArray = __webpack_require__(89);
+var anObject = __webpack_require__(16);
+var isObject = __webpack_require__(12);
+var toIObject = __webpack_require__(19);
+var toPrimitive = __webpack_require__(52);
+var createDesc = __webpack_require__(26);
+var _create = __webpack_require__(41);
+var gOPNExt = __webpack_require__(156);
+var $GOPD = __webpack_require__(91);
+var $DP = __webpack_require__(7);
+var $keys = __webpack_require__(27);
+var gOPD = $GOPD.f;
+var dP = $DP.f;
+var gOPN = gOPNExt.f;
+var $Symbol = global.Symbol;
+var $JSON = global.JSON;
+var _stringify = $JSON && $JSON.stringify;
+var PROTOTYPE = 'prototype';
+var HIDDEN = wks('_hidden');
+var TO_PRIMITIVE = wks('toPrimitive');
+var isEnum = {}.propertyIsEnumerable;
+var SymbolRegistry = shared('symbol-registry');
+var AllSymbols = shared('symbols');
+var OPSymbols = shared('op-symbols');
+var ObjectProto = Object[PROTOTYPE];
+var USE_NATIVE = typeof $Symbol == 'function';
+var QObject = global.QObject;
+// Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
+var setter = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
+
+// fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
+var setSymbolDesc = DESCRIPTORS && $fails(function () {
+  return _create(dP({}, 'a', {
+    get: function () { return dP(this, 'a', { value: 7 }).a; }
+  })).a != 7;
+}) ? function (it, key, D) {
+  var protoDesc = gOPD(ObjectProto, key);
+  if (protoDesc) delete ObjectProto[key];
+  dP(it, key, D);
+  if (protoDesc && it !== ObjectProto) dP(ObjectProto, key, protoDesc);
+} : dP;
+
+var wrap = function (tag) {
+  var sym = AllSymbols[tag] = _create($Symbol[PROTOTYPE]);
+  sym._k = tag;
+  return sym;
+};
+
+var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function (it) {
+  return typeof it == 'symbol';
+} : function (it) {
+  return it instanceof $Symbol;
+};
+
+var $defineProperty = function defineProperty(it, key, D) {
+  if (it === ObjectProto) $defineProperty(OPSymbols, key, D);
+  anObject(it);
+  key = toPrimitive(key, true);
+  anObject(D);
+  if (has(AllSymbols, key)) {
+    if (!D.enumerable) {
+      if (!has(it, HIDDEN)) dP(it, HIDDEN, createDesc(1, {}));
+      it[HIDDEN][key] = true;
+    } else {
+      if (has(it, HIDDEN) && it[HIDDEN][key]) it[HIDDEN][key] = false;
+      D = _create(D, { enumerable: createDesc(0, false) });
+    } return setSymbolDesc(it, key, D);
+  } return dP(it, key, D);
+};
+var $defineProperties = function defineProperties(it, P) {
+  anObject(it);
+  var keys = enumKeys(P = toIObject(P));
+  var i = 0;
+  var l = keys.length;
+  var key;
+  while (l > i) $defineProperty(it, key = keys[i++], P[key]);
+  return it;
+};
+var $create = function create(it, P) {
+  return P === undefined ? _create(it) : $defineProperties(_create(it), P);
+};
+var $propertyIsEnumerable = function propertyIsEnumerable(key) {
+  var E = isEnum.call(this, key = toPrimitive(key, true));
+  if (this === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key)) return false;
+  return E || !has(this, key) || !has(AllSymbols, key) || has(this, HIDDEN) && this[HIDDEN][key] ? E : true;
+};
+var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key) {
+  it = toIObject(it);
+  key = toPrimitive(key, true);
+  if (it === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key)) return;
+  var D = gOPD(it, key);
+  if (D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key])) D.enumerable = true;
+  return D;
+};
+var $getOwnPropertyNames = function getOwnPropertyNames(it) {
+  var names = gOPN(toIObject(it));
+  var result = [];
+  var i = 0;
+  var key;
+  while (names.length > i) {
+    if (!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META) result.push(key);
+  } return result;
+};
+var $getOwnPropertySymbols = function getOwnPropertySymbols(it) {
+  var IS_OP = it === ObjectProto;
+  var names = gOPN(IS_OP ? OPSymbols : toIObject(it));
+  var result = [];
+  var i = 0;
+  var key;
+  while (names.length > i) {
+    if (has(AllSymbols, key = names[i++]) && (IS_OP ? has(ObjectProto, key) : true)) result.push(AllSymbols[key]);
+  } return result;
+};
+
+// 19.4.1.1 Symbol([description])
+if (!USE_NATIVE) {
+  $Symbol = function Symbol() {
+    if (this instanceof $Symbol) throw TypeError('Symbol is not a constructor!');
+    var tag = uid(arguments.length > 0 ? arguments[0] : undefined);
+    var $set = function (value) {
+      if (this === ObjectProto) $set.call(OPSymbols, value);
+      if (has(this, HIDDEN) && has(this[HIDDEN], tag)) this[HIDDEN][tag] = false;
+      setSymbolDesc(this, tag, createDesc(1, value));
+    };
+    if (DESCRIPTORS && setter) setSymbolDesc(ObjectProto, tag, { configurable: true, set: $set });
+    return wrap(tag);
+  };
+  redefine($Symbol[PROTOTYPE], 'toString', function toString() {
+    return this._k;
+  });
+
+  $GOPD.f = $getOwnPropertyDescriptor;
+  $DP.f = $defineProperty;
+  __webpack_require__(90).f = gOPNExt.f = $getOwnPropertyNames;
+  __webpack_require__(34).f = $propertyIsEnumerable;
+  __webpack_require__(60).f = $getOwnPropertySymbols;
+
+  if (DESCRIPTORS && !__webpack_require__(65)) {
+    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
+  }
+
+  wksExt.f = function (name) {
+    return wrap(wks(name));
+  };
+}
+
+$export($export.G + $export.W + $export.F * !USE_NATIVE, { Symbol: $Symbol });
+
+for (var es6Symbols = (
+  // 19.4.2.2, 19.4.2.3, 19.4.2.4, 19.4.2.6, 19.4.2.8, 19.4.2.9, 19.4.2.10, 19.4.2.11, 19.4.2.12, 19.4.2.13, 19.4.2.14
+  'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'
+).split(','), j = 0; es6Symbols.length > j;)wks(es6Symbols[j++]);
+
+for (var wellKnownSymbols = $keys(wks.store), k = 0; wellKnownSymbols.length > k;) wksDefine(wellKnownSymbols[k++]);
+
+$export($export.S + $export.F * !USE_NATIVE, 'Symbol', {
+  // 19.4.2.1 Symbol.for(key)
+  'for': function (key) {
+    return has(SymbolRegistry, key += '')
+      ? SymbolRegistry[key]
+      : SymbolRegistry[key] = $Symbol(key);
+  },
+  // 19.4.2.5 Symbol.keyFor(sym)
+  keyFor: function keyFor(sym) {
+    if (!isSymbol(sym)) throw TypeError(sym + ' is not a symbol!');
+    for (var key in SymbolRegistry) if (SymbolRegistry[key] === sym) return key;
+  },
+  useSetter: function () { setter = true; },
+  useSimple: function () { setter = false; }
+});
+
+$export($export.S + $export.F * !USE_NATIVE, 'Object', {
+  // 19.1.2.2 Object.create(O [, Properties])
+  create: $create,
+  // 19.1.2.4 Object.defineProperty(O, P, Attributes)
+  defineProperty: $defineProperty,
+  // 19.1.2.3 Object.defineProperties(O, Properties)
+  defineProperties: $defineProperties,
+  // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+  getOwnPropertyDescriptor: $getOwnPropertyDescriptor,
+  // 19.1.2.7 Object.getOwnPropertyNames(O)
+  getOwnPropertyNames: $getOwnPropertyNames,
+  // 19.1.2.8 Object.getOwnPropertySymbols(O)
+  getOwnPropertySymbols: $getOwnPropertySymbols
+});
+
+// 24.3.2 JSON.stringify(value [, replacer [, space]])
+$JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function () {
+  var S = $Symbol();
+  // MS Edge converts symbol values to JSON as {}
+  // WebKit converts symbol values to JSON as null
+  // V8 throws on boxed symbols
+  return _stringify([S]) != '[null]' || _stringify({ a: S }) != '{}' || _stringify(Object(S)) != '{}';
+})), 'JSON', {
+  stringify: function stringify(it) {
+    var args = [it];
+    var i = 1;
+    var replacer, $replacer;
+    while (arguments.length > i) args.push(arguments[i++]);
+    $replacer = replacer = args[1];
+    if (!isObject(replacer) && it === undefined || isSymbol(it)) return; // IE8 returns string on undefined
+    if (!isArray(replacer)) replacer = function (key, value) {
+      if (typeof $replacer == 'function') value = $replacer.call(this, key, value);
+      if (!isSymbol(value)) return value;
+    };
+    args[1] = replacer;
+    return _stringify.apply($JSON, args);
+  }
+});
+
+// 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
+$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(14)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
+// 19.4.3.5 Symbol.prototype[@@toStringTag]
+setToStringTag($Symbol, 'Symbol');
+// 20.2.1.9 Math[@@toStringTag]
+setToStringTag(Math, 'Math', true);
+// 24.3.3 JSON[@@toStringTag]
+setToStringTag(global.JSON, 'JSON', true);
+
+
+/***/ }),
+/* 155 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// all enumerable object keys, includes symbols
+var getKeys = __webpack_require__(27);
+var gOPS = __webpack_require__(60);
+var pIE = __webpack_require__(34);
+module.exports = function (it) {
+  var result = getKeys(it);
+  var getSymbols = gOPS.f;
+  if (getSymbols) {
+    var symbols = getSymbols(it);
+    var isEnum = pIE.f;
+    var i = 0;
+    var key;
+    while (symbols.length > i) if (isEnum.call(it, key = symbols[i++])) result.push(key);
+  } return result;
+};
+
+
+/***/ }),
+/* 156 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
+var toIObject = __webpack_require__(19);
+var gOPN = __webpack_require__(90).f;
+var toString = {}.toString;
+
+var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
+  ? Object.getOwnPropertyNames(window) : [];
+
+var getWindowNames = function (it) {
+  try {
+    return gOPN(it);
+  } catch (e) {
+    return windowNames.slice();
+  }
+};
+
+module.exports.f = function getOwnPropertyNames(it) {
+  return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
+};
+
+
+/***/ }),
+/* 157 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(68)('asyncIterator');
+
+
+/***/ }),
+/* 158 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(68)('observable');
+
+
+/***/ }),
+/* 159 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(160), __esModule: true };
+
+/***/ }),
+/* 160 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(161);
+module.exports = __webpack_require__(4).Object.setPrototypeOf;
+
+
+/***/ }),
+/* 161 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.3.19 Object.setPrototypeOf(O, proto)
+var $export = __webpack_require__(5);
+$export($export.S, 'Object', { setPrototypeOf: __webpack_require__(162).set });
+
+
+/***/ }),
+/* 162 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Works with __proto__ only. Old v8 can't work with null proto objects.
+/* eslint-disable no-proto */
+var isObject = __webpack_require__(12);
+var anObject = __webpack_require__(16);
+var check = function (O, proto) {
+  anObject(O);
+  if (!isObject(proto) && proto !== null) throw TypeError(proto + ": can't set as prototype!");
+};
+module.exports = {
+  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
+    function (test, buggy, set) {
+      try {
+        set = __webpack_require__(15)(Function.call, __webpack_require__(91).f(Object.prototype, '__proto__').set, 2);
+        set(test, []);
+        buggy = !(test instanceof Array);
+      } catch (e) { buggy = true; }
+      return function setPrototypeOf(O, proto) {
+        check(O, proto);
+        if (buggy) O.__proto__ = proto;
+        else set(O, proto);
+        return O;
+      };
+    }({}, false) : undefined),
+  check: check
+};
+
+
+/***/ }),
+/* 163 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(164), __esModule: true };
+
+/***/ }),
+/* 164 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(165);
+var $Object = __webpack_require__(4).Object;
+module.exports = function create(P, D) {
+  return $Object.create(P, D);
+};
+
+
+/***/ }),
+/* 165 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $export = __webpack_require__(5);
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+$export($export.S, 'Object', { create: __webpack_require__(41) });
+
+
+/***/ }),
+/* 166 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(167), __esModule: true };
+
+/***/ }),
+/* 167 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(92);
+__webpack_require__(63);
+__webpack_require__(87);
+__webpack_require__(168);
+__webpack_require__(175);
+__webpack_require__(178);
+__webpack_require__(180);
+module.exports = __webpack_require__(4).Map;
+
+
+/***/ }),
+/* 168 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var strong = __webpack_require__(169);
+var validate = __webpack_require__(99);
+var MAP = 'Map';
+
+// 23.1 Map Objects
+module.exports = __webpack_require__(171)(MAP, function (get) {
+  return function Map() { return get(this, arguments.length > 0 ? arguments[0] : undefined); };
+}, {
+  // 23.1.3.6 Map.prototype.get(key)
+  get: function get(key) {
+    var entry = strong.getEntry(validate(this, MAP), key);
+    return entry && entry.v;
+  },
+  // 23.1.3.9 Map.prototype.set(key, value)
+  set: function set(key, value) {
+    return strong.def(validate(this, MAP), key === 0 ? 0 : key, value);
+  }
+}, strong, true);
+
+
+/***/ }),
+/* 169 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var dP = __webpack_require__(7).f;
+var create = __webpack_require__(41);
+var redefineAll = __webpack_require__(93);
+var ctx = __webpack_require__(15);
+var anInstance = __webpack_require__(94);
+var forOf = __webpack_require__(44);
+var $iterDefine = __webpack_require__(64);
+var step = __webpack_require__(88);
+var setSpecies = __webpack_require__(170);
+var DESCRIPTORS = __webpack_require__(9);
+var fastKey = __webpack_require__(67).fastKey;
+var validate = __webpack_require__(99);
+var SIZE = DESCRIPTORS ? '_s' : 'size';
+
+var getEntry = function (that, key) {
+  // fast case
+  var index = fastKey(key);
+  var entry;
+  if (index !== 'F') return that._i[index];
+  // frozen object case
+  for (entry = that._f; entry; entry = entry.n) {
+    if (entry.k == key) return entry;
+  }
+};
+
+module.exports = {
+  getConstructor: function (wrapper, NAME, IS_MAP, ADDER) {
+    var C = wrapper(function (that, iterable) {
+      anInstance(that, C, NAME, '_i');
+      that._t = NAME;         // collection type
+      that._i = create(null); // index
+      that._f = undefined;    // first entry
+      that._l = undefined;    // last entry
+      that[SIZE] = 0;         // size
+      if (iterable != undefined) forOf(iterable, IS_MAP, that[ADDER], that);
+    });
+    redefineAll(C.prototype, {
+      // 23.1.3.1 Map.prototype.clear()
+      // 23.2.3.2 Set.prototype.clear()
+      clear: function clear() {
+        for (var that = validate(this, NAME), data = that._i, entry = that._f; entry; entry = entry.n) {
+          entry.r = true;
+          if (entry.p) entry.p = entry.p.n = undefined;
+          delete data[entry.i];
+        }
+        that._f = that._l = undefined;
+        that[SIZE] = 0;
+      },
+      // 23.1.3.3 Map.prototype.delete(key)
+      // 23.2.3.4 Set.prototype.delete(value)
+      'delete': function (key) {
+        var that = validate(this, NAME);
+        var entry = getEntry(that, key);
+        if (entry) {
+          var next = entry.n;
+          var prev = entry.p;
+          delete that._i[entry.i];
+          entry.r = true;
+          if (prev) prev.n = next;
+          if (next) next.p = prev;
+          if (that._f == entry) that._f = next;
+          if (that._l == entry) that._l = prev;
+          that[SIZE]--;
+        } return !!entry;
+      },
+      // 23.2.3.6 Set.prototype.forEach(callbackfn, thisArg = undefined)
+      // 23.1.3.5 Map.prototype.forEach(callbackfn, thisArg = undefined)
+      forEach: function forEach(callbackfn /* , that = undefined */) {
+        validate(this, NAME);
+        var f = ctx(callbackfn, arguments.length > 1 ? arguments[1] : undefined, 3);
+        var entry;
+        while (entry = entry ? entry.n : this._f) {
+          f(entry.v, entry.k, this);
+          // revert to the last existing entry
+          while (entry && entry.r) entry = entry.p;
+        }
+      },
+      // 23.1.3.7 Map.prototype.has(key)
+      // 23.2.3.7 Set.prototype.has(value)
+      has: function has(key) {
+        return !!getEntry(validate(this, NAME), key);
+      }
+    });
+    if (DESCRIPTORS) dP(C.prototype, 'size', {
+      get: function () {
+        return validate(this, NAME)[SIZE];
+      }
+    });
+    return C;
+  },
+  def: function (that, key, value) {
+    var entry = getEntry(that, key);
+    var prev, index;
+    // change existing entry
+    if (entry) {
+      entry.v = value;
+    // create new entry
+    } else {
+      that._l = entry = {
+        i: index = fastKey(key, true), // <- index
+        k: key,                        // <- key
+        v: value,                      // <- value
+        p: prev = that._l,             // <- previous entry
+        n: undefined,                  // <- next entry
+        r: false                       // <- removed
+      };
+      if (!that._f) that._f = entry;
+      if (prev) prev.n = entry;
+      that[SIZE]++;
+      // add to index
+      if (index !== 'F') that._i[index] = entry;
+    } return that;
+  },
+  getEntry: getEntry,
+  setStrong: function (C, NAME, IS_MAP) {
+    // add .keys, .values, .entries, [@@iterator]
+    // 23.1.3.4, 23.1.3.8, 23.1.3.11, 23.1.3.12, 23.2.3.5, 23.2.3.8, 23.2.3.10, 23.2.3.11
+    $iterDefine(C, NAME, function (iterated, kind) {
+      this._t = validate(iterated, NAME); // target
+      this._k = kind;                     // kind
+      this._l = undefined;                // previous
+    }, function () {
+      var that = this;
+      var kind = that._k;
+      var entry = that._l;
+      // revert to the last existing entry
+      while (entry && entry.r) entry = entry.p;
+      // get next entry
+      if (!that._t || !(that._l = entry = entry ? entry.n : that._t._f)) {
+        // or finish the iteration
+        that._t = undefined;
+        return step(1);
+      }
+      // return step by kind
+      if (kind == 'keys') return step(0, entry.k);
+      if (kind == 'values') return step(0, entry.v);
+      return step(0, [entry.k, entry.v]);
+    }, IS_MAP ? 'entries' : 'values', !IS_MAP, true);
+
+    // add [@@species], 23.1.2.2, 23.2.2.2
+    setSpecies(NAME);
+  }
+};
+
+
+/***/ }),
+/* 170 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var global = __webpack_require__(8);
+var core = __webpack_require__(4);
+var dP = __webpack_require__(7);
+var DESCRIPTORS = __webpack_require__(9);
+var SPECIES = __webpack_require__(6)('species');
+
+module.exports = function (KEY) {
+  var C = typeof core[KEY] == 'function' ? core[KEY] : global[KEY];
+  if (DESCRIPTORS && C && !C[SPECIES]) dP.f(C, SPECIES, {
+    configurable: true,
+    get: function () { return this; }
+  });
+};
+
+
+/***/ }),
+/* 171 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var global = __webpack_require__(8);
+var $export = __webpack_require__(5);
+var meta = __webpack_require__(67);
+var fails = __webpack_require__(17);
+var hide = __webpack_require__(14);
+var redefineAll = __webpack_require__(93);
+var forOf = __webpack_require__(44);
+var anInstance = __webpack_require__(94);
+var isObject = __webpack_require__(12);
+var setToStringTag = __webpack_require__(42);
+var dP = __webpack_require__(7).f;
+var each = __webpack_require__(172)(0);
+var DESCRIPTORS = __webpack_require__(9);
+
+module.exports = function (NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
+  var Base = global[NAME];
+  var C = Base;
+  var ADDER = IS_MAP ? 'set' : 'add';
+  var proto = C && C.prototype;
+  var O = {};
+  if (!DESCRIPTORS || typeof C != 'function' || !(IS_WEAK || proto.forEach && !fails(function () {
+    new C().entries().next();
+  }))) {
+    // create collection constructor
+    C = common.getConstructor(wrapper, NAME, IS_MAP, ADDER);
+    redefineAll(C.prototype, methods);
+    meta.NEED = true;
+  } else {
+    C = wrapper(function (target, iterable) {
+      anInstance(target, C, NAME, '_c');
+      target._c = new Base();
+      if (iterable != undefined) forOf(iterable, IS_MAP, target[ADDER], target);
+    });
+    each('add,clear,delete,forEach,get,has,set,keys,values,entries,toJSON'.split(','), function (KEY) {
+      var IS_ADDER = KEY == 'add' || KEY == 'set';
+      if (KEY in proto && !(IS_WEAK && KEY == 'clear')) hide(C.prototype, KEY, function (a, b) {
+        anInstance(this, C, KEY);
+        if (!IS_ADDER && IS_WEAK && !isObject(a)) return KEY == 'get' ? undefined : false;
+        var result = this._c[KEY](a === 0 ? 0 : a, b);
+        return IS_ADDER ? this : result;
+      });
+    });
+    IS_WEAK || dP(C.prototype, 'size', {
+      get: function () {
+        return this._c.size;
+      }
+    });
+  }
+
+  setToStringTag(C, NAME);
+
+  O[NAME] = C;
+  $export($export.G + $export.W + $export.F, O);
+
+  if (!IS_WEAK) common.setStrong(C, NAME, IS_MAP);
+
+  return C;
+};
+
+
+/***/ }),
+/* 172 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 0 -> Array#forEach
+// 1 -> Array#map
+// 2 -> Array#filter
+// 3 -> Array#some
+// 4 -> Array#every
+// 5 -> Array#find
+// 6 -> Array#findIndex
+var ctx = __webpack_require__(15);
+var IObject = __webpack_require__(53);
+var toObject = __webpack_require__(20);
+var toLength = __webpack_require__(32);
+var asc = __webpack_require__(173);
+module.exports = function (TYPE, $create) {
+  var IS_MAP = TYPE == 1;
+  var IS_FILTER = TYPE == 2;
+  var IS_SOME = TYPE == 3;
+  var IS_EVERY = TYPE == 4;
+  var IS_FIND_INDEX = TYPE == 6;
+  var NO_HOLES = TYPE == 5 || IS_FIND_INDEX;
+  var create = $create || asc;
+  return function ($this, callbackfn, that) {
+    var O = toObject($this);
+    var self = IObject(O);
+    var f = ctx(callbackfn, that, 3);
+    var length = toLength(self.length);
+    var index = 0;
+    var result = IS_MAP ? create($this, length) : IS_FILTER ? create($this, 0) : undefined;
+    var val, res;
+    for (;length > index; index++) if (NO_HOLES || index in self) {
+      val = self[index];
+      res = f(val, index, O);
+      if (TYPE) {
+        if (IS_MAP) result[index] = res;   // map
+        else if (res) switch (TYPE) {
+          case 3: return true;             // some
+          case 5: return val;              // find
+          case 6: return index;            // findIndex
+          case 2: result.push(val);        // filter
+        } else if (IS_EVERY) return false; // every
+      }
+    }
+    return IS_FIND_INDEX ? -1 : IS_SOME || IS_EVERY ? IS_EVERY : result;
+  };
+};
+
+
+/***/ }),
+/* 173 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 9.4.2.3 ArraySpeciesCreate(originalArray, length)
+var speciesConstructor = __webpack_require__(174);
+
+module.exports = function (original, length) {
+  return new (speciesConstructor(original))(length);
+};
+
+
+/***/ }),
+/* 174 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(12);
+var isArray = __webpack_require__(89);
+var SPECIES = __webpack_require__(6)('species');
+
+module.exports = function (original) {
+  var C;
+  if (isArray(original)) {
+    C = original.constructor;
+    // cross-realm fallback
+    if (typeof C == 'function' && (C === Array || isArray(C.prototype))) C = undefined;
+    if (isObject(C)) {
+      C = C[SPECIES];
+      if (C === null) C = undefined;
+    }
+  } return C === undefined ? Array : C;
+};
+
+
+/***/ }),
+/* 175 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// https://github.com/DavidBruant/Map-Set.prototype.toJSON
+var $export = __webpack_require__(5);
+
+$export($export.P + $export.R, 'Map', { toJSON: __webpack_require__(176)('Map') });
+
+
+/***/ }),
+/* 176 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// https://github.com/DavidBruant/Map-Set.prototype.toJSON
+var classof = __webpack_require__(98);
+var from = __webpack_require__(177);
+module.exports = function (NAME) {
+  return function toJSON() {
+    if (classof(this) != NAME) throw TypeError(NAME + "#toJSON isn't generic");
+    return from(this);
+  };
+};
+
+
+/***/ }),
+/* 177 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var forOf = __webpack_require__(44);
+
+module.exports = function (iter, ITERATOR) {
+  var result = [];
+  forOf(iter, false, result.push, result, ITERATOR);
+  return result;
+};
+
+
+/***/ }),
+/* 178 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// https://tc39.github.io/proposal-setmap-offrom/#sec-map.of
+__webpack_require__(179)('Map');
+
+
+/***/ }),
+/* 179 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// https://tc39.github.io/proposal-setmap-offrom/
+var $export = __webpack_require__(5);
+
+module.exports = function (COLLECTION) {
+  $export($export.S, COLLECTION, { of: function of() {
+    var length = arguments.length;
+    var A = new Array(length);
+    while (length--) A[length] = arguments[length];
+    return new this(A);
+  } });
+};
+
+
+/***/ }),
+/* 180 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// https://tc39.github.io/proposal-setmap-offrom/#sec-map.from
+__webpack_require__(181)('Map');
+
+
+/***/ }),
+/* 181 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// https://tc39.github.io/proposal-setmap-offrom/
+var $export = __webpack_require__(5);
+var aFunction = __webpack_require__(80);
+var ctx = __webpack_require__(15);
+var forOf = __webpack_require__(44);
+
+module.exports = function (COLLECTION) {
+  $export($export.S, COLLECTION, { from: function from(source /* , mapFn, thisArg */) {
+    var mapFn = arguments[1];
+    var mapping, A, n, cb;
+    aFunction(this);
+    mapping = mapFn !== undefined;
+    if (mapping) aFunction(mapFn);
+    if (source == undefined) return new this();
+    A = [];
+    if (mapping) {
+      n = 0;
+      cb = ctx(mapFn, arguments[2], 2);
+      forOf(source, false, function (nextItem) {
+        A.push(cb(nextItem, n++));
+      });
+    } else {
+      forOf(source, false, A.push, A);
+    }
+    return new this(A);
+  } });
+};
+
+
+/***/ }),
+/* 182 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(183), __esModule: true };
+
+/***/ }),
+/* 183 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(184);
+module.exports = -0x1fffffffffffff;
+
+
+/***/ }),
+/* 184 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 20.1.2.10 Number.MIN_SAFE_INTEGER
+var $export = __webpack_require__(5);
+
+$export($export.S, 'Number', { MIN_SAFE_INTEGER: -0x1fffffffffffff });
+
+
+/***/ }),
+/* 185 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * Copyright 2015, Yahoo! Inc.
+ * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+ */
+(function (global, factory) {
+     true ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global.hoistNonReactStatics = factory());
+}(this, (function () {
+    'use strict';
+    
+    var REACT_STATICS = {
+        childContextTypes: true,
+        contextTypes: true,
+        defaultProps: true,
+        displayName: true,
+        getDefaultProps: true,
+        getDerivedStateFromProps: true,
+        mixins: true,
+        propTypes: true,
+        type: true
+    };
+    
+    var KNOWN_STATICS = {
+        name: true,
+        length: true,
+        prototype: true,
+        caller: true,
+        callee: true,
+        arguments: true,
+        arity: true
+    };
+    
+    var defineProperty = Object.defineProperty;
+    var getOwnPropertyNames = Object.getOwnPropertyNames;
+    var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+    var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+    var getPrototypeOf = Object.getPrototypeOf;
+    var objectPrototype = getPrototypeOf && getPrototypeOf(Object);
+    
+    return function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
+        if (typeof sourceComponent !== 'string') { // don't hoist over string (html) components
+            
+            if (objectPrototype) {
+                var inheritedComponent = getPrototypeOf(sourceComponent);
+                if (inheritedComponent && inheritedComponent !== objectPrototype) {
+                    hoistNonReactStatics(targetComponent, inheritedComponent, blacklist);
+                }
+            }
+            
+            var keys = getOwnPropertyNames(sourceComponent);
+            
+            if (getOwnPropertySymbols) {
+                keys = keys.concat(getOwnPropertySymbols(sourceComponent));
+            }
+            
+            for (var i = 0; i < keys.length; ++i) {
+                var key = keys[i];
+                if (!REACT_STATICS[key] && !KNOWN_STATICS[key] && (!blacklist || !blacklist[key])) {
+                    var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
+                    try { // Avoid failures from read-only properties
+                        defineProperty(targetComponent, key, descriptor);
+                    } catch (e) {}
+                }
+            }
+            
+            return targetComponent;
+        }
+        
+        return targetComponent;
+    };
+})));
+
+
+/***/ }),
+/* 186 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _getDisplayName = __webpack_require__(100);
+
+var _getDisplayName2 = _interopRequireDefault(_getDisplayName);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var wrapDisplayName = function wrapDisplayName(BaseComponent, hocName) {
+  return hocName + '(' + (0, _getDisplayName2.default)(BaseComponent) + ')';
+};
+
+exports.default = wrapDisplayName;
+
+/***/ }),
+/* 187 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _ns$jss$ns$sheetOptio;
+
+var _propTypes = __webpack_require__(3);
+
+var _ns = __webpack_require__(101);
+
+var ns = _interopRequireWildcard(_ns);
+
+var _propTypes2 = __webpack_require__(188);
+
+var _propTypes3 = _interopRequireDefault(_propTypes2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+exports['default'] = (_ns$jss$ns$sheetOptio = {}, _defineProperty(_ns$jss$ns$sheetOptio, ns.jss, _propTypes3['default'].jss), _defineProperty(_ns$jss$ns$sheetOptio, ns.sheetOptions, _propTypes.object), _defineProperty(_ns$jss$ns$sheetOptio, ns.sheetsRegistry, _propTypes3['default'].registry), _defineProperty(_ns$jss$ns$sheetOptio, ns.managers, _propTypes.object), _ns$jss$ns$sheetOptio);
+
+/***/ }),
+/* 188 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _propTypes = __webpack_require__(3);
+
+exports['default'] = {
+  jss: (0, _propTypes.shape)({
+    options: (0, _propTypes.shape)({
+      createGenerateClassName: _propTypes.func.isRequired
+    }).isRequired,
+    createStyleSheet: _propTypes.func.isRequired,
+    removeStyleSheet: _propTypes.func.isRequired
+  }),
+  registry: (0, _propTypes.shape)({
+    add: _propTypes.func.isRequired,
+    toString: _propTypes.func.isRequired
+  })
+};
+
+/***/ }),
+/* 189 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports['default'] = getDynamicStyles;
+/**
+ * Extracts a styles object with only props that contain function values.
+ */
+function getDynamicStyles(styles) {
+  var to = null;
+
+  for (var key in styles) {
+    var value = styles[key];
+    var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+
+    if (type === 'function') {
+      if (!to) to = {};
+      to[key] = value;
+    } else if (type === 'object' && value !== null && !Array.isArray(value)) {
+      var extracted = getDynamicStyles(value);
+      if (extracted) {
+        if (!to) to = {};
+        to[key] = extracted;
+      }
+    }
+  }
+
+  return to;
+}
+
+/***/ }),
+/* 190 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * SheetsManager is like a WeakMap which is designed to count StyleSheet
+ * instances and attach/detach automatically.
+ */
+var SheetsManager = function () {
+  function SheetsManager() {
+    _classCallCheck(this, SheetsManager);
+
+    this.sheets = [];
+    this.refs = [];
+    this.keys = [];
+  }
+
+  _createClass(SheetsManager, [{
+    key: 'get',
+    value: function get(key) {
+      var index = this.keys.indexOf(key);
+      return this.sheets[index];
+    }
+  }, {
+    key: 'add',
+    value: function add(key, sheet) {
+      var sheets = this.sheets,
+          refs = this.refs,
+          keys = this.keys;
+
+      var index = sheets.indexOf(sheet);
+
+      if (index !== -1) return index;
+
+      sheets.push(sheet);
+      refs.push(0);
+      keys.push(key);
+
+      return sheets.length - 1;
+    }
+  }, {
+    key: 'manage',
+    value: function manage(key) {
+      var index = this.keys.indexOf(key);
+      var sheet = this.sheets[index];
+      if (this.refs[index] === 0) sheet.attach();
+      this.refs[index]++;
+      if (!this.keys[index]) this.keys.splice(index, 0, key);
+      return sheet;
+    }
+  }, {
+    key: 'unmanage',
+    value: function unmanage(key) {
+      var index = this.keys.indexOf(key);
+      if (index === -1) {
+        // eslint-ignore-next-line no-console
+        (0, _warning2['default'])(false, "SheetsManager: can't find sheet to unmanage");
+        return;
+      }
+      if (this.refs[index] > 0) {
+        this.refs[index]--;
+        if (this.refs[index] === 0) this.sheets[index].detach();
+      }
+    }
+  }, {
+    key: 'size',
+    get: function get() {
+      return this.keys.length;
+    }
+  }]);
+
+  return SheetsManager;
+}();
+
+exports['default'] = SheetsManager;
+
+/***/ }),
+/* 191 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports['default'] = cloneStyle;
+
+var _isObservable = __webpack_require__(104);
+
+var _isObservable2 = _interopRequireDefault(_isObservable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var isArray = Array.isArray;
+function cloneStyle(style) {
+  // Support empty values in case user ends up with them by accident.
+  if (style == null) return style;
+
+  // Support string value for SimpleRule.
+  var typeOfStyle = typeof style === 'undefined' ? 'undefined' : _typeof(style);
+
+  if (typeOfStyle === 'string' || typeOfStyle === 'number' || typeOfStyle === 'function') {
+    return style;
+  }
+
+  // Support array for FontFaceRule.
+  if (isArray(style)) return style.map(cloneStyle);
+
+  // Support Observable styles.  Observables are immutable, so we don't need to
+  // copy them.
+  if ((0, _isObservable2['default'])(style)) return style;
+
+  var newStyle = {};
+  for (var name in style) {
+    var value = style[name];
+    if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
+      newStyle[name] = cloneStyle(value);
+      continue;
+    }
+    newStyle[name] = value;
+  }
+
+  return newStyle;
+}
+
+/***/ }),
+/* 192 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* WEBPACK VAR INJECTION */(function(global, module) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ponyfill_js__ = __webpack_require__(194);
+/* global window */
+
+
+var root;
+
+if (typeof self !== 'undefined') {
+  root = self;
+} else if (typeof window !== 'undefined') {
+  root = window;
+} else if (typeof global !== 'undefined') {
+  root = global;
+} else if (true) {
+  root = module;
+} else {
+  root = Function('return this')();
+}
+
+var result = Object(__WEBPACK_IMPORTED_MODULE_0__ponyfill_js__["a" /* default */])(root);
+/* harmony default export */ __webpack_exports__["default"] = (result);
+
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(70), __webpack_require__(193)(module)))
+
+/***/ }),
+/* 193 */
+/***/ (function(module, exports) {
+
+module.exports = function(originalModule) {
+	if(!originalModule.webpackPolyfill) {
+		var module = Object.create(originalModule);
+		// module.parent = undefined by default
+		if(!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function() {
+				return module.i;
+			}
+		});
+		Object.defineProperty(module, "exports", {
+			enumerable: true,
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
+
+
+/***/ }),
+/* 194 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = symbolObservablePonyfill;
+function symbolObservablePonyfill(root) {
+	var result;
+	var Symbol = root.Symbol;
+
+	if (typeof Symbol === 'function') {
+		if (Symbol.observable) {
+			result = Symbol.observable;
+		} else {
+			result = Symbol('observable');
+			Symbol.observable = result;
+		}
+	} else {
+		result = '@@observable';
+	}
+
+	return result;
+};
+
+
+/***/ }),
+/* 195 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global, process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var CSS = global.CSS;
+
+var env = process.env.NODE_ENV;
+
+var escapeRegex = /([[\].#*$><+~=|^:(),"'`])/g;
+
+exports['default'] = function (str) {
+  // We don't need to escape it in production, because we are not using user's
+  // input for selectors, we are generating a valid selector.
+  if (env === 'production') return str;
+
+  if (!CSS || !CSS.escape) {
+    return str.replace(escapeRegex, '\\$1');
+  }
+
+  return CSS.escape(str);
+};
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(70), __webpack_require__(0)))
+
+/***/ }),
+/* 196 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var ns = '2f1acc6c3a606b082e5eef5e54414ffb';
+if (global[ns] == null) global[ns] = 0;
+
+// Bundle may contain multiple JSS versions at the same time. In order to identify
+// the current version with just one short number and use it for classes generation
+// we use a counter. Also it is more accurate, because user can manually reevaluate
+// the module.
+exports['default'] = global[ns]++;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(70)))
+
+/***/ }),
+/* 197 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _isInBrowser = __webpack_require__(47);
+
+var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
+
+var _StyleSheet = __webpack_require__(107);
+
+var _StyleSheet2 = _interopRequireDefault(_StyleSheet);
+
+var _PluginsRegistry = __webpack_require__(198);
+
+var _PluginsRegistry2 = _interopRequireDefault(_PluginsRegistry);
+
+var _rules = __webpack_require__(199);
+
+var _rules2 = _interopRequireDefault(_rules);
+
+var _observables = __webpack_require__(205);
+
+var _observables2 = _interopRequireDefault(_observables);
+
+var _functions = __webpack_require__(206);
+
+var _functions2 = _interopRequireDefault(_functions);
+
+var _sheets = __webpack_require__(71);
+
+var _sheets2 = _interopRequireDefault(_sheets);
+
+var _StyleRule = __webpack_require__(21);
+
+var _StyleRule2 = _interopRequireDefault(_StyleRule);
+
+var _createGenerateClassName = __webpack_require__(106);
+
+var _createGenerateClassName2 = _interopRequireDefault(_createGenerateClassName);
+
+var _createRule2 = __webpack_require__(46);
+
+var _createRule3 = _interopRequireDefault(_createRule2);
+
+var _DomRenderer = __webpack_require__(207);
+
+var _DomRenderer2 = _interopRequireDefault(_DomRenderer);
+
+var _VirtualRenderer = __webpack_require__(208);
+
+var _VirtualRenderer2 = _interopRequireDefault(_VirtualRenderer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var defaultPlugins = _rules2['default'].concat([_observables2['default'], _functions2['default']]);
+
+var instanceCounter = 0;
+
+var Jss = function () {
+  function Jss(options) {
+    _classCallCheck(this, Jss);
+
+    this.id = instanceCounter++;
+    this.version = "9.8.1";
+    this.plugins = new _PluginsRegistry2['default']();
+    this.options = {
+      createGenerateClassName: _createGenerateClassName2['default'],
+      Renderer: _isInBrowser2['default'] ? _DomRenderer2['default'] : _VirtualRenderer2['default'],
+      plugins: []
+    };
+    this.generateClassName = (0, _createGenerateClassName2['default'])();
+
+    // eslint-disable-next-line prefer-spread
+    this.use.apply(this, defaultPlugins);
+    this.setup(options);
+  }
+
+  _createClass(Jss, [{
+    key: 'setup',
+    value: function setup() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      if (options.createGenerateClassName) {
+        this.options.createGenerateClassName = options.createGenerateClassName;
+        // $FlowFixMe
+        this.generateClassName = options.createGenerateClassName();
+      }
+
+      if (options.insertionPoint != null) this.options.insertionPoint = options.insertionPoint;
+      if (options.virtual || options.Renderer) {
+        this.options.Renderer = options.Renderer || (options.virtual ? _VirtualRenderer2['default'] : _DomRenderer2['default']);
+      }
+
+      // eslint-disable-next-line prefer-spread
+      if (options.plugins) this.use.apply(this, options.plugins);
+
+      return this;
+    }
+
+    /**
+     * Create a Style Sheet.
+     */
+
+  }, {
+    key: 'createStyleSheet',
+    value: function createStyleSheet(styles) {
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+      var index = options.index;
+      if (typeof index !== 'number') {
+        index = _sheets2['default'].index === 0 ? 0 : _sheets2['default'].index + 1;
+      }
+      var sheet = new _StyleSheet2['default'](styles, _extends({}, options, {
+        jss: this,
+        generateClassName: options.generateClassName || this.generateClassName,
+        insertionPoint: this.options.insertionPoint,
+        Renderer: this.options.Renderer,
+        index: index
+      }));
+      this.plugins.onProcessSheet(sheet);
+
+      return sheet;
+    }
+
+    /**
+     * Detach the Style Sheet and remove it from the registry.
+     */
+
+  }, {
+    key: 'removeStyleSheet',
+    value: function removeStyleSheet(sheet) {
+      sheet.detach();
+      _sheets2['default'].remove(sheet);
+      return this;
+    }
+
+    /**
+     * Create a rule without a Style Sheet.
+     */
+
+  }, {
+    key: 'createRule',
+    value: function createRule(name) {
+      var style = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+      // Enable rule without name for inline styles.
+      if ((typeof name === 'undefined' ? 'undefined' : _typeof(name)) === 'object') {
+        options = style;
+        style = name;
+        name = undefined;
+      }
+
+      // Cast from RuleFactoryOptions to RuleOptions
+      // https://stackoverflow.com/questions/41328728/force-casting-in-flow
+      var ruleOptions = options;
+
+      ruleOptions.jss = this;
+      ruleOptions.Renderer = this.options.Renderer;
+      if (!ruleOptions.generateClassName) ruleOptions.generateClassName = this.generateClassName;
+      if (!ruleOptions.classes) ruleOptions.classes = {};
+      var rule = (0, _createRule3['default'])(name, style, ruleOptions);
+
+      if (!ruleOptions.selector && rule instanceof _StyleRule2['default']) {
+        rule.selector = '.' + ruleOptions.generateClassName(rule);
+      }
+
+      this.plugins.onProcessRule(rule);
+
+      return rule;
+    }
+
+    /**
+     * Register plugin. Passed function will be invoked with a rule instance.
+     */
+
+  }, {
+    key: 'use',
+    value: function use() {
+      var _this = this;
+
+      for (var _len = arguments.length, plugins = Array(_len), _key = 0; _key < _len; _key++) {
+        plugins[_key] = arguments[_key];
+      }
+
+      plugins.forEach(function (plugin) {
+        // Avoids applying same plugin twice, at least based on ref.
+        if (_this.options.plugins.indexOf(plugin) === -1) {
+          _this.options.plugins.push(plugin);
+          _this.plugins.use(plugin);
+        }
+      });
+
+      return this;
+    }
+  }]);
+
+  return Jss;
+}();
+
+exports['default'] = Jss;
+
+/***/ }),
+/* 198 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var PluginsRegistry = function () {
+  function PluginsRegistry() {
+    _classCallCheck(this, PluginsRegistry);
+
+    this.hooks = {
+      onCreateRule: [],
+      onProcessRule: [],
+      onProcessStyle: [],
+      onProcessSheet: [],
+      onChangeValue: [],
+      onUpdate: []
+
+      /**
+       * Call `onCreateRule` hooks and return an object if returned by a hook.
+       */
+    };
+  }
+
+  _createClass(PluginsRegistry, [{
+    key: 'onCreateRule',
+    value: function onCreateRule(name, decl, options) {
+      for (var i = 0; i < this.hooks.onCreateRule.length; i++) {
+        var rule = this.hooks.onCreateRule[i](name, decl, options);
+        if (rule) return rule;
+      }
+      return null;
+    }
+
+    /**
+     * Call `onProcessRule` hooks.
+     */
+
+  }, {
+    key: 'onProcessRule',
+    value: function onProcessRule(rule) {
+      if (rule.isProcessed) return;
+      var sheet = rule.options.sheet;
+
+      for (var i = 0; i < this.hooks.onProcessRule.length; i++) {
+        this.hooks.onProcessRule[i](rule, sheet);
+      }
+
+      // $FlowFixMe
+      if (rule.style) this.onProcessStyle(rule.style, rule, sheet);
+
+      rule.isProcessed = true;
+    }
+
+    /**
+     * Call `onProcessStyle` hooks.
+     */
+
+  }, {
+    key: 'onProcessStyle',
+    value: function onProcessStyle(style, rule, sheet) {
+      var nextStyle = style;
+
+      for (var i = 0; i < this.hooks.onProcessStyle.length; i++) {
+        nextStyle = this.hooks.onProcessStyle[i](nextStyle, rule, sheet);
+        // $FlowFixMe
+        rule.style = nextStyle;
+      }
+    }
+
+    /**
+     * Call `onProcessSheet` hooks.
+     */
+
+  }, {
+    key: 'onProcessSheet',
+    value: function onProcessSheet(sheet) {
+      for (var i = 0; i < this.hooks.onProcessSheet.length; i++) {
+        this.hooks.onProcessSheet[i](sheet);
+      }
+    }
+
+    /**
+     * Call `onUpdate` hooks.
+     */
+
+  }, {
+    key: 'onUpdate',
+    value: function onUpdate(data, rule, sheet) {
+      for (var i = 0; i < this.hooks.onUpdate.length; i++) {
+        this.hooks.onUpdate[i](data, rule, sheet);
+      }
+    }
+
+    /**
+     * Call `onChangeValue` hooks.
+     */
+
+  }, {
+    key: 'onChangeValue',
+    value: function onChangeValue(value, prop, rule) {
+      var processedValue = value;
+      for (var i = 0; i < this.hooks.onChangeValue.length; i++) {
+        processedValue = this.hooks.onChangeValue[i](processedValue, prop, rule);
+      }
+      return processedValue;
+    }
+
+    /**
+     * Register a plugin.
+     * If function is passed, it is a shortcut for `{onProcessRule}`.
+     */
+
+  }, {
+    key: 'use',
+    value: function use(plugin) {
+      for (var name in plugin) {
+        if (this.hooks[name]) this.hooks[name].push(plugin[name]);else (0, _warning2['default'])(false, '[JSS] Unknown hook "%s".', name);
+      }
+    }
+  }]);
+
+  return PluginsRegistry;
+}();
+
+exports['default'] = PluginsRegistry;
+
+/***/ }),
+/* 199 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _SimpleRule = __webpack_require__(200);
+
+var _SimpleRule2 = _interopRequireDefault(_SimpleRule);
+
+var _KeyframesRule = __webpack_require__(201);
+
+var _KeyframesRule2 = _interopRequireDefault(_KeyframesRule);
+
+var _ConditionalRule = __webpack_require__(202);
+
+var _ConditionalRule2 = _interopRequireDefault(_ConditionalRule);
+
+var _FontFaceRule = __webpack_require__(203);
+
+var _FontFaceRule2 = _interopRequireDefault(_FontFaceRule);
+
+var _ViewportRule = __webpack_require__(204);
+
+var _ViewportRule2 = _interopRequireDefault(_ViewportRule);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var classes = {
+  '@charset': _SimpleRule2['default'],
+  '@import': _SimpleRule2['default'],
+  '@namespace': _SimpleRule2['default'],
+  '@keyframes': _KeyframesRule2['default'],
+  '@media': _ConditionalRule2['default'],
+  '@supports': _ConditionalRule2['default'],
+  '@font-face': _FontFaceRule2['default'],
+  '@viewport': _ViewportRule2['default'],
+  '@-ms-viewport': _ViewportRule2['default']
+
+  /**
+   * Generate plugins which will register all rules.
+   */
+};
+exports['default'] = Object.keys(classes).map(function (key) {
+  // https://jsperf.com/indexof-vs-substr-vs-regex-at-the-beginning-3
+  var re = new RegExp('^' + key);
+  var onCreateRule = function onCreateRule(name, decl, options) {
+    return re.test(name) ? new classes[key](name, decl, options) : null;
+  };
+  return { onCreateRule: onCreateRule };
+});
+
+/***/ }),
+/* 200 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var SimpleRule = function () {
+  function SimpleRule(key, value, options) {
+    _classCallCheck(this, SimpleRule);
+
+    this.type = 'simple';
+    this.isProcessed = false;
+
+    this.key = key;
+    this.value = value;
+    this.options = options;
+  }
+
+  /**
+   * Generates a CSS string.
+   */
+  // eslint-disable-next-line no-unused-vars
+
+
+  _createClass(SimpleRule, [{
+    key: 'toString',
+    value: function toString(options) {
+      if (Array.isArray(this.value)) {
+        var str = '';
+        for (var index = 0; index < this.value.length; index++) {
+          str += this.key + ' ' + this.value[index] + ';';
+          if (this.value[index + 1]) str += '\n';
+        }
+        return str;
+      }
+
+      return this.key + ' ' + this.value + ';';
+    }
+  }]);
+
+  return SimpleRule;
+}();
+
+exports['default'] = SimpleRule;
+
+/***/ }),
+/* 201 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _RuleList = __webpack_require__(29);
+
+var _RuleList2 = _interopRequireDefault(_RuleList);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Rule for @keyframes
+ */
+var KeyframesRule = function () {
+  function KeyframesRule(key, frames, options) {
+    _classCallCheck(this, KeyframesRule);
+
+    this.type = 'keyframes';
+    this.isProcessed = false;
+
+    this.key = key;
+    this.options = options;
+    this.rules = new _RuleList2['default'](_extends({}, options, { parent: this }));
+
+    for (var name in frames) {
+      this.rules.add(name, frames[name], _extends({}, this.options, {
+        parent: this,
+        selector: name
+      }));
+    }
+
+    this.rules.process();
+  }
+
+  /**
+   * Generates a CSS string.
+   */
+
+
+  _createClass(KeyframesRule, [{
+    key: 'toString',
+    value: function toString() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { indent: 1 };
+
+      var inner = this.rules.toString(options);
+      if (inner) inner += '\n';
+      return this.key + ' {\n' + inner + '}';
+    }
+  }]);
+
+  return KeyframesRule;
+}();
+
+exports['default'] = KeyframesRule;
+
+/***/ }),
+/* 202 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _RuleList = __webpack_require__(29);
+
+var _RuleList2 = _interopRequireDefault(_RuleList);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Conditional rule for @media, @supports
+ */
+var ConditionalRule = function () {
+  function ConditionalRule(key, styles, options) {
+    _classCallCheck(this, ConditionalRule);
+
+    this.type = 'conditional';
+    this.isProcessed = false;
+
+    this.key = key;
+    this.options = options;
+    this.rules = new _RuleList2['default'](_extends({}, options, { parent: this }));
+
+    for (var name in styles) {
+      this.rules.add(name, styles[name]);
+    }
+
+    this.rules.process();
+  }
+
+  /**
+   * Get a rule.
+   */
+
+
+  _createClass(ConditionalRule, [{
+    key: 'getRule',
+    value: function getRule(name) {
+      return this.rules.get(name);
+    }
+
+    /**
+     * Get index of a rule.
+     */
+
+  }, {
+    key: 'indexOf',
+    value: function indexOf(rule) {
+      return this.rules.indexOf(rule);
+    }
+
+    /**
+     * Create and register rule, run plugins.
+     */
+
+  }, {
+    key: 'addRule',
+    value: function addRule(name, style, options) {
+      var rule = this.rules.add(name, style, options);
+      this.options.jss.plugins.onProcessRule(rule);
+      return rule;
+    }
+
+    /**
+     * Generates a CSS string.
+     */
+
+  }, {
+    key: 'toString',
+    value: function toString() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { indent: 1 };
+
+      var inner = this.rules.toString(options);
+      return inner ? this.key + ' {\n' + inner + '\n}' : '';
+    }
+  }]);
+
+  return ConditionalRule;
+}();
+
+exports['default'] = ConditionalRule;
+
+/***/ }),
+/* 203 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _toCss = __webpack_require__(69);
+
+var _toCss2 = _interopRequireDefault(_toCss);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var FontFaceRule = function () {
+  function FontFaceRule(key, style, options) {
+    _classCallCheck(this, FontFaceRule);
+
+    this.type = 'font-face';
+    this.isProcessed = false;
+
+    this.key = key;
+    this.style = style;
+    this.options = options;
+  }
+
+  /**
+   * Generates a CSS string.
+   */
+
+
+  _createClass(FontFaceRule, [{
+    key: 'toString',
+    value: function toString(options) {
+      if (Array.isArray(this.style)) {
+        var str = '';
+        for (var index = 0; index < this.style.length; index++) {
+          str += (0, _toCss2['default'])(this.key, this.style[index]);
+          if (this.style[index + 1]) str += '\n';
+        }
+        return str;
+      }
+
+      return (0, _toCss2['default'])(this.key, this.style, options);
+    }
+  }]);
+
+  return FontFaceRule;
+}();
+
+exports['default'] = FontFaceRule;
+
+/***/ }),
+/* 204 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _toCss = __webpack_require__(69);
+
+var _toCss2 = _interopRequireDefault(_toCss);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ViewportRule = function () {
+  function ViewportRule(key, style, options) {
+    _classCallCheck(this, ViewportRule);
+
+    this.type = 'viewport';
+    this.isProcessed = false;
+
+    this.key = key;
+    this.style = style;
+    this.options = options;
+  }
+
+  /**
+   * Generates a CSS string.
+   */
+
+
+  _createClass(ViewportRule, [{
+    key: 'toString',
+    value: function toString(options) {
+      return (0, _toCss2['default'])(this.key, this.style, options);
+    }
+  }]);
+
+  return ViewportRule;
+}();
+
+exports['default'] = ViewportRule;
+
+/***/ }),
+/* 205 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _StyleRule = __webpack_require__(21);
+
+var _StyleRule2 = _interopRequireDefault(_StyleRule);
+
+var _createRule = __webpack_require__(46);
+
+var _createRule2 = _interopRequireDefault(_createRule);
+
+var _isObservable = __webpack_require__(104);
+
+var _isObservable2 = _interopRequireDefault(_isObservable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+exports['default'] = {
+  onCreateRule: function onCreateRule(name, decl, options) {
+    if (!(0, _isObservable2['default'])(decl)) return null;
+
+    // Cast `decl` to `Observable`, since it passed the type guard.
+    var style$ = decl;
+
+    var rule = (0, _createRule2['default'])(name, {}, options);
+
+    // TODO
+    // Call `stream.subscribe()` returns a subscription, which should be explicitly
+    // unsubscribed from when we know this sheet is no longer needed.
+    style$.subscribe(function (style) {
+      for (var prop in style) {
+        rule.prop(prop, style[prop]);
+      }
+    });
+
+    return rule;
+  },
+  onProcessRule: function onProcessRule(rule) {
+    if (!(rule instanceof _StyleRule2['default'])) return;
+    var styleRule = rule;
+    var style = styleRule.style;
+
+    var _loop = function _loop(prop) {
+      var value = style[prop];
+      if (!(0, _isObservable2['default'])(value)) return 'continue';
+      delete style[prop];
+      value.subscribe({
+        next: function next(nextValue) {
+          styleRule.prop(prop, nextValue);
+        }
+      });
+    };
+
+    for (var prop in style) {
+      var _ret = _loop(prop);
+
+      if (_ret === 'continue') continue;
+    }
+  }
+};
+
+/***/ }),
+/* 206 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _RuleList = __webpack_require__(29);
+
+var _RuleList2 = _interopRequireDefault(_RuleList);
+
+var _StyleRule = __webpack_require__(21);
+
+var _StyleRule2 = _interopRequireDefault(_StyleRule);
+
+var _createRule = __webpack_require__(46);
+
+var _createRule2 = _interopRequireDefault(_createRule);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+// A symbol replacement.
+var now = Date.now();
+
+var fnValuesNs = 'fnValues' + now;
+var fnStyleNs = 'fnStyle' + ++now;
+
+exports['default'] = {
+  onCreateRule: function onCreateRule(name, decl, options) {
+    if (typeof decl !== 'function') return null;
+    var rule = (0, _createRule2['default'])(name, {}, options);
+    rule[fnStyleNs] = decl;
+    return rule;
+  },
+  onProcessStyle: function onProcessStyle(style, rule) {
+    var fn = {};
+    for (var prop in style) {
+      var value = style[prop];
+      if (typeof value !== 'function') continue;
+      delete style[prop];
+      fn[prop] = value;
+    }
+    rule = rule;
+    rule[fnValuesNs] = fn;
+    return style;
+  },
+  onUpdate: function onUpdate(data, rule) {
+    // It is a rules container like for e.g. ConditionalRule.
+    if (rule.rules instanceof _RuleList2['default']) {
+      rule.rules.update(data);
+      return;
+    }
+    if (!(rule instanceof _StyleRule2['default'])) return;
+
+    rule = rule;
+
+    // If we have a fn values map, it is a rule with function values.
+    if (rule[fnValuesNs]) {
+      for (var prop in rule[fnValuesNs]) {
+        rule.prop(prop, rule[fnValuesNs][prop](data));
+      }
+    }
+
+    rule = rule;
+
+    var fnStyle = rule[fnStyleNs];
+
+    // If we have a style function, the entire rule is dynamic and style object
+    // will be returned from that function.
+    if (fnStyle) {
+      var style = fnStyle(data);
+      for (var _prop in style) {
+        rule.prop(_prop, style[_prop]);
+      }
+    }
+  }
+};
+
+/***/ }),
+/* 207 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+var _sheets = __webpack_require__(71);
+
+var _sheets2 = _interopRequireDefault(_sheets);
+
+var _StyleRule = __webpack_require__(21);
+
+var _StyleRule2 = _interopRequireDefault(_StyleRule);
+
+var _toCssValue = __webpack_require__(45);
+
+var _toCssValue2 = _interopRequireDefault(_toCssValue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Cache the value from the first time a function is called.
+ */
+var memoize = function memoize(fn) {
+  var value = void 0;
+  return function () {
+    if (!value) value = fn();
+    return value;
+  };
+};
+
+/**
+ * Get a style property value.
+ */
+function getPropertyValue(cssRule, prop) {
+  try {
+    return cssRule.style.getPropertyValue(prop);
+  } catch (err) {
+    // IE may throw if property is unknown.
+    return '';
+  }
+}
+
+/**
+ * Set a style property.
+ */
+function setProperty(cssRule, prop, value) {
+  try {
+    var cssValue = value;
+
+    if (Array.isArray(value)) {
+      cssValue = (0, _toCssValue2['default'])(value, true);
+
+      if (value[value.length - 1] === '!important') {
+        cssRule.style.setProperty(prop, cssValue, 'important');
+        return true;
+      }
+    }
+
+    cssRule.style.setProperty(prop, cssValue);
+  } catch (err) {
+    // IE may throw if property is unknown.
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Remove a style property.
+ */
+function removeProperty(cssRule, prop) {
+  try {
+    cssRule.style.removeProperty(prop);
+  } catch (err) {
+    (0, _warning2['default'])(false, '[JSS] DOMException "%s" was thrown. Tried to remove property "%s".', err.message, prop);
+  }
+}
+
+var CSSRuleTypes = {
+  STYLE_RULE: 1,
+  KEYFRAMES_RULE: 7
+
+  /**
+   * Get the CSS Rule key.
+   */
+
+};var getKey = function () {
+  var extractKey = function extractKey(cssText) {
+    var from = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+    return cssText.substr(from, cssText.indexOf('{') - 1);
+  };
+
+  return function (cssRule) {
+    if (cssRule.type === CSSRuleTypes.STYLE_RULE) return cssRule.selectorText;
+    if (cssRule.type === CSSRuleTypes.KEYFRAMES_RULE) {
+      var name = cssRule.name;
+
+      if (name) return '@keyframes ' + name;
+
+      // There is no rule.name in the following browsers:
+      // - IE 9
+      // - Safari 7.1.8
+      // - Mobile Safari 9.0.0
+      var cssText = cssRule.cssText;
+
+      return '@' + extractKey(cssText, cssText.indexOf('keyframes'));
+    }
+
+    // Conditionals.
+    return extractKey(cssRule.cssText);
+  };
+}();
+
+/**
+ * Set the selector.
+ */
+function setSelector(cssRule, selectorText) {
+  cssRule.selectorText = selectorText;
+
+  // Return false if setter was not successful.
+  // Currently works in chrome only.
+  return cssRule.selectorText === selectorText;
+}
+
+/**
+ * Gets the `head` element upon the first call and caches it.
+ */
+var getHead = memoize(function () {
+  return document.head || document.getElementsByTagName('head')[0];
+});
+
+/**
+ * Gets a map of rule keys, where the property is an unescaped key and value
+ * is a potentially escaped one.
+ * It is used to identify CSS rules and the corresponding JSS rules. As an identifier
+ * for CSSStyleRule we normally use `selectorText`. Though if original selector text
+ * contains escaped code points e.g. `:not(#\\20)`, CSSOM will compile it to `:not(# )`
+ * and so CSS rule's `selectorText` won't match JSS rule selector.
+ *
+ * https://www.w3.org/International/questions/qa-escapes#cssescapes
+ */
+var getUnescapedKeysMap = function () {
+  var style = void 0;
+  var isAttached = false;
+
+  return function (rules) {
+    var map = {};
+    // https://github.com/facebook/flow/issues/2696
+    if (!style) style = document.createElement('style');
+    for (var i = 0; i < rules.length; i++) {
+      var rule = rules[i];
+      if (!(rule instanceof _StyleRule2['default'])) continue;
+      var selector = rule.selector;
+      // Only unescape selector over CSSOM if it contains a back slash.
+
+      if (selector && selector.indexOf('\\') !== -1) {
+        // Lazilly attach when needed.
+        if (!isAttached) {
+          getHead().appendChild(style);
+          isAttached = true;
+        }
+        style.textContent = selector + ' {}';
+        var _style = style,
+            sheet = _style.sheet;
+
+        if (sheet) {
+          var cssRules = sheet.cssRules;
+
+          if (cssRules) map[cssRules[0].selectorText] = rule.key;
+        }
+      }
+    }
+    if (isAttached) {
+      getHead().removeChild(style);
+      isAttached = false;
+    }
+    return map;
+  };
+}();
+
+/**
+ * Find attached sheet with an index higher than the passed one.
+ */
+function findHigherSheet(registry, options) {
+  for (var i = 0; i < registry.length; i++) {
+    var sheet = registry[i];
+    if (sheet.attached && sheet.options.index > options.index && sheet.options.insertionPoint === options.insertionPoint) {
+      return sheet;
+    }
+  }
+  return null;
+}
+
+/**
+ * Find attached sheet with the highest index.
+ */
+function findHighestSheet(registry, options) {
+  for (var i = registry.length - 1; i >= 0; i--) {
+    var sheet = registry[i];
+    if (sheet.attached && sheet.options.insertionPoint === options.insertionPoint) {
+      return sheet;
+    }
+  }
+  return null;
+}
+
+/**
+ * Find a comment with "jss" inside.
+ */
+function findCommentNode(text) {
+  var head = getHead();
+  for (var i = 0; i < head.childNodes.length; i++) {
+    var node = head.childNodes[i];
+    if (node.nodeType === 8 && node.nodeValue.trim() === text) {
+      return node;
+    }
+  }
+  return null;
+}
+
+/**
+ * Find a node before which we can insert the sheet.
+ */
+function findPrevNode(options) {
+  var registry = _sheets2['default'].registry;
+
+
+  if (registry.length > 0) {
+    // Try to insert before the next higher sheet.
+    var sheet = findHigherSheet(registry, options);
+    if (sheet) return sheet.renderer.element;
+
+    // Otherwise insert after the last attached.
+    sheet = findHighestSheet(registry, options);
+    if (sheet) return sheet.renderer.element.nextElementSibling;
+  }
+
+  // Try to find a comment placeholder if registry is empty.
+  var insertionPoint = options.insertionPoint;
+
+  if (insertionPoint && typeof insertionPoint === 'string') {
+    var comment = findCommentNode(insertionPoint);
+    if (comment) return comment.nextSibling;
+    // If user specifies an insertion point and it can't be found in the document -
+    // bad specificity issues may appear.
+    (0, _warning2['default'])(insertionPoint === 'jss', '[JSS] Insertion point "%s" not found.', insertionPoint);
+  }
+
+  return null;
+}
+
+/**
+ * Insert style element into the DOM.
+ */
+function insertStyle(style, options) {
+  var insertionPoint = options.insertionPoint;
+
+  var prevNode = findPrevNode(options);
+
+  if (prevNode) {
+    var parentNode = prevNode.parentNode;
+
+    if (parentNode) parentNode.insertBefore(style, prevNode);
+    return;
+  }
+
+  // Works with iframes and any node types.
+  if (insertionPoint && typeof insertionPoint.nodeType === 'number') {
+    // https://stackoverflow.com/questions/41328728/force-casting-in-flow
+    var insertionPointElement = insertionPoint;
+    var _parentNode = insertionPointElement.parentNode;
+
+    if (_parentNode) _parentNode.insertBefore(style, insertionPointElement.nextSibling);else (0, _warning2['default'])(false, '[JSS] Insertion point is not in the DOM.');
+    return;
+  }
+
+  getHead().insertBefore(style, prevNode);
+}
+
+/**
+ * Read jss nonce setting from the page if the user has set it.
+ */
+var getNonce = memoize(function () {
+  var node = document.querySelector('meta[property="csp-nonce"]');
+  return node ? node.getAttribute('content') : null;
+});
+
+var DomRenderer = function () {
+  function DomRenderer(sheet) {
+    _classCallCheck(this, DomRenderer);
+
+    this.getPropertyValue = getPropertyValue;
+    this.setProperty = setProperty;
+    this.removeProperty = removeProperty;
+    this.setSelector = setSelector;
+    this.getKey = getKey;
+    this.getUnescapedKeysMap = getUnescapedKeysMap;
+    this.hasInsertedRules = false;
+
+    // There is no sheet when the renderer is used from a standalone StyleRule.
+    if (sheet) _sheets2['default'].add(sheet);
+
+    this.sheet = sheet;
+
+    var _ref = this.sheet ? this.sheet.options : {},
+        media = _ref.media,
+        meta = _ref.meta,
+        element = _ref.element;
+
+    this.element = element || document.createElement('style');
+    this.element.type = 'text/css';
+    this.element.setAttribute('data-jss', '');
+    if (media) this.element.setAttribute('media', media);
+    if (meta) this.element.setAttribute('data-meta', meta);
+    var nonce = getNonce();
+    if (nonce) this.element.setAttribute('nonce', nonce);
+  }
+
+  /**
+   * Insert style element into render tree.
+   */
+
+
+  // HTMLStyleElement needs fixing https://github.com/facebook/flow/issues/2696
+
+
+  _createClass(DomRenderer, [{
+    key: 'attach',
+    value: function attach() {
+      // In the case the element node is external and it is already in the DOM.
+      if (this.element.parentNode || !this.sheet) return;
+
+      // When rules are inserted using `insertRule` API, after `sheet.detach().attach()`
+      // browsers remove those rules.
+      // TODO figure out if its a bug and if it is known.
+      // Workaround is to redeploy the sheet before attaching as a string.
+      if (this.hasInsertedRules) {
+        this.deploy();
+        this.hasInsertedRules = false;
+      }
+
+      insertStyle(this.element, this.sheet.options);
+    }
+
+    /**
+     * Remove style element from render tree.
+     */
+
+  }, {
+    key: 'detach',
+    value: function detach() {
+      this.element.parentNode.removeChild(this.element);
+    }
+
+    /**
+     * Inject CSS string into element.
+     */
+
+  }, {
+    key: 'deploy',
+    value: function deploy() {
+      if (!this.sheet) return;
+      this.element.textContent = '\n' + this.sheet.toString() + '\n';
+    }
+
+    /**
+     * Insert a rule into element.
+     */
+
+  }, {
+    key: 'insertRule',
+    value: function insertRule(rule, index) {
+      var sheet = this.element.sheet;
+      var cssRules = sheet.cssRules;
+
+      var str = rule.toString();
+      if (!index) index = cssRules.length;
+
+      if (!str) return false;
+
+      try {
+        sheet.insertRule(str, index);
+      } catch (err) {
+        (0, _warning2['default'])(false, '[JSS] Can not insert an unsupported rule \n\r%s', rule);
+        return false;
+      }
+      this.hasInsertedRules = true;
+
+      return cssRules[index];
+    }
+
+    /**
+     * Delete a rule.
+     */
+
+  }, {
+    key: 'deleteRule',
+    value: function deleteRule(cssRule) {
+      var sheet = this.element.sheet;
+
+      var index = this.indexOf(cssRule);
+      if (index === -1) return false;
+      sheet.deleteRule(index);
+      return true;
+    }
+
+    /**
+     * Get index of a CSS Rule.
+     */
+
+  }, {
+    key: 'indexOf',
+    value: function indexOf(cssRule) {
+      var cssRules = this.element.sheet.cssRules;
+
+      for (var _index = 0; _index < cssRules.length; _index++) {
+        if (cssRule === cssRules[_index]) return _index;
+      }
+      return -1;
+    }
+
+    /**
+     * Generate a new CSS rule and replace the existing one.
+     */
+
+  }, {
+    key: 'replaceRule',
+    value: function replaceRule(cssRule, rule) {
+      var index = this.indexOf(cssRule);
+      var newCssRule = this.insertRule(rule, index);
+      this.element.sheet.deleteRule(index);
+      return newCssRule;
+    }
+
+    /**
+     * Get all rules elements.
+     */
+
+  }, {
+    key: 'getRules',
+    value: function getRules() {
+      return this.element.sheet.cssRules;
+    }
+  }]);
+
+  return DomRenderer;
+}();
+
+exports['default'] = DomRenderer;
+
+/***/ }),
+/* 208 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/* eslint-disable class-methods-use-this */
+
+/**
+ * Rendering backend to do nothing in nodejs.
+ */
+var VirtualRenderer = function () {
+  function VirtualRenderer() {
+    _classCallCheck(this, VirtualRenderer);
+  }
+
+  _createClass(VirtualRenderer, [{
+    key: 'setProperty',
+    value: function setProperty() {
+      return true;
+    }
+  }, {
+    key: 'getPropertyValue',
+    value: function getPropertyValue() {
+      return '';
+    }
+  }, {
+    key: 'removeProperty',
+    value: function removeProperty() {}
+  }, {
+    key: 'setSelector',
+    value: function setSelector() {
+      return true;
+    }
+  }, {
+    key: 'getKey',
+    value: function getKey() {
+      return '';
+    }
+  }, {
+    key: 'attach',
+    value: function attach() {}
+  }, {
+    key: 'detach',
+    value: function detach() {}
+  }, {
+    key: 'deploy',
+    value: function deploy() {}
+  }, {
+    key: 'insertRule',
+    value: function insertRule() {
+      return false;
+    }
+  }, {
+    key: 'deleteRule',
+    value: function deleteRule() {
+      return true;
+    }
+  }, {
+    key: 'replaceRule',
+    value: function replaceRule() {
+      return false;
+    }
+  }, {
+    key: 'getRules',
+    value: function getRules() {}
+  }, {
+    key: 'indexOf',
+    value: function indexOf() {
+      return -1;
+    }
+  }]);
+
+  return VirtualRenderer;
+}();
+
+exports['default'] = VirtualRenderer;
+
+/***/ }),
+/* 209 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _jssGlobal = __webpack_require__(210);
+
+var _jssGlobal2 = _interopRequireDefault(_jssGlobal);
+
+var _jssNested = __webpack_require__(211);
+
+var _jssNested2 = _interopRequireDefault(_jssNested);
+
+var _jssCamelCase = __webpack_require__(212);
+
+var _jssCamelCase2 = _interopRequireDefault(_jssCamelCase);
+
+var _jssDefaultUnit = __webpack_require__(214);
+
+var _jssDefaultUnit2 = _interopRequireDefault(_jssDefaultUnit);
+
+var _jssVendorPrefixer = __webpack_require__(216);
+
+var _jssVendorPrefixer2 = _interopRequireDefault(_jssVendorPrefixer);
+
+var _jssPropsSort = __webpack_require__(221);
+
+var _jssPropsSort2 = _interopRequireDefault(_jssPropsSort);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Subset of jss-preset-default with only the plugins the Material-UI
+// components are using.
+function jssPreset() {
+  return {
+    plugins: [(0, _jssGlobal2.default)(), (0, _jssNested2.default)(), (0, _jssCamelCase2.default)(), (0, _jssDefaultUnit2.default)(), (0, _jssVendorPrefixer2.default)(), (0, _jssPropsSort2.default)()]
+  };
+}
+
+exports.default = jssPreset;
+
+/***/ }),
+/* 210 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+exports['default'] = jssGlobal;
+
+var _jss = __webpack_require__(102);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var propKey = '@global';
+var prefixKey = '@global ';
+
+var GlobalContainerRule = function () {
+  function GlobalContainerRule(key, styles, options) {
+    _classCallCheck(this, GlobalContainerRule);
+
+    this.type = 'global';
+
+    this.key = key;
+    this.options = options;
+    this.rules = new _jss.RuleList(_extends({}, options, {
+      parent: this
+    }));
+
+    for (var selector in styles) {
+      this.rules.add(selector, styles[selector], { selector: selector });
+    }
+
+    this.rules.process();
+  }
+
+  /**
+   * Get a rule.
+   */
+
+
+  _createClass(GlobalContainerRule, [{
+    key: 'getRule',
+    value: function getRule(name) {
+      return this.rules.get(name);
+    }
+
+    /**
+     * Create and register rule, run plugins.
+     */
+
+  }, {
+    key: 'addRule',
+    value: function addRule(name, style, options) {
+      var rule = this.rules.add(name, style, options);
+      this.options.jss.plugins.onProcessRule(rule);
+      return rule;
+    }
+
+    /**
+     * Get index of a rule.
+     */
+
+  }, {
+    key: 'indexOf',
+    value: function indexOf(rule) {
+      return this.rules.indexOf(rule);
+    }
+
+    /**
+     * Generates a CSS string.
+     */
+
+  }, {
+    key: 'toString',
+    value: function toString() {
+      return this.rules.toString();
+    }
+  }]);
+
+  return GlobalContainerRule;
+}();
+
+var GlobalPrefixedRule = function () {
+  function GlobalPrefixedRule(name, style, options) {
+    _classCallCheck(this, GlobalPrefixedRule);
+
+    this.name = name;
+    this.options = options;
+    var selector = name.substr(prefixKey.length);
+    this.rule = options.jss.createRule(selector, style, _extends({}, options, {
+      parent: this,
+      selector: selector
+    }));
+  }
+
+  _createClass(GlobalPrefixedRule, [{
+    key: 'toString',
+    value: function toString(options) {
+      return this.rule.toString(options);
+    }
+  }]);
+
+  return GlobalPrefixedRule;
+}();
+
+var separatorRegExp = /\s*,\s*/g;
+
+function addScope(selector, scope) {
+  var parts = selector.split(separatorRegExp);
+  var scoped = '';
+  for (var i = 0; i < parts.length; i++) {
+    scoped += scope + ' ' + parts[i].trim();
+    if (parts[i + 1]) scoped += ', ';
+  }
+  return scoped;
+}
+
+function handleNestedGlobalContainerRule(rule) {
+  var options = rule.options,
+      style = rule.style;
+
+  var rules = style[propKey];
+
+  if (!rules) return;
+
+  for (var name in rules) {
+    options.sheet.addRule(name, rules[name], _extends({}, options, {
+      selector: addScope(name, rule.selector)
+    }));
+  }
+
+  delete style[propKey];
+}
+
+function handlePrefixedGlobalRule(rule) {
+  var options = rule.options,
+      style = rule.style;
+
+  for (var prop in style) {
+    if (prop.substr(0, propKey.length) !== propKey) continue;
+
+    var selector = addScope(prop.substr(propKey.length), rule.selector);
+    options.sheet.addRule(selector, style[prop], _extends({}, options, {
+      selector: selector
+    }));
+    delete style[prop];
+  }
+}
+
+/**
+ * Convert nested rules to separate, remove them from original styles.
+ *
+ * @param {Rule} rule
+ * @api public
+ */
+function jssGlobal() {
+  function onCreateRule(name, styles, options) {
+    if (name === propKey) {
+      return new GlobalContainerRule(name, styles, options);
+    }
+
+    if (name[0] === '@' && name.substr(0, prefixKey.length) === prefixKey) {
+      return new GlobalPrefixedRule(name, styles, options);
+    }
+
+    var parent = options.parent;
+
+
+    if (parent) {
+      if (parent.type === 'global' || parent.options.parent.type === 'global') {
+        options.global = true;
+      }
+    }
+
+    if (options.global) options.selector = name;
+
+    return null;
+  }
+
+  function onProcessRule(rule) {
+    if (rule.type !== 'style') return;
+
+    handleNestedGlobalContainerRule(rule);
+    handlePrefixedGlobalRule(rule);
+  }
+
+  return { onCreateRule: onCreateRule, onProcessRule: onProcessRule };
+}
+
+/***/ }),
+/* 211 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.default = jssNested;
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var separatorRegExp = /\s*,\s*/g;
+var parentRegExp = /&/g;
+var refRegExp = /\$([\w-]+)/g;
+
+/**
+ * Convert nested rules to separate, remove them from original styles.
+ *
+ * @param {Rule} rule
+ * @api public
+ */
+function jssNested() {
+  // Get a function to be used for $ref replacement.
+  function getReplaceRef(container) {
+    return function (match, key) {
+      var rule = container.getRule(key);
+      if (rule) return rule.selector;
+      (0, _warning2.default)(false, '[JSS] Could not find the referenced rule %s in %s.', key, container.options.meta || container);
+      return key;
+    };
+  }
+
+  var hasAnd = function hasAnd(str) {
+    return str.indexOf('&') !== -1;
+  };
+
+  function replaceParentRefs(nestedProp, parentProp) {
+    var parentSelectors = parentProp.split(separatorRegExp);
+    var nestedSelectors = nestedProp.split(separatorRegExp);
+
+    var result = '';
+
+    for (var i = 0; i < parentSelectors.length; i++) {
+      var parent = parentSelectors[i];
+
+      for (var j = 0; j < nestedSelectors.length; j++) {
+        var nested = nestedSelectors[j];
+        if (result) result += ', ';
+        // Replace all & by the parent or prefix & with the parent.
+        result += hasAnd(nested) ? nested.replace(parentRegExp, parent) : parent + ' ' + nested;
+      }
+    }
+
+    return result;
+  }
+
+  function getOptions(rule, container, options) {
+    // Options has been already created, now we only increase index.
+    if (options) return _extends({}, options, { index: options.index + 1 });
+
+    var nestingLevel = rule.options.nestingLevel;
+
+    nestingLevel = nestingLevel === undefined ? 1 : nestingLevel + 1;
+
+    return _extends({}, rule.options, {
+      nestingLevel: nestingLevel,
+      index: container.indexOf(rule) + 1
+    });
+  }
+
+  function onProcessStyle(style, rule) {
+    if (rule.type !== 'style') return style;
+    var container = rule.options.parent;
+    var options = void 0;
+    var replaceRef = void 0;
+    for (var prop in style) {
+      var isNested = hasAnd(prop);
+      var isNestedConditional = prop[0] === '@';
+
+      if (!isNested && !isNestedConditional) continue;
+
+      options = getOptions(rule, container, options);
+
+      if (isNested) {
+        var selector = replaceParentRefs(prop, rule.selector
+        // Lazily create the ref replacer function just once for
+        // all nested rules within the sheet.
+        );if (!replaceRef) replaceRef = getReplaceRef(container
+        // Replace all $refs.
+        );selector = selector.replace(refRegExp, replaceRef);
+
+        container.addRule(selector, style[prop], _extends({}, options, { selector: selector }));
+      } else if (isNestedConditional) {
+        container
+        // Place conditional right after the parent rule to ensure right ordering.
+        .addRule(prop, null, options).addRule(rule.key, style[prop], { selector: rule.selector });
+      }
+
+      delete style[prop];
+    }
+
+    return style;
+  }
+
+  return { onProcessStyle: onProcessStyle };
+}
+
+/***/ }),
+/* 212 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = camelCase;
+
+var _hyphenateStyleName = __webpack_require__(213);
+
+var _hyphenateStyleName2 = _interopRequireDefault(_hyphenateStyleName);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/**
+ * Convert camel cased property names to dash separated.
+ *
+ * @param {Object} style
+ * @return {Object}
+ */
+function convertCase(style) {
+  var converted = {};
+
+  for (var prop in style) {
+    converted[(0, _hyphenateStyleName2['default'])(prop)] = style[prop];
+  }
+
+  if (style.fallbacks) {
+    if (Array.isArray(style.fallbacks)) converted.fallbacks = style.fallbacks.map(convertCase);else converted.fallbacks = convertCase(style.fallbacks);
+  }
+
+  return converted;
+}
+
+/**
+ * Allow camel cased property names by converting them back to dasherized.
+ *
+ * @param {Rule} rule
+ */
+function camelCase() {
+  function onProcessStyle(style) {
+    if (Array.isArray(style)) {
+      // Handle rules like @font-face, which can have multiple styles in an array
+      for (var index = 0; index < style.length; index++) {
+        style[index] = convertCase(style[index]);
+      }
+      return style;
+    }
+
+    return convertCase(style);
+  }
+
+  function onChangeValue(value, prop, rule) {
+    var hyphenatedProp = (0, _hyphenateStyleName2['default'])(prop);
+
+    // There was no camel case in place
+    if (prop === hyphenatedProp) return value;
+
+    rule.prop(hyphenatedProp, value);
+
+    // Core will ignore that property value we set the proper one above.
+    return null;
+  }
+
+  return { onProcessStyle: onProcessStyle, onChangeValue: onChangeValue };
+}
+
+/***/ }),
+/* 213 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var uppercasePattern = /[A-Z]/g;
+var msPattern = /^ms-/;
+var cache = {};
+
+function hyphenateStyleName(string) {
+    return string in cache
+    ? cache[string]
+    : cache[string] = string
+      .replace(uppercasePattern, '-$&')
+      .toLowerCase()
+      .replace(msPattern, '-ms-');
+}
+
+module.exports = hyphenateStyleName;
+
+
+/***/ }),
+/* 214 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports['default'] = defaultUnit;
+
+var _defaultUnits = __webpack_require__(215);
+
+var _defaultUnits2 = _interopRequireDefault(_defaultUnits);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/**
+ * Clones the object and adds a camel cased property version.
+ */
+function addCamelCasedVersion(obj) {
+  var regExp = /(-[a-z])/g;
+  var replace = function replace(str) {
+    return str[1].toUpperCase();
+  };
+  var newObj = {};
+  for (var key in obj) {
+    newObj[key] = obj[key];
+    newObj[key.replace(regExp, replace)] = obj[key];
+  }
+  return newObj;
+}
+
+var units = addCamelCasedVersion(_defaultUnits2['default']);
+
+/**
+ * Recursive deep style passing function
+ *
+ * @param {String} current property
+ * @param {(Object|Array|Number|String)} property value
+ * @param {Object} options
+ * @return {(Object|Array|Number|String)} resulting value
+ */
+function iterate(prop, value, options) {
+  if (!value) return value;
+
+  var convertedValue = value;
+
+  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+  if (type === 'object' && Array.isArray(value)) type = 'array';
+
+  switch (type) {
+    case 'object':
+      if (prop === 'fallbacks') {
+        for (var innerProp in value) {
+          value[innerProp] = iterate(innerProp, value[innerProp], options);
+        }
+        break;
+      }
+      for (var _innerProp in value) {
+        value[_innerProp] = iterate(prop + '-' + _innerProp, value[_innerProp], options);
+      }
+      break;
+    case 'array':
+      for (var i = 0; i < value.length; i++) {
+        value[i] = iterate(prop, value[i], options);
+      }
+      break;
+    case 'number':
+      if (value !== 0) {
+        convertedValue = value + (options[prop] || units[prop] || '');
+      }
+      break;
+    default:
+      break;
+  }
+
+  return convertedValue;
+}
+
+/**
+ * Add unit to numeric values.
+ */
+function defaultUnit() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  var camelCasedOptions = addCamelCasedVersion(options);
+
+  function onProcessStyle(style, rule) {
+    if (rule.type !== 'style') return style;
+
+    for (var prop in style) {
+      style[prop] = iterate(prop, style[prop], camelCasedOptions);
+    }
+
+    return style;
+  }
+
+  function onChangeValue(value, prop) {
+    return iterate(prop, value, camelCasedOptions);
+  }
+
+  return { onProcessStyle: onProcessStyle, onChangeValue: onChangeValue };
+}
+
+/***/ }),
+/* 215 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Generated jss-default-unit CSS property units
+ *
+ * @type object
+ */
+exports['default'] = {
+  'animation-delay': 'ms',
+  'animation-duration': 'ms',
+  'background-position': 'px',
+  'background-position-x': 'px',
+  'background-position-y': 'px',
+  'background-size': 'px',
+  border: 'px',
+  'border-bottom': 'px',
+  'border-bottom-left-radius': 'px',
+  'border-bottom-right-radius': 'px',
+  'border-bottom-width': 'px',
+  'border-left': 'px',
+  'border-left-width': 'px',
+  'border-radius': 'px',
+  'border-right': 'px',
+  'border-right-width': 'px',
+  'border-spacing': 'px',
+  'border-top': 'px',
+  'border-top-left-radius': 'px',
+  'border-top-right-radius': 'px',
+  'border-top-width': 'px',
+  'border-width': 'px',
+  'border-after-width': 'px',
+  'border-before-width': 'px',
+  'border-end-width': 'px',
+  'border-horizontal-spacing': 'px',
+  'border-start-width': 'px',
+  'border-vertical-spacing': 'px',
+  bottom: 'px',
+  'box-shadow': 'px',
+  'column-gap': 'px',
+  'column-rule': 'px',
+  'column-rule-width': 'px',
+  'column-width': 'px',
+  'flex-basis': 'px',
+  'font-size': 'px',
+  'font-size-delta': 'px',
+  height: 'px',
+  left: 'px',
+  'letter-spacing': 'px',
+  'logical-height': 'px',
+  'logical-width': 'px',
+  margin: 'px',
+  'margin-after': 'px',
+  'margin-before': 'px',
+  'margin-bottom': 'px',
+  'margin-left': 'px',
+  'margin-right': 'px',
+  'margin-top': 'px',
+  'max-height': 'px',
+  'max-width': 'px',
+  'margin-end': 'px',
+  'margin-start': 'px',
+  'mask-position-x': 'px',
+  'mask-position-y': 'px',
+  'mask-size': 'px',
+  'max-logical-height': 'px',
+  'max-logical-width': 'px',
+  'min-height': 'px',
+  'min-width': 'px',
+  'min-logical-height': 'px',
+  'min-logical-width': 'px',
+  motion: 'px',
+  'motion-offset': 'px',
+  outline: 'px',
+  'outline-offset': 'px',
+  'outline-width': 'px',
+  padding: 'px',
+  'padding-bottom': 'px',
+  'padding-left': 'px',
+  'padding-right': 'px',
+  'padding-top': 'px',
+  'padding-after': 'px',
+  'padding-before': 'px',
+  'padding-end': 'px',
+  'padding-start': 'px',
+  'perspective-origin-x': '%',
+  'perspective-origin-y': '%',
+  perspective: 'px',
+  right: 'px',
+  'shape-margin': 'px',
+  size: 'px',
+  'text-indent': 'px',
+  'text-stroke': 'px',
+  'text-stroke-width': 'px',
+  top: 'px',
+  'transform-origin': '%',
+  'transform-origin-x': '%',
+  'transform-origin-y': '%',
+  'transform-origin-z': '%',
+  'transition-delay': 'ms',
+  'transition-duration': 'ms',
+  'vertical-align': 'px',
+  width: 'px',
+  'word-spacing': 'px',
+  // Not existing properties.
+  // Used to avoid issues with jss-expand intergration.
+  'box-shadow-x': 'px',
+  'box-shadow-y': 'px',
+  'box-shadow-blur': 'px',
+  'box-shadow-spread': 'px',
+  'font-line-height': 'px',
+  'text-shadow-x': 'px',
+  'text-shadow-y': 'px',
+  'text-shadow-blur': 'px'
+};
+
+/***/ }),
+/* 216 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = jssVendorPrefixer;
+
+var _cssVendor = __webpack_require__(217);
+
+var vendor = _interopRequireWildcard(_cssVendor);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
+/**
+ * Add vendor prefix to a property name when needed.
+ *
+ * @param {Rule} rule
+ * @api public
+ */
+function jssVendorPrefixer() {
+  function onProcessRule(rule) {
+    if (rule.type === 'keyframes') {
+      rule.key = '@' + vendor.prefix.css + rule.key.substr(1);
+    }
+  }
+
+  function onProcessStyle(style, rule) {
+    if (rule.type !== 'style') return style;
+
+    for (var prop in style) {
+      var value = style[prop];
+
+      var changeProp = false;
+      var supportedProp = vendor.supportedProperty(prop);
+      if (supportedProp && supportedProp !== prop) changeProp = true;
+
+      var changeValue = false;
+      var supportedValue = vendor.supportedValue(supportedProp, value);
+      if (supportedValue && supportedValue !== value) changeValue = true;
+
+      if (changeProp || changeValue) {
+        if (changeProp) delete style[prop];
+        style[supportedProp || prop] = supportedValue || value;
+      }
+    }
+
+    return style;
+  }
+
+  function onChangeValue(value, prop) {
+    return vendor.supportedValue(prop, value);
+  }
+
+  return { onProcessRule: onProcessRule, onProcessStyle: onProcessStyle, onChangeValue: onChangeValue };
+}
+
+/***/ }),
+/* 217 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.supportedValue = exports.supportedProperty = exports.prefix = undefined;
+
+var _prefix = __webpack_require__(72);
+
+var _prefix2 = _interopRequireDefault(_prefix);
+
+var _supportedProperty = __webpack_require__(218);
+
+var _supportedProperty2 = _interopRequireDefault(_supportedProperty);
+
+var _supportedValue = __webpack_require__(220);
+
+var _supportedValue2 = _interopRequireDefault(_supportedValue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+exports['default'] = {
+  prefix: _prefix2['default'],
+  supportedProperty: _supportedProperty2['default'],
+  supportedValue: _supportedValue2['default']
+}; /**
+    * CSS Vendor prefix detection and property feature testing.
+    *
+    * @copyright Oleg Slobodskoi 2015
+    * @website https://github.com/jsstyles/css-vendor
+    * @license MIT
+    */
+
+exports.prefix = _prefix2['default'];
+exports.supportedProperty = _supportedProperty2['default'];
+exports.supportedValue = _supportedValue2['default'];
+
+/***/ }),
+/* 218 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = supportedProperty;
+
+var _isInBrowser = __webpack_require__(47);
+
+var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
+
+var _prefix = __webpack_require__(72);
+
+var _prefix2 = _interopRequireDefault(_prefix);
+
+var _camelize = __webpack_require__(219);
+
+var _camelize2 = _interopRequireDefault(_camelize);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var el = void 0;
+var cache = {};
+
+if (_isInBrowser2['default']) {
+  el = document.createElement('p');
+
+  /**
+   * We test every property on vendor prefix requirement.
+   * Once tested, result is cached. It gives us up to 70% perf boost.
+   * http://jsperf.com/element-style-object-access-vs-plain-object
+   *
+   * Prefill cache with known css properties to reduce amount of
+   * properties we need to feature test at runtime.
+   * http://davidwalsh.name/vendor-prefix
+   */
+  var computed = window.getComputedStyle(document.documentElement, '');
+  for (var key in computed) {
+    if (!isNaN(key)) cache[computed[key]] = computed[key];
+  }
+}
+
+/**
+ * Test if a property is supported, returns supported property with vendor
+ * prefix if required. Returns `false` if not supported.
+ *
+ * @param {String} prop dash separated
+ * @return {String|Boolean}
+ * @api public
+ */
+function supportedProperty(prop) {
+  // For server-side rendering.
+  if (!el) return prop;
+
+  // We have not tested this prop yet, lets do the test.
+  if (cache[prop] != null) return cache[prop];
+
+  // Camelization is required because we can't test using
+  // css syntax for e.g. in FF.
+  // Test if property is supported as it is.
+  if ((0, _camelize2['default'])(prop) in el.style) {
+    cache[prop] = prop;
+  }
+  // Test if property is supported with vendor prefix.
+  else if (_prefix2['default'].js + (0, _camelize2['default'])('-' + prop) in el.style) {
+      cache[prop] = _prefix2['default'].css + prop;
+    } else {
+      cache[prop] = false;
+    }
+
+  return cache[prop];
+}
+
+/***/ }),
+/* 219 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = camelize;
+var regExp = /[-\s]+(.)?/g;
+
+/**
+ * Convert dash separated strings to camel cased.
+ *
+ * @param {String} str
+ * @return {String}
+ */
+function camelize(str) {
+  return str.replace(regExp, toUpper);
+}
+
+function toUpper(match, c) {
+  return c ? c.toUpperCase() : '';
+}
+
+/***/ }),
+/* 220 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = supportedValue;
+
+var _isInBrowser = __webpack_require__(47);
+
+var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
+
+var _prefix = __webpack_require__(72);
+
+var _prefix2 = _interopRequireDefault(_prefix);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var cache = {};
+var el = void 0;
+
+if (_isInBrowser2['default']) el = document.createElement('p');
+
+/**
+ * Returns prefixed value if needed. Returns `false` if value is not supported.
+ *
+ * @param {String} property
+ * @param {String} value
+ * @return {String|Boolean}
+ * @api public
+ */
+function supportedValue(property, value) {
+  // For server-side rendering.
+  if (!el) return value;
+
+  // It is a string or a number as a string like '1'.
+  // We want only prefixable values here.
+  if (typeof value !== 'string' || !isNaN(parseInt(value, 10))) return value;
+
+  var cacheKey = property + value;
+
+  if (cache[cacheKey] != null) return cache[cacheKey];
+
+  // IE can even throw an error in some cases, for e.g. style.content = 'bar'
+  try {
+    // Test value as it is.
+    el.style[property] = value;
+  } catch (err) {
+    cache[cacheKey] = false;
+    return false;
+  }
+
+  // Value is supported as it is.
+  if (el.style[property] !== '') {
+    cache[cacheKey] = value;
+  } else {
+    // Test value with vendor prefix.
+    value = _prefix2['default'].css + value;
+
+    // Hardcode test to convert "flex" to "-ms-flexbox" for IE10.
+    if (value === '-ms-flex') value = '-ms-flexbox';
+
+    el.style[property] = value;
+
+    // Value is supported with vendor prefix.
+    if (el.style[property] !== '') cache[cacheKey] = value;
+  }
+
+  if (!cache[cacheKey]) cache[cacheKey] = false;
+
+  // Reset style value.
+  el.style[property] = '';
+
+  return cache[cacheKey];
+}
+
+/***/ }),
+/* 221 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = jssPropsSort;
+/**
+ * Sort props by length.
+ */
+function jssPropsSort() {
+  function sort(prop0, prop1) {
+    return prop0.length - prop1.length;
+  }
+
+  function onProcessStyle(style, rule) {
+    if (rule.type !== 'style') return style;
+
+    var newStyle = {};
+    var props = Object.keys(style).sort(sort);
+    for (var prop in props) {
+      newStyle[props[prop]] = style[props[prop]];
+    }
+    return newStyle;
+  }
+
+  return { onProcessStyle: onProcessStyle };
+}
+
+/***/ }),
+/* 222 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _deepmerge = __webpack_require__(48);
+
+var _deepmerge2 = _interopRequireDefault(_deepmerge);
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+var _createTypography = __webpack_require__(223);
+
+var _createTypography2 = _interopRequireDefault(_createTypography);
+
+var _createBreakpoints = __webpack_require__(224);
+
+var _createBreakpoints2 = _interopRequireDefault(_createBreakpoints);
+
+var _createPalette = __webpack_require__(225);
+
+var _createPalette2 = _interopRequireDefault(_createPalette);
+
+var _createMixins = __webpack_require__(231);
+
+var _createMixins2 = _interopRequireDefault(_createMixins);
+
+var _shadows = __webpack_require__(232);
+
+var _shadows2 = _interopRequireDefault(_shadows);
+
+var _transitions = __webpack_require__(233);
+
+var _transitions2 = _interopRequireDefault(_transitions);
+
+var _zIndex = __webpack_require__(237);
+
+var _zIndex2 = _interopRequireDefault(_zIndex);
+
+var _spacing = __webpack_require__(238);
+
+var _spacing2 = _interopRequireDefault(_spacing);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function createMuiTheme() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var _options$palette = options.palette,
+      paletteInput = _options$palette === undefined ? {} : _options$palette,
+      _options$breakpoints = options.breakpoints,
+      breakpointsInput = _options$breakpoints === undefined ? {} : _options$breakpoints,
+      _options$mixins = options.mixins,
+      mixinsInput = _options$mixins === undefined ? {} : _options$mixins,
+      _options$typography = options.typography,
+      typographyInput = _options$typography === undefined ? {} : _options$typography,
+      shadowsInput = options.shadows,
+      other = (0, _objectWithoutProperties3.default)(options, ['palette', 'breakpoints', 'mixins', 'typography', 'shadows']);
+
+
+  var palette = (0, _createPalette2.default)(paletteInput);
+  var breakpoints = (0, _createBreakpoints2.default)(breakpointsInput);
+
+  var muiTheme = (0, _extends3.default)({
+    breakpoints: breakpoints,
+    direction: 'ltr',
+    mixins: (0, _createMixins2.default)(breakpoints, _spacing2.default, mixinsInput),
+    overrides: {}, // Inject custom styles
+    palette: palette,
+    props: {}, // Inject custom properties
+    shadows: shadowsInput || _shadows2.default,
+    typography: (0, _createTypography2.default)(palette, typographyInput)
+  }, (0, _deepmerge2.default)({
+    transitions: _transitions2.default,
+    spacing: _spacing2.default,
+    zIndex: _zIndex2.default
+  }, other));
+
+  process.env.NODE_ENV !== "production" ? (0, _warning2.default)(muiTheme.shadows.length === 25, 'Material-UI: the shadows array provided to createMuiTheme should support 25 elevations.') : void 0;
+
+  return muiTheme;
+} // < 1kb payload overhead when lodash/merge is > 3kb.
+exports.default = createMuiTheme;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 223 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+exports.default = createTypography;
+
+var _deepmerge = __webpack_require__(48);
+
+var _deepmerge2 = _interopRequireDefault(_deepmerge);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// < 1kb payload overhead when lodash/merge is > 3kb.
+
+function round(value) {
+  return Math.round(value * 1e5) / 1e5;
+}
+
+function createTypography(palette, typography) {
+  var _ref = typeof typography === 'function' ? typography(palette) : typography,
+      _ref$fontFamily = _ref.fontFamily,
+      fontFamily = _ref$fontFamily === undefined ? '"Roboto", "Helvetica", "Arial", sans-serif' : _ref$fontFamily,
+      _ref$fontSize = _ref.fontSize,
+      fontSize = _ref$fontSize === undefined ? 14 : _ref$fontSize,
+      _ref$fontWeightLight = _ref.fontWeightLight,
+      fontWeightLight = _ref$fontWeightLight === undefined ? 300 : _ref$fontWeightLight,
+      _ref$fontWeightRegula = _ref.fontWeightRegular,
+      fontWeightRegular = _ref$fontWeightRegula === undefined ? 400 : _ref$fontWeightRegula,
+      _ref$fontWeightMedium = _ref.fontWeightMedium,
+      fontWeightMedium = _ref$fontWeightMedium === undefined ? 500 : _ref$fontWeightMedium,
+      _ref$htmlFontSize = _ref.htmlFontSize,
+      htmlFontSize = _ref$htmlFontSize === undefined ? 16 : _ref$htmlFontSize,
+      other = (0, _objectWithoutProperties3.default)(_ref, ['fontFamily', 'fontSize', 'fontWeightLight', 'fontWeightRegular', 'fontWeightMedium', 'htmlFontSize']);
+
+  var coef = fontSize / 14;
+  function pxToRem(value) {
+    return value / htmlFontSize * coef + 'rem';
+  }
+
+  return (0, _deepmerge2.default)({
+    pxToRem: pxToRem,
+    round: round,
+    fontFamily: fontFamily,
+    fontSize: fontSize,
+    fontWeightLight: fontWeightLight,
+    fontWeightRegular: fontWeightRegular,
+    fontWeightMedium: fontWeightMedium,
+    display4: {
+      fontSize: pxToRem(112),
+      fontWeight: fontWeightLight,
+      fontFamily: fontFamily,
+      letterSpacing: '-.04em',
+      lineHeight: round(128 / 112) + 'em',
+      marginLeft: '-.04em',
+      color: palette.text.secondary
+    },
+    display3: {
+      fontSize: pxToRem(56),
+      fontWeight: fontWeightRegular,
+      fontFamily: fontFamily,
+      letterSpacing: '-.02em',
+      lineHeight: round(73 / 56) + 'em',
+      marginLeft: '-.02em',
+      color: palette.text.secondary
+    },
+    display2: {
+      fontSize: pxToRem(45),
+      fontWeight: fontWeightRegular,
+      fontFamily: fontFamily,
+      lineHeight: round(48 / 45) + 'em',
+      marginLeft: '-.02em',
+      color: palette.text.secondary
+    },
+    display1: {
+      fontSize: pxToRem(34),
+      fontWeight: fontWeightRegular,
+      fontFamily: fontFamily,
+      lineHeight: round(41 / 34) + 'em',
+      color: palette.text.secondary
+    },
+    headline: {
+      fontSize: pxToRem(24),
+      fontWeight: fontWeightRegular,
+      fontFamily: fontFamily,
+      lineHeight: round(32.5 / 24) + 'em',
+      color: palette.text.primary
+    },
+    title: {
+      fontSize: pxToRem(21),
+      fontWeight: fontWeightMedium,
+      fontFamily: fontFamily,
+      lineHeight: round(24.5 / 21) + 'em',
+      color: palette.text.primary
+    },
+    subheading: {
+      fontSize: pxToRem(16),
+      fontWeight: fontWeightRegular,
+      fontFamily: fontFamily,
+      lineHeight: round(24 / 16) + 'em',
+      color: palette.text.primary
+    },
+    body2: {
+      fontSize: pxToRem(14),
+      fontWeight: fontWeightMedium,
+      fontFamily: fontFamily,
+      lineHeight: round(24 / 14) + 'em',
+      color: palette.text.primary
+    },
+    body1: {
+      fontSize: pxToRem(14),
+      fontWeight: fontWeightRegular,
+      fontFamily: fontFamily,
+      lineHeight: round(20.5 / 14) + 'em',
+      color: palette.text.primary
+    },
+    caption: {
+      fontSize: pxToRem(12),
+      fontWeight: fontWeightRegular,
+      fontFamily: fontFamily,
+      lineHeight: round(16.5 / 12) + 'em',
+      color: palette.text.secondary
+    },
+    button: {
+      fontSize: pxToRem(14),
+      textTransform: 'uppercase',
+      fontWeight: fontWeightMedium,
+      fontFamily: fontFamily
+    }
+  }, other, {
+    clone: false // No need to clone deep
+  });
+}
+
+/***/ }),
+/* 224 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.keys = undefined;
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+exports.default = createBreakpoints;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Sorted ASC by size. That's important.
+// It can't be configured as it's used statically for propTypes.
+var keys = exports.keys = ['xs', 'sm', 'md', 'lg', 'xl'];
+
+// Keep in mind that @media is inclusive by the CSS specification.
+function createBreakpoints(breakpoints) {
+  var _breakpoints$values = breakpoints.values,
+      values = _breakpoints$values === undefined ? {
+    xs: 0,
+    sm: 600,
+    md: 960,
+    lg: 1280,
+    xl: 1920
+  } : _breakpoints$values,
+      _breakpoints$unit = breakpoints.unit,
+      unit = _breakpoints$unit === undefined ? 'px' : _breakpoints$unit,
+      _breakpoints$step = breakpoints.step,
+      step = _breakpoints$step === undefined ? 5 : _breakpoints$step,
+      other = (0, _objectWithoutProperties3.default)(breakpoints, ['values', 'unit', 'step']);
+
+
+  function up(key) {
+    var value = typeof values[key] === 'number' ? values[key] : key;
+    return '@media (min-width:' + value + unit + ')';
+  }
+
+  function down(key) {
+    var endIndex = keys.indexOf(key) + 1;
+    var upperbound = values[keys[endIndex]];
+
+    if (endIndex === keys.length) {
+      // xl down applies to all sizes
+      return up('xs');
+    }
+
+    var value = typeof upperbound === 'number' && endIndex > 0 ? upperbound : key;
+    return '@media (max-width:' + (value - step / 100) + unit + ')';
+  }
+
+  function between(start, end) {
+    var endIndex = keys.indexOf(end) + 1;
+
+    if (endIndex === keys.length) {
+      return up(start);
+    }
+
+    return '@media (min-width:' + values[start] + unit + ') and ' + ('(max-width:' + (values[keys[endIndex]] - step / 100) + unit + ')');
+  }
+
+  function only(key) {
+    return between(key, key);
+  }
+
+  function width(key) {
+    return values[key];
+  }
+
+  return (0, _extends3.default)({
+    keys: keys,
+    values: values,
+    up: up,
+    down: down,
+    between: between,
+    only: only,
+    width: width
+  }, other);
+}
+
+/***/ }),
+/* 225 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.dark = exports.light = undefined;
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+exports.default = createPalette;
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+var _deepmerge = __webpack_require__(48);
+
+var _deepmerge2 = _interopRequireDefault(_deepmerge);
+
+var _indigo = __webpack_require__(226);
+
+var _indigo2 = _interopRequireDefault(_indigo);
+
+var _pink = __webpack_require__(227);
+
+var _pink2 = _interopRequireDefault(_pink);
+
+var _grey = __webpack_require__(228);
+
+var _grey2 = _interopRequireDefault(_grey);
+
+var _red = __webpack_require__(229);
+
+var _red2 = _interopRequireDefault(_red);
+
+var _common = __webpack_require__(230);
+
+var _common2 = _interopRequireDefault(_common);
+
+var _colorManipulator = __webpack_require__(108);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// < 1kb payload overhead when lodash/merge is > 3kb.
+var light = exports.light = {
+  // The colors used to style the text.
+  text: {
+    // The most important text.
+    primary: 'rgba(0, 0, 0, 0.87)',
+    // Secondary text.
+    secondary: 'rgba(0, 0, 0, 0.54)',
+    // Disabled text have even lower visual prominence.
+    disabled: 'rgba(0, 0, 0, 0.38)',
+    // Text hints.
+    hint: 'rgba(0, 0, 0, 0.38)'
+  },
+  // The color used to divide different elements.
+  divider: 'rgba(0, 0, 0, 0.12)',
+  // The background colors used to style the surfaces.
+  // Consistency between these values is important.
+  background: {
+    paper: _common2.default.white,
+    default: _grey2.default[50]
+  },
+  // The colors used to style the action elements.
+  action: {
+    // The color of an active action like an icon button.
+    active: 'rgba(0, 0, 0, 0.54)',
+    // The color of an hovered action.
+    hover: 'rgba(0, 0, 0, 0.08)',
+    // The color of a selected action.
+    selected: 'rgba(0, 0, 0, 0.14)',
+    // The color of a disabled action.
+    disabled: 'rgba(0, 0, 0, 0.26)',
+    // The background color of a disabled action.
+    disabledBackground: 'rgba(0, 0, 0, 0.12)'
+  }
+};
+
+var dark = exports.dark = {
+  text: {
+    primary: _common2.default.white,
+    secondary: 'rgba(255, 255, 255, 0.7)',
+    disabled: 'rgba(255, 255, 255, 0.5)',
+    hint: 'rgba(255, 255, 255, 0.5)',
+    icon: 'rgba(255, 255, 255, 0.5)'
+  },
+  divider: 'rgba(255, 255, 255, 0.12)',
+  background: {
+    paper: _grey2.default[800],
+    default: '#303030'
+  },
+  action: {
+    active: _common2.default.white,
+    hover: 'rgba(255, 255, 255, 0.1)',
+    selected: 'rgba(255, 255, 255, 0.2)',
+    disabled: 'rgba(255, 255, 255, 0.3)',
+    disabledBackground: 'rgba(255, 255, 255, 0.12)'
+  }
+};
+
+function addLightOrDark(intent, direction, shade, tonalOffset) {
+  if (!intent[direction]) {
+    if (intent.hasOwnProperty(shade)) {
+      intent[direction] = intent[shade];
+    } else if (direction === 'light') {
+      intent.light = (0, _colorManipulator.lighten)(intent.main, tonalOffset);
+    } else if (direction === 'dark') {
+      intent.dark = (0, _colorManipulator.darken)(intent.main, tonalOffset * 1.5);
+    }
+  }
+}
+
+function createPalette(palette) {
+  var _palette$primary = palette.primary,
+      primary = _palette$primary === undefined ? {
+    light: _indigo2.default[300],
+    main: _indigo2.default[500],
+    dark: _indigo2.default[700]
+  } : _palette$primary,
+      _palette$secondary = palette.secondary,
+      secondary = _palette$secondary === undefined ? {
+    light: _pink2.default.A200,
+    main: _pink2.default.A400,
+    dark: _pink2.default.A700
+  } : _palette$secondary,
+      _palette$error = palette.error,
+      error = _palette$error === undefined ? {
+    light: _red2.default[300],
+    main: _red2.default[500],
+    dark: _red2.default[700]
+  } : _palette$error,
+      _palette$type = palette.type,
+      type = _palette$type === undefined ? 'light' : _palette$type,
+      _palette$contrastThre = palette.contrastThreshold,
+      contrastThreshold = _palette$contrastThre === undefined ? 3 : _palette$contrastThre,
+      _palette$tonalOffset = palette.tonalOffset,
+      tonalOffset = _palette$tonalOffset === undefined ? 0.2 : _palette$tonalOffset,
+      other = (0, _objectWithoutProperties3.default)(palette, ['primary', 'secondary', 'error', 'type', 'contrastThreshold', 'tonalOffset']);
+
+
+  function getContrastText(background) {
+    // Use the same logic as
+    // Bootstrap: https://github.com/twbs/bootstrap/blob/1d6e3710dd447de1a200f29e8fa521f8a0908f70/scss/_functions.scss#L59
+    // and material-components-web https://github.com/material-components/material-components-web/blob/ac46b8863c4dab9fc22c4c662dc6bd1b65dd652f/packages/mdc-theme/_functions.scss#L54
+    var contrastText = (0, _colorManipulator.getContrastRatio)(background, dark.text.primary) >= contrastThreshold ? dark.text.primary : light.text.primary;
+
+    if (process.env.NODE_ENV !== 'production') {
+      var contrast = (0, _colorManipulator.getContrastRatio)(background, contrastText);
+      process.env.NODE_ENV !== "production" ? (0, _warning2.default)(contrast >= 3, ['Material-UI: the contrast ratio of ' + contrast + ':1 for ' + contrastText + ' on ' + background, 'falls below the WACG recommended absolute minimum contrast ratio of 3:1.', 'https://www.w3.org/TR/2008/REC-WCAG20-20081211/#visual-audio-contrast-contrast'].join('\n')) : void 0;
+    }
+
+    return contrastText;
+  }
+
+  function augmentColor(color, mainShade, lightShade, darkShade) {
+    if (!color.main && color[mainShade]) {
+      color.main = color[mainShade];
+    }
+    addLightOrDark(color, 'light', lightShade, tonalOffset);
+    addLightOrDark(color, 'dark', darkShade, tonalOffset);
+    if (!color.contrastText) {
+      color.contrastText = getContrastText(color.main);
+    }
+  }
+
+  augmentColor(primary, 500, 300, 700);
+  augmentColor(secondary, 'A400', 'A200', 'A700');
+  augmentColor(error, 500, 300, 700);
+
+  var types = { dark: dark, light: light };
+
+  process.env.NODE_ENV !== "production" ? (0, _warning2.default)(types[type], 'Material-UI: the palette type `' + type + '` is not supported.') : void 0;
+
+  var paletteOutput = (0, _deepmerge2.default)((0, _extends3.default)({
+    // A collection of common colors.
+    common: _common2.default,
+    // The palette type, can be light or dark.
+    type: type,
+    // The colors used to represent primary interface elements for a user.
+    primary: primary,
+    // The colors used to represent secondary interface elements for a user.
+    secondary: secondary,
+    // The colors used to represent interface elements that the user should be made aware of.
+    error: error,
+    // The grey colors.
+    grey: _grey2.default,
+    // Used by `getContrastText()` to maximize the contrast between the background and
+    // the text.
+    contrastThreshold: contrastThreshold,
+    // Take a background color and return the color of the text to maximize the contrast.
+    getContrastText: getContrastText,
+    // Used by the functions below to shift a color's luminance by approximately
+    // two indexes within its tonal palette.
+    // E.g., shift from Red 500 to Red 300 or Red 700.
+    tonalOffset: tonalOffset
+  }, types[type]), other, {
+    clone: false // No need to clone deep
+  });
+
+  return paletteOutput;
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 226 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var indigo = {
+  50: '#e8eaf6',
+  100: '#c5cae9',
+  200: '#9fa8da',
+  300: '#7986cb',
+  400: '#5c6bc0',
+  500: '#3f51b5',
+  600: '#3949ab',
+  700: '#303f9f',
+  800: '#283593',
+  900: '#1a237e',
+  A100: '#8c9eff',
+  A200: '#536dfe',
+  A400: '#3d5afe',
+  A700: '#304ffe'
+};
+
+exports.default = indigo;
+
+/***/ }),
+/* 227 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var pink = {
+  50: '#fce4ec',
+  100: '#f8bbd0',
+  200: '#f48fb1',
+  300: '#f06292',
+  400: '#ec407a',
+  500: '#e91e63',
+  600: '#d81b60',
+  700: '#c2185b',
+  800: '#ad1457',
+  900: '#880e4f',
+  A100: '#ff80ab',
+  A200: '#ff4081',
+  A400: '#f50057',
+  A700: '#c51162'
+};
+
+exports.default = pink;
+
+/***/ }),
+/* 228 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var grey = {
+  50: '#fafafa',
+  100: '#f5f5f5',
+  200: '#eeeeee',
+  300: '#e0e0e0',
+  400: '#bdbdbd',
+  500: '#9e9e9e',
+  600: '#757575',
+  700: '#616161',
+  800: '#424242',
+  900: '#212121',
+  A100: '#d5d5d5',
+  A200: '#aaaaaa',
+  A400: '#303030',
+  A700: '#616161'
+};
+
+exports.default = grey;
+
+/***/ }),
+/* 229 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var red = {
+  50: '#ffebee',
+  100: '#ffcdd2',
+  200: '#ef9a9a',
+  300: '#e57373',
+  400: '#ef5350',
+  500: '#f44336',
+  600: '#e53935',
+  700: '#d32f2f',
+  800: '#c62828',
+  900: '#b71c1c',
+  A100: '#ff8a80',
+  A200: '#ff5252',
+  A400: '#ff1744',
+  A700: '#d50000'
+};
+
+exports.default = red;
+
+/***/ }),
+/* 230 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var common = {
+  black: '#000',
+  white: '#fff'
+};
+
+exports.default = common;
+
+/***/ }),
+/* 231 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _defineProperty2 = __webpack_require__(25);
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _extends3 = __webpack_require__(11);
+
+var _extends4 = _interopRequireDefault(_extends3);
+
+exports.default = createMixins;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function createMixins(breakpoints, spacing, mixins) {
+  var _toolbar;
+
+  return (0, _extends4.default)({
+    gutters: function gutters() {
+      var styles = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      return (0, _extends4.default)({
+        paddingLeft: spacing.unit * 2,
+        paddingRight: spacing.unit * 2
+      }, styles, (0, _defineProperty3.default)({}, breakpoints.up('sm'), (0, _extends4.default)({
+        paddingLeft: spacing.unit * 3,
+        paddingRight: spacing.unit * 3
+      }, styles[breakpoints.up('sm')])));
+    },
+    toolbar: (_toolbar = {
+      minHeight: 56
+    }, (0, _defineProperty3.default)(_toolbar, breakpoints.up('xs') + ' and (orientation: landscape)', {
+      minHeight: 48
+    }), (0, _defineProperty3.default)(_toolbar, breakpoints.up('sm'), {
+      minHeight: 64
+    }), _toolbar)
+  }, mixins);
+}
+
+/***/ }),
+/* 232 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var shadowKeyUmbraOpacity = 0.2;
+var shadowKeyPenumbraOpacity = 0.14;
+var shadowAmbientShadowOpacity = 0.12;
+
+function createShadow() {
+  return [(arguments.length <= 0 ? undefined : arguments[0]) + 'px ' + (arguments.length <= 1 ? undefined : arguments[1]) + 'px ' + (arguments.length <= 2 ? undefined : arguments[2]) + 'px ' + (arguments.length <= 3 ? undefined : arguments[3]) + 'px rgba(0, 0, 0, ' + shadowKeyUmbraOpacity + ')', (arguments.length <= 4 ? undefined : arguments[4]) + 'px ' + (arguments.length <= 5 ? undefined : arguments[5]) + 'px ' + (arguments.length <= 6 ? undefined : arguments[6]) + 'px ' + (arguments.length <= 7 ? undefined : arguments[7]) + 'px rgba(0, 0, 0, ' + shadowKeyPenumbraOpacity + ')', (arguments.length <= 8 ? undefined : arguments[8]) + 'px ' + (arguments.length <= 9 ? undefined : arguments[9]) + 'px ' + (arguments.length <= 10 ? undefined : arguments[10]) + 'px ' + (arguments.length <= 11 ? undefined : arguments[11]) + 'px rgba(0, 0, 0, ' + shadowAmbientShadowOpacity + ')'].join(',');
+}
+
+var shadows = ['none', createShadow(0, 1, 3, 0, 0, 1, 1, 0, 0, 2, 1, -1), createShadow(0, 1, 5, 0, 0, 2, 2, 0, 0, 3, 1, -2), createShadow(0, 1, 8, 0, 0, 3, 4, 0, 0, 3, 3, -2), createShadow(0, 2, 4, -1, 0, 4, 5, 0, 0, 1, 10, 0), createShadow(0, 3, 5, -1, 0, 5, 8, 0, 0, 1, 14, 0), createShadow(0, 3, 5, -1, 0, 6, 10, 0, 0, 1, 18, 0), createShadow(0, 4, 5, -2, 0, 7, 10, 1, 0, 2, 16, 1), createShadow(0, 5, 5, -3, 0, 8, 10, 1, 0, 3, 14, 2), createShadow(0, 5, 6, -3, 0, 9, 12, 1, 0, 3, 16, 2), createShadow(0, 6, 6, -3, 0, 10, 14, 1, 0, 4, 18, 3), createShadow(0, 6, 7, -4, 0, 11, 15, 1, 0, 4, 20, 3), createShadow(0, 7, 8, -4, 0, 12, 17, 2, 0, 5, 22, 4), createShadow(0, 7, 8, -4, 0, 13, 19, 2, 0, 5, 24, 4), createShadow(0, 7, 9, -4, 0, 14, 21, 2, 0, 5, 26, 4), createShadow(0, 8, 9, -5, 0, 15, 22, 2, 0, 6, 28, 5), createShadow(0, 8, 10, -5, 0, 16, 24, 2, 0, 6, 30, 5), createShadow(0, 8, 11, -5, 0, 17, 26, 2, 0, 6, 32, 5), createShadow(0, 9, 11, -5, 0, 18, 28, 2, 0, 7, 34, 6), createShadow(0, 9, 12, -6, 0, 19, 29, 2, 0, 7, 36, 6), createShadow(0, 10, 13, -6, 0, 20, 31, 3, 0, 8, 38, 7), createShadow(0, 10, 13, -6, 0, 21, 33, 3, 0, 8, 40, 7), createShadow(0, 10, 14, -6, 0, 22, 35, 3, 0, 8, 42, 7), createShadow(0, 11, 14, -7, 0, 23, 36, 3, 0, 9, 44, 8), createShadow(0, 11, 15, -7, 0, 24, 38, 3, 0, 9, 46, 8)];
+
+exports.default = shadows;
+
+/***/ }),
+/* 233 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isNumber = exports.isString = exports.formatMs = exports.duration = exports.easing = undefined;
+
+var _keys = __webpack_require__(36);
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _isNan = __webpack_require__(234);
+
+var _isNan2 = _interopRequireDefault(_isNan);
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Follow https://material.google.com/motion/duration-easing.html#duration-easing-natural-easing-curves
+// to learn the context in which each easing should be used.
+var easing = exports.easing = {
+  // This is the most common easing curve.
+  easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+  // Objects enter the screen at full velocity from off-screen and
+  // slowly decelerate to a resting point.
+  easeOut: 'cubic-bezier(0.0, 0, 0.2, 1)',
+  // Objects leave the screen at full velocity. They do not decelerate when off-screen.
+  easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
+  // The sharp curve is used by objects that may return to the screen at any time.
+  sharp: 'cubic-bezier(0.4, 0, 0.6, 1)'
+};
+
+// Follow https://material.io/guidelines/motion/duration-easing.html#duration-easing-common-durations
+// to learn when use what timing
+
+/* eslint-disable no-param-reassign */
+
+var duration = exports.duration = {
+  shortest: 150,
+  shorter: 200,
+  short: 250,
+  // most basic recommended timing
+  standard: 300,
+  // this is to be used in complex animations
+  complex: 375,
+  // recommended when something is entering screen
+  enteringScreen: 225,
+  // recommended when something is leaving screen
+  leavingScreen: 195
+};
+
+var formatMs = exports.formatMs = function formatMs(milliseconds) {
+  return Math.round(milliseconds) + 'ms';
+};
+var isString = exports.isString = function isString(value) {
+  return typeof value === 'string';
+};
+var isNumber = exports.isNumber = function isNumber(value) {
+  return !(0, _isNan2.default)(parseFloat(value));
+};
+
+/**
+ * @param {string|Array} props
+ * @param {object} param
+ * @param {string} param.prop
+ * @param {number} param.duration
+ * @param {string} param.easing
+ * @param {number} param.delay
+ */
+exports.default = {
+  easing: easing,
+  duration: duration,
+  create: function create() {
+    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ['all'];
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var _options$duration = options.duration,
+        durationOption = _options$duration === undefined ? duration.standard : _options$duration,
+        _options$easing = options.easing,
+        easingOption = _options$easing === undefined ? easing.easeInOut : _options$easing,
+        _options$delay = options.delay,
+        delay = _options$delay === undefined ? 0 : _options$delay,
+        other = (0, _objectWithoutProperties3.default)(options, ['duration', 'easing', 'delay']);
+
+
+    process.env.NODE_ENV !== "production" ? (0, _warning2.default)(isString(props) || Array.isArray(props), 'Material-UI: argument "props" must be a string or Array.') : void 0;
+    process.env.NODE_ENV !== "production" ? (0, _warning2.default)(isNumber(durationOption) || isString(durationOption), 'Material-UI: argument "duration" must be a number or a string but found ' + durationOption + '.') : void 0;
+    process.env.NODE_ENV !== "production" ? (0, _warning2.default)(isString(easingOption), 'Material-UI: argument "easing" must be a string.') : void 0;
+    process.env.NODE_ENV !== "production" ? (0, _warning2.default)(isNumber(delay) || isString(delay), 'Material-UI: argument "delay" must be a number or a string.') : void 0;
+    process.env.NODE_ENV !== "production" ? (0, _warning2.default)((0, _keys2.default)(other).length === 0, 'Material-UI: unrecognized argument(s) [' + (0, _keys2.default)(other).join(',') + ']') : void 0;
+
+    return (Array.isArray(props) ? props : [props]).map(function (animatedProp) {
+      return animatedProp + ' ' + (typeof durationOption === 'string' ? durationOption : formatMs(durationOption)) + ' ' + easingOption + ' ' + (typeof delay === 'string' ? delay : formatMs(delay));
+    }).join(',');
+  },
+  getAutoHeightDuration: function getAutoHeightDuration(height) {
+    if (!height) {
+      return 0;
+    }
+
+    var constant = height / 36;
+
+    // https://www.wolframalpha.com/input/?i=(4+%2B+15+*+(x+%2F+36+)+**+0.25+%2B+(x+%2F+36)+%2F+5)+*+10
+    return Math.round((4 + 15 * Math.pow(constant, 0.25) + constant / 5) * 10);
+  }
+};
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 234 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(235), __esModule: true };
+
+/***/ }),
+/* 235 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(236);
+module.exports = __webpack_require__(4).Number.isNaN;
+
+
+/***/ }),
+/* 236 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 20.1.2.4 Number.isNaN(number)
+var $export = __webpack_require__(5);
+
+$export($export.S, 'Number', {
+  isNaN: function isNaN(number) {
+    // eslint-disable-next-line no-self-compare
+    return number != number;
+  }
+});
+
+
+/***/ }),
+/* 237 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// We need to centralize the zIndex definitions as they work
+// like global values in the browser.
+var zIndex = {
+  mobileStepper: 1000,
+  appBar: 1100,
+  drawer: 1200,
+  modal: 1300,
+  snackbar: 1400,
+  tooltip: 1500
+};
+
+exports.default = zIndex;
+
+/***/ }),
+/* 238 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  // All components align to an 8dp square baseline grid for mobile, tablet, and desktop.
+  // https://material.io/guidelines/layout/metrics-keylines.html#metrics-keylines-baseline-grids
+  unit: 8
+};
+
+/***/ }),
+/* 239 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CHANNEL = undefined;
+
+var _defineProperty2 = __webpack_require__(25);
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Same value used by react-jss
+var CHANNEL = exports.CHANNEL = '__THEMING__';
+
+var themeListener = {
+  contextTypes: (0, _defineProperty3.default)({}, CHANNEL, _propTypes2.default.object),
+  initial: function initial(context) {
+    if (!context[CHANNEL]) {
+      return null;
+    }
+
+    return context[CHANNEL].getState();
+  },
+  subscribe: function subscribe(context, cb) {
+    if (!context[CHANNEL]) {
+      return null;
+    }
+
+    return context[CHANNEL].subscribe(cb);
+  },
+  unsubscribe: function unsubscribe(context, subscriptionId) {
+    if (context[CHANNEL]) {
+      context[CHANNEL].unsubscribe(subscriptionId);
+    }
+  }
+};
+
+exports.default = themeListener;
+
+/***/ }),
+/* 240 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createGenerateClassName;
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var generatorCounter = 0;
+
+// Returns a function which generates unique class names based on counters.
+// When new generator function is created, rule counter is reset.
+// We need to reset the rule counter for SSR for each request.
+//
+// It's inspired by
+// https://github.com/cssinjs/jss/blob/4e6a05dd3f7b6572fdd3ab216861d9e446c20331/src/utils/createGenerateClassName.js
+function createGenerateClassName() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var _options$dangerouslyU = options.dangerouslyUseGlobalCSS,
+      dangerouslyUseGlobalCSS = _options$dangerouslyU === undefined ? false : _options$dangerouslyU,
+      _options$productionPr = options.productionPrefix,
+      productionPrefix = _options$productionPr === undefined ? 'jss' : _options$productionPr;
+
+  var escapeRegex = /([[\].#*$><+~=|^:(),"'`\s])/g;
+  var ruleCounter = 0;
+
+  // - HMR can lead to many class name generators being instantiated,
+  // so the warning is only triggered in production.
+  // - We expect a class name generator to be instantiated per new request on the server,
+  // so the warning is only triggered client side.
+  // - You can get away with having multiple class name generators
+  // by modifying the `productionPrefix`.
+  if (process.env.NODE_ENV === 'production' && typeof window !== 'undefined' && productionPrefix === 'jss') {
+    generatorCounter += 1;
+
+    if (generatorCounter > 2) {
+      // eslint-disable-next-line no-console
+      console.error(['Material-UI: we have detected more than needed creation of the class name generator.', 'You should only use one class name generator on the client side.', 'If you do otherwise, you take the risk to have conflicting class names in production.'].join('\n'));
+    }
+  }
+
+  return function (rule, styleSheet) {
+    ruleCounter += 1;
+    process.env.NODE_ENV !== "production" ? (0, _warning2.default)(ruleCounter < 1e10, ['Material-UI: you might have a memory leak.', 'The ruleCounter is not supposed to grow that much.'].join('')) : void 0;
+
+    // Code branch the whole block at the expense of more code.
+    if (dangerouslyUseGlobalCSS) {
+      if (styleSheet && styleSheet.options.classNamePrefix) {
+        var prefix = styleSheet.options.classNamePrefix;
+        // Sanitize the string as will be used to prefix the generated class name.
+        prefix = prefix.replace(escapeRegex, '-');
+
+        if (prefix.match(/^Mui/)) {
+          return prefix + '-' + rule.key;
+        }
+
+        if (process.env.NODE_ENV !== 'production') {
+          return prefix + '-' + rule.key + '-' + ruleCounter;
+        }
+      }
+
+      if (process.env.NODE_ENV === 'production') {
+        return '' + productionPrefix + ruleCounter;
+      }
+
+      return rule.key + '-' + ruleCounter;
+    }
+
+    if (process.env.NODE_ENV === 'production') {
+      return '' + productionPrefix + ruleCounter;
+    }
+
+    if (styleSheet && styleSheet.options.classNamePrefix) {
+      var _prefix = styleSheet.options.classNamePrefix;
+      // Sanitize the string as will be used to prefix the generated class name.
+      _prefix = _prefix.replace(escapeRegex, '-');
+
+      return _prefix + '-' + rule.key + '-' + ruleCounter;
+    }
+
+    return rule.key + '-' + ruleCounter;
+  };
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 241 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _keys = __webpack_require__(36);
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+var _deepmerge = __webpack_require__(48);
+
+var _deepmerge2 = _interopRequireDefault(_deepmerge);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// < 1kb payload overhead when lodash/merge is > 3kb.
+
+// Support for the jss-expand plugin.
+function arrayMerge(destination, source) {
+  return source;
+}
+
+function getStylesCreator(stylesOrCreator) {
+  var themingEnabled = typeof stylesOrCreator === 'function';
+
+  function create(theme, name) {
+    var styles = themingEnabled ? stylesOrCreator(theme) : stylesOrCreator;
+
+    if (!name || !theme.overrides || !theme.overrides[name]) {
+      return styles;
+    }
+
+    var overrides = theme.overrides[name];
+    var stylesWithOverrides = (0, _extends3.default)({}, styles);
+
+    (0, _keys2.default)(overrides).forEach(function (key) {
+      process.env.NODE_ENV !== "production" ? (0, _warning2.default)(stylesWithOverrides[key], ['Material-UI: you are trying to override a style that does not exist.', 'Fix the `' + key + '` key of `theme.overrides.' + name + '`.'].join('\n')) : void 0;
+      stylesWithOverrides[key] = (0, _deepmerge2.default)(stylesWithOverrides[key], overrides[key], {
+        arrayMerge: arrayMerge
+      });
+    });
+
+    return stylesWithOverrides;
+  }
+
+  return {
+    create: create,
+    options: {},
+    themingEnabled: themingEnabled
+  };
+}
+
+exports.default = getStylesCreator;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 242 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function getThemeProps(params) {
+  var theme = params.theme,
+      name = params.name;
+
+
+  if (!name || !theme.props || !theme.props[name]) {
+    return {};
+  }
+
+  return theme.props[name];
+}
+
+exports.default = getThemeProps;
+
+/***/ }),
+/* 243 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _ButtonBase = __webpack_require__(244);
+
+Object.defineProperty(exports, 'default', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_ButtonBase).default;
+  }
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+/* 244 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styles = undefined;
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _defineProperty2 = __webpack_require__(25);
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _getPrototypeOf = __webpack_require__(37);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(40);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(43);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactDom = __webpack_require__(24);
+
+var _classnames = __webpack_require__(35);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _keycode = __webpack_require__(109);
+
+var _keycode2 = _interopRequireDefault(_keycode);
+
+var _ownerWindow = __webpack_require__(245);
+
+var _ownerWindow2 = _interopRequireDefault(_ownerWindow);
+
+var _withStyles = __webpack_require__(61);
+
+var _withStyles2 = _interopRequireDefault(_withStyles);
+
+var _keyboardFocus = __webpack_require__(246);
+
+var _TouchRipple = __webpack_require__(249);
+
+var _TouchRipple2 = _interopRequireDefault(_TouchRipple);
+
+var _createRippleHandler = __webpack_require__(261);
+
+var _createRippleHandler2 = _interopRequireDefault(_createRippleHandler);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = exports.styles = {
+  root: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    // Remove grey highlight
+    WebkitTapHighlightColor: 'transparent',
+    backgroundColor: 'transparent', // Reset default value
+    outline: 'none',
+    border: 0,
+    margin: 0, // Remove the margin in Safari
+    borderRadius: 0,
+    padding: 0, // Remove the padding in Firefox
+    cursor: 'pointer',
+    userSelect: 'none',
+    verticalAlign: 'middle',
+    '-moz-appearance': 'none', // Reset
+    '-webkit-appearance': 'none', // Reset
+    textDecoration: 'none',
+    // So we take precedent over the style of a native <a /> element.
+    color: 'inherit',
+    '&::-moz-focus-inner': {
+      borderStyle: 'none' // Remove Firefox dotted outline.
+    }
+  },
+  disabled: {
+    pointerEvents: 'none', // Disable link interactions
+    cursor: 'default'
+  },
+  keyboardFocused: {}
+};
+
+/**
+ * `ButtonBase` contains as few styles as possible.
+ * It aims to be a simple building block for creating a button.
+ * It contains a load of style reset and some focus/ripple logic.
+ */
+
+var ButtonBase = function (_React$Component) {
+  (0, _inherits3.default)(ButtonBase, _React$Component);
+
+  function ButtonBase() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    (0, _classCallCheck3.default)(this, ButtonBase);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = ButtonBase.__proto__ || (0, _getPrototypeOf2.default)(ButtonBase)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+      keyboardFocused: false
+    }, _this.onKeyboardFocusHandler = function (event) {
+      _this.keyDown = false;
+      _this.setState({ keyboardFocused: true });
+
+      if (_this.props.onKeyboardFocus) {
+        _this.props.onKeyboardFocus(event);
+      }
+    }, _this.onRippleRef = function (node) {
+      _this.ripple = node;
+    }, _this.ripple = null, _this.keyDown = false, _this.button = null, _this.keyboardFocusTimeout = null, _this.keyboardFocusCheckTime = 50, _this.keyboardFocusMaxCheckTimes = 5, _this.handleKeyDown = function (event) {
+      var _this$props = _this.props,
+          component = _this$props.component,
+          focusRipple = _this$props.focusRipple,
+          onKeyDown = _this$props.onKeyDown,
+          onClick = _this$props.onClick;
+
+      var key = (0, _keycode2.default)(event);
+
+      // Check if key is already down to avoid repeats being counted as multiple activations
+      if (focusRipple && !_this.keyDown && _this.state.keyboardFocused && _this.ripple && key === 'space') {
+        _this.keyDown = true;
+        event.persist();
+        _this.ripple.stop(event, function () {
+          _this.ripple.start(event);
+        });
+      }
+
+      if (onKeyDown) {
+        onKeyDown(event);
+      }
+
+      // Keyboard accessibility for non interactive elements
+      if (event.target === event.currentTarget && component && component !== 'button' && (key === 'space' || key === 'enter')) {
+        event.preventDefault();
+        if (onClick) {
+          onClick(event);
+        }
+      }
+    }, _this.handleKeyUp = function (event) {
+      if (_this.props.focusRipple && (0, _keycode2.default)(event) === 'space' && _this.ripple && _this.state.keyboardFocused) {
+        _this.keyDown = false;
+        event.persist();
+        _this.ripple.stop(event, function () {
+          return _this.ripple.pulsate(event);
+        });
+      }
+      if (_this.props.onKeyUp) {
+        _this.props.onKeyUp(event);
+      }
+    }, _this.handleMouseDown = (0, _createRippleHandler2.default)(_this, 'MouseDown', 'start', function () {
+      clearTimeout(_this.keyboardFocusTimeout);
+      (0, _keyboardFocus.focusKeyPressed)(false);
+      if (_this.state.keyboardFocused) {
+        _this.setState({ keyboardFocused: false });
+      }
+    }), _this.handleMouseUp = (0, _createRippleHandler2.default)(_this, 'MouseUp', 'stop'), _this.handleMouseLeave = (0, _createRippleHandler2.default)(_this, 'MouseLeave', 'stop', function (event) {
+      if (_this.state.keyboardFocused) {
+        event.preventDefault();
+      }
+    }), _this.handleTouchStart = (0, _createRippleHandler2.default)(_this, 'TouchStart', 'start'), _this.handleTouchEnd = (0, _createRippleHandler2.default)(_this, 'TouchEnd', 'stop'), _this.handleTouchMove = (0, _createRippleHandler2.default)(_this, 'TouchEnd', 'stop'), _this.handleBlur = (0, _createRippleHandler2.default)(_this, 'Blur', 'stop', function () {
+      clearTimeout(_this.keyboardFocusTimeout);
+      (0, _keyboardFocus.focusKeyPressed)(false);
+      _this.setState({ keyboardFocused: false });
+    }), _this.handleFocus = function (event) {
+      if (_this.props.disabled) {
+        return;
+      }
+
+      // Fix for https://github.com/facebook/react/issues/7769
+      if (!_this.button) {
+        _this.button = event.currentTarget;
+      }
+
+      event.persist();
+      (0, _keyboardFocus.detectKeyboardFocus)(_this, _this.button, function () {
+        _this.onKeyboardFocusHandler(event);
+      });
+
+      if (_this.props.onFocus) {
+        _this.props.onFocus(event);
+      }
+    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+  }
+
+  (0, _createClass3.default)(ButtonBase, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.button = (0, _reactDom.findDOMNode)(this);
+      (0, _keyboardFocus.listenForFocusKeys)((0, _ownerWindow2.default)(this.button));
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      // The blur won't fire when the disabled state is set on a focused input.
+      // We need to book keep the focused state manually.
+      if (!this.props.disabled && nextProps.disabled && this.state.keyboardFocused) {
+        this.setState({
+          keyboardFocused: false
+        });
+      }
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+      if (this.props.focusRipple && !this.props.disableRipple && !prevState.keyboardFocused && this.state.keyboardFocused) {
+        this.ripple.pulsate();
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.button = null;
+      clearTimeout(this.keyboardFocusTimeout);
+    } // Used to help track keyboard activation keyDown
+
+  }, {
+    key: 'render',
+    value: function render() {
+      var _classNames;
+
+      var _props = this.props,
+          buttonRef = _props.buttonRef,
+          centerRipple = _props.centerRipple,
+          children = _props.children,
+          classes = _props.classes,
+          classNameProp = _props.className,
+          component = _props.component,
+          disabled = _props.disabled,
+          disableRipple = _props.disableRipple,
+          focusRipple = _props.focusRipple,
+          onBlur = _props.onBlur,
+          onFocus = _props.onFocus,
+          onKeyboardFocus = _props.onKeyboardFocus,
+          onKeyDown = _props.onKeyDown,
+          onKeyUp = _props.onKeyUp,
+          onMouseDown = _props.onMouseDown,
+          onMouseLeave = _props.onMouseLeave,
+          onMouseUp = _props.onMouseUp,
+          onTouchEnd = _props.onTouchEnd,
+          onTouchMove = _props.onTouchMove,
+          onTouchStart = _props.onTouchStart,
+          tabIndex = _props.tabIndex,
+          TouchRippleProps = _props.TouchRippleProps,
+          type = _props.type,
+          other = (0, _objectWithoutProperties3.default)(_props, ['buttonRef', 'centerRipple', 'children', 'classes', 'className', 'component', 'disabled', 'disableRipple', 'focusRipple', 'onBlur', 'onFocus', 'onKeyboardFocus', 'onKeyDown', 'onKeyUp', 'onMouseDown', 'onMouseLeave', 'onMouseUp', 'onTouchEnd', 'onTouchMove', 'onTouchStart', 'tabIndex', 'TouchRippleProps', 'type']);
+
+
+      var className = (0, _classnames2.default)(classes.root, (_classNames = {}, (0, _defineProperty3.default)(_classNames, classes.disabled, disabled), (0, _defineProperty3.default)(_classNames, classes.keyboardFocused, this.state.keyboardFocused), _classNames), classNameProp);
+
+      var buttonProps = {};
+
+      var ComponentProp = component;
+
+      if (!ComponentProp) {
+        if (other.href) {
+          ComponentProp = 'a';
+        } else {
+          ComponentProp = 'button';
+        }
+      }
+
+      if (ComponentProp === 'button') {
+        buttonProps.type = type || 'button';
+        buttonProps.disabled = disabled;
+      } else {
+        buttonProps.role = 'button';
+      }
+
+      return _react2.default.createElement(
+        ComponentProp,
+        (0, _extends3.default)({
+          onBlur: this.handleBlur,
+          onFocus: this.handleFocus,
+          onKeyDown: this.handleKeyDown,
+          onKeyUp: this.handleKeyUp,
+          onMouseDown: this.handleMouseDown,
+          onMouseLeave: this.handleMouseLeave,
+          onMouseUp: this.handleMouseUp,
+          onTouchEnd: this.handleTouchEnd,
+          onTouchMove: this.handleTouchMove,
+          onTouchStart: this.handleTouchStart,
+          tabIndex: disabled ? '-1' : tabIndex,
+          className: className,
+          ref: buttonRef
+        }, buttonProps, other),
+        children,
+        !disableRipple && !disabled ? _react2.default.createElement(_TouchRipple2.default, (0, _extends3.default)({ innerRef: this.onRippleRef, center: centerRipple }, TouchRippleProps)) : null
+      );
+    }
+  }]);
+  return ButtonBase;
+}(_react2.default.Component);
+
+ButtonBase.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * Use that property to pass a ref callback to the native button component.
+   */
+  buttonRef: _propTypes2.default.func,
+  /**
+   * If `true`, the ripples will be centered.
+   * They won't start at the cursor interaction position.
+   */
+  centerRipple: _propTypes2.default.bool,
+  /**
+   * The content of the component.
+   */
+  children: _propTypes2.default.node,
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * @ignore
+   */
+  className: _propTypes2.default.string,
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   * The default value is a `button`.
+   */
+  component: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  /**
+   * If `true`, the base button will be disabled.
+   */
+  disabled: _propTypes2.default.bool,
+  /**
+   * If `true`, the ripple effect will be disabled.
+   */
+  disableRipple: _propTypes2.default.bool,
+  /**
+   * If `true`, the base button will have a keyboard focus ripple.
+   * `disableRipple` must also be `false`.
+   */
+  focusRipple: _propTypes2.default.bool,
+  /**
+   * @ignore
+   */
+  onBlur: _propTypes2.default.func,
+  /**
+   * @ignore
+   */
+  onClick: _propTypes2.default.func,
+  /**
+   * @ignore
+   */
+  onFocus: _propTypes2.default.func,
+  /**
+   * Callback fired when the component is focused with a keyboard.
+   * We trigger a `onFocus` callback too.
+   */
+  onKeyboardFocus: _propTypes2.default.func,
+  /**
+   * @ignore
+   */
+  onKeyDown: _propTypes2.default.func,
+  /**
+   * @ignore
+   */
+  onKeyUp: _propTypes2.default.func,
+  /**
+   * @ignore
+   */
+  onMouseDown: _propTypes2.default.func,
+  /**
+   * @ignore
+   */
+  onMouseLeave: _propTypes2.default.func,
+  /**
+   * @ignore
+   */
+  onMouseUp: _propTypes2.default.func,
+  /**
+   * @ignore
+   */
+  onTouchEnd: _propTypes2.default.func,
+  /**
+   * @ignore
+   */
+  onTouchMove: _propTypes2.default.func,
+  /**
+   * @ignore
+   */
+  onTouchStart: _propTypes2.default.func,
+  /**
+   * @ignore
+   */
+  role: _propTypes2.default.string,
+  /**
+   * @ignore
+   */
+  tabIndex: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.string]),
+  /**
+   * Properties applied to the `TouchRipple` element.
+   */
+  TouchRippleProps: _propTypes2.default.object,
+  /**
+   * @ignore
+   */
+  type: _propTypes2.default.string
+} : {};
+
+ButtonBase.defaultProps = {
+  centerRipple: false,
+  disableRipple: false,
+  focusRipple: false,
+  tabIndex: '0',
+  type: 'button'
+};
+
+exports.default = (0, _withStyles2.default)(styles, { name: 'MuiButtonBase' })(ButtonBase);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 245 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = ownerWindow;
+
+var _ownerDocument = __webpack_require__(110);
+
+var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function ownerWindow(node) {
+  var doc = (0, _ownerDocument2.default)(node);
+  return doc && doc.defaultView || doc.parentWindow;
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 246 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.focusKeyPressed = focusKeyPressed;
+exports.detectKeyboardFocus = detectKeyboardFocus;
+exports.listenForFocusKeys = listenForFocusKeys;
+
+var _keycode = __webpack_require__(109);
+
+var _keycode2 = _interopRequireDefault(_keycode);
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+var _contains = __webpack_require__(247);
+
+var _contains2 = _interopRequireDefault(_contains);
+
+var _ownerDocument = __webpack_require__(110);
+
+var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//  weak
+
+var internal = {
+  focusKeyPressed: false
+};
+
+function focusKeyPressed(pressed) {
+  if (typeof pressed !== 'undefined') {
+    internal.focusKeyPressed = Boolean(pressed);
+  }
+
+  return internal.focusKeyPressed;
+}
+
+function detectKeyboardFocus(instance, element, callback) {
+  var attempt = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
+
+  process.env.NODE_ENV !== "production" ? (0, _warning2.default)(instance.keyboardFocusCheckTime, 'Material-UI: missing instance.keyboardFocusCheckTime') : void 0;
+  process.env.NODE_ENV !== "production" ? (0, _warning2.default)(instance.keyboardFocusMaxCheckTimes, 'Material-UI: missing instance.keyboardFocusMaxCheckTimes') : void 0;
+
+  instance.keyboardFocusTimeout = setTimeout(function () {
+    var doc = (0, _ownerDocument2.default)(element);
+
+    if (focusKeyPressed() && (doc.activeElement === element || (0, _contains2.default)(element, doc.activeElement))) {
+      callback();
+    } else if (attempt < instance.keyboardFocusMaxCheckTimes) {
+      detectKeyboardFocus(instance, element, callback, attempt + 1);
+    }
+  }, instance.keyboardFocusCheckTime);
+}
+
+var FOCUS_KEYS = ['tab', 'enter', 'space', 'esc', 'up', 'down', 'left', 'right'];
+
+function isFocusKey(event) {
+  return FOCUS_KEYS.indexOf((0, _keycode2.default)(event)) !== -1;
+}
+
+var handleKeyUpEvent = function handleKeyUpEvent(event) {
+  if (isFocusKey(event)) {
+    internal.focusKeyPressed = true;
+  }
+};
+
+function listenForFocusKeys(win) {
+  // The event listener will only be added once per window.
+  // Duplicate event listeners will be ignored by addEventListener.
+  // Also, this logic is client side only, we don't need a teardown.
+  win.addEventListener('keyup', handleKeyUpEvent);
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 247 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _inDOM = __webpack_require__(248);
+
+var _inDOM2 = _interopRequireDefault(_inDOM);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  // HTML DOM and SVG DOM may have different support levels,
+  // so we need to check on context instead of a document root element.
+  return _inDOM2.default ? function (context, node) {
+    if (context.contains) {
+      return context.contains(node);
+    } else if (context.compareDocumentPosition) {
+      return context === node || !!(context.compareDocumentPosition(node) & 16);
+    } else {
+      return fallback(context, node);
+    }
+  } : fallback;
+}();
+
+function fallback(context, node) {
+  if (node) do {
+    if (node === context) return true;
+  } while (node = node.parentNode);
+
+  return false;
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 248 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
+module.exports = exports['default'];
+
+/***/ }),
+/* 249 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styles = exports.DELAY_RIPPLE = undefined;
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _toConsumableArray2 = __webpack_require__(250);
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+var _getPrototypeOf = __webpack_require__(37);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(40);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(43);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactDom = __webpack_require__(24);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _TransitionGroup = __webpack_require__(256);
+
+var _TransitionGroup2 = _interopRequireDefault(_TransitionGroup);
+
+var _classnames = __webpack_require__(35);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _withStyles = __webpack_require__(61);
+
+var _withStyles2 = _interopRequireDefault(_withStyles);
+
+var _Ripple = __webpack_require__(258);
+
+var _Ripple2 = _interopRequireDefault(_Ripple);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var DURATION = 550;
+var DELAY_RIPPLE = exports.DELAY_RIPPLE = 80;
+
+var styles = exports.styles = function styles(theme) {
+  return {
+    root: {
+      display: 'block',
+      position: 'absolute',
+      overflow: 'hidden',
+      borderRadius: 'inherit',
+      width: '100%',
+      height: '100%',
+      left: 0,
+      top: 0,
+      pointerEvents: 'none',
+      zIndex: 0
+    },
+    ripple: {
+      width: 50,
+      height: 50,
+      left: 0,
+      top: 0,
+      opacity: 0,
+      position: 'absolute'
+    },
+    rippleVisible: {
+      opacity: 0.3,
+      transform: 'scale(1)',
+      animation: 'mui-ripple-enter ' + DURATION + 'ms ' + theme.transitions.easing.easeInOut
+    },
+    ripplePulsate: {
+      animationDuration: theme.transitions.duration.shorter + 'ms'
+    },
+    child: {
+      opacity: 1,
+      display: 'block',
+      width: '100%',
+      height: '100%',
+      borderRadius: '50%',
+      backgroundColor: 'currentColor'
+    },
+    childLeaving: {
+      opacity: 0,
+      animation: 'mui-ripple-exit ' + DURATION + 'ms ' + theme.transitions.easing.easeInOut
+    },
+    childPulsate: {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      animation: 'mui-ripple-pulsate 2500ms ' + theme.transitions.easing.easeInOut + ' 200ms infinite'
+    },
+    '@keyframes mui-ripple-enter': {
+      '0%': {
+        transform: 'scale(0)',
+        opacity: 0.1
+      },
+      '100%': {
+        transform: 'scale(1)',
+        opacity: 0.3
+      }
+    },
+    '@keyframes mui-ripple-exit': {
+      '0%': {
+        opacity: 1
+      },
+      '100%': {
+        opacity: 0
+      }
+    },
+    '@keyframes mui-ripple-pulsate': {
+      '0%': {
+        transform: 'scale(1)'
+      },
+      '50%': {
+        transform: 'scale(0.92)'
+      },
+      '100%': {
+        transform: 'scale(1)'
+      }
+    }
+  };
+};
+
+/**
+ * @ignore - internal component.
+ */
+
+var TouchRipple = function (_React$Component) {
+  (0, _inherits3.default)(TouchRipple, _React$Component);
+
+  function TouchRipple() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    (0, _classCallCheck3.default)(this, TouchRipple);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = TouchRipple.__proto__ || (0, _getPrototypeOf2.default)(TouchRipple)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+      nextKey: 0,
+      ripples: []
+    }, _this.ignoringMouseDown = false, _this.startTimer = null, _this.startTimerCommit = null, _this.pulsate = function () {
+      _this.start({}, { pulsate: true });
+    }, _this.start = function () {
+      var event = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var cb = arguments[2];
+      var _options$pulsate = options.pulsate,
+          pulsate = _options$pulsate === undefined ? false : _options$pulsate,
+          _options$center = options.center,
+          center = _options$center === undefined ? _this.props.center || options.pulsate : _options$center,
+          _options$fakeElement = options.fakeElement,
+          fakeElement = _options$fakeElement === undefined ? false : _options$fakeElement;
+
+
+      if (event.type === 'mousedown' && _this.ignoringMouseDown) {
+        _this.ignoringMouseDown = false;
+        return;
+      }
+
+      if (event.type === 'touchstart') {
+        _this.ignoringMouseDown = true;
+      }
+
+      var element = fakeElement ? null : _reactDom2.default.findDOMNode(_this);
+      var rect = element ? element.getBoundingClientRect() : {
+        width: 0,
+        height: 0,
+        left: 0,
+        top: 0
+      };
+
+      // Get the size of the ripple
+      var rippleX = void 0;
+      var rippleY = void 0;
+      var rippleSize = void 0;
+
+      if (center || event.clientX === 0 && event.clientY === 0 || !event.clientX && !event.touches) {
+        rippleX = Math.round(rect.width / 2);
+        rippleY = Math.round(rect.height / 2);
+      } else {
+        var clientX = event.clientX ? event.clientX : event.touches[0].clientX;
+        var clientY = event.clientY ? event.clientY : event.touches[0].clientY;
+        rippleX = Math.round(clientX - rect.left);
+        rippleY = Math.round(clientY - rect.top);
+      }
+
+      if (center) {
+        rippleSize = Math.sqrt((2 * Math.pow(rect.width, 2) + Math.pow(rect.height, 2)) / 3);
+
+        // For some reason the animation is broken on Mobile Chrome if the size if even.
+        if (rippleSize % 2 === 0) {
+          rippleSize += 1;
+        }
+      } else {
+        var sizeX = Math.max(Math.abs((element ? element.clientWidth : 0) - rippleX), rippleX) * 2 + 2;
+        var sizeY = Math.max(Math.abs((element ? element.clientHeight : 0) - rippleY), rippleY) * 2 + 2;
+        rippleSize = Math.sqrt(Math.pow(sizeX, 2) + Math.pow(sizeY, 2));
+      }
+
+      // Touche devices
+      if (event.touches) {
+        // Prepare the ripple effect.
+        _this.startTimerCommit = function () {
+          _this.startCommit({ pulsate: pulsate, rippleX: rippleX, rippleY: rippleY, rippleSize: rippleSize, cb: cb });
+        };
+        // Deplay the execution of the ripple effect.
+        _this.startTimer = setTimeout(function () {
+          _this.startTimerCommit();
+          _this.startTimerCommit = null;
+        }, DELAY_RIPPLE); // We have to make a tradeoff with this value.
+      } else {
+        _this.startCommit({ pulsate: pulsate, rippleX: rippleX, rippleY: rippleY, rippleSize: rippleSize, cb: cb });
+      }
+    }, _this.startCommit = function (params) {
+      var pulsate = params.pulsate,
+          rippleX = params.rippleX,
+          rippleY = params.rippleY,
+          rippleSize = params.rippleSize,
+          cb = params.cb;
+
+      var ripples = _this.state.ripples;
+
+      // Add a ripple to the ripples array.
+      ripples = [].concat((0, _toConsumableArray3.default)(ripples), [_react2.default.createElement(_Ripple2.default, {
+        key: _this.state.nextKey,
+        classes: _this.props.classes,
+        timeout: {
+          exit: DURATION,
+          enter: DURATION
+        },
+        pulsate: pulsate,
+        rippleX: rippleX,
+        rippleY: rippleY,
+        rippleSize: rippleSize
+      })]);
+
+      _this.setState({
+        nextKey: _this.state.nextKey + 1,
+        ripples: ripples
+      }, cb);
+    }, _this.stop = function (event, cb) {
+      clearTimeout(_this.startTimer);
+      var ripples = _this.state.ripples;
+
+      // The touch interaction occures to quickly.
+      // We still want to show ripple effect.
+
+      if (event.type === 'touchend' && _this.startTimerCommit) {
+        event.persist();
+        _this.startTimerCommit();
+        _this.startTimerCommit = null;
+        _this.startTimer = setTimeout(function () {
+          _this.stop(event, cb);
+        }, 0);
+        return;
+      }
+
+      _this.startTimerCommit = null;
+
+      if (ripples && ripples.length) {
+        _this.setState({
+          ripples: ripples.slice(1)
+        }, cb);
+      }
+    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+  }
+
+  (0, _createClass3.default)(TouchRipple, [{
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      clearTimeout(this.startTimer);
+    }
+
+    // Used to filter out mouse emulated events on mobile.
+
+    // We use a timer in order to only show the ripples for touch "click" like events.
+    // We don't want to display the ripple for touch scroll events.
+
+    // This is the hook called once the previous timeout is ready.
+
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          center = _props.center,
+          classes = _props.classes,
+          className = _props.className,
+          other = (0, _objectWithoutProperties3.default)(_props, ['center', 'classes', 'className']);
+
+
+      return _react2.default.createElement(
+        _TransitionGroup2.default,
+        (0, _extends3.default)({
+          component: 'span',
+          enter: true,
+          exit: true,
+          className: (0, _classnames2.default)(classes.root, className)
+        }, other),
+        this.state.ripples
+      );
+    }
+  }]);
+  return TouchRipple;
+}(_react2.default.Component);
+
+TouchRipple.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * If `true`, the ripple starts at the center of the component
+   * rather than at the point of interaction.
+   */
+  center: _propTypes2.default.bool,
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * @ignore
+   */
+  className: _propTypes2.default.string
+} : {};
+
+TouchRipple.defaultProps = {
+  center: false
+};
+
+exports.default = (0, _withStyles2.default)(styles, { flip: false, name: 'MuiTouchRipple' })(TouchRipple);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 250 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _from = __webpack_require__(251);
+
+var _from2 = _interopRequireDefault(_from);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  } else {
+    return (0, _from2.default)(arr);
+  }
+};
+
+/***/ }),
+/* 251 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(252), __esModule: true };
+
+/***/ }),
+/* 252 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(63);
+__webpack_require__(253);
+module.exports = __webpack_require__(4).Array.from;
+
+
+/***/ }),
+/* 253 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var ctx = __webpack_require__(15);
+var $export = __webpack_require__(5);
+var toObject = __webpack_require__(20);
+var call = __webpack_require__(95);
+var isArrayIter = __webpack_require__(96);
+var toLength = __webpack_require__(32);
+var createProperty = __webpack_require__(254);
+var getIterFn = __webpack_require__(97);
+
+$export($export.S + $export.F * !__webpack_require__(255)(function (iter) { Array.from(iter); }), 'Array', {
+  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
+  from: function from(arrayLike /* , mapfn = undefined, thisArg = undefined */) {
+    var O = toObject(arrayLike);
+    var C = typeof this == 'function' ? this : Array;
+    var aLen = arguments.length;
+    var mapfn = aLen > 1 ? arguments[1] : undefined;
+    var mapping = mapfn !== undefined;
+    var index = 0;
+    var iterFn = getIterFn(O);
+    var length, result, step, iterator;
+    if (mapping) mapfn = ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
+    // if object isn't iterable or it's array with default iterator - use simple case
+    if (iterFn != undefined && !(C == Array && isArrayIter(iterFn))) {
+      for (iterator = iterFn.call(O), result = new C(); !(step = iterator.next()).done; index++) {
+        createProperty(result, index, mapping ? call(iterator, mapfn, [step.value, index], true) : step.value);
+      }
+    } else {
+      length = toLength(O.length);
+      for (result = new C(length); length > index; index++) {
+        createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
+      }
+    }
+    result.length = index;
+    return result;
+  }
+});
+
+
+/***/ }),
+/* 254 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $defineProperty = __webpack_require__(7);
+var createDesc = __webpack_require__(26);
+
+module.exports = function (object, index, value) {
+  if (index in object) $defineProperty.f(object, index, createDesc(0, value));
+  else object[index] = value;
+};
+
+
+/***/ }),
+/* 255 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var ITERATOR = __webpack_require__(6)('iterator');
+var SAFE_CLOSING = false;
+
+try {
+  var riter = [7][ITERATOR]();
+  riter['return'] = function () { SAFE_CLOSING = true; };
+  // eslint-disable-next-line no-throw-literal
+  Array.from(riter, function () { throw 2; });
+} catch (e) { /* empty */ }
+
+module.exports = function (exec, skipClosing) {
+  if (!skipClosing && !SAFE_CLOSING) return false;
+  var safe = false;
+  try {
+    var arr = [7];
+    var iter = arr[ITERATOR]();
+    iter.next = function () { return { done: safe = true }; };
+    arr[ITERATOR] = function () { return iter; };
+    exec(arr);
+  } catch (e) { /* empty */ }
+  return safe;
+};
+
+
+/***/ }),
+/* 256 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+exports.__esModule = true;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _ChildMapping = __webpack_require__(257);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var values = Object.values || function (obj) {
+  return Object.keys(obj).map(function (k) {
+    return obj[k];
+  });
+};
+
+var propTypes = {
+  /**
+   * `<TransitionGroup>` renders a `<div>` by default. You can change this
+   * behavior by providing a `component` prop.
+   * If you use React v16+ and would like to avoid a wrapping `<div>` element
+   * you can pass in `component={null}`. This is useful if the wrapping div
+   * borks your css styles.
+   */
+  component: _propTypes2.default.any,
+  /**
+   * A set of `<Transition>` components, that are toggled `in` and out as they
+   * leave. the `<TransitionGroup>` will inject specific transition props, so
+   * remember to spread them through if you are wrapping the `<Transition>` as
+   * with our `<Fade>` example.
+   */
+  children: _propTypes2.default.node,
+
+  /**
+   * A convenience prop that enables or disables appear animations
+   * for all children. Note that specifying this will override any defaults set
+   * on individual children Transitions.
+   */
+  appear: _propTypes2.default.bool,
+  /**
+   * A convenience prop that enables or disables enter animations
+   * for all children. Note that specifying this will override any defaults set
+   * on individual children Transitions.
+   */
+  enter: _propTypes2.default.bool,
+  /**
+    * A convenience prop that enables or disables exit animations
+    * for all children. Note that specifying this will override any defaults set
+    * on individual children Transitions.
+    */
+  exit: _propTypes2.default.bool,
+
+  /**
+   * You may need to apply reactive updates to a child as it is exiting.
+   * This is generally done by using `cloneElement` however in the case of an exiting
+   * child the element has already been removed and not accessible to the consumer.
+   *
+   * If you do need to update a child as it leaves you can provide a `childFactory`
+   * to wrap every child, even the ones that are leaving.
+   *
+   * @type Function(child: ReactElement) -> ReactElement
+   */
+  childFactory: _propTypes2.default.func
+};
+
+var defaultProps = {
+  component: 'div',
+  childFactory: function childFactory(child) {
+    return child;
+  }
+};
+
+/**
+ * The `<TransitionGroup>` component manages a set of `<Transition>` components
+ * in a list. Like with the `<Transition>` component, `<TransitionGroup>`, is a
+ * state machine for managing the mounting and unmounting of components over
+ * time.
+ *
+ * Consider the example below using the `Fade` CSS transition from before.
+ * As items are removed or added to the TodoList the `in` prop is toggled
+ * automatically by the `<TransitionGroup>`. You can use _any_ `<Transition>`
+ * component in a `<TransitionGroup>`, not just css.
+ *
+ * ## Example
+ *
+ * <iframe src="https://codesandbox.io/embed/00rqyo26kn?fontsize=14" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+ *
+ * Note that `<TransitionGroup>`  does not define any animation behavior!
+ * Exactly _how_ a list item animates is up to the individual `<Transition>`
+ * components. This means you can mix and match animations across different
+ * list items.
+ */
+
+var TransitionGroup = function (_React$Component) {
+  _inherits(TransitionGroup, _React$Component);
+
+  function TransitionGroup(props, context) {
+    _classCallCheck(this, TransitionGroup);
+
+    // Initial children should all be entering, dependent on appear
+    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props, context));
+
+    _this.state = {
+      children: (0, _ChildMapping.getChildMapping)(props.children, function (child) {
+        return (0, _react.cloneElement)(child, {
+          onExited: _this.handleExited.bind(_this, child),
+          in: true,
+          appear: _this.getProp(child, 'appear'),
+          enter: _this.getProp(child, 'enter'),
+          exit: _this.getProp(child, 'exit')
+        });
+      })
+    };
+    return _this;
+  }
+
+  TransitionGroup.prototype.getChildContext = function getChildContext() {
+    return {
+      transitionGroup: { isMounting: !this.appeared }
+    };
+  };
+  // use child config unless explictly set by the Group
+
+
+  TransitionGroup.prototype.getProp = function getProp(child, prop) {
+    var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.props;
+
+    return props[prop] != null ? props[prop] : child.props[prop];
+  };
+
+  TransitionGroup.prototype.componentDidMount = function componentDidMount() {
+    this.appeared = true;
+  };
+
+  TransitionGroup.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+    var _this2 = this;
+
+    var prevChildMapping = this.state.children;
+    var nextChildMapping = (0, _ChildMapping.getChildMapping)(nextProps.children);
+
+    var children = (0, _ChildMapping.mergeChildMappings)(prevChildMapping, nextChildMapping);
+
+    Object.keys(children).forEach(function (key) {
+      var child = children[key];
+
+      if (!(0, _react.isValidElement)(child)) return;
+
+      var hasPrev = key in prevChildMapping;
+      var hasNext = key in nextChildMapping;
+
+      var prevChild = prevChildMapping[key];
+      var isLeaving = (0, _react.isValidElement)(prevChild) && !prevChild.props.in;
+
+      // item is new (entering)
+      if (hasNext && (!hasPrev || isLeaving)) {
+        // console.log('entering', key)
+        children[key] = (0, _react.cloneElement)(child, {
+          onExited: _this2.handleExited.bind(_this2, child),
+          in: true,
+          exit: _this2.getProp(child, 'exit', nextProps),
+          enter: _this2.getProp(child, 'enter', nextProps)
+        });
+      }
+      // item is old (exiting)
+      else if (!hasNext && hasPrev && !isLeaving) {
+          // console.log('leaving', key)
+          children[key] = (0, _react.cloneElement)(child, { in: false });
+        }
+        // item hasn't changed transition states
+        // copy over the last transition props;
+        else if (hasNext && hasPrev && (0, _react.isValidElement)(prevChild)) {
+            // console.log('unchanged', key)
+            children[key] = (0, _react.cloneElement)(child, {
+              onExited: _this2.handleExited.bind(_this2, child),
+              in: prevChild.props.in,
+              exit: _this2.getProp(child, 'exit', nextProps),
+              enter: _this2.getProp(child, 'enter', nextProps)
+            });
+          }
+    });
+
+    this.setState({ children: children });
+  };
+
+  TransitionGroup.prototype.handleExited = function handleExited(child, node) {
+    var currentChildMapping = (0, _ChildMapping.getChildMapping)(this.props.children);
+
+    if (child.key in currentChildMapping) return;
+
+    if (child.props.onExited) {
+      child.props.onExited(node);
+    }
+
+    this.setState(function (state) {
+      var children = _extends({}, state.children);
+
+      delete children[child.key];
+      return { children: children };
+    });
+  };
+
+  TransitionGroup.prototype.render = function render() {
+    var _props = this.props,
+        Component = _props.component,
+        childFactory = _props.childFactory,
+        props = _objectWithoutProperties(_props, ['component', 'childFactory']);
+
+    var children = values(this.state.children).map(childFactory);
+
+    delete props.appear;
+    delete props.enter;
+    delete props.exit;
+
+    if (Component === null) {
+      return children;
+    }
+    return _react2.default.createElement(
+      Component,
+      props,
+      children
+    );
+  };
+
+  return TransitionGroup;
+}(_react2.default.Component);
+
+TransitionGroup.childContextTypes = {
+  transitionGroup: _propTypes2.default.object.isRequired
+};
+
+
+TransitionGroup.propTypes = process.env.NODE_ENV !== "production" ? propTypes : {};
+TransitionGroup.defaultProps = defaultProps;
+
+exports.default = TransitionGroup;
+module.exports = exports['default'];
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 257 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.getChildMapping = getChildMapping;
+exports.mergeChildMappings = mergeChildMappings;
+
+var _react = __webpack_require__(1);
+
+/**
+ * Given `this.props.children`, return an object mapping key to child.
+ *
+ * @param {*} children `this.props.children`
+ * @return {object} Mapping of key to child
+ */
+function getChildMapping(children, mapFn) {
+  var mapper = function mapper(child) {
+    return mapFn && (0, _react.isValidElement)(child) ? mapFn(child) : child;
+  };
+
+  var result = Object.create(null);
+  if (children) _react.Children.map(children, function (c) {
+    return c;
+  }).forEach(function (child) {
+    // run the map function here instead so that the key is the computed one
+    result[child.key] = mapper(child);
+  });
+  return result;
+}
+
+/**
+ * When you're adding or removing children some may be added or removed in the
+ * same render pass. We want to show *both* since we want to simultaneously
+ * animate elements in and out. This function takes a previous set of keys
+ * and a new set of keys and merges them with its best guess of the correct
+ * ordering. In the future we may expose some of the utilities in
+ * ReactMultiChild to make this easy, but for now React itself does not
+ * directly have this concept of the union of prevChildren and nextChildren
+ * so we implement it here.
+ *
+ * @param {object} prev prev children as returned from
+ * `ReactTransitionChildMapping.getChildMapping()`.
+ * @param {object} next next children as returned from
+ * `ReactTransitionChildMapping.getChildMapping()`.
+ * @return {object} a key set that contains all keys in `prev` and all keys
+ * in `next` in a reasonable order.
+ */
+function mergeChildMappings(prev, next) {
+  prev = prev || {};
+  next = next || {};
+
+  function getValueForKey(key) {
+    return key in next ? next[key] : prev[key];
+  }
+
+  // For each key of `next`, the list of keys to insert before that key in
+  // the combined list
+  var nextKeysPending = Object.create(null);
+
+  var pendingKeys = [];
+  for (var prevKey in prev) {
+    if (prevKey in next) {
+      if (pendingKeys.length) {
+        nextKeysPending[prevKey] = pendingKeys;
+        pendingKeys = [];
+      }
+    } else {
+      pendingKeys.push(prevKey);
+    }
+  }
+
+  var i = void 0;
+  var childMapping = {};
+  for (var nextKey in next) {
+    if (nextKeysPending[nextKey]) {
+      for (i = 0; i < nextKeysPending[nextKey].length; i++) {
+        var pendingNextKey = nextKeysPending[nextKey][i];
+        childMapping[nextKeysPending[nextKey][i]] = getValueForKey(pendingNextKey);
+      }
+    }
+    childMapping[nextKey] = getValueForKey(nextKey);
+  }
+
+  // Finally, add the keys which didn't appear before any key in `next`
+  for (i = 0; i < pendingKeys.length; i++) {
+    childMapping[pendingKeys[i]] = getValueForKey(pendingKeys[i]);
+  }
+
+  return childMapping;
+}
+
+/***/ }),
+/* 258 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _defineProperty2 = __webpack_require__(25);
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _getPrototypeOf = __webpack_require__(37);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(40);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(43);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = __webpack_require__(35);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _Transition = __webpack_require__(259);
+
+var _Transition2 = _interopRequireDefault(_Transition);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @ignore - internal component.
+ */
+var Ripple = function (_React$Component) {
+  (0, _inherits3.default)(Ripple, _React$Component);
+
+  function Ripple() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    (0, _classCallCheck3.default)(this, Ripple);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = Ripple.__proto__ || (0, _getPrototypeOf2.default)(Ripple)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+      visible: false,
+      leaving: false
+    }, _this.handleEnter = function () {
+      _this.setState({
+        visible: true
+      });
+    }, _this.handleExit = function () {
+      _this.setState({
+        leaving: true
+      });
+    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+  }
+
+  (0, _createClass3.default)(Ripple, [{
+    key: 'render',
+    value: function render() {
+      var _classNames, _classNames2;
+
+      var _props = this.props,
+          classes = _props.classes,
+          classNameProp = _props.className,
+          pulsate = _props.pulsate,
+          rippleX = _props.rippleX,
+          rippleY = _props.rippleY,
+          rippleSize = _props.rippleSize,
+          other = (0, _objectWithoutProperties3.default)(_props, ['classes', 'className', 'pulsate', 'rippleX', 'rippleY', 'rippleSize']);
+      var _state = this.state,
+          visible = _state.visible,
+          leaving = _state.leaving;
+
+
+      var rippleClassName = (0, _classnames2.default)(classes.ripple, (_classNames = {}, (0, _defineProperty3.default)(_classNames, classes.rippleVisible, visible), (0, _defineProperty3.default)(_classNames, classes.ripplePulsate, pulsate), _classNames), classNameProp);
+
+      var rippleStyles = {
+        width: rippleSize,
+        height: rippleSize,
+        top: -(rippleSize / 2) + rippleY,
+        left: -(rippleSize / 2) + rippleX
+      };
+
+      var childClassName = (0, _classnames2.default)(classes.child, (_classNames2 = {}, (0, _defineProperty3.default)(_classNames2, classes.childLeaving, leaving), (0, _defineProperty3.default)(_classNames2, classes.childPulsate, pulsate), _classNames2));
+
+      return _react2.default.createElement(
+        _Transition2.default,
+        (0, _extends3.default)({ onEnter: this.handleEnter, onExit: this.handleExit }, other),
+        _react2.default.createElement(
+          'span',
+          { className: rippleClassName, style: rippleStyles },
+          _react2.default.createElement('span', { className: childClassName })
+        )
+      );
+    }
+  }]);
+  return Ripple;
+}(_react2.default.Component);
+
+Ripple.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * @ignore
+   */
+  className: _propTypes2.default.string,
+  /**
+   * If `true`, the ripple pulsates, typically indicating the keyboard focus state of an element.
+   */
+  pulsate: _propTypes2.default.bool,
+  /**
+   * Diameter of the ripple.
+   */
+  rippleSize: _propTypes2.default.number,
+  /**
+   * Horizontal position of the ripple center.
+   */
+  rippleX: _propTypes2.default.number,
+  /**
+   * Vertical position of the ripple center.
+   */
+  rippleY: _propTypes2.default.number
+} : {};
+
+Ripple.defaultProps = {
+  pulsate: false
+};
+
+exports.default = Ripple;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 259 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+exports.__esModule = true;
+exports.EXITING = exports.ENTERED = exports.ENTERING = exports.EXITED = exports.UNMOUNTED = undefined;
+
+var _propTypes = __webpack_require__(3);
+
+var PropTypes = _interopRequireWildcard(_propTypes);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(24);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _PropTypes = __webpack_require__(260);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var UNMOUNTED = exports.UNMOUNTED = 'unmounted';
+var EXITED = exports.EXITED = 'exited';
+var ENTERING = exports.ENTERING = 'entering';
+var ENTERED = exports.ENTERED = 'entered';
+var EXITING = exports.EXITING = 'exiting';
+
+/**
+ * The Transition component lets you describe a transition from one component
+ * state to another _over time_ with a simple declarative API. Most commonly
+ * it's used to animate the mounting and unmounting of a component, but can also
+ * be used to describe in-place transition states as well.
+ *
+ * By default the `Transition` component does not alter the behavior of the
+ * component it renders, it only tracks "enter" and "exit" states for the components.
+ * It's up to you to give meaning and effect to those states. For example we can
+ * add styles to a component when it enters or exits:
+ *
+ * ```jsx
+ * import Transition from 'react-transition-group/Transition';
+ *
+ * const duration = 300;
+ *
+ * const defaultStyle = {
+ *   transition: `opacity ${duration}ms ease-in-out`,
+ *   opacity: 0,
+ * }
+ *
+ * const transitionStyles = {
+ *   entering: { opacity: 0 },
+ *   entered:  { opacity: 1 },
+ * };
+ *
+ * const Fade = ({ in: inProp }) => (
+ *   <Transition in={inProp} timeout={duration}>
+ *     {(state) => (
+ *       <div style={{
+ *         ...defaultStyle,
+ *         ...transitionStyles[state]
+ *       }}>
+ *         I'm a fade Transition!
+ *       </div>
+ *     )}
+ *   </Transition>
+ * );
+ * ```
+ *
+ * As noted the `Transition` component doesn't _do_ anything by itself to its child component.
+ * What it does do is track transition states over time so you can update the
+ * component (such as by adding styles or classes) when it changes states.
+ *
+ * There are 4 main states a Transition can be in:
+ *  - `entering`
+ *  - `entered`
+ *  - `exiting`
+ *  - `exited`
+ *
+ * Transition state is toggled via the `in` prop. When `true` the component begins the
+ * "Enter" stage. During this stage, the component will shift from its current transition state,
+ * to `'entering'` for the duration of the transition and then to the `'entered'` stage once
+ * it's complete. Let's take the following example:
+ *
+ * ```jsx
+ * state= { in: false };
+ *
+ * toggleEnterState = () => {
+ *   this.setState({ in: true });
+ * }
+ *
+ * render() {
+ *   return (
+ *     <div>
+ *       <Transition in={this.state.in} timeout={500} />
+ *       <button onClick={this.toggleEnterState}>Click to Enter</button>
+ *     </div>
+ *   );
+ * }
+ * ```
+ *
+ * When the button is clicked the component will shift to the `'entering'` state and
+ * stay there for 500ms (the value of `timeout`) before it finally switches to `'entered'`.
+ *
+ * When `in` is `false` the same thing happens except the state moves from `'exiting'` to `'exited'`.
+ *
+ * > **Note**: For simpler transitions the `Transition` component might be enough, but
+ * > take into account that it's platform-agnostic, while the `CSSTransition` component
+ * > [forces reflows](https://github.com/reactjs/react-transition-group/blob/5007303e729a74be66a21c3e2205e4916821524b/src/CSSTransition.js#L208-L215)
+ * > in order to make more complex transitions more predictable. For example, even though
+ * > classes `example-enter` and `example-enter-active` are applied immediately one after
+ * > another, you can still transition from one to the other because of the forced reflow
+ * > (read [this issue](https://github.com/reactjs/react-transition-group/issues/159#issuecomment-322761171)
+ * > for more info). Take this into account when choosing between `Transition` and
+ * > `CSSTransition`.
+ *
+ * ## Example
+ *
+ * <iframe src="https://codesandbox.io/embed/741op4mmj0?fontsize=14" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+ *
+ */
+
+var Transition = function (_React$Component) {
+  _inherits(Transition, _React$Component);
+
+  function Transition(props, context) {
+    _classCallCheck(this, Transition);
+
+    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props, context));
+
+    var parentGroup = context.transitionGroup;
+    // In the context of a TransitionGroup all enters are really appears
+    var appear = parentGroup && !parentGroup.isMounting ? props.enter : props.appear;
+
+    var initialStatus = void 0;
+    _this.nextStatus = null;
+
+    if (props.in) {
+      if (appear) {
+        initialStatus = EXITED;
+        _this.nextStatus = ENTERING;
+      } else {
+        initialStatus = ENTERED;
+      }
+    } else {
+      if (props.unmountOnExit || props.mountOnEnter) {
+        initialStatus = UNMOUNTED;
+      } else {
+        initialStatus = EXITED;
+      }
+    }
+
+    _this.state = { status: initialStatus };
+
+    _this.nextCallback = null;
+    return _this;
+  }
+
+  Transition.prototype.getChildContext = function getChildContext() {
+    return { transitionGroup: null }; // allows for nested Transitions
+  };
+
+  Transition.prototype.componentDidMount = function componentDidMount() {
+    this.updateStatus(true);
+  };
+
+  Transition.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+    var _ref = this.pendingState || this.state,
+        status = _ref.status;
+
+    if (nextProps.in) {
+      if (status === UNMOUNTED) {
+        this.setState({ status: EXITED });
+      }
+      if (status !== ENTERING && status !== ENTERED) {
+        this.nextStatus = ENTERING;
+      }
+    } else {
+      if (status === ENTERING || status === ENTERED) {
+        this.nextStatus = EXITING;
+      }
+    }
+  };
+
+  Transition.prototype.componentDidUpdate = function componentDidUpdate() {
+    this.updateStatus();
+  };
+
+  Transition.prototype.componentWillUnmount = function componentWillUnmount() {
+    this.cancelNextCallback();
+  };
+
+  Transition.prototype.getTimeouts = function getTimeouts() {
+    var timeout = this.props.timeout;
+
+    var exit = void 0,
+        enter = void 0,
+        appear = void 0;
+
+    exit = enter = appear = timeout;
+
+    if (timeout != null && typeof timeout !== 'number') {
+      exit = timeout.exit;
+      enter = timeout.enter;
+      appear = timeout.appear;
+    }
+    return { exit: exit, enter: enter, appear: appear };
+  };
+
+  Transition.prototype.updateStatus = function updateStatus() {
+    var mounting = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+    var nextStatus = this.nextStatus;
+
+    if (nextStatus !== null) {
+      this.nextStatus = null;
+      // nextStatus will always be ENTERING or EXITING.
+      this.cancelNextCallback();
+      var node = _reactDom2.default.findDOMNode(this);
+
+      if (nextStatus === ENTERING) {
+        this.performEnter(node, mounting);
+      } else {
+        this.performExit(node);
+      }
+    } else if (this.props.unmountOnExit && this.state.status === EXITED) {
+      this.setState({ status: UNMOUNTED });
+    }
+  };
+
+  Transition.prototype.performEnter = function performEnter(node, mounting) {
+    var _this2 = this;
+
+    var enter = this.props.enter;
+
+    var appearing = this.context.transitionGroup ? this.context.transitionGroup.isMounting : mounting;
+
+    var timeouts = this.getTimeouts();
+
+    // no enter animation skip right to ENTERED
+    // if we are mounting and running this it means appear _must_ be set
+    if (!mounting && !enter) {
+      this.safeSetState({ status: ENTERED }, function () {
+        _this2.props.onEntered(node);
+      });
+      return;
+    }
+
+    this.props.onEnter(node, appearing);
+
+    this.safeSetState({ status: ENTERING }, function () {
+      _this2.props.onEntering(node, appearing);
+
+      // FIXME: appear timeout?
+      _this2.onTransitionEnd(node, timeouts.enter, function () {
+        _this2.safeSetState({ status: ENTERED }, function () {
+          _this2.props.onEntered(node, appearing);
+        });
+      });
+    });
+  };
+
+  Transition.prototype.performExit = function performExit(node) {
+    var _this3 = this;
+
+    var exit = this.props.exit;
+
+    var timeouts = this.getTimeouts();
+
+    // no exit animation skip right to EXITED
+    if (!exit) {
+      this.safeSetState({ status: EXITED }, function () {
+        _this3.props.onExited(node);
+      });
+      return;
+    }
+    this.props.onExit(node);
+
+    this.safeSetState({ status: EXITING }, function () {
+      _this3.props.onExiting(node);
+
+      _this3.onTransitionEnd(node, timeouts.exit, function () {
+        _this3.safeSetState({ status: EXITED }, function () {
+          _this3.props.onExited(node);
+        });
+      });
+    });
+  };
+
+  Transition.prototype.cancelNextCallback = function cancelNextCallback() {
+    if (this.nextCallback !== null) {
+      this.nextCallback.cancel();
+      this.nextCallback = null;
+    }
+  };
+
+  Transition.prototype.safeSetState = function safeSetState(nextState, callback) {
+    var _this4 = this;
+
+    // We need to track pending updates for instances where a cWRP fires quickly
+    // after cDM and before the state flushes, which would double trigger a
+    // transition
+    this.pendingState = nextState;
+
+    // This shouldn't be necessary, but there are weird race conditions with
+    // setState callbacks and unmounting in testing, so always make sure that
+    // we can cancel any pending setState callbacks after we unmount.
+    callback = this.setNextCallback(callback);
+    this.setState(nextState, function () {
+      _this4.pendingState = null;
+      callback();
+    });
+  };
+
+  Transition.prototype.setNextCallback = function setNextCallback(callback) {
+    var _this5 = this;
+
+    var active = true;
+
+    this.nextCallback = function (event) {
+      if (active) {
+        active = false;
+        _this5.nextCallback = null;
+
+        callback(event);
+      }
+    };
+
+    this.nextCallback.cancel = function () {
+      active = false;
+    };
+
+    return this.nextCallback;
+  };
+
+  Transition.prototype.onTransitionEnd = function onTransitionEnd(node, timeout, handler) {
+    this.setNextCallback(handler);
+
+    if (node) {
+      if (this.props.addEndListener) {
+        this.props.addEndListener(node, this.nextCallback);
+      }
+      if (timeout != null) {
+        setTimeout(this.nextCallback, timeout);
+      }
+    } else {
+      setTimeout(this.nextCallback, 0);
+    }
+  };
+
+  Transition.prototype.render = function render() {
+    var status = this.state.status;
+    if (status === UNMOUNTED) {
+      return null;
+    }
+
+    var _props = this.props,
+        children = _props.children,
+        childProps = _objectWithoutProperties(_props, ['children']);
+    // filter props for Transtition
+
+
+    delete childProps.in;
+    delete childProps.mountOnEnter;
+    delete childProps.unmountOnExit;
+    delete childProps.appear;
+    delete childProps.enter;
+    delete childProps.exit;
+    delete childProps.timeout;
+    delete childProps.addEndListener;
+    delete childProps.onEnter;
+    delete childProps.onEntering;
+    delete childProps.onEntered;
+    delete childProps.onExit;
+    delete childProps.onExiting;
+    delete childProps.onExited;
+
+    if (typeof children === 'function') {
+      return children(status, childProps);
+    }
+
+    var child = _react2.default.Children.only(children);
+    return _react2.default.cloneElement(child, childProps);
+  };
+
+  return Transition;
+}(_react2.default.Component);
+
+Transition.contextTypes = {
+  transitionGroup: PropTypes.object
+};
+Transition.childContextTypes = {
+  transitionGroup: function transitionGroup() {}
+};
+
+
+Transition.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * A `function` child can be used instead of a React element.
+   * This function is called with the current transition status
+   * ('entering', 'entered', 'exiting', 'exited', 'unmounted'), which can be used
+   * to apply context specific props to a component.
+   *
+   * ```jsx
+   * <Transition timeout={150}>
+   *   {(status) => (
+   *     <MyComponent className={`fade fade-${status}`} />
+   *   )}
+   * </Transition>
+   * ```
+   */
+  children: PropTypes.oneOfType([PropTypes.func.isRequired, PropTypes.element.isRequired]).isRequired,
+
+  /**
+   * Show the component; triggers the enter or exit states
+   */
+  in: PropTypes.bool,
+
+  /**
+   * By default the child component is mounted immediately along with
+   * the parent `Transition` component. If you want to "lazy mount" the component on the
+   * first `in={true}` you can set `mountOnEnter`. After the first enter transition the component will stay
+   * mounted, even on "exited", unless you also specify `unmountOnExit`.
+   */
+  mountOnEnter: PropTypes.bool,
+
+  /**
+   * By default the child component stays mounted after it reaches the `'exited'` state.
+   * Set `unmountOnExit` if you'd prefer to unmount the component after it finishes exiting.
+   */
+  unmountOnExit: PropTypes.bool,
+
+  /**
+   * Normally a component is not transitioned if it is shown when the `<Transition>` component mounts.
+   * If you want to transition on the first mount set `appear` to `true`, and the
+   * component will transition in as soon as the `<Transition>` mounts.
+   *
+   * > Note: there are no specific "appear" states. `appear` only adds an additional `enter` transition.
+   */
+  appear: PropTypes.bool,
+
+  /**
+   * Enable or disable enter transitions.
+   */
+  enter: PropTypes.bool,
+
+  /**
+   * Enable or disable exit transitions.
+   */
+  exit: PropTypes.bool,
+
+  /**
+   * The duration of the transition, in milliseconds.
+   * Required unless `addEndListener` is provided
+   *
+   * You may specify a single timeout for all transitions like: `timeout={500}`,
+   * or individually like:
+   *
+   * ```jsx
+   * timeout={{
+   *  enter: 300,
+   *  exit: 500,
+   * }}
+   * ```
+   *
+   * @type {number | { enter?: number, exit?: number }}
+   */
+  timeout: function timeout(props) {
+    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    var pt = _PropTypes.timeoutsShape;
+    if (!props.addEndListener) pt = pt.isRequired;
+    return pt.apply(undefined, [props].concat(args));
+  },
+
+  /**
+   * Add a custom transition end trigger. Called with the transitioning
+   * DOM node and a `done` callback. Allows for more fine grained transition end
+   * logic. **Note:** Timeouts are still used as a fallback if provided.
+   *
+   * ```jsx
+   * addEndListener={(node, done) => {
+   *   // use the css transitionend event to mark the finish of a transition
+   *   node.addEventListener('transitionend', done, false);
+   * }}
+   * ```
+   */
+  addEndListener: PropTypes.func,
+
+  /**
+   * Callback fired before the "entering" status is applied. An extra parameter
+   * `isAppearing` is supplied to indicate if the enter stage is occurring on the initial mount
+   *
+   * @type Function(node: HtmlElement, isAppearing: bool) -> void
+   */
+  onEnter: PropTypes.func,
+
+  /**
+   * Callback fired after the "entering" status is applied. An extra parameter
+   * `isAppearing` is supplied to indicate if the enter stage is occurring on the initial mount
+   *
+   * @type Function(node: HtmlElement, isAppearing: bool)
+   */
+  onEntering: PropTypes.func,
+
+  /**
+   * Callback fired after the "entered" status is applied. An extra parameter
+   * `isAppearing` is supplied to indicate if the enter stage is occurring on the initial mount
+   *
+   * @type Function(node: HtmlElement, isAppearing: bool) -> void
+   */
+  onEntered: PropTypes.func,
+
+  /**
+   * Callback fired before the "exiting" status is applied.
+   *
+   * @type Function(node: HtmlElement) -> void
+   */
+  onExit: PropTypes.func,
+
+  /**
+   * Callback fired after the "exiting" status is applied.
+   *
+   * @type Function(node: HtmlElement) -> void
+   */
+  onExiting: PropTypes.func,
+
+  /**
+   * Callback fired after the "exited" status is applied.
+   *
+   * @type Function(node: HtmlElement) -> void
+   */
+  onExited: PropTypes.func
+} : {};
+
+// Name the function so it is clearer in the documentation
+function noop() {}
+
+Transition.defaultProps = {
+  in: false,
+  mountOnEnter: false,
+  unmountOnExit: false,
+  appear: false,
+  enter: true,
+  exit: true,
+
+  onEnter: noop,
+  onEntering: noop,
+  onEntered: noop,
+
+  onExit: noop,
+  onExiting: noop,
+  onExited: noop
+};
+
+Transition.UNMOUNTED = 0;
+Transition.EXITED = 1;
+Transition.ENTERING = 2;
+Transition.ENTERED = 3;
+Transition.EXITING = 4;
+
+exports.default = Transition;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 260 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.classNamesShape = exports.timeoutsShape = undefined;
+exports.transitionTimeout = transitionTimeout;
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function transitionTimeout(transitionType) {
+  var timeoutPropName = 'transition' + transitionType + 'Timeout';
+  var enabledPropName = 'transition' + transitionType;
+
+  return function (props) {
+    // If the transition is enabled
+    if (props[enabledPropName]) {
+      // If no timeout duration is provided
+      if (props[timeoutPropName] == null) {
+        return new Error(timeoutPropName + ' wasn\'t supplied to CSSTransitionGroup: ' + 'this can cause unreliable animations and won\'t be supported in ' + 'a future version of React. See ' + 'https://fb.me/react-animation-transition-group-timeout for more ' + 'information.');
+
+        // If the duration isn't a number
+      } else if (typeof props[timeoutPropName] !== 'number') {
+        return new Error(timeoutPropName + ' must be a number (in milliseconds)');
+      }
+    }
+
+    return null;
+  };
+}
+
+var timeoutsShape = exports.timeoutsShape = _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.shape({
+  enter: _propTypes2.default.number,
+  exit: _propTypes2.default.number
+}).isRequired]);
+
+var classNamesShape = exports.classNamesShape = _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.shape({
+  enter: _propTypes2.default.string,
+  exit: _propTypes2.default.string,
+  active: _propTypes2.default.string
+}), _propTypes2.default.shape({
+  enter: _propTypes2.default.string,
+  enterDone: _propTypes2.default.string,
+  enterActive: _propTypes2.default.string,
+  exit: _propTypes2.default.string,
+  exitDone: _propTypes2.default.string,
+  exitActive: _propTypes2.default.string
+})]);
+
+/***/ }),
+/* 261 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function createRippleHandler(instance, eventName, action, cb) {
+  return function handleEvent(event) {
+    if (cb) {
+      cb.call(instance, event);
+    }
+
+    if (event.defaultPrevented) {
+      return false;
+    }
+
+    if (instance.ripple) {
+      instance.ripple[action](event);
+    }
+
+    if (instance.props && typeof instance.props['on' + eventName] === 'function') {
+      instance.props['on' + eventName](event);
+    }
+
+    return true;
+  };
+}
+
+exports.default = createRippleHandler;
+
+/***/ }),
+/* 262 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof2 = __webpack_require__(62);
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+var _keys = __webpack_require__(36);
+
+var _keys2 = _interopRequireDefault(_keys);
+
+exports.capitalize = capitalize;
+exports.contains = contains;
+exports.findIndex = findIndex;
+exports.find = find;
+exports.createChainedFunction = createChainedFunction;
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function capitalize(string) {
+  if (process.env.NODE_ENV !== 'production' && typeof string !== 'string') {
+    throw new Error('Material-UI: capitalize(string) expects a string argument.');
+  }
+
+  return string.charAt(0).toUpperCase() + string.slice(1);
+} //  weak
+
+function contains(obj, pred) {
+  return (0, _keys2.default)(pred).every(function (key) {
+    return obj.hasOwnProperty(key) && obj[key] === pred[key];
+  });
+}
+
+function findIndex(arr, pred) {
+  var predType = typeof pred === 'undefined' ? 'undefined' : (0, _typeof3.default)(pred);
+  for (var i = 0; i < arr.length; i += 1) {
+    if (predType === 'function' && !!pred(arr[i], i, arr) === true) {
+      return i;
+    }
+    if (predType === 'object' && contains(arr[i], pred)) {
+      return i;
+    }
+    if (['string', 'number', 'boolean'].indexOf(predType) !== -1) {
+      return arr.indexOf(pred);
+    }
+  }
+  return -1;
+}
+
+function find(arr, pred) {
+  var index = findIndex(arr, pred);
+  return index > -1 ? arr[index] : undefined;
+}
+
+/**
+ * Safe chained function
+ *
+ * Will only create a new function if needed,
+ * otherwise will pass back existing functions or null.
+ *
+ * @param {function} functions to chain
+ * @returns {function|null}
+ */
+function createChainedFunction() {
+  for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
+    funcs[_key] = arguments[_key];
+  }
+
+  return funcs.filter(function (func) {
+    return func != null;
+  }).reduce(function (acc, func) {
+    process.env.NODE_ENV !== "production" ? (0, _warning2.default)(typeof func === 'function', 'Material-UI: invalid Argument Type, must only provide functions, undefined, or null.') : void 0;
+
+    return function chainedFunction() {
+      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      acc.apply(this, args);
+      func.apply(this, args);
+    };
+  }, function () {});
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 263 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19994,7 +31688,7 @@ function off(el, eventName, callback, opts) {
 }
 
 /***/ }),
-/* 39 */
+/* 264 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20044,7 +31738,7 @@ exports.default = function (node) {
 };
 
 /***/ }),
-/* 40 */
+/* 265 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20099,7 +31793,7 @@ function debounce(func, wait, immediate) {
 }
 
 /***/ }),
-/* 41 */
+/* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20133,7 +31827,7 @@ function throttle(fn, threshhold, scope) {
 }
 
 /***/ }),
-/* 42 */
+/* 267 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20149,7 +31843,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _index = __webpack_require__(18);
+var _index = __webpack_require__(111);
 
 var _index2 = _interopRequireDefault(_index);
 
@@ -20197,17 +31891,17 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 43 */
+/* 268 */
 /***/ (function(module, exports) {
 
 module.exports = [{"rating":80,"slug":"10-second-ninja","cloudHash":"ru2rg81ktbh7vzs87x51","title":"10 Second Ninja","url":"https://www.igdb.com/games/10-second-ninja","support":["PC"],"summary":"Ninja's are awesome, this is an established fact of the universe. Nazi Robots from space however are not. They are trying to take over the Earth and their leader Robot Hitler is out to get you, the world's first ninja. You have 10 seconds to destroy all Nazi Robots in your vicinity and face the ultimate challenge: Hitler Robot himself. THE GAME IS ON. \n \n10 Second Ninja is a blisteringly fast platformery, actiony, sort of puzzley gamey thing. The player (that's you) is given the task of eliminating all of the enemies in each stage in 10 seconds or less. How hard could that be?","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ru2rg81ktbh7vzs87x51.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ru2rg81ktbh7vzs87x51.jpg","size":"cover_small"}],"airtableId":"recsHtv43Y1sNGrsn","igdbName":"10 Second Ninja","genre":["2D platform"],"date":"2016-05-15","developers":[9388],"completed":true,"igdbId":9848},{"rating":80,"slug":"140","cloudHash":"uzq4jkuo29ygkavthzjx","title":"140","url":"https://www.igdb.com/games/140","support":["PC"],"summary":"140 is an indie 2D puzzle-platformer. It features minimalistic, blocky graphics and a excellent sound-track.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/uzq4jkuo29ygkavthzjx.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/uzq4jkuo29ygkavthzjx.jpg","size":"cover_small"}],"airtableId":"recOrgoprF02CSmJj","igdbName":"140","genre":["2D platform"],"date":"2017-01-01","developers":[5088],"completed":true,"igdbId":9497},{"rating":"","slug":"a-blind-legend","cloudHash":"loe4xfkczpim9vygjxaw","title":"A Blind Legend","url":"https://www.igdb.com/games/a-blind-legend","support":["PC"],"summary":"A Blind Legend is the first-ever action-adventure game without video – where ears replace eyes! Discover the original, innovative sensory experience of binaural 3D sound.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/loe4xfkczpim9vygjxaw.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/loe4xfkczpim9vygjxaw.jpg","size":"cover_small"}],"airtableId":"recQgy8EDNTsWPuIz","igdbName":"A Blind Legend","genre":"","date":"2017-07-09","developers":"","completed":"","igdbId":33641},{"rating":"","slug":"a-good-snowman-is-hard-to-build","cloudHash":"crsvwkdsrnzw0xrc9k1n","title":"A Good Snowman Is Hard To Build","url":"https://www.igdb.com/games/a-good-snowman-is-hard-to-build","support":["Android"],"summary":"A puzzle game about being a monster and making snowmen.\nLovingly crafted by the mind of Alan Hazelden and the hands of Benjamin Davis.\nWith beautiful soundscapes from the heart of Ryan Roth.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/crsvwkdsrnzw0xrc9k1n.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/crsvwkdsrnzw0xrc9k1n.jpg","size":"cover_small"}],"airtableId":"recadpWccWMaDflus","igdbName":"A Good Snowman Is Hard To Build","genre":["Puzzle"],"date":"2017-10-01","developers":[7278,7279],"completed":true,"igdbId":14678},{"rating":69,"slug":"a-story-about-my-uncle","cloudHash":"i2wpp7dyhs01yet41nx3","title":"A Story About My Uncle","url":"https://www.igdb.com/games/a-story-about-my-uncle","support":["PC"],"summary":"A Story About My Uncle is a non-violent First-Person platform adventure game built in the Unreal Engine. It is a story about a boy who searches for his lost uncle and ends up in a world he couldn’t imagine existed.\n\nThe movement through the world in A Story About My Uncle is a crucial part of it’s core gameplay, focusing on swinging yourself through caverns with a grappling hook mechanic that gives the player a wonderful sense of speed and freedom. Soar through a game world with a unique art style and a mysterious story unraveling slowly before you.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/i2wpp7dyhs01yet41nx3.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/i2wpp7dyhs01yet41nx3.jpg","size":"cover_small"}],"airtableId":"reckpv53G44u9GCwi","igdbName":"A Story About My Uncle","genre":["FPS","3D platform"],"date":"2016-08-28","developers":[3030],"completed":true,"igdbId":7211},{"rating":68,"slug":"aaru-s-awakening","cloudHash":"dbqeurxoflocm2owcfdp","title":"Aaru's Awakening","url":"https://www.igdb.com/games/aaru-s-awakening","support":["PC"],"summary":"You are the champion of Dawn, Aaru. Complete missions and explore the world of Lumenox using Aaru's highly mobile skills, teleportation and charging. \n\nThe balance between Dawn, Day, Dusk and Night is being destroyed by Night. As a last hope Dawn sends out his champion, Aaru, to travel all the way to Night’s domain and restore balance. Can you save the world of Lumenox?","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/dbqeurxoflocm2owcfdp.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/dbqeurxoflocm2owcfdp.jpg","size":"cover_small"}],"airtableId":"recN5KsK6y1a8x5gY","igdbName":"Aaru’s Awakening","genre":["2D platform"],"date":"2016-06-11","developers":[6979],"completed":"","igdbId":7171},{"rating":"","slug":"abalone","cloudHash":"hfhxcel8n2hslwedkgsy","title":"Abalone","url":"https://www.igdb.com/games/abalone","support":["PC"],"summary":"The official adaptation of the famous board game Abalone. Abalone is the adaptation of the famous million selling board game on iPhone and iPad. Discover or rediscover Abalone, play in the classic way or try all the different competition variations boards: Swiss daisy, the Alien, Fujiyama…\n\nThe rules are really simples: aligns 3 balls and push your opponent’s marble out of the board. The first that eject 6 balls of his opponents win the game.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/hfhxcel8n2hslwedkgsy.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/hfhxcel8n2hslwedkgsy.jpg","size":"cover_small"}],"airtableId":"recvYSEDdangPj4i7","igdbName":"Abalone","genre":["Plateau"],"date":"2015-01-29","developers":"","completed":"","igdbId":9939},{"rating":80.88,"slug":"abzu--1","cloudHash":"mvplc0engxcuxnbi5zef","title":"ABZÛ","url":"https://www.igdb.com/games/abzu--1","support":["PC"],"summary":"ABZÛ is an exploration game where you are a lone diver in a lush ocean world. The diver descends deeper and deeper into the depths, where she will encounter majestic creatures, discover ancient secrets, and search for her true purpose. ABZÛ roughly translates to \"The Ocean of Wisdom\" from ancient Sumerian.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/mvplc0engxcuxnbi5zef.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/mvplc0engxcuxnbi5zef.jpg","size":"cover_small"}],"airtableId":"recNOZuhHaNCo1yG9","igdbName":"ABZÛ","genre":"","date":"2017-07-01","developers":[4681],"completed":true,"igdbId":7352},{"rating":100,"slug":"advance-wars","cloudHash":"xj1vitetmgeefrb8kzrg","title":"Advance Wars","url":"https://www.igdb.com/games/advance-wars","support":["GBA"],"summary":"Just because this battle fits in the palm of your hand doesn't mean the stakes are small. On the contrary, this all-or-nothing fight will have you accessing guns, grenades, launchers, and weaponry of all sorts. Players assume command of an army that's out to reclaim a world that's been broken up by warring factions. The battle map is essentially a grid, and moving units is like moving chess pieces on a board -- each of the units can move a specific amount of spaces within this grid, and can only attack at a certain distance from specific enemies. Advance Wars features more than 115 maps, a map editor, head-to-head play via link cable, and an easy-to-understand tutorial mode for beginners.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/xj1vitetmgeefrb8kzrg.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/xj1vitetmgeefrb8kzrg.jpg","size":"cover_small"}],"airtableId":"recXEW9MhKvYboZAE","igdbName":"Advance Wars","genre":["TBS"],"date":"2016-02-16","developers":[765],"completed":"","igdbId":1691},{"rating":80,"slug":"age-of-empires-ii-the-age-of-kings","cloudHash":"yoqdjsssreh8sjs9nvtv","title":"Age of Empires II: The Age of Kings","url":"https://www.igdb.com/games/age-of-empires-ii-the-age-of-kings","support":["PC"],"summary":"Take control of a powerful civilization. Lead them through 1000 years of the Middle Ages to riches and greatness. Will you Intimidate the world into following you by using military force? Rule the world with honor and nobility by using commerce and diplomacy? Or Underhandedly seize power through conspiracy, deception and regicide? There are many paths to power, there can only be one ruler! \n \nFeatures: \n \n* Travel through time as your civilization evolves from the Dark Age to the Imperial Age \n \n* Construct a rich and thriving empire by trading with allies \n \n* Control and lead military forces with tactical commands \n \n* Go into battle at the side of famous heroes such as Joan of Arc, Barbarossa or William Wallace","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/yoqdjsssreh8sjs9nvtv.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/yoqdjsssreh8sjs9nvtv.jpg","size":"cover_small"}],"airtableId":"recQH42YT7eLwNdC0","igdbName":"Age of Empires II: The Age of Kings","genre":["RTS"],"date":"","developers":[68],"completed":"","igdbId":327},{"rating":"","slug":"disney-s-aladdin","cloudHash":"os2dwbnbh9v8gwkeipmd","title":"Aladdin","url":"https://www.igdb.com/games/disney-s-aladdin","support":["SNES"],"summary":"Disney's Aladdin is a 1993 video game developed by Capcom for the Super Nintendo Entertainment System (SNES). Based on the film of the same name, Disney's Aladdin is a 2D side-scrolling video game in which the player characters are Aladdin and his monkey Abu. The game was released in November 1993, the same month that another game with the same title was released by Virgin Games for Sega Genesis. The two games vary in several respects, including the fact that Aladdin carries a sword in the Virgin game but does not in the Capcom game, a fact that Shinji Mikami, the Capcom game's designer, said made the Virgin game better. The Capcom game was ported to Game Boy Advance (GBA) on March 19, 2004.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/os2dwbnbh9v8gwkeipmd.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/os2dwbnbh9v8gwkeipmd.jpg","size":"cover_small"}],"airtableId":"recVTs7aUN6Y1M2oO","igdbName":"Disney's Aladdin","genre":["2D platform"],"date":"","developers":[1069,37],"completed":"","igdbId":2473},{"rating":80,"slug":"disneys-aladdin","cloudHash":"ji8luekxnz2vhnkg6rgc","title":"Aladdin","url":"https://www.igdb.com/games/disneys-aladdin","support":["Sega Mega Drive"],"summary":"Disney's Aladdin is a platform video game developed by Virgin Interactive based on the 1992 motion picture of the same name. The game was released for the Sega Genesis/Mega Drive in November 1993 and was later ported to the Nintendo Entertainment System, Game Boy, and home computers. It is one of several video games based on this film, including one game that was released in the same month by Capcom for the Super Nintendo Entertainment System.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ji8luekxnz2vhnkg6rgc.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ji8luekxnz2vhnkg6rgc.jpg","size":"cover_small"}],"airtableId":"recSbd4y4OJWuqEeX","igdbName":"Disney's Aladdin","genre":["2D platform"],"date":"","developers":[426,1238,1233,141],"completed":"","igdbId":8118},{"rating":"","slug":"alex-kidd-in-miracle-world","cloudHash":"v0nwvwykbcviv1zmk1gu","title":"Alex Kidd in the miracle world","url":"https://www.igdb.com/games/alex-kidd-in-miracle-world","support":["Sega Master System"],"summary":"Journey through the planet Aries to the beautiful City of Radactian - and save it from the evil Janken the Great.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/v0nwvwykbcviv1zmk1gu.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/v0nwvwykbcviv1zmk1gu.jpg","size":"cover_small"}],"airtableId":"recjbfime0WZFaGXR","igdbName":"Alex Kidd in Miracle World","genre":["2D platform"],"date":"","developers":[11739],"completed":true,"igdbId":26778},{"rating":"","slug":"altos-adventure","cloudHash":"fzn92djjopem4jmowtg5","title":"Alto's Adventure","url":"https://www.igdb.com/games/altos-adventure","support":["Android"],"summary":"Join Alto and his friends as they embark on an endless snowboarding odyssey. Journey across the beautiful alpine hills of their native wilderness, through neighbouring villages, ancient woodlands, and long-abandoned ruins.\nAlong the way you'll rescue runaway llamas, grind rooftops, leap over terrifying chasms and outwit the mountain elders – all while braving the ever changing elements and passage of time upon the mountain.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/fzn92djjopem4jmowtg5.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/fzn92djjopem4jmowtg5.jpg","size":"cover_small"}],"airtableId":"recylDxdRSWVfic0X","igdbName":"Alto's Adventure","genre":"","date":"2017-12-06","developers":[4697,10385],"completed":true,"igdbId":18130},{"rating":"","slug":"another-world","cloudHash":"gxqkdvdufqt5rs3aueex","title":"Another World","url":"https://www.igdb.com/games/another-world","support":["SNES"],"summary":"Another World chronicles the story of a man hurtled through space and time by a nuclear experiment gone wrong. You assume the role of Lester Knight Chaykin, a young physicist. You’ll need to dodge, outwit, and overcome a host of alien monsters and deadly earthquakes that plague the alien landscape you now call home. Only a perfect blend of logic and skill will get you past the deadly obstacles that lie in waiting.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/gxqkdvdufqt5rs3aueex.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/gxqkdvdufqt5rs3aueex.jpg","size":"cover_small"}],"airtableId":"reciOZhZpehIA4YUs","igdbName":"Another World","genre":"","date":"","developers":[501],"completed":"","igdbId":4348},{"rating":82.6666666666667,"slug":"antichamber","cloudHash":"fakcrybyuw1u7u8kgohm","title":"Antichamber","url":"https://www.igdb.com/games/antichamber","support":["PC"],"summary":"Antichamber is a single-player first-person puzzle-platform video game. Many of the puzzles are based on phenomena that occur within the Impossible Objects created by the game engine, such as passages that lead the player to different locations depending on which way they face, and structures that seem otherwise impossible within normal three-dimensional space. The game includes elements of psychological exploration through brief messages of advice to help the player figure out solutions to the puzzles as well as adages for real life.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/fakcrybyuw1u7u8kgohm.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/fakcrybyuw1u7u8kgohm.jpg","size":"cover_small"}],"airtableId":"recQBBZ6ziVA9PwZZ","igdbName":"Antichamber","genre":["FPS","Puzzle"],"date":"2015-06-14","developers":[956],"completed":true,"igdbId":2064},{"rating":80,"slug":"archer-macleans-mercury","cloudHash":"cvsfkoysldvyarmgjw7g","title":"Archer Maclean's Mercury","url":"https://www.igdb.com/games/archer-macleans-mercury","support":["PSP"],"summary":"From the mind of developer Archer Maclean comes Mercury, a puzzle game that lets you guide the metallic substance through a series of challenging puzzles. Without spilling too much, you must control your colored mercury blobs around 3D mazes simply by tilting the level. Negotiate obstacles and hazards, solve puzzles, and compete against time and percentage limits while avoiding traps and predators. In addition to the single-player mode, Archer Maclean's Mercury also features multiplayer battle and ghost modes.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/cvsfkoysldvyarmgjw7g.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/cvsfkoysldvyarmgjw7g.jpg","size":"cover_small"}],"airtableId":"recmqwQ5gogtqylYS","igdbName":"Archer Maclean's Mercury","genre":["Puzzle"],"date":"","developers":"","completed":"","igdbId":22293},{"rating":80.75,"slug":"assassin-s-creed","cloudHash":"p73nqxuc20nf8upc22lx","title":"Assassin's Creed","url":"https://www.igdb.com/games/assassin-s-creed","support":["PC"],"summary":"Assassin’s Creed is the next-gen game developed by Ubisoft Montreal that will redefine the action genre. While other games claim to be next-gen with impressive graphics and physics, Assassin’s Creed merges technology, game design, theme, and emotions into a world where you instigate chaos and become a vulnerable, yet powerful, agent of change.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/p73nqxuc20nf8upc22lx.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/p73nqxuc20nf8upc22lx.jpg","size":"cover_small"}],"airtableId":"rec4OcbYO9vh4SNKk","igdbName":"Assassin's Creed","genre":"","date":"","developers":[38],"completed":true,"igdbId":128},{"rating":90.25,"slug":"assassin-s-creed-ii","cloudHash":"doczeiofd1ckpapdhqs7","title":"Assassin's Creed 2","url":"https://www.igdb.com/games/assassin-s-creed-ii","support":["PC"],"summary":"Discover an intriguing and epic story of power, revenge and conspiracy set during a pivotal moment in history: the Italian Renaissance. \nExperience the freedom and immersion of an all new open world and mission structure with settings such as the rooftops and canals of beautiful Venice. Your options in combat, assassination and escape are vast, with many new weapons, settings and gameplay elements.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/doczeiofd1ckpapdhqs7.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/doczeiofd1ckpapdhqs7.jpg","size":"cover_small"}],"airtableId":"rec0dNzeoXnLBrggM","igdbName":"Assassin's Creed II","genre":"","date":"2016-04-14","developers":[38],"completed":true,"igdbId":127},{"rating":83.3333333333333,"slug":"assassin-s-creed-brotherhood","cloudHash":"gqnr3kbwcyou6viisbja","title":"Assassin's Creed Brotherhood","url":"https://www.igdb.com/games/assassin-s-creed-brotherhood","support":["PC"],"summary":"Live and breathe as Ezio, a legendary Master Assassin, in his enduring struggle against the powerful Templar Order. He must journey into Italy’s greatest city, Rome, center of power, greed and corruption to strike at the heart of the enemy. \nDefeating the corrupt tyrants entrenched there will require not only strength, but leadership, as Ezio commands an entire Brotherhood who will rally to his side. Only by working together can the Assassins defeat their mortal enemies. \nAnd for the first time, introducing a never-before-seen multiplayer layer that allows you to choose from a wide range of unique characters, each with their own signature weapons and assassination techniques, and match your skills against other players from around the world. \nIt’s time to join the Brotherhood.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/gqnr3kbwcyou6viisbja.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/gqnr3kbwcyou6viisbja.jpg","size":"cover_small"}],"airtableId":"recZs6AsQ9WvA7mig","igdbName":"Assassin's Creed: Brotherhood","genre":"","date":"2016-05-29","developers":[39,38,896],"completed":true,"igdbId":113},{"rating":"","slug":"asterix-obelix-xxl","cloudHash":"ac9insb8085lydt8efai","title":"Asterix et Obelix XXL 2 Mission Las Vegum","url":"https://www.igdb.com/games/asterix-obelix-xxl","support":["PC"],"summary":"A pair of Asterix & Obelix games on a single cartridge.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ac9insb8085lydt8efai.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ac9insb8085lydt8efai.jpg","size":"cover_small"}],"airtableId":"recRX6ULs7DI5dx8v","igdbName":"Asterix & Obelix XXL","genre":["Beat'em Up"],"date":"","developers":[1910,1909],"completed":true,"igdbId":3789},{"rating":74.875,"slug":"asura-s-wrath","cloudHash":"ykrat7gnqxmdlovbnlsf","title":"Asura's Wrath","url":"https://www.igdb.com/games/asura-s-wrath","support":["PS3"],"summary":"The game follows the title character, the demigod Asura as he seeks revenge on the pantheon of other demigods who betrayed him. The story is presented in the style and format of an episodic series of cinematic shorts, including opening and closing credits, with the gameplay being integrated into the cinematic where players switch between third-person combat and interactive sequences with player input in the form of quick-time event button prompts. Because of its unique style, the game has been described in the media as an \"interactive anime\". According to the game's producer Kazuhiro Tsuchiya, Asura's Wrath takes elements from Hinduism and Buddhism and blends them with science fiction, with the main character based on the ever combative and superiority-seeking beings of the same name that are part of the Hindu and Buddhist cosmology.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ykrat7gnqxmdlovbnlsf.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ykrat7gnqxmdlovbnlsf.jpg","size":"cover_small"}],"airtableId":"recbJJKygS38KAXCu","igdbName":"Asura's Wrath","genre":"","date":"2015-09-29","developers":[2438],"completed":true,"igdbId":5495},{"rating":60,"slug":"bad-dinos","cloudHash":"l6k98ltlfmrlvgtvkuom","title":"Bad Dinos","url":"https://www.igdb.com/games/bad-dinos","support":["Android"],"summary":"Play Bad Dinos – a new kind of tower-defense game that makes the rest feel ancient! Protect the Poundrok family while rescuing its adventurous son from the clutches of a high-flying pterodactyl. Junior Poundrok yearned to fly but not like this. Now his family must pile into its rockin’ Winnecavo to retrieve him while guarding against incoming stampedes of ill-tempered dinosaurs!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/l6k98ltlfmrlvgtvkuom.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/l6k98ltlfmrlvgtvkuom.jpg","size":"cover_small"}],"airtableId":"recir8Adn0rTM3nCV","igdbName":"Bad Dinos","genre":["Tower Defense"],"date":"","developers":[834],"completed":true,"igdbId":23219},{"rating":70,"slug":"badland","cloudHash":"tkv5mhkyrcrsnp1zqjhs","title":"Badland","url":"https://www.igdb.com/games/badland","support":["Android"],"summary":"Badland is an atmospheric side-scrolling action adventure game that takes platforming to the next level with innovative use of physics in level design. The game immerses players in an audiovisual gaming experience through a lush forest full of various inhabitants, trees and flowers. Although the forest looks like it's from some beautiful fairytale, there seems to be something terribly wrong. You control one of the forest's inhabitants, on a journey to discover what's going on. Through the quest. you discover astonishing amount of imaginative traps and obstacles.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/tkv5mhkyrcrsnp1zqjhs.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/tkv5mhkyrcrsnp1zqjhs.jpg","size":"cover_small"}],"airtableId":"recWp4C9HKTUk0qcK","igdbName":"Badland","genre":["2D platform"],"date":"2017-11-02","developers":[4713],"completed":true,"igdbId":8901},{"rating":90.25,"slug":"bastion","cloudHash":"hjrb5hkxv9tkmgz7enur","title":"Bastion","url":"https://www.igdb.com/games/bastion","support":["PC"],"summary":"An action-RPG set in an imaginary world. A mysterious narrator moves the story forwards based on your every desicion in game and the paths you choose. You have an arsenal of upgradeable weapons at your disposal. Once you complete the main story you unlock a harder new game mode to continue your challenge.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/hjrb5hkxv9tkmgz7enur.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/hjrb5hkxv9tkmgz7enur.jpg","size":"cover_small"}],"airtableId":"recNqOe80BAkRgsEL","igdbName":"Bastion","genre":["Action RPG"],"date":"2015-04-04","developers":[928],"completed":true,"igdbId":1983},{"rating":89.4,"slug":"batman-arkham-asylum","cloudHash":"siat3cbfmg3hgbqrcljs","title":"Batman Arkham Asylum","url":"https://www.igdb.com/games/batman-arkham-asylum","support":["PC"],"summary":"Using a great variety of gadgets you must make your way around the island, and the asylums halls to find and stop the joker. The game uses a 3-button combat system, but with a great number of gadget abilites which Batman can unlock. This makes for a very cinematic combat experience when fighting the Joker's goons.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/siat3cbfmg3hgbqrcljs.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/siat3cbfmg3hgbqrcljs.jpg","size":"cover_small"}],"airtableId":"rec3enRoNaeynnzWS","igdbName":"Batman: Arkham Asylum","genre":"","date":"2013-11-28","developers":[164],"completed":true,"igdbId":500},{"rating":91.2,"slug":"batman-arkham-city","cloudHash":"nemib0kgnbo6i0rmlavm","title":"Batman Arkham City","url":"https://www.igdb.com/games/batman-arkham-city","support":["PC"],"summary":"After the events of Batman: Arkham Asylum (2009), a section of the city of Gotham has been turned into a prison, designed to keep the scum of the city away from the people. Bruce Wayne protests this prison but is shortly kidnapped by the despicable Hugo Strange, thus having to face the city's most powerful villains as the Batman while trying to uncover Strange's plans.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/nemib0kgnbo6i0rmlavm.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/nemib0kgnbo6i0rmlavm.jpg","size":"cover_small"}],"airtableId":"recywR7FF0IT6Kq20","igdbName":"Batman: Arkham City","genre":"","date":"2013-12-30","developers":[164],"completed":true,"igdbId":501},{"rating":71.1176470588235,"slug":"batman-arkham-origins","cloudHash":"xls0pnx4wcnwqaypsenm","title":"Batman Arkham Origins","url":"https://www.igdb.com/games/batman-arkham-origins","support":["PC"],"summary":"Batman: Arkham Origins features an expanded Gotham City and introduces an original prequel storyline occurring several years before the events of Batman: Arkham Asylum and Batman: Arkham City.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/xls0pnx4wcnwqaypsenm.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/xls0pnx4wcnwqaypsenm.jpg","size":"cover_small"}],"airtableId":"recuut0zXM3NIDRcR","igdbName":"Batman: Arkham Origins","genre":"","date":"2016-05-06","developers":[937,413,221],"completed":true,"igdbId":2003},{"rating":68,"slug":"batman-vengeance","cloudHash":"ygqmhlyt3cxohcvif1xg","title":"Batman Vengeance","url":"https://www.igdb.com/games/batman-vengeance","support":["PS2"],"summary":"Batman: Vengeance is a 2001 video game that was released on all major platforms of the sixth generation of console games. It was developed and published by Ubisoft in conjunction with Warner Bros. Interactive Entertainment and DC Comics. It is based on the television series The New Batman Adventures (the successor to Batman: The Animated Series).","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ygqmhlyt3cxohcvif1xg.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ygqmhlyt3cxohcvif1xg.jpg","size":"cover_small"}],"airtableId":"recigX2fHdOxWbqaP","igdbName":"Batman: Vengeance","genre":"","date":"","developers":[38],"completed":true,"igdbId":5740},{"rating":"","slug":"besiege","cloudHash":"qnk3o6orgk3jl3rmglwd","title":"Besiege","url":"https://www.igdb.com/games/besiege","support":["PC"],"summary":"Besiege is a physics based building game in which you construct medieval siege engines and lay waste to immense fortresses and peaceful hamlets. \n \nBuild a machine which can crush windmills, wipe out battalions of brave soldiers and transport valuable resources, defending your creation against cannons, archers and whatever else the desperate enemies have at their disposal.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/qnk3o6orgk3jl3rmglwd.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/qnk3o6orgk3jl3rmglwd.jpg","size":"cover_small"}],"airtableId":"recrZzSy0fRJrn9OV","igdbName":"Besiege","genre":"","date":"2017-07-09","developers":[4930],"completed":"","igdbId":9047},{"rating":90.6,"slug":"beyond-good-evil","cloudHash":"osmozqw60d57oph9f1jg","title":"Beyond Good & Evil","url":"https://www.igdb.com/games/beyond-good-evil","support":["PC"],"summary":"Beyond Good & Evil is an action-adventure game with elements of puzzle-solving and stealth-based games. The player controls the protagonist, Jade, from a third-person perspective. Jade can run, move stealthily, jump over obstacles and pits, climb ladders, push or bash doors and objects, and flatten herself against walls. As Jade, the player investigates a number of installations in search of the truth about a war with an alien threat.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/osmozqw60d57oph9f1jg.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/osmozqw60d57oph9f1jg.jpg","size":"cover_small"}],"airtableId":"rectw04L494vZByLD","igdbName":"Beyond Good & Evil","genre":"","date":"","developers":[398,899,702],"completed":true,"igdbId":1341},{"rating":72.3333333333333,"slug":"binary-domain","cloudHash":"y5sj9zwbjkkt2a5ad9ws","title":"Binary Domain","url":"https://www.igdb.com/games/binary-domain","support":["PC"],"summary":"The Machine Age has begun in the immersive and atmospheric squad-based shooter Binary Domain. Regain control of a futuristic Tokyo from an emerging robotic threat in the year 2080. The story starts when Dan Marshall and his squad are sent to bring the robotic community under control as they begin to infiltrate society and slowly take over undetected, leaving humans redundant in their wake. Fighting through the derelict lower levels of the city, players control an international peace-keeping squad that soon starts to question their surroundings and the choices they make. Are the robots becoming more human, or are humans becoming more like machines? \n \nThrilling encounters with these highly intelligent robotic enemies require you to think tactically, make challenging, real-time moral decisions and build up trust with your team mates in order to guide your squad to safety and success.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/y5sj9zwbjkkt2a5ad9ws.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/y5sj9zwbjkkt2a5ad9ws.jpg","size":"cover_small"}],"airtableId":"recXk7wqCdcS78ZKj","igdbName":"Binary Domain","genre":["Action RPG"],"date":"2016-07-04","developers":[2942,2943],"completed":true,"igdbId":6913},{"rating":88.8571428571429,"slug":"bionic-commando-rearmed","cloudHash":"fkm09bvhn1rytbltiwu7","title":"Bionic Commando Rearmed","url":"https://www.igdb.com/games/bionic-commando-rearmed","support":["PC"],"summary":"Classic side-scrolling gameplay is reporting back for duty with Bionic Commando Rearmed, a remake of the classic NES game, out now on PC. 20 years after the 8-bit classic was released, Bionic Commando Rearmed recreates the world of the original with a complete \"2.5D\" visual revamp.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/fkm09bvhn1rytbltiwu7.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/fkm09bvhn1rytbltiwu7.jpg","size":"cover_small"}],"airtableId":"recQ0fQdC0jBmJn6F","igdbName":"Bionic Commando Rearmed","genre":"","date":"2016-12-20","developers":[842],"completed":true,"igdbId":15856},{"rating":87.2222222222222,"slug":"runner2-future-legend-of-rhythm-alien","cloudHash":"dgkytktu0lcimdhrjchf","title":"BIT.TRIP Presents... Runner2 Future Legend of Rhythm Alien","url":"https://www.igdb.com/games/runner2-future-legend-of-rhythm-alien","support":["PC"],"summary":"Runner2 is the sequel to the critically acclaimed and IGF award winning BIT.TRIP RUNNER.,In the style of the BIT.TRIP series, Runner2 is a rhythm-music platforming game.,Players will run through fantastic environments, using brand new moves, to brand new soundtracks as they run, jump, slide, kick, and soar toward the goal of tracking down the Timbletot and thwarting his evil plans to destroy not only our world, but every world there is.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/dgkytktu0lcimdhrjchf.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/dgkytktu0lcimdhrjchf.jpg","size":"cover_small"}],"airtableId":"recMxVuJw1aTY7POK","igdbName":"Runner2: Future Legend of Rhythm Alien","genre":["Rhythm","2D platform"],"date":"2016-09-18","developers":[2728],"completed":true,"igdbId":5592},{"rating":80,"slug":"bit-trip-runner","cloudHash":"p7ga4d2x7xhenyiekgqe","title":"BIT.TRIP RUNNER","url":"https://www.igdb.com/games/bit-trip-runner","support":["PC"],"summary":"BIT.TRIP RUNNER is the fastest, most exhilarating music/ rhythm-platformer to hit Steam! Race across the Moon, kicking down crystal walls and sliding under chomping moon-slugs! Bound through the Robotic Mines and face off against the MinerMech! Dash through the Big City on a quest to find friends and defeat the final boss together!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/p7ga4d2x7xhenyiekgqe.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/p7ga4d2x7xhenyiekgqe.jpg","size":"cover_small"}],"airtableId":"recSj6wLTDajTNpZA","igdbName":"BIT.TRIP RUNNER","genre":["2D platform","Rhythm"],"date":"2016-06-14","developers":[2728],"completed":"","igdbId":6246},{"rating":85,"slug":"blade-symphony","cloudHash":"o83f8cigfk2br9yhme3s","title":"Blade Symphony","url":"https://www.igdb.com/games/blade-symphony","support":["PC"],"summary":"Prove you are the world's greatest swordsman! Engage in tactical 1 vs. 1 sword fighting, 2 vs. 2, or sandbox FFA, or capture Control Points in a tactical slash-em-up.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/o83f8cigfk2br9yhme3s.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/o83f8cigfk2br9yhme3s.jpg","size":"cover_small"}],"airtableId":"rec1pmA9KoXwMF9q7","igdbName":"Blade Symphony","genre":["Vs. Fighting"],"date":"2016-06-04","developers":[4379],"completed":"","igdbId":8408},{"rating":73.3333333333333,"slug":"blazblue-calamity-trigger","cloudHash":"rpoitl6fycmmx19tez5m","title":"BlazBlue: Calamity Trigger","url":"https://www.igdb.com/games/blazblue-calamity-trigger","support":["PC"],"summary":"BlazBlue: Calamity Trigger is a fighting game developed by Arc System Works in 2008 and is the first game in the BlazBlue series. The game was originally developed for Japanese arcades and later received console and PC ports. The game is a traditional 2D fighter where two characters participate in a duel. Every character has a weak, medium and strong attack, as well as an \"unique\" technique, called a Drive attack, which is different for each character. Various combos can be performed by every character through careful input of regular and Drive attacks.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/rpoitl6fycmmx19tez5m.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/rpoitl6fycmmx19tez5m.jpg","size":"cover_small"}],"airtableId":"recEG1trXHmQW1oSt","igdbName":"BlazBlue: Calamity Trigger","genre":["Vs. Fighting"],"date":"2017-08-05","developers":[1218],"completed":true,"igdbId":6441},{"rating":"","slug":"bleach-soul-carnival-2","cloudHash":"kdmgxvq1epmg39loj04e","title":"Bleach Soul Carnival 2","url":"https://www.igdb.com/games/bleach-soul-carnival-2","support":["PSP"],"summary":"The game follows the story of the manga from the start of the series, until Ichigo's victory over Ulquiorra Cifer. The game's story is told through voice acting and text. There are also some cinematics which were taken right from the anime that are shown most often during fights scenes.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/kdmgxvq1epmg39loj04e.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/kdmgxvq1epmg39loj04e.jpg","size":"cover_small"}],"airtableId":"recWu7RJKaTBsz8Fm","igdbName":"Bleach: Soul Carnival 2","genre":["Beat'em Up"],"date":"","developers":"","completed":true,"igdbId":25934},{"rating":86.6666666666667,"slug":"braid","cloudHash":"duuhpuhde2tzhz9daco1","title":"Braid","url":"https://www.igdb.com/games/braid","support":["PC"],"summary":"Braid is played by solving physical puzzles in a standard platform game environment. The player controls the protagonist Tim as he runs, jumps, and climbs across the game's levels. Tim jumps and stomps on enemies to defeat them, and can collect keys to unlock doors or operate levers to trigger platforms. A defining game element is the player's unlimited ability to reverse time and \"rewind\" actions, even after dying. The game is divided into six worlds, which are experienced sequentially and can be entered from different rooms of Tim's house; the player can return to any world previously visited to attempt to solve puzzles they missed.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/duuhpuhde2tzhz9daco1.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/duuhpuhde2tzhz9daco1.jpg","size":"cover_small"}],"airtableId":"rec7KRMkXfElus7ne","igdbName":"Braid","genre":["Puzzle"],"date":"2015-06-17","developers":[1335],"completed":"","igdbId":2853},{"rating":76.5384615384615,"slug":"broken-age","cloudHash":"vcuzefpnphlsqkzxjht2","title":"Broken Age","url":"https://www.igdb.com/games/broken-age","support":["PC"],"summary":"Broken Age is a point-and-click adventure telling the stories of a young boy and girl leading parallel lives. The girl has been chosen by her village to be sacrificed to a terrible monster--but she decides to fight back. Meanwhile, a boy on a spaceship is living a solitary life under the care of a motherly computer, but he wants to break free to lead adventures and do good in the world. Adventures ensue.\n\nBroken Age development began when we asked our community if they would help us create a classic-style adventure game without needing to rely on traditional publishers. It turns out they did.\n\nAnd ever since day one, 2 Player Productions has been recording the whole process in an ongoing series of in-depth episodes documenting the creation of a game. Stay tuned for details on how to get your hands on it.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/vcuzefpnphlsqkzxjht2.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/vcuzefpnphlsqkzxjht2.jpg","size":"cover_small"}],"airtableId":"recwlkSKkyeG5PCym","igdbName":"Broken Age","genre":["Point'n'click"],"date":"2016-05-13","developers":[85],"completed":true,"igdbId":3087},{"rating":85.1428571428571,"slug":"brothers-a-tale-of-two-sons","cloudHash":"ecstnq8wxbz93mkjndrq","title":"Brothers: A Tale of Two Sons","url":"https://www.igdb.com/games/brothers-a-tale-of-two-sons","support":["PC"],"summary":"Brothers is presented from a third-person view overlooking the two brothers. The brothers are moved individually by two thumbsticks on the controller. The controller triggers also cause the respective brother to interact with the game world, such as talking to a non-player character or grabbing onto a ledge or object. \n \nThe older brother is the stronger of the two and can pull levers or boost his younger brother to higher spaces, while the younger one can pass between narrow bars. The player progresses by manipulating the two brothers at the same time to complete various puzzles, often requiring the player to manipulate both brothers to perform differing functions (such as one distracting a hostile non-player character while the other makes their way around). \n \nShould either brother fall from a great height or get injured, the game restarts at a recent checkpoint. All of the in-game dialogue is spoken in a fictional language, thus the story is conveyed through actions, gestures and expressions.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ecstnq8wxbz93mkjndrq.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ecstnq8wxbz93mkjndrq.jpg","size":"cover_small"}],"airtableId":"recNiHwc5xloIeK4b","igdbName":"Brothers: A Tale of Two Sons","genre":"","date":"2017-07-02","developers":[280],"completed":true,"igdbId":1334},{"rating":80.3333333333333,"slug":"brutal-legend","cloudHash":"bqhvuvo0zhumuvvq82wy","title":"Brutal Legend","url":"https://www.igdb.com/games/brutal-legend","support":["PC"],"summary":"Brütal Legend is an action-adventure that marries visceral action combat with open-world freedom. Set in a universe somewhere between Lord of the Rings and Spinal Tap, it’s a fresh take on the action/driving genre, which in this case is full of imitation cover bands, demons intent on enslaving humanity and Heavy metal tunes. Featuring the talents of comedian, actor and musician, Jack Black as super roadie Eddie Riggs, as well as cameos by some of the biggest names in metal music it's a wild ride in the belly of the beast that is not to be missed by gamers and Metalheads alike.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/bqhvuvo0zhumuvvq82wy.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/bqhvuvo0zhumuvvq82wy.jpg","size":"cover_small"}],"airtableId":"recLc0JsYxp9LaqH4","igdbName":"Brütal Legend","genre":"","date":"2014-04-18","developers":[85],"completed":"","igdbId":212},{"rating":75.1111111111111,"slug":"call-of-juarez-gunslinger","cloudHash":"bisnn99m1ziuxsak3vss","title":"Call Of Juarez: Gunslinger","url":"https://www.igdb.com/games/call-of-juarez-gunslinger","support":["PC"],"summary":"From the dust of a gold mine to the dirt of a saloon, Call of Juarez® Gunslinger is a real homage to the Wild West tales. Live the epic and violent journey of a ruthless bounty hunter on the trail of the West’s most notorious outlaws. Blurring the lines between man and myth, this adventure made of memorable encounters unveils the untold truth behind some of the greatest legends of the Old West.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/bisnn99m1ziuxsak3vss.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/bisnn99m1ziuxsak3vss.jpg","size":"cover_small"}],"airtableId":"reco1qBXMF06w7OIX","igdbName":"Call of Juarez: Gunslinger","genre":["FPS"],"date":"2017-07-02","developers":[108],"completed":true,"igdbId":1976},{"rating":78.75,"slug":"castle-crashers","cloudHash":"dzhlhoxngqslwv25yuig","title":"Castle Crashers","url":"https://www.igdb.com/games/castle-crashers","support":["PC"],"summary":"This four player RPG adventure will let you hack, slash, and smash your way to victory. Featuring hand-drawn characters, Castle Crashers delivers unique hi-res illustrated visuals and intense gameplay action. Play with up to three friends and discover mind-boggling magic and mystery in the amazing world created just for you!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/dzhlhoxngqslwv25yuig.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/dzhlhoxngqslwv25yuig.jpg","size":"cover_small"}],"airtableId":"recMe0woewvAqkqk7","igdbName":"Castle Crashers","genre":["Beat'em Up"],"date":"2017-08-05","developers":[1228],"completed":true,"igdbId":3153},{"rating":55,"slug":"castle-of-illusion-starring-mickey-mouse","cloudHash":"ymhbze4eqtbckvxb5u1r","title":"Castle of Illusion Starring Mickey Mouse","url":"https://www.igdb.com/games/castle-of-illusion-starring-mickey-mouse","support":["Sega Mega Drive"],"summary":"Minnie Mouse has been kidnapped by the evil witch Mizrabel, and it's up to Mickey Mouse to venture through the mysterious worlds of the Castle of Illusion to rescue her in this 2D platformer (and collaboration between Disney and Sega).","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ymhbze4eqtbckvxb5u1r.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ymhbze4eqtbckvxb5u1r.jpg","size":"cover_small"}],"airtableId":"rec8HvQ2tpuBacrND","igdbName":"Castle of Illusion Starring Mickey Mouse","genre":["2D platform"],"date":"","developers":[112],"completed":"","igdbId":8122},{"rating":"","slug":"castlevania","cloudHash":"rzlkte4veumiieb4zlbj","title":"Castlevania","url":"https://www.igdb.com/games/castlevania","support":["NES"],"summary":"Step into the shadows of the deadliest dwelling on earth. You've arrived at Castlevania, and you're here on business: To destroy forever the Curse of the Evil Count. \n \nUnfortunately, everybody's home this evening. Bats, ghosts, every kind of creature you can imagine. You'll find 'em all over the place, if they don't find you first. Because you've got to get through six monstrous floors before you even meet up with the Master of the House. Your Magic Whip will help, and you'll probably find a weapons or two along the way. But once you make it to the tower, you can count on a Duel to the Death. The Count has waited 100 years for a rematch.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/rzlkte4veumiieb4zlbj.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/rzlkte4veumiieb4zlbj.jpg","size":"cover_small"}],"airtableId":"rec12HkUvbnLnmtDJ","igdbName":"Castlevania","genre":"","date":"","developers":[129],"completed":"","igdbId":1114},{"rating":86,"slug":"castlevania-aria-of-sorrow","cloudHash":"niyashkpxqppiailsum7","title":"Castlevania: Aria of Sorrow","url":"https://www.igdb.com/games/castlevania-aria-of-sorrow","support":["GBA"],"summary":"The year is 2035 and Soma Cruz is about to witness the first solar eclipse of the 21st century when he suddenly blacks out -- only to awaken inside a mysterious castle. As Soma, you must navigate the castle's labyrinths while confronting perilous monsters at every turn. But beware, you must escape before the evil consumes you!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/niyashkpxqppiailsum7.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/niyashkpxqppiailsum7.jpg","size":"cover_small"}],"airtableId":"rec8qJTj94bqPmPsK","igdbName":"Castlevania: Aria of Sorrow","genre":["Metroidvania"],"date":"","developers":[159],"completed":true,"igdbId":1134},{"rating":"","slug":"castlevania-harmony-of-dissonance","cloudHash":"bk9jvp1jllh3vtv9mvmp","title":"Castlevania: Harmony of Dissonance","url":"https://www.igdb.com/games/castlevania-harmony-of-dissonance","support":["GBA"],"summary":"Nearly fifty years has past since Simon Belmont rescued the land from the curse of Dracula. Now, Simon's descendant Juste Belmont, must acquire the relics of Dracula to unravel the disappearance of his childhood friend Lydie. The castle's enchanting mysteries and danger await all those who dare enter.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/bk9jvp1jllh3vtv9mvmp.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/bk9jvp1jllh3vtv9mvmp.jpg","size":"cover_small"}],"airtableId":"recddxYUQKX4P7Ho6","igdbName":"Castlevania: Harmony of Dissonance","genre":["Metroidvania"],"date":"","developers":[159],"completed":true,"igdbId":1133},{"rating":90,"slug":"castlevania-symphony-of-the-night","cloudHash":"gifwryqyonzk2bkp64mb","title":"Castlevania: Symphony of the Night","url":"https://www.igdb.com/games/castlevania-symphony-of-the-night","support":["PS1"],"summary":"Uncover all the mysteries of Dracula’s castle.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/gifwryqyonzk2bkp64mb.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/gifwryqyonzk2bkp64mb.jpg","size":"cover_small"}],"airtableId":"recSFhxF9s9aUyQ2f","igdbName":"Castlevania: Symphony of the Night","genre":["Metroidvania"],"date":"","developers":[159,1822],"completed":true,"igdbId":1128},{"rating":82.3333333333333,"slug":"castlevania-the-dracula-x-chronicles","cloudHash":"u25dqyha97puvs2vlcdl","title":"Castlevania: The Dracula X Chronicles","url":"https://www.igdb.com/games/castlevania-the-dracula-x-chronicles","support":["PSP"],"summary":"Castlevania: The Dracula X Chronicles is an entirely new take at the best Castlevania game to never be released in the US, \"Castlevania: Rondo of Blood\". The Dracula X Chronicles brings this action/adventure franchise to the PSP system for the first time, complete with 3D graphics, enhanced gameplay and new music. Completing the Dracula X storyline, this game also includes an unlockable version of Symphony of the Night and players will also be able to unlock the original Rondo of Blood from the NEC PC Engine. Includes unlockable versions of the original \"Rondo of Blood\" and \"Symphony of the Night\" games, optimized for the PSP. Timeless side scrolling action through more than 10 gothic stages and additional hidden areas. Return to previously completed levels to find additional secrets.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/u25dqyha97puvs2vlcdl.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/u25dqyha97puvs2vlcdl.jpg","size":"cover_small"}],"airtableId":"rechDNIPTjoqnbJnu","igdbName":"Castlevania: The Dracula X Chronicles","genre":"","date":"","developers":[129],"completed":"","igdbId":21888},{"rating":91.3333333333333,"slug":"chrono-trigger","cloudHash":"bal4sq3icc5owth4k4x3","title":"Chrono Trigger","url":"https://www.igdb.com/games/chrono-trigger","support":["SNES"],"summary":"When a newly developed teleportation device malfunctions at the Millennial Fair, young Crono must travel through time to rescue his misfortunate companion from an intricate web of past and present perils. The swashbuckling adventure that ensues soon unveils an evil force set to destroy the world, triggering Crono's race against time to change the course of history and bring about a brighter future.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/bal4sq3icc5owth4k4x3.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/bal4sq3icc5owth4k4x3.jpg","size":"cover_small"}],"airtableId":"recjrqcskfmcZi2Bi","igdbName":"Chrono Trigger","genre":["JRPG"],"date":"2015-11-27","developers":[250],"completed":true,"igdbId":1802},{"rating":74.25,"slug":"cloudbuilt","cloudHash":"a1xhrvckumbviaokylc5","title":"Cloudbuilt","url":"https://www.igdb.com/games/cloudbuilt","support":["PC"],"summary":"A game of speed, precision and freedom, use all the abilities of your rocket-powered suit to avoid fatal hazards, dodge hostile robots and reach not just the finish line, but the top of the worldwide leaderboards. Carve your own path through a multitude of mysterious floating ruins high above the clouds and show everyone you're the best!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/a1xhrvckumbviaokylc5.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/a1xhrvckumbviaokylc5.jpg","size":"cover_small"}],"airtableId":"recR5qMtZPrx5QgFU","igdbName":"Cloudbuilt","genre":["3D platform"],"date":"2016-01-16","developers":[8309],"completed":"","igdbId":16820},{"rating":75,"slug":"clustertruck","cloudHash":"qv5ypq6l4v7epivnhoop","title":"Clustertruck","url":"https://www.igdb.com/games/clustertruck","support":["PC"],"summary":"Clustertruck is a chaotic physics based truckformer. Jump your way through insane levels in a game of \"the floor is lava\" on top of speeding trucks driven by terrible drivers.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/qv5ypq6l4v7epivnhoop.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/qv5ypq6l4v7epivnhoop.jpg","size":"cover_small"}],"airtableId":"rec1bkoyWqz5xGSKS","igdbName":"Clustertruck","genre":["3D platform"],"date":"2017-10-02","developers":[9453],"completed":true,"igdbId":18484},{"rating":"","slug":"comix-zone","cloudHash":"ldrn5px2jtmyagvhtllk","title":"Comix Zone","url":"https://www.igdb.com/games/comix-zone","support":["Sega Mega Drive"],"summary":"Sketch Turner, a \"starving artist\" and freelance rock musician, is working on his newest comic book, named the \"Comix Zone.\" Comix Zone is the story of the New World Empire's attempt to defend Earth from an invasion of alien renegades, with inspiration coming from Sketch's (oddly vivid) dreams and nightmares. One night, while Sketch is working on Comix Zone during a thunderstorm, a lightning bolt strikes a panel of his comic. In this instant, the main villain of Comix Zone - a powerful mutant named Mortus - manages to escape the comic book's pages, desiring to kill Sketch so he can become flesh and blood and take over the real world. Because he does not possess any power in reality, Mortus sends Sketch into the world of his own comic, freely drawing in enemies to try and kill him. \n \n \n \nInside the comic book, Sketch meets General Alissa Cyan, who believes he is a superhero (\"the chosen one\") who came to save their post-apocalyptic world from the evil of Mortus and the alien invaders. Ignoring Sketch's protests, Alissa sends him on his mission, keeping in touch with instructions and hints via radio. It is up to Sketch to stop Mortus' evil plans and find a way out of this comic world before his own creations erase him for good. \n \n \n \nThe game has two possible endings. At the end of the game, Alissa attempts to defuse a Nuke, when Mortus comes into the comic and throws her into the chamber, which starts to fill up with liquid. Mortus then battles Sketch. If the player defeats Mortus and the Kreeps he summons quickly enough to drain the liquid and save Alissa, an ending occurs where Alissa comes to the real world with Sketch. Comix Zone is a huge success, being sold out on its first day, and Alissa joins the army, eventually becoming Chief of Security for the United States. Roadkill is given a vast amount of mozzarella cheese, and spends a lot of time exploring the city's new sewer system when not sleeping under a pile of Sketch's dirty socks. \n \n \n \nIf the player defeats Mortus after the chamber fills with liquid, Alissa dies. Sketch comes out, but his comic is destroyed. The last sentence in the cutscene says \"Will Sketch recreate his adventure for a happier ending?\"","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ldrn5px2jtmyagvhtllk.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ldrn5px2jtmyagvhtllk.jpg","size":"cover_small"}],"airtableId":"reclrCLxLqw9RE9KV","igdbName":"Comix Zone","genre":"","date":"2017-12-22","developers":[1444],"completed":true,"igdbId":3071},{"rating":"","slug":"conker-s-bad-fur-day","cloudHash":"l018p4vrgq981vc5lml0","title":"Conker's Bad Fur Day","url":"https://www.igdb.com/games/conker-s-bad-fur-day","support":["N64"],"summary":"Humorous action-platformer that does away with the tedious item collection found in most games in the genre. Instead, BFD employs a combination of standard jump, run and explore mechanics and context-sensitive gags and actions. For instance, in the beginning of the game, by pressing the B button on the first pad he encounters, Conker drinks some Alka-Seltzer to wipe out his hangover, at which point players can proceed forward. Later on these pads are used to activate a slingshot and throwing knives; to turn Conker into an anvil and drop downward; to shoot automatic, double-handed guns; to activate a The Matrix-inspired slow-motion effect and flip through the air shooting enemies; and much, much more.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/l018p4vrgq981vc5lml0.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/l018p4vrgq981vc5lml0.jpg","size":"cover_small"}],"airtableId":"recXcnIztMA5hhVo4","igdbName":"Conker's Bad Fur Day","genre":"","date":"","developers":[771],"completed":"","igdbId":1286},{"rating":80,"slug":"costume-quest","cloudHash":"rs2nivvwq0amgmuw929c","title":"Costume Quest","url":"https://www.igdb.com/games/costume-quest","support":["PC"],"summary":"Costume Quest is a rollicking Adventure/Role-Playing game that unfolds on Halloween night across seemingly peaceful suburban neighborhoods, a mysterious village carnival, and a monster-infested shopping mall. Created by Double Fine's lead animator, Tasha Harris, the game follows the adventure of a group of young friends who must rid their neighborhood of monsters using only their wits, their bravery, and their home-made costumes. Players go door-to-door collecting candy, points, cards, battle stamps and quest assignments as they prepare themselves for Combat Mode-where they transform into larger-than-life versions of their costumes. Each costume that comes-to-life provides its own unique set of superpowers that players will need to battle Halloweens worst monsters.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/rs2nivvwq0amgmuw929c.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/rs2nivvwq0amgmuw929c.jpg","size":"cover_small"}],"airtableId":"recSdtNYGV1BR87OK","igdbName":"Costume Quest","genre":"","date":"2014-06-29","developers":[85],"completed":"","igdbId":5637},{"rating":63.375,"slug":"counterspy","cloudHash":"rnvb2uygqmyxo4yifoeb","title":"CounterSpy","url":"https://www.igdb.com/games/counterspy","support":["PS3"],"summary":"CounterSpy is a side-scrolling stealth video game developed by Dynamighty.[2] It was published by Sony Computer Entertainment as a cross-buy and cross-save title for the PlayStation 3, PlayStation 4, and PlayStation Vita.[3] An Android and iOS release is planned for an unknown date. \n \nThe games received a mixture of average and positive reviews. It was mostly praised for the art and soundtrack of the game.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/rnvb2uygqmyxo4yifoeb.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/rnvb2uygqmyxo4yifoeb.jpg","size":"cover_small"}],"airtableId":"recpnmTQ0COzRw9cW","igdbName":"CounterSpy","genre":["Stealth"],"date":"2016-07-20","developers":[5985],"completed":true,"igdbId":7612},{"rating":"","slug":"crash-bandicoot-warped","cloudHash":"b0yse08hwfkbmn9bedxd","title":"Crash Bandicoot 3: Warped","url":"https://www.igdb.com/games/crash-bandicoot-warped","support":["PS1"],"summary":"Oh, yeah! He's back! AND he's ready to rumble! It's a whole new adventure with Crash Bandicoot, and this time he's time traveling through the ages with his little sister Coco! Scubadive with the sharks, ride a baby T-Rex, go soar the skies in a plane, gallop along the Great Wall of China on a tiger, dodge ancient Egyptian mummies and much much more!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/b0yse08hwfkbmn9bedxd.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/b0yse08hwfkbmn9bedxd.jpg","size":"cover_small"}],"airtableId":"reciKPewNHNsgRpqM","igdbName":"Crash Bandicoot: Warped","genre":["3D platform"],"date":"2015-12-29","developers":[401],"completed":true,"igdbId":1187},{"rating":77,"slug":"crash-nitro-kart","cloudHash":"khfqn3guxatbqrveomzj","title":"Crash Nitro Kart","url":"https://www.igdb.com/games/crash-nitro-kart","support":["PS2"],"summary":"Crash Bandicoot returns to the karting scene with a host of other characters from the adventure series, and this time they have both Neo Cortex and Emperor Velo to worry about. Velo has taken the crew to a remote planet, forced to race for their lives against Neo Cortex and his many evil doers. \n \nChoose from various game modes, from the straight into the action Arcade mode to Adventure mode, following Crash and the gang in the story to save Earth. Race against four friends in multiplayer battle modes, plus connect to the Gamecube for extra options and upload your high scores to the internet ranking system. \n[","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/khfqn3guxatbqrveomzj.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/khfqn3guxatbqrveomzj.jpg","size":"cover_small"}],"airtableId":"recTB7gpOmUpm7fmP","igdbName":"Crash Nitro Kart","genre":["Racing"],"date":"","developers":[72],"completed":"","igdbId":1193},{"rating":53,"slug":"crazy-machines","cloudHash":"kdxjngyj7uz6tphbynrj","title":"Crazy Machines","url":"https://www.igdb.com/games/crazy-machines","support":["PC"],"summary":"Turn the crank, rotate the gears, push the levers, Use the catapult, explode it, or fly it...From grilling sausages with a pulley, gears, rubberbands and a candle to firing a cannon with a basketball, these wacky brain-teasers will light up your imagination with creative and addictive fun.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/kdxjngyj7uz6tphbynrj.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/kdxjngyj7uz6tphbynrj.jpg","size":"cover_small"}],"airtableId":"rec6TxfMsTTOBuAdT","igdbName":"Crazy Machines","genre":["Puzzle"],"date":"2015-05-29","developers":[2141],"completed":"","igdbId":4777},{"rating":88.5,"slug":"crypt-of-the-necrodancer","cloudHash":"mytpzc9wr9sunxz9x1af","title":"Crypt of the NecroDancer","url":"https://www.igdb.com/games/crypt-of-the-necrodancer","support":["PC"],"summary":"Crypt of the NecroDancer is a hardcore roguelike rhythm game. Can you survive this deadly dungeon of dance, slay the NecroDancer, and recapture your still beating heart? Or will you be a slave to the rhythm for all eternity?","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/mytpzc9wr9sunxz9x1af.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/mytpzc9wr9sunxz9x1af.jpg","size":"cover_small"}],"airtableId":"recUDLhYQmzJgvsga","igdbName":"Crypt of the NecroDancer","genre":["Roguelike"],"date":"2017-03-07","developers":[3834],"completed":true,"igdbId":7886},{"rating":74.4285714285714,"slug":"dante-s-inferno","cloudHash":"aaqvj0k88d7ubgvgm9fs","title":"Dante's Inferno","url":"https://www.igdb.com/games/dante-s-inferno","support":["PS3"],"summary":"Dante's Inferno is an epic single player, third-person action adventure game inspired by \"Inferno\", part one of Dante Alighieri's classic Italian poem, \"The Divine Comedy.\" Featuring nonstop action rendered at 60 frames-per-second, signature and upgradable weapons, attack combos and mana-fueled spells and the choice of punishing or absolving the souls of defeated enemies, it is a classic Medieval tale of the eternal conflict with sin and the resulting horrors of hell, adapted for a new generation and a new medium.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/aaqvj0k88d7ubgvgm9fs.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/aaqvj0k88d7ubgvgm9fs.jpg","size":"cover_small"}],"airtableId":"recdRLGaQknw6h7Vl","igdbName":"Dante's Inferno","genre":["Beat'em Up"],"date":"2016-07-09","developers":[7,1241],"completed":true,"igdbId":6958},{"rating":84.3333333333333,"slug":"dark-souls-prepare-to-die-edition","cloudHash":"hbzoyr6l9hiuzjuygkwq","title":"Dark Souls: Prepare to Die Edition","url":"https://www.igdb.com/games/dark-souls-prepare-to-die-edition","support":["PC"],"summary":"Dark Souls will be the most deeply challenging game you play this year. Can you live through a million deaths and earn your legacy?","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/hbzoyr6l9hiuzjuygkwq.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/hbzoyr6l9hiuzjuygkwq.jpg","size":"cover_small"}],"airtableId":"recAGzVea4jV32Psw","igdbName":"Dark Souls: Prepare to Die Edition","genre":"","date":"2017-05-20","developers":[1012],"completed":true,"igdbId":21040},{"rating":75,"slug":"deadbolt","cloudHash":"mbsqoky2e0cthuq1nhy3","title":"DEADBOLT","url":"https://www.igdb.com/games/deadbolt","support":["PC"],"summary":"DEADBOLT is an extremely challenging stealth-action hybrid that allows you to take control of the reaper to quell the recent undead uprising.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/mbsqoky2e0cthuq1nhy3.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/mbsqoky2e0cthuq1nhy3.jpg","size":"cover_small"}],"airtableId":"recsVrk8IeHBBp13i","igdbName":"DEADBOLT","genre":"","date":"2018-01-18","developers":[1532],"completed":true,"igdbId":18389},{"rating":60,"slug":"deadcore","cloudHash":"z8xsge5ijtzgzso5iwql","title":"Deadcore","url":"https://www.igdb.com/games/deadcore","support":["PC"],"summary":"DeadCore is a Platformer-FPS blending exploration and speedrun. \nBecome immersed in a futuristic and dreamlike adventure which will see you climb a huge Tower born from the void and truly put your capabilities to the test. Will you be able to reveal the secrets that lie beneath this fog-ridden world?","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/z8xsge5ijtzgzso5iwql.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/z8xsge5ijtzgzso5iwql.jpg","size":"cover_small"}],"airtableId":"recp0nI89rJHtcTLG","igdbName":"DeadCore","genre":["FPS","3D platform"],"date":"2016-05-17","developers":[3798],"completed":true,"igdbId":7864},{"rating":70.2307692307692,"slug":"deadpool","cloudHash":"pfh6p58zvuchhs6ayuaq","title":"Deadpool","url":"https://www.igdb.com/games/deadpool","support":["PC"],"summary":"In Deadpool the player takes control of the loud-mouthed, foul-mouthed, merc-with-a-mouth Wade Wilson (a.k.a. Deadpool). While on out on a contract to kill a corrupt media mogul, Mister Sinister intervenes and kills him instead, drawing the ire of Deadpool who then vows revenge only to stumble upon a bigger plot which could spell the end of humanity. \n\nWith the help of some of the X-Men such as Wolverine, Rogue and Domino along with a buddy from the future, Cable, they band together to stop Mister Sinister and his group of Marauders (Arclight, Blockbuster and Vertigo) from succeeding.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/pfh6p58zvuchhs6ayuaq.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/pfh6p58zvuchhs6ayuaq.jpg","size":"cover_small"}],"airtableId":"recGQTYCkxf5qwvOm","igdbName":"Deadpool","genre":["Beat'em Up"],"date":"2018-01-10","developers":[434],"completed":true,"igdbId":1919},{"rating":79.3333333333333,"slug":"deathspank","cloudHash":"inhtwv8njmj9bksrnwen","title":"DeathSpank","url":"https://www.igdb.com/games/deathspank","support":["PC"],"summary":"This game follows the thong-tastic adventures of a misguided hero named DeathSpank. Comic fans will recognize DeathSpank as a character that first appeared on writer Ron Gilbert's Grumpy Gamer website in a series of animated comics he penned with long-time creative collaborator, Clayton Kauzlaric.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/inhtwv8njmj9bksrnwen.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/inhtwv8njmj9bksrnwen.jpg","size":"cover_small"}],"airtableId":"recRhtCflKAKTW7Cl","igdbName":"DeathSpank","genre":["Hack'n'Slash"],"date":"2013-10-23","developers":[1051],"completed":true,"igdbId":2249},{"rating":72.6666666666667,"slug":"deathspank-thongs-of-virtue","cloudHash":"xa21uxvvhcfiyjozcl9q","title":"DeathSpank: Thongs of Virtue","url":"https://www.igdb.com/games/deathspank-thongs-of-virtue","support":["PC"],"summary":"In his travels DeathSpank has brought justice to the downtrodden, faced the riddle of bacon and defeated evils so horrible they would make just plain evil lose its lunch. DeathSpank: Thongs of Virtue is a hilarious adventure full of violence, sorcery and war-metaphors! And it’s fun! Remember fun? You hit things with swords, blow things up with magical bazookas, zap foes with Tesla Rods or chuck Fire hand grenades at their big stupid dumb heads . \n \nFeaturing the trademark humor found in the original, Thongs of Virtue centers on DeathSpank’s journey through a massive war-torn land; explore the North Pole and the high seas to locate the mystical thongs to bring peace and harmony to the universe.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/xa21uxvvhcfiyjozcl9q.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/xa21uxvvhcfiyjozcl9q.jpg","size":"cover_small"}],"airtableId":"recJOVU7WC9hJWhe8","igdbName":"DeathSpank: Thongs of Virtue","genre":["Hack'n'Slash"],"date":"2013-11-03","developers":[1051],"completed":true,"igdbId":2250},{"rating":66.5,"slug":"democracy-3","cloudHash":"fzcfk3dods1ummmanemc","title":"Democracy 3","url":"https://www.igdb.com/games/democracy-3","support":["PC"],"summary":"Democracy is a government simulation game. The player plays as if they are the president or prime minister of a democratic government. The player must introduce and alter policies in seven areas - tax, economy, welfare, foreign policy, transport, law and order and public services. Each policy has an effect on the happiness of various voter groups, as well as affecting factors such as crime and air quality. The player has to deal with \"situations\", which are typically problems such as petrol protests or homelessness, and also has to make decisions on dilemmas that arise each turn.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/fzcfk3dods1ummmanemc.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/fzcfk3dods1ummmanemc.jpg","size":"cover_small"}],"airtableId":"recLk8DkyUFjEkOyB","igdbName":"Democracy 3","genre":["Simulation"],"date":"","developers":[2448],"completed":"","igdbId":5506},{"rating":90.5,"slug":"deus-ex","cloudHash":"b4ojwekfoyv2en1xn8mq","title":"Deus Ex","url":"https://www.igdb.com/games/deus-ex","support":["PC"],"summary":"In this philosophical first-person action RPG set in a dystopian 2052, JC Denton, a nano-augmented agent for the anti-terrorist organization UNATCO, is tasked with stopping the invasion of Liberty Island by the terrorist group NSF. As events unfold, Denton finds that he plays a large part in a world-wide conspiracy which forces him to ponder his allegiances, his morality and the existence and necessity of a God.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/b4ojwekfoyv2en1xn8mq.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/b4ojwekfoyv2en1xn8mq.jpg","size":"cover_small"}],"airtableId":"reclb0NpDxXfDhF6U","igdbName":"Deus Ex","genre":["FPS","Action RPG","Stealth"],"date":"2015-12-27","developers":[25,378],"completed":true,"igdbId":41},{"rating":83,"slug":"deus-ex-go","cloudHash":"xtgzuub06s3orfqtbkbv","title":"Deus Ex Go","url":"https://www.igdb.com/games/deus-ex-go","support":["Android"],"summary":"Deus Ex GO is a turn-based infiltration puzzle game set in a stylized interpretation of the Deus Ex Universe. As double agent Adam Jensen, you’ll use hacking, combat, and augmentations to solve the most challenging puzzles of the entire GO series. Work alongside your allies in TF29 and the Juggernaut Collective as you infiltrate locations to unravel the conspiracy behind a terrorist plot.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/xtgzuub06s3orfqtbkbv.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/xtgzuub06s3orfqtbkbv.jpg","size":"cover_small"}],"airtableId":"recKbjthmQOgsLKxH","igdbName":"Deus Ex Go","genre":["Puzzle"],"date":"2017-08-08","developers":[12473],"completed":true,"igdbId":19601},{"rating":89.8333333333333,"slug":"deus-ex-human-revolution-directors-cut","cloudHash":"trneju00raq3e4uuk48y","title":"Deus Ex: Human Revolution - Directors Cut","url":"https://www.igdb.com/games/deus-ex-human-revolution-directors-cut","support":["PC"],"summary":"Deus Ex: Human Revolution - Director's Cut was released on October 22, 2013 for Xbox 360, PS3, PC and Wii U. It features approximately 8 hours of director's commentaries and a 45 minute “Making Of” video. It also features an improved visual engine and a complete overhaul of the boss battles.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/trneju00raq3e4uuk48y.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/trneju00raq3e4uuk48y.jpg","size":"cover_small"}],"airtableId":"recRw1syfS43CzkD4","igdbName":"Deus Ex: Human Revolution - Director's Cut","genre":["Stealth","FPS"],"date":"2017-06-21","developers":[27,6103],"completed":true,"igdbId":9740},{"rating":80,"slug":"devil-may-cry-3-dante-s-awakening","cloudHash":"xcpgnvjjfu5qy5v9yhoz","title":"Devil May Cry 3: Dante's Awakening","url":"https://www.igdb.com/games/devil-may-cry-3-dante-s-awakening","support":["PC"],"summary":"Dante's past is now revealed as Devil May Cry returns to its roots. Master Dante's multiple fighting styles while battling never before seen demons and new characters as you fight your way towards a brutal confrontation with Dante's mysterious twin brother, Vergil.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/xcpgnvjjfu5qy5v9yhoz.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/xcpgnvjjfu5qy5v9yhoz.jpg","size":"cover_small"}],"airtableId":"recziwYjFydDK0hle","igdbName":"Devil May Cry 3: Dante's Awakening","genre":["Beat'em Up"],"date":"2013-11-05","developers":[37],"completed":true,"igdbId":136},{"rating":81.2857142857143,"slug":"devil-may-cry-4","cloudHash":"wvaoutsakjogzecsstaf","title":"Devil May Cry 4","url":"https://www.igdb.com/games/devil-may-cry-4","support":["PC"],"summary":"Devil May Cry 4 immerses gamers in a gothic supernatural world, where a new protagonist clashes with a familiar hero. As the new leading man, Nero, players will unleash incredible attacks and non-stop combos using a unique new gameplay mechanic, his powerful \"Devil Bringer\" arm. \n \nWith the advanced graphical capabilities of the PC, high definition visuals and intricate detail come to life as players explore new and exotic locales. Dynamic action and undeniable style combine with explosive fighting options and a gripping story to produce the incomparable experience that only a Devil May Cry game can deliver.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/wvaoutsakjogzecsstaf.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/wvaoutsakjogzecsstaf.jpg","size":"cover_small"}],"airtableId":"recnrElGILDomY7Mu","igdbName":"Devil May Cry 4","genre":["Beat'em Up"],"date":"","developers":[37],"completed":true,"igdbId":112},{"rating":"","slug":"devils-attorney","cloudHash":"zclyvvestxmipbpoettt","title":"Devil's Attorney","url":"https://www.igdb.com/games/devils-attorney","support":["Android"],"summary":"Devil's Attorney is a turn-based strategy game set in the 80's where you play as Max McMann, a defense attorney that's high on charm but low on moral fiber. \n \nYour objective is to free all of your clients and use the money you earn to buy accessories and new furniture for your apartment; boosting your ego and unlocking new courtroom skills in the process.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/zclyvvestxmipbpoettt.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/zclyvvestxmipbpoettt.jpg","size":"cover_small"}],"airtableId":"rec1ACrMNLHkxfzel","igdbName":"Devil's Attorney","genre":"","date":"2017-12-17","developers":[12051],"completed":true,"igdbId":27090},{"rating":90,"slug":"diablo-ii","cloudHash":"rdxf2fdxiutxiw0dumto","title":"Diablo II","url":"https://www.igdb.com/games/diablo-ii","support":["PC"],"summary":"A top down adventure game of epic proportion. Diablo 2 is the continuation of a wonderful world of magic and horror. - - \"There is no escape from chaos, there is only the sweet release of death\"","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/rdxf2fdxiutxiw0dumto.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/rdxf2fdxiutxiw0dumto.jpg","size":"cover_small"}],"airtableId":"recfwq2UOttKalHKX","igdbName":"Diablo II","genre":["Hack'n'Slash"],"date":"","developers":[59],"completed":"","igdbId":126},{"rating":90,"slug":"disgaea-afternoon-of-darkness","cloudHash":"tjuv8hcju5em9gzyolnp","title":"Disgaea: Afternoon of Darkness","url":"https://www.igdb.com/games/disgaea-afternoon-of-darkness","support":["PSP"],"summary":"Disgaea is a tactical role playing game. Battle gameplay takes place on a map divided into a square grid. The player controls a squad of humanoid units and monsters, which each occupy a single square of the grid and do combat with a group of enemies. Depending on the character and attack selected, the player will be able to deal damage to a specific enemy unit or a designated region of the map. Combat ends when all enemy units or all of the player's units are destroyed. \nHumanoid characters may lift and throw other units across the map in order to allow allies to move further or force enemies to keep their distance. This even allows the player to capture enemies by throwing them into the base panel; these enemies then become allies, and can be used on subsequent maps. The chance of capturing an enemy in this manner depends on several factors. Failure to capture the enemy will result in the death of all characters inside the base panel, and the enemy will survive.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/tjuv8hcju5em9gzyolnp.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/tjuv8hcju5em9gzyolnp.jpg","size":"cover_small"}],"airtableId":"recBj1LgSDOgXdgxg","igdbName":"Disgaea: Afternoon of Darkness","genre":["JRPG"],"date":"","developers":"","completed":"","igdbId":22528},{"rating":"","slug":"disneys-stitch-experiment-626","cloudHash":"bzimzzv8zxpo2pwvuhz8","title":"Disney's Stitch: Experiment 626","url":"https://www.igdb.com/games/disneys-stitch-experiment-626","support":["PS2"],"summary":"The game takes place before the Lilo & Stitch film begins, showing the massive space universe only hinted at in the movie. The player controls Stitch, using his powers to the fullest: climbing walls and ceilings, dashing with amazing speed, shooting up to four weapons at once (one in each hand), flying with the jetpack, and swinging using the grapple gun. The game features several of the film's memorable characters, including Jumba, Gantu, and Grand Councilwoman.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/bzimzzv8zxpo2pwvuhz8.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/bzimzzv8zxpo2pwvuhz8.jpg","size":"cover_small"}],"airtableId":"recRzGQEUrTrpYyEQ","igdbName":"Disney's Stitch: Experiment 626","genre":"","date":"","developers":[45],"completed":true,"igdbId":25911},{"rating":61.6666666666667,"slug":"divekick","cloudHash":"cak7gfph5kseuftgbwzb","title":"Divekick","url":"https://www.igdb.com/games/divekick","support":["PC"],"summary":"Divekick is the world’s first two-button fighting game. It distills the essence of the fighting game genre into just two buttons with no d-pad directional movement. It is a comedic parody of fighting game motifs and contains many humorous references to games (especially those in the Street Fighter franchise) as well as inside jokes from within the competitive fighting game community. Unlike most fighting games which are played using many buttons for many different kinds of movement and attacks, Divekick is played using only two buttons, Dive and Kick.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/cak7gfph5kseuftgbwzb.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/cak7gfph5kseuftgbwzb.jpg","size":"cover_small"}],"airtableId":"recB1WJc6ywJm3Lag","igdbName":"Divekick","genre":["Vs. Fighting"],"date":"2017-01-08","developers":[2121,2122],"completed":true,"igdbId":4759},{"rating":"","slug":"djmax-portable","cloudHash":"kw0oucbkojq3utxjtcdb","title":"DJMax Portable","url":"https://www.igdb.com/games/djmax-portable","support":["PSP"],"summary":"Korean rythm game for PSP","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/kw0oucbkojq3utxjtcdb.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/kw0oucbkojq3utxjtcdb.jpg","size":"cover_small"}],"airtableId":"recFOz5IB4RiYsSPH","igdbName":"DJMax Portable","genre":["Rhythm"],"date":"","developers":[11590],"completed":"","igdbId":25913},{"rating":81.5,"slug":"dmc-devil-may-cry","cloudHash":"tt2ahytpby4we9dbgmt5","title":"DmC: Devil May Cry","url":"https://www.igdb.com/games/dmc-devil-may-cry","support":["PC"],"summary":"In this retelling of Dante's origin story which is set against a contemporary backdrop, DmC Devil May Cry™ retains the stylish action, fluid combat and self-assured protagonist that have defined the iconic series but inject a more brutal and visceral edge.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/tt2ahytpby4we9dbgmt5.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/tt2ahytpby4we9dbgmt5.jpg","size":"cover_small"}],"airtableId":"recJwfFKOgqjrJmpN","igdbName":"DmC: Devil May Cry","genre":["Beat'em Up"],"date":"2016-07-24","developers":[795],"completed":true,"igdbId":1254},{"rating":78.5714285714286,"slug":"don-t-starve","cloudHash":"jjtsots1bqxdskgq7rll","title":"Don't Starve","url":"https://www.igdb.com/games/don-t-starve","support":["PC"],"summary":"Don’t Starve is an uncompromising wilderness survival game full of science and magic. \n \nYou play as Wilson, an intrepid Gentleman Scientist who has been trapped by a demon and transported to a mysterious wilderness world. Wilson must learn to exploit his environment and its inhabitants if he ever hopes to escape and find his way back home. \n \nEnter a strange and unexplored world full of strange creatures, dangers, and surprises. Gather resources to craft items and structures that match your survival style. Play your way as you unravel the mysteries of this strange land.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/jjtsots1bqxdskgq7rll.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/jjtsots1bqxdskgq7rll.jpg","size":"cover_small"}],"airtableId":"reciIZUBGRnAMMiM3","igdbName":"Don't Starve","genre":["Survival"],"date":"2017-08-13","developers":[1005,2345],"completed":"","igdbId":3152},{"rating":79.6666666666667,"slug":"donkey-kong-country","cloudHash":"unabqdvpayhg8tkzkyqh","title":"Donkey Kong Country","url":"https://www.igdb.com/games/donkey-kong-country","support":["SNES"],"summary":"Donkey Kong Country is a side scrolling platformer by British developers Rareware in 1994. It featured revolutionary pre-rendered 3D graphics that give the game a very unique look compared to most other games on consoles at the time. The two playable characters featured in the game are the titular character, Donkey Kong and his nephew, Diddy Kong. Together the two swing, climb, jump, swim, cartwheel, ride animals, and blast out of barrels on their way to recover their stolen bannanas from the evil King K. Rool and his Kremling army. The adventure takes you through a variety of different environments and levels that continually change up gameplay. Donkey Kong Country also provides plenty of opportunities for exploration with almost every level having a multitude of collectible, shortcuts, and hidden bonus areas.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/unabqdvpayhg8tkzkyqh.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/unabqdvpayhg8tkzkyqh.jpg","size":"cover_small"}],"airtableId":"reca9M6i1vNgZF6Zw","igdbName":"Donkey Kong Country","genre":["2D platform"],"date":"2017-12-20","developers":[771],"completed":true,"igdbId":1090},{"rating":80,"slug":"doom","cloudHash":"napawx0fxrjpfd7jvpft","title":"Doom","url":"https://www.igdb.com/games/doom","support":["PC"],"summary":"A sci-fi FPS in which a space mercenary searches for his lost friend from the box art. \n \nThings aren't looking too good. You'll never navigate off the planet on your own. Plus, all the heavy weapons have been taken by the assault team leaving you with only a pistol. If you only could get your hands around a plasma rifle or even a shotgun you could take a few down on your way out. Whatever killed your buddies deserves a couple of pellets in the forehead. Securing your helmet, you exit the landing pod. Hopefully you can find more substantial firepower somewhere within the station. As you walk through the main entrance of the base, you hear animal-like growls echoing through the distant corridors. They know you're here. There's no turning back now.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/napawx0fxrjpfd7jvpft.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/napawx0fxrjpfd7jvpft.jpg","size":"cover_small"}],"airtableId":"recwYoOljXc7y4cE1","igdbName":"Doom","genre":["FPS"],"date":"","developers":[543,1169,360,184],"completed":true,"igdbId":673},{"rating":"","slug":"dots","cloudHash":"e9wnrq6wgksfg2uahhto","title":"Dots","url":"https://www.igdb.com/games/dots","support":["Android"],"summary":"The goal is simple: connect same-colored dots vertically and horizontally to win points. Make a square to win even more! \n \nDots has three modes to satisfy every type of player. Race against the clock in Timed Mode, think strategically in Moves Mode, or sit back and relax in Endless Mode. Stockpile dots along the way to gain power-ups.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/e9wnrq6wgksfg2uahhto.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/e9wnrq6wgksfg2uahhto.jpg","size":"cover_small"}],"airtableId":"recQrrhXFYB1l6sT5","igdbName":"Dots","genre":["Puzzle"],"date":"","developers":[7089],"completed":"","igdbId":27045},{"rating":75.5,"slug":"double-dragon-neon","cloudHash":"wtnlxknpbudpfrhiad6s","title":"Double Dragon Neon","url":"https://www.igdb.com/games/double-dragon-neon","support":["PC"],"summary":"Twin brothers Billy and Jimmy have been kicking butt and taking names for 25 years. Join them in this bodacious re-imagining of the classic beat 'em up that started it all, Double Dragon Neon. Battle through glass-jawed goons, deadly teleporting geishas, scientific abominations, and more as you hunt down the evil Skullmageddon and save the love of your life, Marion.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/wtnlxknpbudpfrhiad6s.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/wtnlxknpbudpfrhiad6s.jpg","size":"cover_small"}],"airtableId":"recMKHb6siNpfx5lE","igdbName":"Double Dragon Neon","genre":["Beat'em Up"],"date":"2015-12-06","developers":[1021,2345],"completed":true,"igdbId":5968},{"rating":"","slug":"dreaming-sarah","cloudHash":"rdvhikb2ziy3bnshrcoq","title":"Dreaming Sarah","url":"https://www.igdb.com/games/dreaming-sarah","support":["PC"],"summary":"Dreaming Sarah is an adventure game where you explore the dream world of a young girl named Sarah, who is in a deep coma. Collect items and abilities as you solve puzzles, interact with people and objects to try to wake up.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/rdvhikb2ziy3bnshrcoq.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/rdvhikb2ziy3bnshrcoq.jpg","size":"cover_small"}],"airtableId":"recP15ldbSIju4ibG","igdbName":"Dreaming Sarah","genre":["2D platform"],"date":"2017-01-07","developers":[4631],"completed":true,"igdbId":8702},{"rating":74.8461538461538,"slug":"ducktales-remastered","cloudHash":"acnhjsbnx95apaoslki5","title":"DuckTales Remastered","url":"https://www.igdb.com/games/ducktales-remastered","support":["PC"],"summary":"DuckTales Remastered takes the classic Disney platforming adventure to a whole new level. All of the visuals from the 8-bit game have been beautifully re-created as hand-drawn and animated sprites, across a backdrop of luscious, re-envisioned level backgrounds. Furthermore, original Disney Character Voices talent, including some from the cartoon TV series, bring in-game characters to life with charm and wit, while the classic melodies of the original soundtrack are given a modern twist. The game also features an all new tutorial level where players can get familiar with the iconic pogo jump and cane swing, while Scrooge McDuck's Museum allows players to track all their stats and compare their progress with others via global leaderboards.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/acnhjsbnx95apaoslki5.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/acnhjsbnx95apaoslki5.jpg","size":"cover_small"}],"airtableId":"recm5AKDFPy5Kbns1","igdbName":"DuckTales: Remastered","genre":["2D platform"],"date":"2017-06-25","developers":[37,1021],"completed":true,"igdbId":2904},{"rating":75.3333333333333,"slug":"duke-nukem-3d","cloudHash":"m0ihamfs9kya3aelsksx","title":"Duke Nukem 3D","url":"https://www.igdb.com/games/duke-nukem-3d","support":["PC"],"summary":"Aliens have landed in futuristic Los Angeles and it's up to the Duke to bring the pain and show them the door. After the initial entries of side-scrolling platform games, Duke Nukem 3D introduces a first-person perspective to the series and turns the game into a full-fledged shooter with 2.5D graphics. \n \nDuke's arsenal includes pistols, pipe bombs, laser trip mines, Nordenfelt guns, a chain gun and various rocket launchers, but also his mighty foot to kick enemies. The game sports a high level of interactivity. Many objects in the environment can be broken or interacted with, such as pool tables, arcade machines, glass, light switches and security cameras. The protagonist is also able to hand strippers a dollars to have them remove their top.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/m0ihamfs9kya3aelsksx.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/m0ihamfs9kya3aelsksx.jpg","size":"cover_small"}],"airtableId":"recJa0mNPSY8klnVc","igdbName":"Duke Nukem 3D","genre":["FPS"],"date":"","developers":[224,225,226,2345],"completed":true,"igdbId":342},{"rating":82,"slug":"dust-an-elysian-tail","cloudHash":"sb6na88hsccyamuacfrr","title":"Dust An Elysian Tail","url":"https://www.igdb.com/games/dust-an-elysian-tail","support":["PC"],"summary":"immerse yourself in a gorgeous hand-painted world on a search for your true identity. As the mysterious warrior, Dust, your action-packed journey will take you from peaceful glades to snowy mountaintops and beyond. At your disposal is the mythical Blade of Ahrah, capable of turning its wielder into an unstoppable force of nature, and the blade's diminutive guardian, Fidget. Battle dozens of enemies at once with an easy-to-learn, difficult-to-master combat system, take on a variety of quests from friendly villagers, discover ancient secrets and powerful upgrades hidden throughout the massive, open world, and uncover the story of an ancient civilization on the brink of extinction as you fight to uncover your own past.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/sb6na88hsccyamuacfrr.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/sb6na88hsccyamuacfrr.jpg","size":"cover_small"}],"airtableId":"recINfdiPZNnrchGc","igdbName":"Dust: An Elysian Tail","genre":["Beat'em Up"],"date":"2014-01-05","developers":[5228],"completed":true,"igdbId":2130},{"rating":79.75,"slug":"dustforce-dx","cloudHash":"ihmmolfuj9dk1pi41yug","title":"Dustforce DX","url":"https://www.igdb.com/games/dustforce-dx","support":["PC"],"summary":"Clean up the world with style! As an acrobatic janitor, you are an adept force against dust and disorder. Leap and dash off walls and ceilings, and deftly traverse precarious environments. Cleanse each level swiftly and thoroughly to achieve mastery in this 2D sweep-'em-up platformer.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ihmmolfuj9dk1pi41yug.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ihmmolfuj9dk1pi41yug.jpg","size":"cover_small"}],"airtableId":"recQ5rAb4oMH47w3c","igdbName":"Dustforce DX","genre":["2D platform"],"date":"2015-01-14","developers":[3011],"completed":"","igdbId":1340},{"rating":"","slug":"enduro-racer","cloudHash":"u8vmepdeex3cnq88q0cb","title":"Enduro Racer","url":"https://www.igdb.com/games/enduro-racer","support":["Sega Master System"],"summary":"In this game you play the role of an endurance bike racer. The gameplay involves you racing against the clock to get to the finish line and jumping over ramps. At the end of each race you get points for how many cars or bikes you have overtaken with which you can upgrade your bike. There are various different terrain for you to race on including desert beach and dirt tracks plus a number of things to slow you down or even knock you off of your bike all together. The main idea is to find the best route through each level to shave off valuable seconds in order to over take more cars and bikes. \n \nThe Japanese version of the game has more Tracks than the European and US versions have. Among them is a snow track which is one of the hardest tracks in the game, because there is a lot of stones on the thin road.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/u8vmepdeex3cnq88q0cb.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/u8vmepdeex3cnq88q0cb.jpg","size":"cover_small"}],"airtableId":"recs7ifuXbq9DDCN5","igdbName":"Enduro Racer","genre":["Racing"],"date":"","developers":[229,11739],"completed":"","igdbId":6666},{"rating":"","slug":"enemy-mind","cloudHash":"m8tzbjtwxdy3szigeks6","title":"Enemy Mind","url":"https://www.igdb.com/games/enemy-mind","support":["PC"],"summary":"Built for PC, Enemy Mind lets you battle your way through 70+ waves of challenging enemies. Deftly maneuver over twenty unique ships, each with different abilities for you to harness. Backed by an all-new chip-emulated soundtrack by the psychoacoustic artist Rainbow Kitten, Enemy Mind features an adaptive story system as innovative as its gameplay. Are you ready to unlock the secrets of Enemy Mind?","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/m8tzbjtwxdy3szigeks6.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/m8tzbjtwxdy3szigeks6.jpg","size":"cover_small"}],"airtableId":"reccCMLFldU3qsfGq","igdbName":"Enemy Mind","genre":["Shoot'em Up"],"date":"2017-01-13","developers":[8535],"completed":true,"igdbId":17157},{"rating":82.4444444444444,"slug":"enslaved-odyssey-to-the-west","cloudHash":"qoeibu4f3hjoegoedrhe","title":"ENSLAVED: Odyssey to the West","url":"https://www.igdb.com/games/enslaved-odyssey-to-the-west","support":["PC"],"summary":"Enslaved: Odyssey to the West is an action-adventure platform video game developed by Ninja Theory and published by Namco Bandai Games. It was released on PlayStation 3 and Xbox 360 on October 5, October 7 and October 8, 2010 in North America, Australia, Japan and Europe respectively.[1][2] A premium version, featuring all DLC content, was made for Microsoft Windows and Sony Playstation 3 and was later released on October 25, 2013.\n\nThe story is a re-imagining of the novel Journey to the West written by Wu Cheng'en. Unlike the original story that was set in a fantastical version of ancient China, the game is set 150 years in a future post-apocalyptic world following a global war, with only remnants of humanity left, along with the still active war machines left over from the conflict. Like the original story however, the plot revolves around someone who forces the help and protection of a warrior, with many characters sharing the same names and roles. The game's story was written by Alex Garland, with voice talent and motion capture from Andy Serkis and Lindsey Shaw.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/qoeibu4f3hjoegoedrhe.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/qoeibu4f3hjoegoedrhe.jpg","size":"cover_small"}],"airtableId":"recVPrWHcQtOhhNF8","igdbName":"Enslaved: Odyssey to the West","genre":"","date":"2016-06-10","developers":[795],"completed":true,"igdbId":2538},{"rating":87.5,"slug":"euro-truck-simulator-2","cloudHash":"owxdjjsjcn9v3g25vcjx","title":"Euro Truck Simulator 2","url":"https://www.igdb.com/games/euro-truck-simulator-2","support":["PC"],"summary":"Euro Truck Simulator 2 is a vehicle simulation game developed and published by SCS Software for Microsoft Windows and Linux and was initially released as open development on October 19, 2012. The game is a direct sequel to the 2008 game Euro Truck Simulator and it is second video game in Euro Truck Simulator series. Set in Europe, the player can drive one of a choice of articulated trucks across a depiction of Europe, picking up cargo from various locations and delivering it. As the game progresses, it is possible for the player to buy more vehicles, depots, and hire drivers to work for them. Despite the name, players can also choose to deliver cargo in the USA.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/owxdjjsjcn9v3g25vcjx.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/owxdjjsjcn9v3g25vcjx.jpg","size":"cover_small"}],"airtableId":"recM9wxbxCJSRyY7n","igdbName":"Euro Truck Simulator 2","genre":["Simulation"],"date":"2015-10-26","developers":[1443],"completed":"","igdbId":3070},{"rating":80,"slug":"eyetoy-play-2003","cloudHash":"txhdtfqufse0sk8ky4oo","title":"EyeToy : Play","url":"https://www.igdb.com/games/eyetoy-play-2003","support":["PS2"],"summary":"EyeToy: Play is a video game for the PlayStation 2, released in 2003. It was the first game to make use of the PlayStation 2's video camera accessory, EyeToy. The game was initially packaged with the EyeToy when the accessory was first released. It features twelve mini-games to choose from. This game, and all other EyeToy titles, are played by moving one's body. The motion is detected by the USB camera. The software recognizes pixel changes in the video image and compares the proximity of the change to other game objects to play the game. Users who get a high score get to take a photo to tease other players.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/txhdtfqufse0sk8ky4oo.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/txhdtfqufse0sk8ky4oo.jpg","size":"cover_small"}],"airtableId":"recqb212AjY6e1xQZ","igdbName":"EyeToy: Play (2003)","genre":"","date":"","developers":[1033],"completed":true,"igdbId":18724},{"rating":"","slug":"f-zero-x","cloudHash":"hyicoqrtiqtmiskloqux","title":"F-Zero X","url":"https://www.igdb.com/games/f-zero-x","support":["N64"],"summary":"It's you against 29 other machines competing for the title of F-Zero X Champion. You're racing at speeds of over 1,000 km/h high above the atmosphere. Your competition comes from every corner of the galaxy and won't shed a tear at the thought of smashing you off the track. With four-player simultaneous gameplay and the Rumble Pak accessory, you have the fastest racing game on the N64 system!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/hyicoqrtiqtmiskloqux.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/hyicoqrtiqtmiskloqux.jpg","size":"cover_small"}],"airtableId":"recy1iC7yaopqAftx","igdbName":"F-Zero X","genre":["Racing"],"date":"2016-01-05","developers":[421],"completed":true,"igdbId":3489},{"rating":89.5333333333333,"slug":"far-cry-3","cloudHash":"azxhargytmhjymue8v06","title":"Far Cry 3","url":"https://www.igdb.com/games/far-cry-3","support":["PC"],"summary":"Beyond the reach of civilization lies a lawless island ruled by violence. This is where you find yourself stranded, caught in a bloody conflict between the island’s psychotic warlords and indigenous rebels. Struggling to survive, your only hope of escape is through the muzzle of a gun. Discover the island’s dark secrets and take the fight to the enemy; improvise and use your environment to your advantage; and outwit its cast of ruthless, deranged inhabitants. Beware the beauty and mystery of this island of insanity… Where nothing is what is seems, you’ll need more than luck to escape alive.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/azxhargytmhjymue8v06.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/azxhargytmhjymue8v06.jpg","size":"cover_small"}],"airtableId":"recEdOly3jnx8MZD2","igdbName":"Far Cry 3","genre":["FPS"],"date":"2016-11-17","developers":[406,398,38],"completed":true,"igdbId":529},{"rating":82.4285714285714,"slug":"far-cry-3-blood-dragon","cloudHash":"wiuflew5z2fkx4gagvdx","title":"Far Cry 3: Blood Dragon","url":"https://www.igdb.com/games/far-cry-3-blood-dragon","support":["PC"],"summary":"The year is 2007. It is the future.\n \nYou are Sergeant Rex Colt: Mark IV Cyber Commando. The year is 2007 and Earth has been ravaged by a nuclear war which erupted in the 90s. The east vs. west conflict has raged for generations, and humanity continues to struggle to progress after a disastrous decade. New paths for peace must be found, and the US cyborg army may have found a solution: a powerful bioweapon on a distant island. Your mission is to gather information and figure out what the hell is going on.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/wiuflew5z2fkx4gagvdx.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/wiuflew5z2fkx4gagvdx.jpg","size":"cover_small"}],"airtableId":"recKeIzqyRmb6VJVa","igdbName":"Far Cry 3: Blood Dragon","genre":["FPS"],"date":"2016-12-01","developers":[38,398],"completed":true,"igdbId":2001},{"rating":81.4666666666667,"slug":"fifa-15","cloudHash":"kq2pbxsax0aufgpij41o","title":"FIFA 2015","url":"https://www.igdb.com/games/fifa-15","support":["PS3"],"summary":"FIFA 15 is a football simulation game developed by EA Canada and published by Electronic Arts. FIFA 15 is the first of the series to be developed for next generation (Xbox One and PS4) consoles and also features the new Ignite game engine.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/kq2pbxsax0aufgpij41o.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/kq2pbxsax0aufgpij41o.jpg","size":"cover_small"}],"airtableId":"rec9ErRLAYT4z7dye","igdbName":"FIFA 15","genre":["Sport"],"date":"2015-06-15","developers":[277],"completed":"","igdbId":7574},{"rating":90,"slug":"fire-emblem-the-blazing-blade","cloudHash":"jx7ahvaxql34z9n0hptv","title":"Fire Emblem","url":"https://www.igdb.com/games/fire-emblem-the-blazing-blade","support":["GBA"],"summary":"It is the seventh game of the Fire Emblem series, the second game in the series to be released for the Game Boy Advance, and the first to be released in both North America and Europe. It features a prologue storyline designed to introduce newcomers to Fire Emblem gameplay and tactical basics. The overall narrative is a prequel to the events of the previous game, Fire Emblem: The Binding Blade, which is set twenty years later.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/jx7ahvaxql34z9n0hptv.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/jx7ahvaxql34z9n0hptv.jpg","size":"cover_small"}],"airtableId":"recZjGtiKME6CtN2d","igdbName":"Fire Emblem: The Blazing Blade","genre":["JRPG"],"date":"","developers":[765],"completed":true,"igdbId":1439},{"rating":"","slug":"flyn","cloudHash":"tyrneaxqmi7lbupv7x5g","title":"Fly'n","url":"https://www.igdb.com/games/flyn","support":["PC"],"summary":"Fly’N is a PC platformer in which players control four original characters with their own complementary abilities. They are the guardians of the World-Trees: the Buds. It’s only by combining and by playing with their powers that the Buds will be able to find the right path when the situation seems impossible… \n \nSave the World-Trees from Dyer, the loony hair-dryer who intends to destroy their Helys! It’s up to you to control the four different characters with unique powers, guardians of the World-Trees: the Buds. But watch out – their path will be peppered with pitfalls, each one more hazardous than the rest! When you find yourself in a tricky situation, you’ll have to figure out which combination of actions will save the day… \n \nSomewhere between a platformer, a puzzle game and a great big dollop of pure fun, Fly’N is ready to take off!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/tyrneaxqmi7lbupv7x5g.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/tyrneaxqmi7lbupv7x5g.jpg","size":"cover_small"}],"airtableId":"recmGzgdtHetZJlKN","igdbName":"Fly'n","genre":["2D platform"],"date":"2016-12-16","developers":[5362],"completed":"","igdbId":10327},{"rating":76.7272727272727,"slug":"for-honor","cloudHash":"gkg9dynnclxc1vfrxia2","title":"For Honor","url":"https://www.igdb.com/games/for-honor","support":["PC"],"summary":"Carve a path of destruction through the battlefield in For Honor, a brand-new game developed by Ubisoft Montreal studio. \n \nEnter the chaos of a raging war as a bold knight, brutal viking, or mysterious samurai, three of the greatest warrior legacies. For Honor is a fast-paced, competitive experience mixing skill, strategy, and team play with visceral melee combat. \n \nThe Art of Battle, For Honor’s innovative control system, puts you in total control of your heroes, each with distinct skills and weapons, as you fight for land, glory, and honor. As a skilled warrior on an intense, believable battleground, you annihilate all soldiers, archers, and opposing heroes who stand in your way.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/gkg9dynnclxc1vfrxia2.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/gkg9dynnclxc1vfrxia2.jpg","size":"cover_small"}],"airtableId":"recM8TOThhV7nXX5V","igdbName":"For Honor","genre":["Beat'em Up"],"date":"2017-08-13","developers":[38],"completed":"","igdbId":11162},{"rating":"","slug":"framed-2","cloudHash":"bfytkvoiormafehx8ykk","title":"FRAMED 2","url":"https://www.igdb.com/games/framed-2","support":["Android"],"summary":"The prequel to the original Framed","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/bfytkvoiormafehx8ykk.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/bfytkvoiormafehx8ykk.jpg","size":"cover_small"}],"airtableId":"recB2Lxe5G6nAVaY6","igdbName":"FRAMED 2","genre":["Puzzle"],"date":"2018-01-01","developers":[6200],"completed":true,"igdbId":25236},{"rating":"","slug":"freddi-fish-3-the-case-of-the-stolen-conch-shell","cloudHash":"klkzcljdggr6vo50dghx","title":"Freddi Fish 3: The Case of the Stolen Conch Shell","url":"https://www.igdb.com/games/freddi-fish-3-the-case-of-the-stolen-conch-shell","support":["PC"],"summary":"The Great Conch Shell has been stolen and it's up to Freddi Fish and Luther to catch the culprit!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/klkzcljdggr6vo50dghx.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/klkzcljdggr6vo50dghx.jpg","size":"cover_small"}],"airtableId":"recovh1EpKNYaePCK","igdbName":"Freddi Fish 3: The Case of the Stolen Conch Shell","genre":["Point'n'click"],"date":"","developers":[603,1890],"completed":true,"igdbId":3745},{"rating":83.3333333333333,"slug":"freedom-planet","cloudHash":"mkonypprzajatbdiv2bi","title":"Freedom Planet","url":"https://www.igdb.com/games/freedom-planet","support":["PC"],"summary":"Freedom Planet is a combat-based platform adventure that pits a spunky dragon girl and her friends against an alien attack force. There's trouble around every turn, from insects to giant robots to sheer explosive destruction, but you'll have a variety of special fighting abilities to blast your way through each stage. \n\nAs Lilac, you can use Dragon powers to whip enemies with your hair, spin like a cyclone, or fly through the air at high speed like a comet. \nAs Carol, you can bust through foes with a flurry of punches and kicks or summon motorcycles that let you ride up walls and ceilings.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/mkonypprzajatbdiv2bi.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/mkonypprzajatbdiv2bi.jpg","size":"cover_small"}],"airtableId":"rec94fF6aq4q1ZYAr","igdbName":"Freedom Planet","genre":["2D platform"],"date":"2015-09-05","developers":[4534],"completed":true,"igdbId":7116},{"rating":83.3333333333333,"slug":"fruit-ninja","cloudHash":"ull7qpl9zqb5buv4gy2l","title":"Fruit Ninja","url":"https://www.igdb.com/games/fruit-ninja","support":["Android"],"summary":"Fruit Ninja is a juicy action game with squishy, splatty and satisfying fruit carnage! Become the ultimate bringer of sweet, tasty destruction with every slash. \n \nSwipe up across the screen to deliciously slash fruit like a true ninja warrior. With three games modes in single player and worldwide leaderboards using Openfeint, the addictive gameplay will keep you coming back for even higher scores.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ull7qpl9zqb5buv4gy2l.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ull7qpl9zqb5buv4gy2l.jpg","size":"cover_small"}],"airtableId":"recq8K0JaTpQLQdol","igdbName":"Fruit Ninja","genre":"","date":"","developers":[891],"completed":true,"igdbId":1684},{"rating":88.8,"slug":"ftl-faster-than-light","cloudHash":"hu3vbtczuus3yfetdnqs","title":"FTL Faster Than Light","url":"https://www.igdb.com/games/ftl-faster-than-light","support":["PC"],"summary":"In FTL you experience the atmosphere of running a spaceship trying to save the galaxy. It's a dangerous mission, with every encounter presenting a unique challenge with multiple solutions. What will you do if a heavy missile barrage shuts down your shields?","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/hu3vbtczuus3yfetdnqs.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/hu3vbtczuus3yfetdnqs.jpg","size":"cover_small"}],"airtableId":"recINbuNv49HlMZme","igdbName":"FTL: Faster Than Light","genre":["Roguelike"],"date":"2015-09-09","developers":[1447],"completed":"","igdbId":3075},{"rating":93.3333333333333,"slug":"god-of-war","cloudHash":"e0uvmct4m3frubzk0rv8","title":"God of War","url":"https://www.igdb.com/games/god-of-war","support":["PS3"],"summary":"Similar to franchises like Devil May Cry, Rygar, and Castlevania, the game draws its inspiration from ancient Greek mythology and boasts a heavy emphasis on exploration and battle strategy. Broken into three to four acts, the game also has a strong focus on story-telling and boast tons of magic spells and abilities. Described as \"Clash of the Titans meets Heavy Metal\", God of War equips its hero with a pair of sword-like chain weapons that can grab enemies, perform multi-hit combos, and pull off a variety of different aerial attacks. Slight platforming elements and an energy collection system similar to that of Onimusha have been incorporated as well, and players are even able to use certain elements of their fallen enemies as a weapon (re: Medusa's head, for instance, can be used to turn enemies to stone after you've defeated her).","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/e0uvmct4m3frubzk0rv8.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/e0uvmct4m3frubzk0rv8.jpg","size":"cover_small"}],"airtableId":"recGv4zDKrdUaQX5s","igdbName":"God of War","genre":["Beat'em Up"],"date":"2015-06-02","developers":[4357],"completed":true,"igdbId":549},{"rating":92.75,"slug":"god-of-war-ii","cloudHash":"f3mwxy3opbrbmcyguhly","title":"God of War 2","url":"https://www.igdb.com/games/god-of-war-ii","support":["PS3"],"summary":"Kratos is now the God of War, having defeated the Olympian god Ares. Shunned by the other gods and still haunted by nightmares from his past, Kratos decides to join an army of Spartans in an attack on the city of Rhodes. Kratos also ignores a warning from the goddess Athena that his lust for revenge is alienating the other gods.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/f3mwxy3opbrbmcyguhly.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/f3mwxy3opbrbmcyguhly.jpg","size":"cover_small"}],"airtableId":"reccpjslaFYT1nHJ4","igdbName":"God of War II","genre":["Beat'em Up"],"date":"2015-06-04","developers":[4357],"completed":true,"igdbId":551},{"rating":96,"slug":"god-of-war-iii","cloudHash":"sjadu79hvsifju7rmnih","title":"God of War 3","url":"https://www.igdb.com/games/god-of-war-iii","support":["PS3"],"summary":"Set in the realm of brutal Greek mythology, God of War III is a single-player game that allows players to take on the climatic role of the ex-Spartan warrior, Kratos, as he scales through the intimidating heights of Mt. Olympus and the dark depths of Hell to seek revenge on those who have betrayed him. Armed with double-chained blades, and an array of new weapons and magic for this iteration of the trilogy, Kratos must take on mythology's darkest creatures while solving intricate puzzles throughout his merciless quest to destroy Olympus. Utilizing a new game engine built from the ground up and state-of-the-art visual technologies, the development team behind God of War III has made standard-setting strides in giving players the realistic feel of actually being on the battlegrounds. With texture resolutions quadrupling since God of War II on PlayStation 2 computer entertainment system, God of War III, in its debut on the PS3 system, will feature fluid, life-like characters, as well as dynamic lighting effects, a robust weapon system, and world-changing scenarios that will truly bring unmistakable realism to Kratos' fateful quest. Players will have a chance to join battles on a grand scale that is four times larger than its predecessor.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/sjadu79hvsifju7rmnih.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/sjadu79hvsifju7rmnih.jpg","size":"cover_small"}],"airtableId":"rec4HrWh1y2ncKbPD","igdbName":"God of War III","genre":["Beat'em Up"],"date":"2015-06-10","developers":[4357],"completed":true,"igdbId":499},{"rating":87.5,"slug":"god-of-war-chains-of-olympus","cloudHash":"dgcfancolie0xnynwlzv","title":"God of War Chains of Olympus","url":"https://www.igdb.com/games/god-of-war-chains-of-olympus","support":["PS3"],"summary":"The game is set in Ancient Greece and loosely based on its mythology. The player controls Kratos, a Spartan warrior in the service of the Olympian Gods. Kratos is guided by the goddess Athena, who instructs him to find the Sun God Helios, as the Dream God Morpheus has caused the remaining gods to slumber in Helios' absence. With the power of the sun, Morpheus and Persephone, the Queen of the Underworld, with the aid of the Titan Atlas, intend to destroy the Pillar of the World and in turn Olympus. God of War: Chains of Olympus is chronologically the second chapter in the series, which focuses on vengeance as its central theme.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/dgcfancolie0xnynwlzv.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/dgcfancolie0xnynwlzv.jpg","size":"cover_small"}],"airtableId":"rec4qSdO1Nl6ekdwy","igdbName":"God of War: Chains of Olympus","genre":["Beat'em Up"],"date":"2015-08-03","developers":[431,4357],"completed":true,"igdbId":552},{"rating":91,"slug":"god-of-war-ghost-of-sparta","cloudHash":"lvmsawd75v2g79ur0t2r","title":"God of War Ghost of Sparta","url":"https://www.igdb.com/games/god-of-war-ghost-of-sparta","support":["PSP"],"summary":"Set in the realm of Greek mythology, God of War: Ghost of Sparta is a single-player game that allows players to take on the powerful role of Spartan warrior Kratos. This new adventure picks up after God of War concludes, telling the story of Kratos' ascension to power as the God of War. In his quest to rid himself of the nightmares that haunt him, Kratos must embark on a journey that will reveal the origins of lost worlds, and finally answer long-awaited questions about his dark past. Armed with the deadly chained Blades of Chaos, he will have to overcome armies of mythological monsters, legions of undead soldiers, and amazingly dangerous and brutal landscapes throughout his merciless quest.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/lvmsawd75v2g79ur0t2r.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/lvmsawd75v2g79ur0t2r.jpg","size":"cover_small"}],"airtableId":"recyQCPRLiK1ruAfS","igdbName":"God of War: Ghost of Sparta","genre":["Beat'em Up"],"date":"","developers":[431,4357],"completed":true,"igdbId":550},{"rating":88.125,"slug":"grand-theft-auto-iv","cloudHash":"tvcgnhqrhts9gcqqjrgj","title":"Gran Theft Auto IV","url":"https://www.igdb.com/games/grand-theft-auto-iv","support":["PC"],"summary":"What does the American dream mean today? For Niko Bellic fresh off the boat from Europe, it is the hope he can escape from his past. For his cousin, Roman, it is the vision that together they can find fortune in Liberty City, gateway to the land of opportunity.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/tvcgnhqrhts9gcqqjrgj.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/tvcgnhqrhts9gcqqjrgj.jpg","size":"cover_small"}],"airtableId":"recoTywyRckxKlGnv","igdbName":"Grand Theft Auto IV","genre":"","date":"2016-02-28","developers":[365,306],"completed":true,"igdbId":731},{"rating":93.1428571428571,"slug":"grand-theft-auto-san-andreas","cloudHash":"bu6konltnmbsnpr4edc1","title":"Gran Theft Auto San Andreas","url":"https://www.igdb.com/games/grand-theft-auto-san-andreas","support":["PC"],"summary":"Returning after his mother's murder to the semi-fictional city of Los Santos (based on Los Angeles), Carl Johnson, a former gang banger, must take back the streets for his family and friends by gaining respect and once again gaining control over the city. However, a story filled with plots, lies and corruption will lead him to trudge the entire state of San Andreas (based on California and Nevada) to get revenge.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/bu6konltnmbsnpr4edc1.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/bu6konltnmbsnpr4edc1.jpg","size":"cover_small"}],"airtableId":"recoG5OnPKQz345iL","igdbName":"Grand Theft Auto: San Andreas","genre":"","date":"","developers":[365],"completed":true,"igdbId":732},{"rating":80.5833333333333,"slug":"grid-2","cloudHash":"yim9urgsw5rmyqk8rsoe","title":"Grid 2","url":"https://www.igdb.com/games/grid-2","support":["PC"],"summary":"Be fast, be first and be famous as the race returns in GRID 2, the sequel to the BAFTA-award winning, multi-million selling Race Driver: GRID.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/yim9urgsw5rmyqk8rsoe.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/yim9urgsw5rmyqk8rsoe.jpg","size":"cover_small"}],"airtableId":"rec5UoUUKWo99aOtP","igdbName":"Grid 2","genre":["Racing"],"date":"2017-06-01","developers":[412],"completed":true,"igdbId":2138},{"rating":77,"slug":"grow-home","cloudHash":"h5jxatqieoewqw9mm8th","title":"Grow Home","url":"https://www.igdb.com/games/grow-home","support":["PC"],"summary":"In Grow Home you play as BUD (Botanical Utility Droid), a robot on a mission to save his home planet by harvesting the seeds of a giant alien plant. On his quest BUD will discover a beautiful world of floating islands that are home to some rather strange plants and animals. \nGrow the giant plant and use your unique climbing abilities to reach ever higher ground, but be careful…one wrong move and it’s a long way down!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/h5jxatqieoewqw9mm8th.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/h5jxatqieoewqw9mm8th.jpg","size":"cover_small"}],"airtableId":"reccn7RFZWnaD4Dd5","igdbName":"Grow Home","genre":"","date":"2016-05-30","developers":[433],"completed":true,"igdbId":8774},{"rating":68.5384615384615,"slug":"grow-up","cloudHash":"f2usmsrd5ixf67jsgt7v","title":"Grow Up","url":"https://www.igdb.com/games/grow-up","support":["PC"],"summary":"BUD is back! Join this adorable wobbly robot on his fantastical acroBUDic adventure to the moon.\n\n\"Grow Up is a joyful and ageless fantasy game. BUD, a clumsy and charming robot, is on a mission to find MOM, his parental spaceship. Leap, bounce, and float in a vast open world as BUD explores the new planet in this beautiful acrobatic adventure.\"","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/f2usmsrd5ixf67jsgt7v.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/f2usmsrd5ixf67jsgt7v.jpg","size":"cover_small"}],"airtableId":"recNzMUYWJxRG5p4q","igdbName":"Grow Up","genre":"","date":"2017-07-05","developers":[433],"completed":true,"igdbId":19552},{"rating":94,"slug":"guacamelee-gold-edition","cloudHash":"lsppbhelzmafmvhr6otb","title":"Guacamelee! Gold Edition","url":"https://www.igdb.com/games/guacamelee-gold-edition","support":["PC"],"summary":"\"Guacamelee! is a Metroid-vania style action-platformer set in a magical Mexican inspired world.\n\nThe game draws its inspiration from traditional Mexican culture and folklore, and features many interesting and unique characters. Guacamelee! builds upon the classic open-world Metroid-vania style of games, by adding a strong melee combat component, a new dimension switching mechanic, and cooperative same-screen multiplayer for the entire story. The game also blurs the boundaries between combat and platforming by making many of the moves useful and necessary for both of these.\n\nTravel through a mystical and mysterious Mexican world as a Luchador using the power of your two fists to battle evil. Uncover hidden wrestling techniques like the Rooster Uppercut, and Dimension Swap to open new areas and secrets.\"\n\nGuacamelee! Gold Edition is a port of the PlayStation 3 and Vita version of the game and includes the DLC that was released for the game. An updated version of the game called \"Guacamelee! Super Turbo Championship Edition\" was later released that includes an expanded story, 2 new areas, and a new boss.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/lsppbhelzmafmvhr6otb.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/lsppbhelzmafmvhr6otb.jpg","size":"cover_small"}],"airtableId":"recK8plbLK0HH7j7O","igdbName":"Guacamelee! Gold Edition","genre":["Metroidvania"],"date":"2014-06-29","developers":[2168],"completed":true,"igdbId":19121},{"rating":"","slug":"guilty-gear-x","cloudHash":"i5a2x3xl9zqc6je7kgeo","title":"Guilty Gear X","url":"https://www.igdb.com/games/guilty-gear-x","support":["PC"],"summary":"Guilty Gear X is the sequel to 1998's Guilty Gear, a 2D fighting game for the Sony PlayStation that became extremely popular in Japan. Featuring beautiful hand-drawn artwork and animation, as well as balanced, fun, high-energy gameplay, Guilty Gear X aspires to be the king of 2D fighters.\n\nThe goal in Guilty Gear X is simple: get your opponent's Life Bar down to zero within the allotted time to win. Winning a round nets you a point; getting two points will win you the match. There are 14 different characters to choose from, each with their own personal style and moves. There might even be some hidden ones, too...","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/i5a2x3xl9zqc6je7kgeo.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/i5a2x3xl9zqc6je7kgeo.jpg","size":"cover_small"}],"airtableId":"recWSY5uy3ltVQaKH","igdbName":"Guilty Gear X","genre":["Vs. Fighting"],"date":"","developers":[1218],"completed":"","igdbId":9141},{"rating":60,"slug":"guilty-gear-x2-number-reload","cloudHash":"q3rerixyh65tazyelggd","title":"Guilty Gear X2 #Reload","url":"https://www.igdb.com/games/guilty-gear-x2-number-reload","support":["PC"],"summary":"As humanity endeavored to better themselves, they created the biological marvel known as Gears. Originally intended as the next step of human evolution, they were instead fitted for war and turned against their own creators.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/q3rerixyh65tazyelggd.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/q3rerixyh65tazyelggd.jpg","size":"cover_small"}],"airtableId":"recVUjSSWUfws7UHh","igdbName":"Guilty Gear X2 #Reload","genre":["Vs. Fighting"],"date":"","developers":[1218],"completed":"","igdbId":9143},{"rating":63.3333333333333,"slug":"guns-gore-and-cannoli","cloudHash":"w8eitvkpopsng6im58mp","title":"Guns, Gore & Cannoli","url":"https://www.igdb.com/games/guns-gore-and-cannoli","support":["PC"],"summary":"Welcome to Thugtown circa 1920, the height of Prohibition.\nPrepare yourself for a non-stop, action-packed, completely over-the-top, fast-paced, platform game. Set against the gangster heyday of the roaring twenties. Lose yourself in an exciting, elaborate tale of the underground and underworld. Experience friendship, betrayal, vengeance, and witness first hand the rise and fall of a criminal mastermind.\nThis is survival horror, wiseguy style... Capiche?","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/w8eitvkpopsng6im58mp.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/w8eitvkpopsng6im58mp.jpg","size":"cover_small"}],"airtableId":"rec770bCaIKmZsGTB","igdbName":"Guns, Gore & Cannoli","genre":"","date":"2018-01-14","developers":[7000],"completed":true,"igdbId":13187},{"rating":"","slug":"hack-slash-loot","cloudHash":"gzbh7kfpuo5yvwogagx9","title":"Hack, Slash, Loot","url":"https://www.igdb.com/games/hack-slash-loot","support":["PC"],"summary":"A single-player turn-based dungeon crawler. Take control of a lone hero and explore sprawling dungeons, fight dangerous monsters.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/gzbh7kfpuo5yvwogagx9.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/gzbh7kfpuo5yvwogagx9.jpg","size":"cover_small"}],"airtableId":"recSPPybrIx6NnSIk","igdbName":"Hack, Slash, Loot","genre":["Roguelike"],"date":"2016-05-07","developers":[4735],"completed":"","igdbId":8951},{"rating":"","slug":"hacker-evolution","cloudHash":"mwjtczxs9ruzibqphday","title":"Hacker Evolution","url":"https://www.igdb.com/games/hacker-evolution","support":["PC"],"summary":"The concept behind Hacker Evolution is to create a game that challenges the gamer's intelligence, attention and focus, creating a captivating mind game. Solve puzzles, examine code and bits of information, to help you achieve your objectives.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/mwjtczxs9ruzibqphday.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/mwjtczxs9ruzibqphday.jpg","size":"cover_small"}],"airtableId":"recaNXDCiFfjIwLUD","igdbName":"Hacker Evolution","genre":"","date":"2014-03-22","developers":[737],"completed":"","igdbId":1023},{"rating":80,"slug":"half-life","cloudHash":"twbyn9lpdljjxedxudn5","title":"Half-Life","url":"https://www.igdb.com/games/half-life","support":["PC"],"summary":"Dr. Gordon Freeman doesn't speak, but he's got a helluva story to tell. This first-person roller-coaster initiated a new era in the history of action games by combining engrossing gameplay, upgraded graphics, ingenious level design and a revolutionary story that may not be all that it seems, told not through cutscenes, but through the visual environment.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/twbyn9lpdljjxedxudn5.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/twbyn9lpdljjxedxudn5.jpg","size":"cover_small"}],"airtableId":"recZyJhbXZRSVidvG","igdbName":"Half-Life","genre":["FPS"],"date":"2016-12-28","developers":[56],"completed":true,"igdbId":231},{"rating":60,"slug":"half-life-blue-shift","cloudHash":"t8gvpqm15fh0bbtpe0iy","title":"Half-Life: Blue Shift","url":"https://www.igdb.com/games/half-life-blue-shift","support":["PC"],"summary":"Half-Life: Blue Shift is an expansion pack for Valve Software's science fiction first-person shooter video game Half-Life. The game was developed by Gearbox Software with Valve Corporation and published by Sierra Entertainment on June 12, 2001. (It was originally set for release in Spring.) Blue Shift is the second expansion for Half-Life, originally intended as part of a Dreamcast version of the original game. Although the Dreamcast port was later cancelled, the PC version continued development and was released as a standalone product. The game was released on Steam on August 24, 2005.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/t8gvpqm15fh0bbtpe0iy.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/t8gvpqm15fh0bbtpe0iy.jpg","size":"cover_small"}],"airtableId":"recJaEpSHcFyvii0B","igdbName":"Half-Life: Blue Shift","genre":["FPS"],"date":"2016-12-29","developers":[148],"completed":true,"igdbId":2549},{"rating":70,"slug":"half-life-opposing-force","cloudHash":"m9kcyninqdeuq73hsum0","title":"Half-Life: Opposing Force","url":"https://www.igdb.com/games/half-life-opposing-force","support":["PC"],"summary":"Opposing Force returns to the same setting as Half-Life, but instead portrays the events from the perspective of a U.S. Marine, one of the enemy characters in the original game. The player character, Adrian Shephard, is sent in to neutralize the Black Mesa Research Facility after a scientific mishap causes it to be invaded by aliens, but quickly finds that the Marines are outnumbered and slowly being beaten back by a second alien race and black operations units.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/m9kcyninqdeuq73hsum0.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/m9kcyninqdeuq73hsum0.jpg","size":"cover_small"}],"airtableId":"recOjl5tL7rytfQ9n","igdbName":"Half-Life: Opposing Force","genre":["FPS"],"date":"2016-12-29","developers":[148],"completed":true,"igdbId":232},{"rating":88,"slug":"heavenly-sword","cloudHash":"klytr5oxg56qi0dm8kaq","title":"Heavenly Sword","url":"https://www.igdb.com/games/heavenly-sword","support":["PS3"],"summary":"The gameplay of Heavenly Sword resembles a martial arts title focused on melee combat while featuring opportunities for ranged attacks. The main character, Nariko, uses a weapon called the \"Heavenly Sword\" which changes into one of three forms depending on what attack stance the player uses as part of a unique fighting style. Speed Stance provides an even balance between damage and speed, where the sword takes the form of two separate blades. Range Stance allows fast, long-range, but weaker attacks, with the sword being two blades chained together. Power Stance is the most powerful, but slowest style, where attacks are made with the Sword in the shape of one large, two-handed blade.\n\nFor exploration and certain battles, the game also makes use of \"quick time events\" (QTE). During a QTE, a symbol for a certain button or for an action such as moving the analog stick to the right or left appears on screen and the player must match what is shown to successfully complete the scene.\n\nIn addition to Nariko, a secondary character, Kai, is controlled for some portions of the game. Many of Kai's stages take the form of sniping missions, using her crossbow to pick off enemies, in some cases to protect characters. While Kai cannot perform hand-to-hand combat, in stages that call for her to explore the level she is able to hop over objects and to free herself from an enemy's grasp by temporarily stunning them.\n\nProjectiles can be maneuvered to their targets using the motion-sensing capabilities of the SIXAXIS controller through a feature known as Aftertouch. Such projectiles include guiding Kai's arrows after she has launched them, and for Nariko, guiding a cannon or rocket launcher, or picking up and throwing objects.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/klytr5oxg56qi0dm8kaq.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/klytr5oxg56qi0dm8kaq.jpg","size":"cover_small"}],"airtableId":"rec3bUefcCy6wzGem","igdbName":"Heavenly Sword","genre":["Beat'em Up"],"date":"2016-02-10","developers":[795],"completed":true,"igdbId":7318},{"rating":82.4,"slug":"heavy-rain","cloudHash":"zezmz5jsmk8mo8kxxrxt","title":"Heavy Rain","url":"https://www.igdb.com/games/heavy-rain","support":["PS3"],"summary":"Heavy Rain is a cinematic psychological thriller from game developer Quantic Dream exclusively for the PlayStation 3. Dealing with a range of adult themes, the game revolves around a sophisticated plot and strong narrative threads that explore a complex moral proposition. You assume the role of multiple characters with very different backgrounds, motivations, and skills in a world where each player decision affects what will follow.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/zezmz5jsmk8mo8kxxrxt.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/zezmz5jsmk8mo8kxxrxt.jpg","size":"cover_small"}],"airtableId":"recmdnd5ZBYiygOai","igdbName":"Heavy Rain","genre":"","date":"2016-07-14","developers":[261],"completed":true,"igdbId":493},{"rating":73.6666666666667,"slug":"hell-yeah-wrath-of-the-dead-rabbit","cloudHash":"sktcbzmy1r1oxbcddtk0","title":"Hell Yeah! Wrath of the Dead Rabbit","url":"https://www.igdb.com/games/hell-yeah-wrath-of-the-dead-rabbit","support":["PC"],"summary":"Ash, a skeletal rabbit and the prince of Hell, has inherited the role of ruler of Hell from his father. After a photographer takes a picture of Ash playing with a rubber duck in the bathtub, Ash sets out to kill the 100 monsters that have seen the photo, to restore his image. The world of Hell Yeah! Wrath of the Dead Rabbit has several zones with different visual styles, including \"haunted caves, science labs, casinos and spaceships full of talking animals\". The player navigates these zones by traveling on a large buzz-saw-like circular blade that can cut through the environment, can fire a variety of projectile weapons, and is equipped with a jetpack. Ash is assisted in his quest by his butler, Nestor, a top hat-wearing Octopus.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/sktcbzmy1r1oxbcddtk0.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/sktcbzmy1r1oxbcddtk0.jpg","size":"cover_small"}],"airtableId":"rec5KdejuUaTIh5VE","igdbName":"Hell Yeah! Wrath of the Dead Rabbit","genre":"","date":"2015-11-17","developers":[5089],"completed":true,"igdbId":5618},{"rating":77,"slug":"hitman-2-silent-assassin","cloudHash":"b7yhhhbmrf9unx485gxi","title":"Hitman 2 Silent Assassin","url":"https://www.igdb.com/games/hitman-2-silent-assassin","support":["PC"],"summary":"Enter the realm of a retired assassin, forced back into action by treason. You may be a hired killer but you still have a sense of loyalty and justice. Visit the dark recesses of a world corrupted by crime, greed, degradation and dishonor. And a past that catches up with you. \n \nTrust no one - if the price is right, the finger of your most trusted ally will be on the trigger. Your targets may hide in the most remote areas of the planet, but their destruction is never prevented - only postponed. \n \nLearn your trade - master your tools - overcome your obstacles - outsmart your enemies - eliminate your targets. Remember: rash decisions bleed consequences. Know when to strike instantly, know when to take your time. Chance favors the prepared. Failure is not an option.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/b7yhhhbmrf9unx485gxi.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/b7yhhhbmrf9unx485gxi.jpg","size":"cover_small"}],"airtableId":"recJUnLYjNrQT5SRP","igdbName":"Hitman 2: Silent Assassin","genre":"","date":"2014-08-14","developers":[290],"completed":"","igdbId":748},{"rating":80.3333333333333,"slug":"hitman-blood-money","cloudHash":"lr44wit3kygg9dhemho1","title":"Hitman Blood Money","url":"https://www.igdb.com/games/hitman-blood-money","support":["PC"],"summary":"Hitman Blood Money is the fourth installment of the critically acclaimed Hitman series. If Agent 47 must stay hidden, make clean ‘hits’ and leave the scene unnoticed, he will be rewarded. But if he is revealed during a violent act, his picture will end up in the papers and on wanted posters, making the job as a contract killer more difficult. \n \nThis time, Agent 47 is paid in cold, hard cash. How the money is spent will affect his passage through the game and the weapons at his disposal, resulting in a unique game-play experience for each player.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/lr44wit3kygg9dhemho1.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/lr44wit3kygg9dhemho1.jpg","size":"cover_small"}],"airtableId":"recGFEc5vBK5OqR0a","igdbName":"Hitman: Blood Money","genre":"","date":"2015-06-16","developers":[290],"completed":true,"igdbId":1048},{"rating":60,"slug":"hitman-codename-47","cloudHash":"ykeevmkxm2d8k8xodcea","title":"Hitman Codename 47","url":"https://www.igdb.com/games/hitman-codename-47","support":["PC"],"summary":"Hitman: Codename 47 sets a new standard for thinker-shooters. As Hitman you must use stealth, tactics and imagination to enter, execute and exit your assignment, getting minimum attention but maximum effect! \n \nYou have access to the most devious devices, but it will cost you – how you use them will determine if you retire as a millionaire, or get retired! Hitman is no ordinary hired killer – he’s a versatile forensic artist using stealth, disguise, intelligence, advanced weapons, poison and raw power to accomplish his kills. But he is also haunted by a troubling past of deception and brutal genetic engineering. \n \nThe intriguing story evolves over five chapters of riveting action. But the success of a contract killer depends just as much on a fast mind as a quick shot.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ykeevmkxm2d8k8xodcea.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ykeevmkxm2d8k8xodcea.jpg","size":"cover_small"}],"airtableId":"recB2IVx5F1bxwkn8","igdbName":"Hitman: Codename 47","genre":"","date":"2014-08-14","developers":[290],"completed":"","igdbId":1050},{"rating":70,"slug":"hitman-contracts","cloudHash":"ipggcidlhitn2zprd9j3","title":"Hitman Contracts","url":"https://www.igdb.com/games/hitman-contracts","support":["PC"],"summary":"Hitman: Contracts is a stealth action game developed by IO Interactive and published by Eidos Interactive. It is the third installment in the Hitman game series. The game features recreations of four levels from Hitman: Codename 47.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ipggcidlhitn2zprd9j3.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ipggcidlhitn2zprd9j3.jpg","size":"cover_small"}],"airtableId":"recfudkzIRhCTWLb3","igdbName":"Hitman: Contracts","genre":"","date":"2015-06-15","developers":[290],"completed":"","igdbId":1049},{"rating":"","slug":"hook--1","cloudHash":"lmxnuyegkdakxuvdammw","title":"Hook","url":"https://www.igdb.com/games/hook--1","support":["Android"],"summary":"HOOK is a minimal, relaxing, puzzle game.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/lmxnuyegkdakxuvdammw.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/lmxnuyegkdakxuvdammw.jpg","size":"cover_small"}],"airtableId":"recXWswm6tzVMnWPB","igdbName":"HOOK","genre":["Puzzle"],"date":"2017-08-10","developers":[5527],"completed":true,"igdbId":10225},{"rating":86.2,"slug":"hotline-miami","cloudHash":"dp3p8xtimhchpujpsq4p","title":"Hotline Miami","url":"https://www.igdb.com/games/hotline-miami","support":["PC"],"summary":"Answer the phone, drive to your destination, put on your mask, kill everyone. Hotline Miami is a very fast paced two dimensional top-down shooter/slasher set in the 80s Miami, where you play as an unnamed character with the objective of ending everyones lives with different melee or ranged weapons while wearing an animal mask. The player starts with one mask but different masks, each with a unique effect, are unlocked as the game progresses. \n \nHotline Miami features an instant level restart system which further increases the pace of the game and enables the player to quickly try out different strategies on each map. After each mission the performance of the player is graded and he is given a score, which can unlock new masks and weapons, if the score is sufficiently high.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/dp3p8xtimhchpujpsq4p.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/dp3p8xtimhchpujpsq4p.jpg","size":"cover_small"}],"airtableId":"recqKNZO0SVoqe8ir","igdbName":"Hotline Miami","genre":"","date":"2016-12-25","developers":[1003,2345],"completed":true,"igdbId":1384},{"rating":70.25,"slug":"hotline-miami-2-wrong-number","cloudHash":"oum6asm7pc3jnxzumqbd","title":"Hotline Miami 2: Wrong Number","url":"https://www.igdb.com/games/hotline-miami-2-wrong-number","support":["PC"],"summary":"A sequel to Hotline Miami and a brutal conclusion to the gruesome saga, Hotline Miami 2: Wrong Number follows the escalating level of violence through multiple factions born from the events of the original game and driven by uncertain motivations.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/oum6asm7pc3jnxzumqbd.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/oum6asm7pc3jnxzumqbd.jpg","size":"cover_small"}],"airtableId":"recWMM3CzfGJNZm1L","igdbName":"Hotline Miami 2: Wrong Number","genre":"","date":"2017-02-14","developers":[1003,2345],"completed":true,"igdbId":2126},{"rating":73.75,"slug":"human-resource-machine","cloudHash":"jqhfalmxexxmge6rhit6","title":"Human Resource Machine","url":"https://www.igdb.com/games/human-resource-machine","support":["Android"],"summary":"\"Human Resource Machine is a puzzle game. In each level, your boss gives you a job. Automate it by programming your little office worker! If you succeed, you'll be promoted up to the next level for another year of work in the vast office building. Congratulations! \n \nDon't worry if you've never programmed before - programming is just puzzle solving. If you strip away all the 1's and 0's and scary squiggly brackets, programming is actually simple, logical, beautiful, and something that anyone can understand and have fun with!\"","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/jqhfalmxexxmge6rhit6.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/jqhfalmxexxmge6rhit6.jpg","size":"cover_small"}],"airtableId":"recjKf1rkXnD47Zjq","igdbName":"Human Resource Machine","genre":["Puzzle"],"date":"2017-10-25","developers":[2766],"completed":true,"igdbId":14545},{"rating":78.3333333333333,"slug":"i-ninja","cloudHash":"fbcgkhefo4cr7w8zi6zz","title":"I-Ninja","url":"https://www.igdb.com/games/i-ninja","support":["PC"],"summary":"I Ninja is a 3D platform title starring an original character created by British developer Argonaut Software. Players control a spirited young ninja as they make their way through a diverse selection of indoor and outdoor locales. The title character is garbed in a blue suit and matching hooded mask, so that only his eyes and his expressive brow are visible to players. The character also wields a pair of katana blades in both hands as he jumps from platform to platform, avoiding hazards and slicing at enemies. The cartoon-style atmosphere is brought to life with the use of cel-shaded graphics, giving the game a distinctive look from many of its platform contemporaries. \n \n \nI-Ninja is an adrenaline-charged adventure game. An ultra-cool ninja with major attitude meets extreme sports game play, I-Ninja is the consummate warrior who has spent years mastering his weapons and honing his skills. In true gravity defying game play, I-Ninja can scale buildings, \"shred\" on extreme rails, hover great distances with a \"sword copter\", ride drifting roller spheres and utilize specialized manga-style ninja moves to navigate through each dynamic environment.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/fbcgkhefo4cr7w8zi6zz.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/fbcgkhefo4cr7w8zi6zz.jpg","size":"cover_small"}],"airtableId":"rec8UzWSgb9wDMch6","igdbName":"I-Ninja","genre":"","date":"","developers":[260],"completed":true,"igdbId":3951},{"rating":89,"slug":"ikaruga","cloudHash":"ofsvahzwalxvuruxrif4","title":"Ikaruga","url":"https://www.igdb.com/games/ikaruga","support":["PC"],"summary":"In this vertical scrolling spaceship shooter, you control a ship that can change its polarity at will. As blue/white, the ship can easily destroy red/black enemies, and visa versa. Bullets of your polarity can be collected to fuel your missile gauge, but those opposite will kill you. Destroying an enemy ship will make them drop points for you to pick up, but they are polarized, too. Different difficulties exist to change exactly how you interact with polarized points, or how they appear.\n\nIkaruga is a balls-hard shmup with lots of difficulty even at the easiest level, and lots of replay value for those willing to face the challenge.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ofsvahzwalxvuruxrif4.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ofsvahzwalxvuruxrif4.jpg","size":"cover_small"}],"airtableId":"recKJuZ99MhiIdgKV","igdbName":"Ikaruga","genre":["Shoot'em Up"],"date":"2017-11-24","developers":[861,1963],"completed":true,"igdbId":3953},{"rating":73.3333333333333,"slug":"impossible-creatures","cloudHash":"lp3nz7qthtuescocnz54","title":"Impossible Creatures","url":"https://www.igdb.com/games/impossible-creatures","support":["PC"],"summary":"Genetically-alter animals to create the perfect mutant creations in \"Impossible Creatures\", the 2003 classic RTS. Taking place in a fictional 1930's setting, take down an evil villain in the single player campaign or challenge other players online in multiplayer. \n \nThe armies consist of 9 creatures; each one is a combination of any two animals from a list of 76 (51 with no downloads). Many animals possess inherent abilities to add more strategic depth to the game. There is an extensive single-player campaign as well as online multiplayer functionality with different game modes, add-ons, custom maps, mods, and scenarios. \n \nOn November 12th 2015 Impossible Creatures was released on Steam as Impossible Creatures: Steam Edition, by Nordic Games. The Steam version includes all patches and expansion packs released in the past, the IC Online servers reimplemented through Steam's cloud service and the game's modding SDK included in the package alongside the Mission Editor originally available within the game's files; potential Steam Workshop support is in the works. The Steam Edition is also optimized for modern computer systems and software.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/lp3nz7qthtuescocnz54.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/lp3nz7qthtuescocnz54.jpg","size":"cover_small"}],"airtableId":"recvAORXI8uj4bHjS","igdbName":"Impossible Creatures","genre":["RTS"],"date":"","developers":[196],"completed":"","igdbId":14551},{"rating":86.25,"slug":"infamous","cloudHash":"z4ypgrdxdrng3z7y0iho","title":"Infamous","url":"https://www.igdb.com/games/infamous","support":["PS3"],"summary":"Infamous is a 3rd person action adventure open world title in which the main character Cole MacGrat ends up with electricity-based super powers after being caught in an explosion.\n\nThe player follows the story through a heavily influenced comic book approach, and can decide to play towards a good or evil paths with Cole's powers. These choices ultimately affect character growth, the reaction of the City's populace towards Cole, and finer elements of gameplay and the story.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/z4ypgrdxdrng3z7y0iho.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/z4ypgrdxdrng3z7y0iho.jpg","size":"cover_small"}],"airtableId":"recx5jkDFnLpVkunD","igdbName":"Infamous","genre":"","date":"2015-07-09","developers":[403],"completed":true,"igdbId":523},{"rating":84.5,"slug":"infamous-2","cloudHash":"n58ufrcsjymn3v283vxx","title":"Infamous 2","url":"https://www.igdb.com/games/infamous-2","support":["PS3"],"summary":"Blamed for the destruction of Empire City and haunted by the ghosts of his past, reluctant hero Cole MacGrath makes a dramatic journey to the historic Southern city of New Marais in an effort to discover his full super-powered potential -- and face a civilization-ending confrontation with a dark and terrifying enemy from his own future. Gifted with extraordinary god-like abilities, Cole alone has the power to save humanity, but the question is-- will he choose to do so?","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/n58ufrcsjymn3v283vxx.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/n58ufrcsjymn3v283vxx.jpg","size":"cover_small"}],"airtableId":"rece1eSj88MIAzkY5","igdbName":"Infamous 2","genre":"","date":"2015-07-10","developers":[403],"completed":true,"igdbId":515},{"rating":75,"slug":"infamous-festival-of-blood","cloudHash":"r9ikzqjtp7jjvv8yfj6m","title":"Infamous Festival of Blood","url":"https://www.igdb.com/games/infamous-festival-of-blood","support":["PS3"],"summary":"Infamous: Festival of Blood is an action-adventure video game developed by Sucker Punch Productions for the PlayStation 3 video game console. Festival of Blood is a standalone expansion in the Infamous series based on the Infamous 2 engine and map but does not require a copy of Infamous 2 in order to play.[1] \n \nThe story is set aside from the canon aspect of the Infamous series, being a spoof told by the main protagonist's friend Zeke Dunbar. The game features new characters, powers and comes with a new comic cutscene creation for the main game Infamous 2 '​s user-generated content (UGC), as well as support for the PlayStation Move controller.[2] Unlike previous games, the game does not feature karmic choices on missions due to Cole's vampire state. \n \nInfamous: Festival of Blood – along with Infamous and Infamous 2 – was released on August 28, 2012 as part of the Infamous Collection under Sony's new line of PlayStation Collections for the PlayStation 3.[3]","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/r9ikzqjtp7jjvv8yfj6m.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/r9ikzqjtp7jjvv8yfj6m.jpg","size":"cover_small"}],"airtableId":"rec8lBtxS3tRkIHKM","igdbName":"Infamous: Festival of Blood","genre":"","date":"2015-07-25","developers":[403],"completed":true,"igdbId":7850},{"rating":80,"slug":"injustice-gods-among-us","cloudHash":"hhjyak5vzbzhyofpfrnw","title":"Injustice: Gods Among Us","url":"https://www.igdb.com/games/injustice-gods-among-us","support":["PC"],"summary":"What if our greatest heroes became our greatest threat? Injustice: Gods Among Us introduces a bold new franchise to the fighting game genre from NetherRealm Studios, creators of the definitive fighting game Mortal Kombat. Featuring DC Comics icons such Batman, Cyborg, The Flash, Harley Quinn, Nightwing, Solomon Grundy, Superman and Wonder Woman, the latest title from the award-winning studio presents a deep original story. Heroes and villains will engage in epic battles on a massive scale in a world where the line between good and evil has been blurred.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/hhjyak5vzbzhyofpfrnw.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/hhjyak5vzbzhyofpfrnw.jpg","size":"cover_small"}],"airtableId":"recX0rA0iKQHFdmC9","igdbName":"Injustice: Gods Among Us","genre":["Vs. Fighting"],"date":"2016-12-10","developers":[48,392,3226],"completed":true,"igdbId":1918},{"rating":90,"slug":"jak-ii","cloudHash":"jwdbjzdjgqy0mgdhn0ut","title":"Jak 2","url":"https://www.igdb.com/games/jak-ii","support":["PS2"],"summary":"The game begins with Jak and Daxter, the protagonists, and Samos, their guardian, watching as Keira, Samos’ daughter and Jak’s love interest, demonstrate the Rift Rider and Precursor Rift Gate that they found in the previous game. When activated, the Rift opens a portal, and a large ominous atmosphere and a monster appear. Jak launches the Rider through the gate, past the monster. Jak and Daxter, separated from Keira and Samos, arrive in the segregated dystopia known as Haven City. They are separated on arrival, and Jak is captured by the city's Krimzon Guard. While Jak is imprisoned, he undergoes experiments with Dark Eco under the command of the city's leader: Baron Praxis. Jak, along with previous prisoners in the city jail, were experimented on for Operation: Dark Warrior, a project that consisted of injecting prisoners with dark eco in order to give them super-human abilities to be used in Haven City's war against animalistic creatures called Metal Heads. Jak, the only prisoner to survive the experiments, is altered mentally and physically, turning him (temporarily under random and controlled spasms) into a deadly monster.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/jwdbjzdjgqy0mgdhn0ut.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/jwdbjzdjgqy0mgdhn0ut.jpg","size":"cover_small"}],"airtableId":"rec5mnH5DMpHBJohc","igdbName":"Jak II","genre":"","date":"","developers":[401],"completed":true,"igdbId":1529},{"rating":70,"slug":"jak-3","cloudHash":"jm70qc7jsbd3r72l8cld","title":"Jak 3","url":"https://www.igdb.com/games/jak-3","support":["PS2"],"summary":"Jak 3 is a platform game developed by Naughty Dog for Sony's PlayStation 2 console. The game is the sequel to Jak II, and third in the series. The game features new weapons and devices, new playable areas, and a storyline that picks up after the events of the previous games. As in the other games in the series, the player takes on the dual role of recurring protagonists Jak and Daxter.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/jm70qc7jsbd3r72l8cld.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/jm70qc7jsbd3r72l8cld.jpg","size":"cover_small"}],"airtableId":"rec7HYnenhHbBLEx9","igdbName":"Jak 3","genre":"","date":"","developers":[401],"completed":true,"igdbId":1530},{"rating":90,"slug":"jak-and-daxter-the-precursor-legacy","cloudHash":"tgzbgl8kc7wjfuvbdgtr","title":"Jak and Daxter: The Precursor Legacy","url":"https://www.igdb.com/games/jak-and-daxter-the-precursor-legacy","support":["PS2"],"summary":"From the creator and developer of the acclaimed, top-selling Crash Bandicoot series comes the next generation in interactive entertainment. \n \nExpect the unexpected! Enter a new world of magic, adventure, exploration, and discovery where enormous vistas and exotic characters lead you to places beyond your imagination. Test your wits and your skills as you embark on a journey to reverse your best friend's transformation into a furry Ottsel, even as he entangles you in his amusing antics. Discover twisted corruption and battle the sinister minds behind this chilling plot. Light Eco. Precursor Technology. Power Cells. Dark Eco. What does it all mean? \n \nOnly one person holds the secret behind the power of the mysterious Eco. Together you must now take on these endeavors. \n \n \n \nUnleash the hero within. A new legacy is born!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/tgzbgl8kc7wjfuvbdgtr.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/tgzbgl8kc7wjfuvbdgtr.jpg","size":"cover_small"}],"airtableId":"reckcxJzvXC437qNw","igdbName":"Jak and Daxter: The Precursor Legacy","genre":"","date":"","developers":[401],"completed":true,"igdbId":1528},{"rating":78,"slug":"jamestown-legend-of-the-lost-colony","cloudHash":"riik9h1btkobonbu66eg","title":"Jamestown: Legend of the Lost Colony","url":"https://www.igdb.com/games/jamestown-legend-of-the-lost-colony","support":["PC"],"summary":"Jamestown: Legend Of The Lost Colony is a neo-classical top-down shooter for up to 4 players, set on 17th-century British Colonial Mars. It features all the intensity, depth, and lovingly handcrafted pixels of a classic arcade shooter, with a modern twist: deeply-integrated cooperative gameplay.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/riik9h1btkobonbu66eg.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/riik9h1btkobonbu66eg.jpg","size":"cover_small"}],"airtableId":"recmxY1et9Zcp0OPS","igdbName":"Jamestown: Legend of the Lost Colony","genre":["Shoot'em Up"],"date":"2016-07-31","developers":[2739],"completed":true,"igdbId":6278},{"rating":80,"slug":"jet-set-radio","cloudHash":"seyzserqoknpfq8bzofv","title":"Jet Set Radio","url":"https://www.igdb.com/games/jet-set-radio","support":["PC"],"summary":"The government is attempting to silence the kids of Tokyo, but with their Overdrive Magnetic-Motor Skating Shoes, the cops will have to catch 'em first. The Jet Grind Radio program keeps the kids unified and inspired to fight for their rights of expression, which includes graffiti art. Grab your spray cans and design your own piece on one of the immense walls in the 3D, interactive city. You might be forced to protect your territory from adversaries that want to take over your neighborhood. Join up with like-minded hip individuals that will help you keep your area the way you want it. The cops will be after you too, so you'll have to be quick. The 10 cartoon-style characters are pumped up with polygons so they come alive in 3D on Dreamcast. Uniqueness is key to these kids and each character stands apart with exclusive abilities and style. They like to show off too, and with 18 missions, there's plenty of time to impress. It's fast, it's fun, and it's definitely funky.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/seyzserqoknpfq8bzofv.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/seyzserqoknpfq8bzofv.jpg","size":"cover_small"}],"airtableId":"recEXa1XLWNLwJAyU","igdbName":"Jet Set Radio","genre":"","date":"2015-08-08","developers":[874,875,72],"completed":true,"igdbId":1569},{"rating":85,"slug":"jotun","cloudHash":"w6r7i79s6q6r4tzieawz","title":"Jotun","url":"https://www.igdb.com/games/jotun","support":["PC"],"summary":"Jotun is a hand-drawn action-exploration game set in Norse mythology. In Jotun, you play Thora, a Norse warrior who has died an inglorious death and must prove herself to the Gods to enter Valhalla.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/w6r7i79s6q6r4tzieawz.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/w6r7i79s6q6r4tzieawz.jpg","size":"cover_small"}],"airtableId":"recMLyTJznlqPYScO","igdbName":"Jotun","genre":"","date":"2017-07-29","developers":[7097],"completed":true,"igdbId":14147},{"rating":94.92307692307692,"slug":"journey","cloudHash":"mjqpr06rbwnraky2un7a","title":"Journey","url":"https://www.igdb.com/games/journey","support":["PS3"],"summary":"In Journey the player controls a robed figure in a vast desert, traveling towards a mountain in the distance. Other players on the same journey can be discovered, and two players can meet and assist each other, but they cannot communicate via speech or text and cannot see each other's names. The only form of communication between the two is a musical chime. This chime also transforms dull, stiff pieces of cloth found throughout the levels into vibrant red, affecting the game world and allowing the player to progress through the levels. The robed figure wears a trailing scarf, which when charged by approaching floating pieces of cloth, briefly allows the player to float through the air.\n\nThe developers sought to evoke in the player a sense of smallness and wonder, and to forge an emotional connection between them and the anonymous players they meet along the way. The music, composed by Austin Wintory, dynamically responds to the player's actions, building a single theme to represent the game's emotional arc throughout the story. Reviewers of the game praised the visual and auditory art as well as the sense of companionship created by playing with a stranger, calling it a moving and emotional experience. Journey won several \"game of the year\" awards and received several other awards and nominations, including a Best Score Soundtrack for Visual Media nomination for the 2013 Grammy Awards.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/mjqpr06rbwnraky2un7a.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/mjqpr06rbwnraky2un7a.jpg","size":"cover_small"}],"airtableId":"recLqx18QpYiP3jd8","igdbName":"Journey","genre":"","date":"2016-07-18","developers":[857],"completed":true,"igdbId":1352},{"rating":84.3333333333333,"slug":"jumpjet-rex","cloudHash":"iwrxctd1urjhuso36kft","title":"JumpJet Rex","url":"https://www.igdb.com/games/jumpjet-rex","support":["PC"],"summary":"JumpJet Rex is a punishing, old school 2-D platformer where players take control of a Tyrannosaurus Rex with extraterrestrial jump boots to save dino-kind from extinction by a giant asteroid.\n\nAs Rex, players will jump, drop and dash through more than 40 challenging levels and race against the clock to not only preserve life during the Mesozoic era, but also prove their platforming prowess against other dino enthusiasts.\n\nPlayers can explore the galaxy and unlock new worlds alone or team up with a friend in co-op mode, where players will need to coordinate movements to get past challenges.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/iwrxctd1urjhuso36kft.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/iwrxctd1urjhuso36kft.jpg","size":"cover_small"}],"airtableId":"recagyQAetSsY6HJB","igdbName":"JumpJet Rex","genre":["2D platform"],"date":"2017-01-04","developers":[4371],"completed":true,"igdbId":13167},{"rating":60,"slug":"just-cause","cloudHash":"qedorefzscif9utlooww","title":"Just Cause","url":"https://www.igdb.com/games/just-cause","support":["PC"],"summary":"The Agency needs you to topple the dictator of San Esperito. Incite a revolution, ally with drug cartels, or go it alone - Just Cause gives you the freedom to tackle your assignment however you want.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/qedorefzscif9utlooww.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/qedorefzscif9utlooww.jpg","size":"cover_small"}],"airtableId":"recYCgbKVUwIAzTkZ","igdbName":"Just Cause","genre":"","date":"2014-08-11","developers":[437],"completed":true,"igdbId":1042},{"rating":85,"slug":"just-cause-2","cloudHash":"oqp72hl5iyz5qypcxnoa","title":"Just Cause 2","url":"https://www.igdb.com/games/just-cause-2","support":["PC"],"summary":"In a lawless open-world paradise, use whatever means necessary to achieve your objective. Use land, sea and air to your advantage and use a wide range of weaponry to cause as much chaos as possible.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/oqp72hl5iyz5qypcxnoa.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/oqp72hl5iyz5qypcxnoa.jpg","size":"cover_small"}],"airtableId":"rec9qXK0zbFd6AiGv","igdbName":"Just Cause 2","genre":"","date":"2016-02-07","developers":[437],"completed":true,"igdbId":558},{"rating":"","slug":"kickbeat","cloudHash":"ipkoguhksynmd7lx9fco","title":"KickBeat","url":"https://www.igdb.com/games/kickbeat","support":["PC"],"summary":"From indie pioneers Zen Studios (makers of Pinball FX2 and CastleStorm) comes KickBeat, an innovative rhythm game with a Kung Fu theme, featuring fully 3D characters and high-energy music! You can use your own music to create custom KickBeat tracks, allowing you ultimate replayability!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ipkoguhksynmd7lx9fco.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ipkoguhksynmd7lx9fco.jpg","size":"cover_small"}],"airtableId":"recdDQlETHx6qvFig","igdbName":"KickBeat","genre":["Rhythm"],"date":"2016-06-30","developers":[453],"completed":true,"igdbId":7683},{"rating":73,"slug":"killer-is-dead-nightmare-edition","cloudHash":"qtvf3vwgmq5lizpawqdd","title":"Killer is Dead Nightmare Edition","url":"https://www.igdb.com/games/killer-is-dead-nightmare-edition","support":["PC"],"summary":"","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/qtvf3vwgmq5lizpawqdd.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/qtvf3vwgmq5lizpawqdd.jpg","size":"cover_small"}],"airtableId":"recWCwnbOJiUOhjIB","igdbName":"Killer is Dead Nightmare Edition","genre":["Beat'em Up"],"date":"2017-07-15","developers":"","completed":true,"igdbId":23353},{"rating":86.6666666666667,"slug":"kingdom-hearts-ii","cloudHash":"kawgvnfqvcmjixnnr53i","title":"Kingdom Hearts II","url":"https://www.igdb.com/games/kingdom-hearts-ii","support":["PS2"],"summary":"Kingdom Hearts II is an action role-playing game, and the primary entry to the series since the 2002 Disney Interactive and Square collaboration; Kingdom Hearts.\nSora, Donald, and Goofy wake from their slumber and prepare for the journey ahead. They must face Organization XIII, protect the Keyblade’s power, and resume their search for the special people they have lost.\nThe game's setting is a collection of various levels (referred to in-game as \"worlds\") that the player progresses through. As in the first game, it II allows the player to travel to locales from various Disney works, along with original worlds specifically created for the series.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/kawgvnfqvcmjixnnr53i.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/kawgvnfqvcmjixnnr53i.jpg","size":"cover_small"}],"airtableId":"recGp3AHnmalkdah6","igdbName":"Kingdom Hearts II","genre":["Action RPG"],"date":"","developers":[799],"completed":true,"igdbId":1221},{"rating":"","slug":"klocki","cloudHash":"gn4rg2zzr1z42khwp0p9","title":"Klocki","url":"https://www.igdb.com/games/klocki","support":["Android"],"summary":"Klocki is a relaxing and minimal experience. Loaded with a lot of different puzzle mechanics.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/gn4rg2zzr1z42khwp0p9.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/gn4rg2zzr1z42khwp0p9.jpg","size":"cover_small"}],"airtableId":"recpVZb4Wk7e2V96L","igdbName":"Klocki","genre":["Puzzle"],"date":"2017-08-11","developers":[5527],"completed":true,"igdbId":20472},{"rating":55,"slug":"kung-fu-strike-the-warriors-rise","cloudHash":"lho4zn3dckzcgkakgefy","title":"Kung Fu Strike: The Warrior's Rise","url":"https://www.igdb.com/games/kung-fu-strike-the-warriors-rise","support":["PC"],"summary":"Taking its inspiration from ancient Chinese tales of revenge and retribution, then adding a dash of over-the-top martial arts and old school arcade fun, Kung Fu Strike features 28 stages of fast-paced combo-based fighting. Blend powerful punches, high kicks and perfectly timed blocks to pull off devastating combos, all thanks to a fluid combat system that turns brawling into an art form.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/lho4zn3dckzcgkakgefy.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/lho4zn3dckzcgkakgefy.jpg","size":"cover_small"}],"airtableId":"reci386cBKNX4MjKC","igdbName":"Kung Fu Strike: The Warrior's Rise","genre":["Beat'em Up"],"date":"2014-12-26","developers":[12449],"completed":true,"igdbId":9384},{"rating":87.5,"slug":"lara-croft-go","cloudHash":"mmgnoqkhhyaozgomtuta","title":"Lara Croft GO","url":"https://www.igdb.com/games/lara-croft-go","support":["Android"],"summary":"Lara Croft GO expands the turn-based puzzle gameplay and takes you on an adventure set in a long-forgotten world. Explore the ruins of an ancient civilization, discover hidden secrets and face deadly challenges as you uncover the myth of the Queen of Venom. \n \nA never-before-seen take on the iconic franchise featuring challenging gameplay, gorgeous visuals and a mesmerizing soundtrack, all at your fingertips.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/mmgnoqkhhyaozgomtuta.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/mmgnoqkhhyaozgomtuta.jpg","size":"cover_small"}],"airtableId":"recoZLEVdLYbRRzky","igdbName":"Lara Croft GO","genre":["Puzzle"],"date":"2017-11-20","developers":[12473],"completed":true,"igdbId":11592},{"rating":84.8571428571429,"slug":"left-4-dead","cloudHash":"ffdj7i1tl2jvh42lmeis","title":"Left 4 Dead","url":"https://www.igdb.com/games/left-4-dead","support":["PC"],"summary":"From Valve (the creators of Counter-Strike, Half-Life and more) comes Left 4 Dead, a co-op action horror game for the PC and Xbox 360 that casts up to four players in an epic struggle for survival against swarming zombie hordes and terrifying mutant monsters. \n \nSet in the immediate aftermath of the zombie apocalypse, L4D's survival co-op mode lets you blast a path through the infected in four unique “movies,” guiding your survivors across the rooftops of an abandoned metropolis, through rural ghost towns and pitch-black forests in your quest to escape a devastated Ground Zero crawling with infected enemies. Each \"movie\" is comprised of five large maps, and can be played by one to four human players, with an emphasis on team-based strategy and objectives. \n \nNew technology dubbed \"the AI Director\" is used to generate a unique gameplay experience every time you play. The Director tailors the frequency and ferocity of the zombie attacks to your performance, putting you in the middle of a fast-paced, but not overwhelming, Hollywood horror movie. \n \nAddictive single player, co-op, and multiplayer action gameplay from the makers of Counter-Strike and Half-Life Versus Mode lets you compete four-on-four with friends, playing as a human trying to get rescued, or as a zombie boss monster that will stop at nothing to destroy them.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ffdj7i1tl2jvh42lmeis.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ffdj7i1tl2jvh42lmeis.jpg","size":"cover_small"}],"airtableId":"recNIZGCbFF9CVNWI","igdbName":"Left 4 Dead","genre":["FPS"],"date":"2015-06-20","developers":[57,56,55],"completed":true,"igdbId":122},{"rating":88.6,"slug":"left-4-dead-2","cloudHash":"eckumjvspgvgsap4wmp2","title":"Left 4 Dead 2","url":"https://www.igdb.com/games/left-4-dead-2","support":["PC"],"summary":"Left 4 Dead 2 is a cooperative first-person shooter video game, the sequel to Valve Corporation's Left 4 Dead. The Game builds upon cooperatively focused gameplay and Valve's proprietary Source engine, the same game engine used in the original Left 4 Dead. Set during the aftermath of an apocalyptic pandemic, Left 4 Dead 2 focuses on four new Survivors, fighting against hordes of the Infected, who develop severe psychosis and exhibit zombie-like tendencies. The Survivors must fight their way through five campaigns, interspersed with safe houses that act as checkpoints, with the goal of escape at each campaign's finale.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/eckumjvspgvgsap4wmp2.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/eckumjvspgvgsap4wmp2.jpg","size":"cover_small"}],"airtableId":"recAcwVXuRgslEowW","igdbName":"Left 4 Dead 2","genre":["FPS"],"date":"2015-06-14","developers":[56,55],"completed":true,"igdbId":124},{"rating":"","slug":"legacy-of-kain-soul-reaver","cloudHash":"z2ynyxu8qhu3zeroojeq","title":"Legacy of Kain: Soul Reaver","url":"https://www.igdb.com/games/legacy-of-kain-soul-reaver","support":["PC"],"summary":"Many years after the events in Blood Omen: Legacy of Kain. Kain has created an empire in the world of Nosgoth where almost all humans have been exterminated. To help him maintain control over such large territory he chooses five lieutenants to command his vampire forces. Your name is Raziel and you are one of those lieutenants. Ages have passed by and during that time you have been has “blessed” with something no other vampire has--wings. Kain, being evil and jealous vampire, punished Raziel for his \"transgression\". Jealous Kain tore off Raziel’s wings and cast him down into the Lake of the Dead. A millenium has passed while Raziel lay forgotten before he is brought back to existence by The Elder God. He becomes a soul reaver with one purpose and one purpose only--kill Kain. \n \nLegacy of Kain: Soul Reaver continues the story from Blood Omen in a very clever and interesting way while also adding many new gameplay features. One of those improvements is the ability to shift between spectral and material plane. Both worlds overlap each other in a way that allows Raziel to overcome obstacles in one world by simply shifting to the other. But beware, because both of those planes are anything but a safe place and something that is harmless on one side can kill you on the other. Soul Reaver is a chapter in a series of masterpieces. With a gripping story, fluent gameplay, and a number so unique features it is clearly one of the most prominent tiles in the gaming history and it is surely worth checking out.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/z2ynyxu8qhu3zeroojeq.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/z2ynyxu8qhu3zeroojeq.jpg","size":"cover_small"}],"airtableId":"recAyRkjaJWSQeWha","igdbName":"Legacy of Kain : Soul Reaver","genre":"","date":"","developers":[291,552],"completed":"","igdbId":4122},{"rating":75,"slug":"lemma","cloudHash":"q0yjvtwcifxgjbwwba0z","title":"Lemma","url":"https://www.igdb.com/games/lemma","support":["PC"],"summary":"Immersive first-person parkour in a surreal, physics-driven voxel world. Lemma enables creative building through movement. Spawn structures just by moving through space. Extend platforms, smash through walls, and build new ones, all through parkour moves.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/q0yjvtwcifxgjbwwba0z.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/q0yjvtwcifxgjbwwba0z.jpg","size":"cover_small"}],"airtableId":"recJ9Ap2kQY51N6TO","igdbName":"Lemma","genre":["FPS","3D platform"],"date":"2016-12-10","developers":[8680],"completed":true,"igdbId":17386},{"rating":"","slug":"disneys-lilo-and-stitch","cloudHash":"fzwqxq60gtsqpvy80tjq","title":"Lilo & Stitch ","url":"https://www.igdb.com/games/disneys-lilo-and-stitch","support":["GBA"],"summary":"WARNING: Stitch is extremely dangerous. The result of an illegal genetic experiment by a mad scientist, Stitch appears to be harmless - small, furry, with six legs - but his very existence is an abomination to all that's decent in the galaxy. Last seen on the island of Hawaii in the company of a little named Lilo. Fugitive may be disguised as a family pet.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/fzwqxq60gtsqpvy80tjq.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/fzwqxq60gtsqpvy80tjq.jpg","size":"cover_small"}],"airtableId":"recm4bGSOM4NZcZZx","igdbName":"Disney's Lilo & Stitch","genre":"","date":"","developers":[888],"completed":true,"igdbId":25912},{"rating":85.375,"slug":"limbo","cloudHash":"zrgtcrizlaeo8axliehq","title":"Limbo","url":"https://www.igdb.com/games/limbo","support":["PC"],"summary":"Limbo is a black and white puzzle-platforming adventure. Play the role of a young boy traveling through an eerie and treacherous world in an attempt to discover the fate of his sister. Limbo's design is an example of gaming as an art form. Short and sweet, doesn't overstay its welcome. Puzzles are challenging and fun, not illogical and frustrating.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/zrgtcrizlaeo8axliehq.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/zrgtcrizlaeo8axliehq.jpg","size":"cover_small"}],"airtableId":"rectOi2cN3IA70282","igdbName":"Limbo","genre":["Puzzle","2D platform"],"date":"2013-09-20","developers":[854,748],"completed":true,"igdbId":1331},{"rating":60,"slug":"little-fighter-2","cloudHash":"p2ug8ro49mrxuscxo7uj","title":"Little Fighter 2","url":"https://www.igdb.com/games/little-fighter-2","support":["PC"],"summary":"Little Fighter 2 is a popular Hong Kong freeware PC fighting game for Windows and is the sequel to the game Little Fighter (LF1). Little Fighter 2 was created by Marti Wong and Starsky Wong in 1999, and released in a long series of updates.\nThe game supports up to 4 human players on one computer and a total of 8 characters using online play or computer-controlled opponents. Characters are controlled using the keyboard or a gamepad. All keys can be set via a configuration menu.\nThe game has a commercially released sequel, Little Fighter Online. In 2009, in celebration of Little Fighter 2's tenth anniversary, version 2.0 was released. The update fixed minor bugs and added a gameplay recording feature, a new stage called 'Survival', a browser toolbar that is not mentioned in the installation process and obstructive ads being displayed while the game is being loaded. Version 2.0a was released in late 2009, with only a bug fix.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/p2ug8ro49mrxuscxo7uj.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/p2ug8ro49mrxuscxo7uj.jpg","size":"cover_small"}],"airtableId":"recU6kijzyZw66S8W","igdbName":"Little Fighter 2","genre":["Beat'em Up"],"date":"","developers":"","completed":true,"igdbId":8700},{"rating":76.6666666666667,"slug":"lovely-planet","cloudHash":"utahf2j8jqw3bcoakcdw","title":"Lovely Planet","url":"https://www.igdb.com/games/lovely-planet","support":["PC"],"summary":"With boots of speed on your feet, an infinite supply of bullets for your semi-automatic and the ability to jump over twice your own height, you're well equipped to go up against any enemy on your quest to reach Lovely Planet! Balance between jumping around dodging bullets and taking aim for a better shot at your enemies, don't waste time camping at cover spots and waiting for enemies to pop out - artfully evade the onslaught of bullets and defeat all baddies that stand in your way!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/utahf2j8jqw3bcoakcdw.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/utahf2j8jqw3bcoakcdw.jpg","size":"cover_small"}],"airtableId":"recUdCXA7v6nllt6l","igdbName":"Lovely Planet","genre":["FPS","3D platform"],"date":"2016-08-14","developers":[7185],"completed":"","igdbId":14326},{"rating":83,"slug":"lovers-in-a-dangerous-spacetime","cloudHash":"vrjub2tkqzqjc1gpyelu","title":"Lovers in a Dangerous Spacetime","url":"https://www.igdb.com/games/lovers-in-a-dangerous-spacetime","support":["PC"],"summary":"Lovers in a Dangerous Spacetime is a frantic 1- or 2-player couch co-op action space shooter set in a massive neon battleship. Only through teamwork can you triumph over the evil forces of Anti-Love, rescue kidnapped space-bunnies, and avoid a vacuumy demise. Deep space is a dangerous place, but you don’t have to face it alone!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/vrjub2tkqzqjc1gpyelu.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/vrjub2tkqzqjc1gpyelu.jpg","size":"cover_small"}],"airtableId":"recL2VRCHMcQj6h8j","igdbName":"Lovers in a Dangerous Spacetime","genre":"","date":"2017-04-12","developers":[6547],"completed":true,"igdbId":12520},{"rating":71.7857142857143,"slug":"mad-max","cloudHash":"pcprtyfthjmzp2abnnhv","title":"Mad Max","url":"https://www.igdb.com/games/mad-max","support":["PC"],"summary":"In Mad Max, the player takes on the role of titular character Mad Max; a dangerous melee fighter and can use his attacks to kill almost anyone. His weapon of choice is his shotgun. He is assisted by another man called Chumbucket. Chum mainly works with Max to build and upgrade the Magnum Opus vehicle. \n \nMad Max will feature a variety of weapons which Max can use to defeat enemies. Though the shotgun is Max's weapon of choice, ammo is scarce, and so melee options are the smarter way to go. The 'thunderstick' is an explosive weapon that can be lanced into an enemy's chest, crackling like a lit dynamite fuse before blowing the victim to smithereens. The Harpoon is also one of Max's favorite weapon though it can only be used in-vehicle with Chum riding along. Max's Magnum Opus can be combined with a speedy V12 engine and powerful ramming ability to destroy enemies's vehicles and weaponry. When simultaneously driving and aiming, the game enters slow-motion and allows you to toggle between targets. Not much is known about the vehicular combat and its features. \n \nMad Max will feature crafting system which can be used to craft new weapons and tools. Max's garage can also be used to change and modify the car's engines, chassis, wheels, body works including paint treatment and the “shell” of the auto-mobile and the car’s weight and attributes update accordingly. Max can also be upgraded though it's plans hasn't fully been implemented. \n \nMany choices are given in the game, such as, either playing silently or aggressively. Max can also get guidance from Chum about how he can complete his objectives strategically. However, its largely up to the player how he can complete the objectives.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/pcprtyfthjmzp2abnnhv.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/pcprtyfthjmzp2abnnhv.jpg","size":"cover_small"}],"airtableId":"recJBapjn3WnBs3DT","igdbName":"Mad Max","genre":"","date":"2017-09-29","developers":[437],"completed":true,"igdbId":2552},{"rating":85,"slug":"mario-kart-double-dash","cloudHash":"kl3foy2i0robhbcjbp5g","title":"Mario Kart: Double Dash","url":"https://www.igdb.com/games/mario-kart-double-dash","support":["GameCube"],"summary":"The Mushroom Kingdom just got a whole lot more hectic as Mario and friends double up for furious kart racing. This time around, each kart holds two racers that can switch places at any time, so choose from a huge cast of favorites and pair them up any way you see fit. The character in front handles the driving duties, while the character in the rear doles out damage with six normal items and eight special items that only specific characters can use. Get ready for some intense multiplayer mayhem with your favorite characters, including Mario, Luigi, Donkey Kong, Peach, Bowser, and Koopa.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/kl3foy2i0robhbcjbp5g.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/kl3foy2i0robhbcjbp5g.jpg","size":"cover_small"}],"airtableId":"recsQwmeXRTvcwjHc","igdbName":"Mario Kart: Double Dash!!","genre":["Racing"],"date":"","developers":[421],"completed":"","igdbId":2344},{"rating":91.4285714285714,"slug":"mark-of-the-ninja","cloudHash":"k6flnmya6oz5bnluebu2","title":"Mark of the Ninja","url":"https://www.igdb.com/games/mark-of-the-ninja","support":["PC"],"summary":"Mark of the Ninja is a side-scrolling action stealth video game developed by Klei Entertainment and published by Microsoft Studios. It was announced on February 28, 2012 and later released for the Xbox 360 via Xbox Live Arcade on September 7, 2012. A Microsoft Windows version was released on October 16, 2012. It follows the story of a nameless ninja in the present day, and features a themed conflict between ancient ninja tradition and modern technology. Cutscenes for the game are rendered in Saturday morning cartoon animation style.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/k6flnmya6oz5bnluebu2.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/k6flnmya6oz5bnluebu2.jpg","size":"cover_small"}],"airtableId":"rec1R4yeOAk7kxm6p","igdbName":"Mark of the Ninja","genre":["Stealth"],"date":"2015-11-20","developers":[1005],"completed":true,"igdbId":2129},{"rating":88.5,"slug":"mass-effect","cloudHash":"kueaxhiqdwrosfhqspn1","title":"Mass Effect","url":"https://www.igdb.com/games/mass-effect","support":["PC"],"summary":"What starts as a routine mission to an agrarian outpost quickly becomes the opening salvo in an epic war. As the newly appointed Executive Officer of the SSV Normandy, you'll assemble and lead an elite squad of heroes into battle after heart-pounding battle. Each decision you make will impact not only your fate, but the destiny of the entire galaxy in the Mass Effect trilogy. \n \nKey Features: \n \nIncredible, interactive storytelling. Create and customize your own character, from Commander Shepard's appearance and skills to a personalized arsenal. Unleash devastating abilities as you command and train. Your decisions will control the outcome of each mission, your relationships with your crew and ultimately the entire war. \n \nAn amazing universe to explore. From the massive Citadel to the harsh, radioactive landscape of the Krogan home world – the incredible breadth of the Mass Effect universe will blow you away. Travel to the farthest outposts aboard the SSV Normandy, the most technologically advanced ship in the galaxy. You'll follow the clues left by ancient civilizations, discover hidden bases with fantastic new tech and lead your hand-picked crew into explosive alien battles. \n \nEdge-of-your-seat excitement meets strategic combat. Find the perfect combination of squad-mates and weapons for each battle if you want to lead them to victory. Sun-Tzu's advice remains as pertinent in 2183 as it is today – know your enemy. You'll need different tactics for a squad of enemies with devastating biotic attacks than a heavily armored Geth Colossus so choose your teams wisely.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/kueaxhiqdwrosfhqspn1.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/kueaxhiqdwrosfhqspn1.jpg","size":"cover_small"}],"airtableId":"reczlxaJiN5MW7FzM","igdbName":"Mass Effect","genre":["Action RPG"],"date":"","developers":[222,2],"completed":true,"igdbId":73},{"rating":95.6,"slug":"mass-effect-2","cloudHash":"q8shkfzxblrn22o9dvra","title":"Mass Effect 2","url":"https://www.igdb.com/games/mass-effect-2","support":["PC"],"summary":"Are you prepared to lose everything to save the galaxy? You'll need to be, Commander Shephard. It's time to bring together your greatest allies and recruit the galaxy's fighting elite to continue the resistance against the invading Reapers. So steel yourself, because this is an astronomical mission where sacrifices must be made. You'll face tougher choices and new, deadlier enemies. Arm yourself and prepare for an unforgettable intergalactic adventure. \n \nGame Features: \n \nShift the fight in your favour. Equip yourself with powerful new weapons almost instantly thanks to a new inventory system. Plus, an improved health regeneration system means you'll spend less time hunting for restorative items. \n \nMake every decision matter. Divisive crew members are just the tip of the iceberg, Commander, because you'll also be tasked with issues of intergalactic diplomacy. And time's a wastin' so don't be afraid to use new prompt-based actions that let you interrupt conversations, even if they could alter the fate of your crew...and the galaxy. \n \nForge new alliances, carefully. You'll fight alongside some of your most trustworthy crew members, but you'll also get the opportunity to recruit new talent. Just choose your new partners with care because the fate of the galaxy rests on your shoulders, Commander.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/q8shkfzxblrn22o9dvra.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/q8shkfzxblrn22o9dvra.jpg","size":"cover_small"}],"airtableId":"recjUBOoqxxZ0EqZw","igdbName":"Mass Effect 2","genre":["Action RPG"],"date":"","developers":[2,222],"completed":true,"igdbId":74},{"rating":90.8125,"slug":"mass-effect-3","cloudHash":"uhfdlwlxixe3out9bmzx","title":"Mass Effect 3","url":"https://www.igdb.com/games/mass-effect-3","support":["PC"],"summary":"Earth is burning. The Reapers have taken over and other civilizations are falling like dominoes. Lead the final fight to save humanity and take back Earth from these terrifying machines, Commander Shepard. You'll need backup for these battles. Fortunately, the galaxy has a habit of sending unexpected species your way. Recruit team members and forge new alliances, but be prepared to say goodbye at any time as partners make the ultimate sacrifice. It's time for Commander Shepard to fight for the fate of the human race and save the galaxy. No pressure, Commander. \n \nFight smarter. Take advantage of new powers and combat moves. Shepard can now blind fire at enemies and build tougher melee attacks. Plus, when you fight as a team you can combine new biotic and tech powers to unleash devastating Power Combos. \n \nBuild the final force. Build a team from a variety of races and classes and combine their skills to overcome impossible odds. You'll be joined by newcomers like James Vega, a tough-as-nails soldier, as well as EDI, a trusted AI in a newly acquired physical form. Keep an eye out for beloved characters from your past, but beware. Some may not survive the final battle... \n \nFace off against friends. Enjoy an integrated co-op multiplayer mode and team up with friends online to liberate key conflict zones from increasingly tough opponents. Customize your warrior and earn new weapons, armor, and abilities to build war preparedness stats in your single player campaign.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/uhfdlwlxixe3out9bmzx.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/uhfdlwlxixe3out9bmzx.jpg","size":"cover_small"}],"airtableId":"recyPZ6TN6Ylun6uh","igdbName":"Mass Effect 3","genre":["Action RPG"],"date":"","developers":[2,222],"completed":true,"igdbId":75},{"rating":73.8,"slug":"max-payne","cloudHash":"uhpmrpzvazasc9hjf6qo","title":"Max Payne","url":"https://www.igdb.com/games/max-payne","support":["PC"],"summary":"Max Payne is a third-person shooter in which the player assumes the role of its titular character, Max Payne. Almost all the gameplay involves bullet time-based gun-fights and levels are generally straightforward, occasionally incorporating platforming and puzzle-solving elements. The game's storyline is advanced by the player following Max's internal monologue as the character determines what his next steps should be. Several of the game's levels involve surrealistic nightmares and drug-related hallucinations of Payne.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/uhpmrpzvazasc9hjf6qo.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/uhpmrpzvazasc9hjf6qo.jpg","size":"cover_small"}],"airtableId":"recPkwQA5M8lRqpvB","igdbName":"Max Payne","genre":["TPS"],"date":"","developers":[305],"completed":true,"igdbId":18},{"rating":84.2857142857143,"slug":"max-payne-2-the-fall-of-max-payne","cloudHash":"llugundhgdjnkumfdnnu","title":"Max Payne 2: The Fall Of Max Payne","url":"https://www.igdb.com/games/max-payne-2-the-fall-of-max-payne","support":["PC"],"summary":"Max Payne 2 is a third-person shooter, in which the player assumes the role of Max Payne, but also plays as Mona Sax in a few levels. Initially, the player's weapon is a 9mm pistol. As they progress, players access other weapons including other handguns, shotguns, submachine guns, assault rifles, sniper rifles, and hand-thrown weapons. To move the game along, the player is told what the next objective is through Max's internal monologue, in which Max iterates what his next steps should be.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/llugundhgdjnkumfdnnu.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/llugundhgdjnkumfdnnu.jpg","size":"cover_small"}],"airtableId":"reccC8aGqNbOmvXZS","igdbName":"Max Payne 2: The Fall Of Max Payne","genre":["TPS"],"date":"","developers":[305],"completed":true,"igdbId":19},{"rating":89.3333333333333,"slug":"max-payne-3","cloudHash":"uvtfrvleul4lt8oklwug","title":"Max Payne 3","url":"https://www.igdb.com/games/max-payne-3","support":["PC"],"summary":"Max Payne 3 is a third-person shooter in which the player assumes the role of its titular character, Max Payne. A new feature to the series, introduced in Max Payne 3, is the cover system, which allows players to gain a tactical advantage, and avoid taking damage from enemies. To progress through the linear story, players take on enemies throughout levels. The game features interactive cutscenes which transition seamlessly into continuing gameplay; there are no loading screens across gameplay and cutscenes.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/uvtfrvleul4lt8oklwug.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/uvtfrvleul4lt8oklwug.jpg","size":"cover_small"}],"airtableId":"recrjQMw9gObBftS4","igdbName":"Max Payne 3","genre":["TPS"],"date":"2016-02-13","developers":[636,637,638,306],"completed":true,"igdbId":960},{"rating":85,"slug":"mega-man-x","cloudHash":"ktmvbcfu4tsmrrfjurqh","title":"Mega Man X","url":"https://www.igdb.com/games/mega-man-x","support":["SNES"],"summary":"Near the end of his life, Dr. Light succeeds in creating the first of a new series of robots which will change the world. Able to think and make decisions, this new robot holds great danger as well as great possibilities. Fearful of the possible consequences of unleashing his creation on the world, Dr. Light decides to seal him in a capsule and test his systems until they are totally reliable. The future will have to decide his fate... \n \nReleased from the capsule by Dr. Cain, \"X\" is born into the world of the future where the robot rebellions are a thing of the past. But when Dr. Cain tries to implement Dr. Light's designs into a new series of Reploids, something goes hideously wrong. Now the future lies on the brink of destruction and a new Mega Man must emerge to face Sigma and his forces before the human race is wiped from the planet!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ktmvbcfu4tsmrrfjurqh.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ktmvbcfu4tsmrrfjurqh.jpg","size":"cover_small"}],"airtableId":"rec0mVmoReHnZjE34","igdbName":"Mega Man X","genre":"","date":"2016-12-30","developers":[37,10157],"completed":true,"igdbId":1741},{"rating":"","slug":"mega-man-zero","cloudHash":"hiqps5bskd78js7bedjn","title":"Mega Man Zero","url":"https://www.igdb.com/games/mega-man-zero","support":["GBA"],"summary":"It's your mission to help the exiled scientist Ciel discover the source of a new reploid energy! Play as Mega Man's pal Zero, the reploid from the Mega Man X series turned good by the infectious Sigma Virus and 100 years of sleep. Conquer your adversaries and find the energy source... or risk ultimate defeat. It's up to you to defend good from the destructive powers in the universe.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/hiqps5bskd78js7bedjn.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/hiqps5bskd78js7bedjn.jpg","size":"cover_small"}],"airtableId":"reclwbw9Jvm6Eq2mY","igdbName":"Mega Man Zero","genre":"","date":"","developers":[2344],"completed":true,"igdbId":1775},{"rating":"","slug":"megabyte-punch","cloudHash":"nlc8t9hov0kbsprkzroe","title":"Megabyte Punch","url":"https://www.igdb.com/games/megabyte-punch","support":["PC"],"summary":"Megabyte Punch is a fighting/beat ‘em up game in which you build your own fighter!\n\nAs you travel through different environments, you battle other creatures to get their parts. Parts have their own powers and bonuses, like gun arms for a shoot ability or powerful hips for a devastating pelvic thrust attack. Then, using the abilities of your customized fighter, you can compete in the tournament or battle against other players in a destructible arena.\n\nThe game takes place in an computer world where you protect the Heartcore of your village against the likes of the Valk Empire and the dreaded Khoteps in 6 different levels with each 3 stages and a boss fight!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/nlc8t9hov0kbsprkzroe.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/nlc8t9hov0kbsprkzroe.jpg","size":"cover_small"}],"airtableId":"recb2ReLE878rcRaL","igdbName":"Megabyte Punch","genre":["2D platform","Action RPG"],"date":"2015-08-27","developers":[4225],"completed":true,"igdbId":9383},{"rating":84.7647058823529,"slug":"metal-gear-rising-revengeance","cloudHash":"f7vy3oeezbgihn4f1k24","title":"Metal Gear Rising: Revengeance","url":"https://www.igdb.com/games/metal-gear-rising-revengeance","support":["PC"],"summary":"Developed by Kojima Productions and PlatinumGames, METAL GEAR RISING: REVENGEANCE takes the renowned METAL GEAR franchise into exciting new territory with an all-new action experience. The game seamlessly melds pure action and epic story-telling that surrounds Raiden – a child soldier transformed into a half-human, half-cyborg ninja who uses his High Frequency katana blade to cut through any thing that stands in his vengeful path! \n \nA huge success on both Xbox 360® and PlayStation®3, METAL GEAR RISING: REVENGEANCE comes to PC with all the famed moves and action running within a beautifully-realised HD environment. \n \nThis new PC version includes all three DLC missions: Blade Wolf, Jetstream, and VR Missions, in addition to all customized body upgrades for Raiden, including: White Armor, Inferno Armor, Commando Armor, Raiden’s MGS4 body, and the ever-popular Cyborg Ninja. \n \n\"CUTSCENES\" option added to the Main Menu. Play any and all cutscenes. \n \n\"CODECS\" option added to the Main Menu. Play all and any codec conversation scenes. \n \nMenu option added to the CHAPTER Menu enabling user to play only the Boss battles. \n \n\"GRAPHIC OPTIONS\" added to the OPTIONS Menu. Modify resolution, anti-aliasing, etc. \n There is an option reading \"ZANGEKI\" that will modify the amount of cuts you can make.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/f7vy3oeezbgihn4f1k24.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/f7vy3oeezbgihn4f1k24.jpg","size":"cover_small"}],"airtableId":"reczmVxS3hl4DoiND","igdbName":"Metal Gear Rising: Revengeance","genre":["Beat'em Up"],"date":"2017-08-12","developers":[852],"completed":true,"igdbId":378},{"rating":80,"slug":"metal-gear-solid","cloudHash":"xqtzz7z10l0rodeghmgj","title":"Metal Gear Solid","url":"https://www.igdb.com/games/metal-gear-solid","support":["PS3","PS1"],"summary":"Metal Gear Solid follows Solid Snake, a soldier who infiltrates a nuclear weapons facility to neutralize the terrorist threat from FOXHOUND, a renegade special forces unit. Snake must liberate two hostages, the head of DARPA and the president of a major arms manufacturer, confront the terrorists, and stop them from launching a nuclear strike. Cinematic cutscenes were rendered using the in-game engine and graphics, and voice acting was used throughout the entire game. \n \nMetal Gear Solid was very well received, shipping more than six million copies, and scoring an average of 94/100 on the aggregate website Metacritic. It is recognized by many critics as one of the best and most important games of all time, and heralded as the game which made the stealth genre popular. The commercial success of the title prompted the release of an expanded version for the PlayStation and PC, titled Metal Gear Solid: Integral, and a remake, Metal Gear Solid: The Twin Snakes was later released for the Nintendo GameCube. The game has also spawned numerous sequels, prequels and spin-offs, including several games, a radio drama, comics, and novels.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/xqtzz7z10l0rodeghmgj.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/xqtzz7z10l0rodeghmgj.jpg","size":"cover_small"}],"airtableId":"recKGvMaEx6XcEfX9","igdbName":"Metal Gear Solid","genre":"","date":"2015-08-18","developers":[312,311],"completed":true,"igdbId":375},{"rating":"","slug":"metal-slug","cloudHash":"xuhoelv47blqvm1ouzf9","title":"Metal Slug","url":"https://www.igdb.com/games/metal-slug","support":["Neo Geo"],"summary":"“METAL SLUG ”, the very first title in SNK’s legendary 2D run & gun action shooting game series where all began, returns to the missions on the Steam gaming platform!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/xuhoelv47blqvm1ouzf9.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/xuhoelv47blqvm1ouzf9.jpg","size":"cover_small"}],"airtableId":"recNi7CrTTtGIcaI4","igdbName":"Metal Slug","genre":"","date":"2017-12-18","developers":"","completed":true,"igdbId":1404},{"rating":"","slug":"metal-slug-2","cloudHash":"w77bw6wbwr6qprutaxlv","title":"Metal Slug 2","url":"https://www.igdb.com/games/metal-slug-2","support":["Neo Geo"],"summary":"“METAL SLUG 2”, the 2nd entry in SNK’s emblematic 2D run & gun action shooting game returns to the battlefield on the Steam gaming platform!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/w77bw6wbwr6qprutaxlv.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/w77bw6wbwr6qprutaxlv.jpg","size":"cover_small"}],"airtableId":"recqQmuATkDfqfRXu","igdbName":"Metal Slug 2","genre":"","date":"2017-12-19","developers":[1474,781,4501],"completed":true,"igdbId":1407},{"rating":85,"slug":"metroid-fusion","cloudHash":"tr9nls7qtpxri83yjzhk","title":"Metroid Fusion","url":"https://www.igdb.com/games/metroid-fusion","support":["GBA"],"summary":"The famed Metroid series makes its return on the Game Boy Advance with Metroid Fusion. After Samus' exploits in the Super Nintendo classic Super Metroid, the intergalactic bounty hunter becomes infected with a parasitic life form known only as \"X\". Samus is rescued and revived by Metroid DNA only after undergoing some major changes in her body and suit, resulting in a drastic change in her appearance, and a new ability to absorb and assimilate the abilities of the \"X\" virus. Experience a new and enthralling chapter in the Metroid series, and relive the timeless gameplay and exploration that made the series a legend.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/tr9nls7qtpxri83yjzhk.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/tr9nls7qtpxri83yjzhk.jpg","size":"cover_small"}],"airtableId":"recXMH9N0ygLfHOb1","igdbName":"Metroid Fusion","genre":["Metroidvania"],"date":"","developers":[761],"completed":true,"igdbId":1104},{"rating":95,"slug":"metroid-prime","cloudHash":"xfwca30qhflousnzg1vz","title":"Metroid Prime","url":"https://www.igdb.com/games/metroid-prime","support":["GameCube"],"summary":"Everyone's favorite heroine, Samus Aran, is back! Packed to the gills with exploration, creative power-ups, and wicked enemies, Metroid Prime is a first-person adventure worthy of the Metroid stamp. An action-packed adventure set in the first-person perspective, Metroid Prime takes place just after the events in the original Metroid (NES). It has lead character Samus Aran, a bounty hunter by trade, chasing down the evil Space Pirates. Their intention is to use a genetic mutagen called Phazon to create a super army and take over the universe. While the installments in the series before have never been home to deeply involving storylines, Metroid Prime breaks the shell to offer up one of the most intriguing and read-worthy sagas yet. Developed by Texas-based Retro Studios. Metroid Prime brings all of the elements of the acclaimed franchise into a massive 3D arena.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/xfwca30qhflousnzg1vz.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/xfwca30qhflousnzg1vz.jpg","size":"cover_small"}],"airtableId":"recKiUHEsS3kv4iyd","igdbName":"Metroid Prime","genre":["FPS"],"date":"2017-12-01","developers":[766],"completed":true,"igdbId":1105},{"rating":95,"slug":"metroid-zero-mission","cloudHash":"yzh3dugptuqkv1jbqu4u","title":"Metroid Zero Mission","url":"https://www.igdb.com/games/metroid-zero-mission","support":["GBA"],"summary":"The full story of Samus Aran's first mission finally unfolds... \n \nThe first Metroid game just scratched the surface of the cataclysmic events on planet Zebes, and at long last the rest of the tale has come to light. Experience the first of Samus's legendary adventures through all-new cut-scenes and action sequences as the bounty hunter races through the deeps toward her showdown with the leader of the Space Pirates. But will the end of Mother Brain really mean the end of the story...? \n \nCompletion of the game unlocks an emulated version of the original Metroid game. Zero Mission also allow players to unlock the Metroid Fusion picture gallery by linking between Zero Mission and Fusion cartridges via the Game Boy Advance Game Link Cable.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/yzh3dugptuqkv1jbqu4u.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/yzh3dugptuqkv1jbqu4u.jpg","size":"cover_small"}],"airtableId":"recIcXoHIVSP3bBej","igdbName":"Metroid: Zero Mission","genre":["Metroidvania"],"date":"","developers":[761],"completed":true,"igdbId":1107},{"rating":100,"slug":"mini-metro","cloudHash":"fa6pu1dt9koc0bll2tg1","title":"Mini Metro","url":"https://www.igdb.com/games/mini-metro","support":["Android"],"summary":"In Mini Metro, you take on the task of designing the subway layout for a rapidly expanding city. Your city starts with three stations. Draw routes between these stations to connect them with subway lines. Commuters travel along your lines to get around the city as fast as they can. Each station can only hold a handful of waiting commuters so your subway network will need to be well-designed to avoid delays.\n\nThe city is growing. More stations are opening, and commuters are appearing faster. The demands on your network are ever-increasing. You'll be constantly redesigning your lines to maximise efficiency. The new assets you earn every week will help immensely — as long as they're used wisely. \n\nEventually your network will fail. Stations will open too quickly. Commuters will crowd the platforms. How long the city keeps moving is up to you.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/fa6pu1dt9koc0bll2tg1.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/fa6pu1dt9koc0bll2tg1.jpg","size":"cover_small"}],"airtableId":"recoF1iFDd5Q8G8Ic","igdbName":"Mini Metro","genre":"","date":"2017-08-05","developers":[3688],"completed":true,"igdbId":7767},{"rating":77,"slug":"mini-ninjas","cloudHash":"n7xzzn0heaagvjr745mt","title":"Mini Ninjas","url":"https://www.igdb.com/games/mini-ninjas","support":["PC"],"summary":"Mini Ninjas is a game that combines furious action with stealth and exploration for an experience that appeals to a wide audience across age groups and preferences. It’s an action-adventure with a strong focus on allowing the player freedom to explore the world and has the depth to allow for very varied gameplay and approaches to getting through the game.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/n7xzzn0heaagvjr745mt.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/n7xzzn0heaagvjr745mt.jpg","size":"cover_small"}],"airtableId":"recpeAJgwt0wDo9YV","igdbName":"Mini Ninjas","genre":"","date":"2014-10-30","developers":[290],"completed":true,"igdbId":2192},{"rating":72.5,"slug":"mirror-s-edge","cloudHash":"qa9bxutqwwhxa264tg5b","title":"Mirror's Edge","url":"https://www.igdb.com/games/mirror-s-edge","support":["PC"],"summary":"In a perfect city, were crime is no more and where everything is monitored, you play as Faith; a courier who transports packages via the open rooftops of the city. These \"couriers\" are known as runners. Murder has come to this city, and now you are being hunted...","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/qa9bxutqwwhxa264tg5b.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/qa9bxutqwwhxa264tg5b.jpg","size":"cover_small"}],"airtableId":"recN4stbW51Sdmyvx","igdbName":"Mirror's Edge","genre":["FPS","3D platform"],"date":"","developers":[94,3956,712],"completed":true,"igdbId":1051},{"rating":70,"slug":"mitsurugi-kamui-hikae","cloudHash":"zomvlzg12tbtk1x3t7dc","title":"Mitsurugi Kamui Hikae","url":"https://www.igdb.com/games/mitsurugi-kamui-hikae","support":["PC"],"summary":"Mitsurugi Kamui Hikae focuses on high-speed arena-based action. Use lightning fast sword slashes, hand-to-hand attacks and mysterious ancient techniques to defeat wave after wave of demonic foes.\n\nUse skill points to learn new skills, upgrade your abilities, and take on brutal bosses.\nWeaken your enemies with vicious wounds, then sheathe your sword to finish them off with style. Employ hand-to-hand techniques to build your katana gauge, then cut deep with your divine blade.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/zomvlzg12tbtk1x3t7dc.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/zomvlzg12tbtk1x3t7dc.jpg","size":"cover_small"}],"airtableId":"recN0FKVxdbTHwAR5","igdbName":"Mitsurugi Kamui Hikae","genre":["Beat'em Up"],"date":"2016-05-23","developers":[5273],"completed":true,"igdbId":8822},{"rating":"","slug":"moirai","cloudHash":"flqlc3hjiwsvwghfqb4i","title":"Moirai","url":"https://www.igdb.com/games/moirai","support":["PC"],"summary":"The townsfolk tell you that a woman named Julia has gone missing. You venture out into the cave just beyond the village looking for her. You're given a knife to protect yourself. What you find there may surprise you.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/flqlc3hjiwsvwghfqb4i.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/flqlc3hjiwsvwghfqb4i.jpg","size":"cover_small"}],"airtableId":"rec7i9wVtjKO5RTJG","igdbName":"Moirai","genre":"","date":"2016-08-09","developers":"","completed":true,"igdbId":22365},{"rating":89.6666666666667,"slug":"monument-valley","cloudHash":"cocbrvnx9rjxlexmt9hu","title":"Monument Valley","url":"https://www.igdb.com/games/monument-valley","support":["Android"],"summary":"In Monument Valley, the player leads the player-character princess Ida through mazes of optical illusions and impossible objects, which are referred to as \"sacred geometry\" in-game, as she journeys to be forgiven for something. The game is presented in isometric view, and the player interacts with the environment to find hidden passages as Ida progresses to the map's exit. Each of the ten levels has a different central mechanic. Interactions include moving platforms and pillar animals, and creating bridges. The player is indirectly cued through the game by design elements like color, and directly cued by crow people, who block Ida's path. Critics compared the game's visual style to a vibrant M. C. Escher drawing and Echochrome. The game includes a camera mode where the player can roam the level to compose screenshots. It includes filters à la Instagram.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/cocbrvnx9rjxlexmt9hu.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/cocbrvnx9rjxlexmt9hu.jpg","size":"cover_small"}],"airtableId":"recjfcTouYSUAmzrm","igdbName":"Monument Valley","genre":["Puzzle"],"date":"2016-03-10","developers":[4712],"completed":true,"igdbId":8900},{"rating":"","slug":"nancy-drew-the-final-scene","cloudHash":"ul6zuxjkadydkldukvuv","title":"Nancy Drew: The Final Scene","url":"https://www.igdb.com/games/nancy-drew-the-final-scene","support":["PC"],"summary":"Search a Darkened Movie Theater to Free a Hostage from her Captor’s Dangerous Plot!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ul6zuxjkadydkldukvuv.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ul6zuxjkadydkldukvuv.jpg","size":"cover_small"}],"airtableId":"rechKnwuNBZtpQgLq","igdbName":"Nancy Drew: The Final Scene","genre":["Point'n'click"],"date":"2017-01-29","developers":"","completed":true,"igdbId":7624},{"rating":80,"slug":"need-for-speed-hot-pursuit-2","cloudHash":"mc6yd4loppqw5mu5d6fd","title":"Need For Speed 6 Hot Pursuit 2","url":"https://www.igdb.com/games/need-for-speed-hot-pursuit-2","support":["PC"],"summary":"The Need for Speed series returns, this time reverting back to the 'chase' arcade experience instead of a racing simulation. Top speed racing is the name of the game, where you must outchase not just the opposing drivers, but the cops. \n \nChoose from a selection of today's (and yesterday's) top sports cars, including the Ferrari F50, Porsche 911 and a range from the likes of Ford, Corvette, BMW, Lotus, Mercedes, Aston Martin, the McLaren F1 and a lot more. \n \nThe competitive race mode allows you to take on other drivers and beat them to the line. A selection of tracks allows you to not only dodge incoming traffic, but perform deadly jumps and stunts to receive points. These points, combined with the points recieved from your finishing position, can unlock new cars and tracks. \n \nThe Hot Pursuit mode combines all the major elements of the competitive mode with the chance to out run the cops. They will throw everything at you to try and stop you, including running you off the road, setting up road blocks and unleashing an attack helicopter equiped with missiles. Three busts by the cops ends the race.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/mc6yd4loppqw5mu5d6fd.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/mc6yd4loppqw5mu5d6fd.jpg","size":"cover_small"}],"airtableId":"receNnKqJGUXW3NIo","igdbName":"Need for Speed: Hot Pursuit 2","genre":["Racing"],"date":"","developers":[350,349],"completed":true,"igdbId":95},{"rating":84.7368421052632,"slug":"need-for-speed-most-wanted-53b9fef3-adb4-41a0-8ca0-ffcbb0060467","cloudHash":"onlimcrgz1zsngrffmql","title":"Need for Speed: Most Wanted","url":"https://www.igdb.com/games/need-for-speed-most-wanted-53b9fef3-adb4-41a0-8ca0-ffcbb0060467","support":["PC"],"summary":"Need for Speed: Most Wanted takes on the gameplay style of the first Most Wanted title in the Need for Speed franchise. Most Wanted allows players to select one car and compete against other racers in three types of events: Sprint races, which involves traveling from one point of the city to another, Circuit races, each having two or three laps total and Speed runs, which involve traversing through a course in the highest average speed possible. There is also the Ambush races, which start with the player surrounded by cops and tasked to evade their pursuit as quickly as possible.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/onlimcrgz1zsngrffmql.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/onlimcrgz1zsngrffmql.jpg","size":"cover_small"}],"airtableId":"recXWEGVGDXk6R3uC","igdbName":"Need for Speed: Most Wanted","genre":["Racing"],"date":"2018-02-17","developers":[347],"completed":true,"igdbId":3193},{"rating":72,"slug":"neon-struct","cloudHash":"soellccjtz75sud7clbi","title":"NEON STRUCT","url":"https://www.igdb.com/games/neon-struct","support":["PC"],"summary":"You are Jillian Cleary: an ex-spy on the run, framed for treason and hunted by your former agency. You must move in secret, survive off the grid, and find a way to clear your name. Old friends and new allies will lend their support; but with the eyes of the world upon you, who can you trust?","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/soellccjtz75sud7clbi.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/soellccjtz75sud7clbi.jpg","size":"cover_small"}],"airtableId":"recWOW5pWZd5kV7pG","igdbName":"NEON STRUCT","genre":["FPS","Stealth"],"date":"2016-09-10","developers":[4016],"completed":"","igdbId":17571},{"rating":87,"slug":"nidhogg","cloudHash":"royj0fkdeoqewzmtmshr","title":"Nidhogg","url":"https://www.igdb.com/games/nidhogg","support":["PC"],"summary":"Nidhogg is the award-winning fencing tug-of-war, full of graceful acrobatics and clumsy stabs. This is the ultimate two-player showdown of fast-paced fencing and melee attacks. Beware, advantages in Nidhogg are often fleeting, as new opponents continually spawn in your way. Use a variety of fencing maneuvers while armed -- lunges, parries, and even dirty tricks like throwing your sword. If swordless, press forward with punches, sweep kicks, dive kicks, rolls, and wall jumps.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/royj0fkdeoqewzmtmshr.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/royj0fkdeoqewzmtmshr.jpg","size":"cover_small"}],"airtableId":"recr9XIHDh1R9yJl6","igdbName":"Nidhogg","genre":["Vs. Fighting"],"date":"2016-12-10","developers":[2462],"completed":true,"igdbId":5551},{"rating":79,"slug":"ninja-five-o","cloudHash":"sxtiofcmx11cbbmsa6ta","title":"Ninja Five-O","url":"https://www.igdb.com/games/ninja-five-o","support":["GBA"],"summary":"Take on the role of Ninja Five-O as he uses all his skill, stealth and magic to rescue hostages and defeat his enemies. Master the art of ninja swords, shuriken throwing stars and ancient ninjitsu magic! \n \n* Kaginawa Wire grappling hook that can be used to hang, fly, jump, climb walls and surprise attack. \n* 6 Challenging missions covering 20 levels. \n* Crush objects to find hidden Power-Ups and secret items \n* Unique enemy boss characters for each level.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/sxtiofcmx11cbbmsa6ta.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/sxtiofcmx11cbbmsa6ta.jpg","size":"cover_small"}],"airtableId":"recCKrgA7e84cBqCo","igdbName":"Ninja Five-O","genre":["2D platform"],"date":"","developers":[864],"completed":true,"igdbId":6524},{"rating":51,"slug":"no-time-to-explain","cloudHash":"d1jnbv8zl2ayxfkqlkbr","title":"No Time to Explain","url":"https://www.igdb.com/games/no-time-to-explain","support":["PC"],"summary":"Rescue yourself from your inexplicable demise in this 2D platformer from tinyBuild.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/d1jnbv8zl2ayxfkqlkbr.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/d1jnbv8zl2ayxfkqlkbr.jpg","size":"cover_small"}],"airtableId":"recjZb4UhYc6oZhQm","igdbName":"No Time To Explain","genre":["2D platform"],"date":"2014-12-29","developers":"","completed":"","igdbId":9560},{"rating":73.6363636363636,"slug":"octodad-dadliest-catch","cloudHash":"xu422mfbzdeb5yrey6gj","title":"Octodad: Dadliest Catch","url":"https://www.igdb.com/games/octodad-dadliest-catch","support":["PC"],"summary":"Octodad: Dadliest Catch is a game about destruction, deception, and fatherhood. The player controls Octodad, a dapper octopus masquerading as a human, as he goes about his life. Octodad's existence is a constant struggle, as he must master mundane tasks with his unwieldy boneless tentacles while simultaneously keeping his cephalopodan nature a secret from his human family.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/xu422mfbzdeb5yrey6gj.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/xu422mfbzdeb5yrey6gj.jpg","size":"cover_small"}],"airtableId":"recE9bXxFY64WceIW","igdbName":"Octodad: Dadliest Catch","genre":"","date":"2017-05-03","developers":[2147],"completed":true,"igdbId":4788},{"rating":90,"slug":"one-finger-death-punch","cloudHash":"us20fdb88of0z86zwtnx","title":"One Finger Death Punch","url":"https://www.igdb.com/games/one-finger-death-punch","support":["PC"],"summary":"Experience cinematic kung-fu battles in the fastest, most intense brawler the indie world has ever seen! With the unique 1:1 response system of One Finger Death Punch, players will feel the immediate feedback of every bone-crunching hit. \n \nPay tribute to the masters using five classic kung-fu styles mixed with additional weapons. Combine face-to-face combat with throwing weapons to recreate complex fight choreographies or just send bad guys flying through glass windows. Explore a world map with over 250 stages, 13 modes, and 3 difficulty levels. Unlock 21 different skills that can be combined in thousands of ways to assist you in your journey. Put your kung-fu to the ultimate test in the survival mode.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/us20fdb88of0z86zwtnx.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/us20fdb88of0z86zwtnx.jpg","size":"cover_small"}],"airtableId":"recvbC9o2GzFInwKd","igdbName":"One Finger Death Punch","genre":"","date":"2017-01-05","developers":[5849],"completed":true,"igdbId":8360},{"rating":"","slug":"oniken","cloudHash":"dmz1m6ovg8u6vu6fxrw5","title":"Oniken","url":"https://www.igdb.com/games/oniken","support":["PC"],"summary":"When a global war nearly decimated humankind, an evil military organization called Oniken takes advantage of the situation to dominate and oppress the few remaining survivors. Even though any resistance to this organization seemed hopeless, a small rebel movement organizes strikes against Oniken. One day, a ninja mercenary named Zaku offers his services to the resistance for unknown reasons. His moves are lethal and now he is the resistance's only hope.\n\nOniken is an action platform game highly inspired by the 1980's, its games and its movies. You can see this not only in the graphics and sound design, but also in Oniken's story and difficulty. \n\nDon't Worry, You Will Die A Lot Of Times. \n\nEvery copy of Oniken comes with digital versions of the game manual and the original soundtrack.Features\nGraphics, sounds and difficulty from the 8-bit era\nCinematic cutscenes\nOver 18 boss fights\nSix missions, three stages each\nAn extra mission after you beat the game\nBoss rush mode\nNot difficult enough? Try the new HARDCORE MODE\nGlobal Leaderboards\nFull pixelated violence","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/dmz1m6ovg8u6vu6fxrw5.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/dmz1m6ovg8u6vu6fxrw5.jpg","size":"cover_small"}],"airtableId":"recKJRbTdbt2FTt2a","igdbName":"Oniken","genre":["2D platform"],"date":"2015-06-04","developers":[4745],"completed":"","igdbId":8963},{"rating":80,"slug":"osmos","cloudHash":"psd3sm5kbu9kmpupymmb","title":"Osmos","url":"https://www.igdb.com/games/osmos","support":["PC"],"summary":"Enter the ambient world of Osmos: elegant, physics-based gameplay, dreamlike visuals, and a minimalist, electronic soundtrack. Your objective is to grow by absorbing other motes. Propel yourself by ejecting matter behind you. But be wise: ejecting matter also shrinks you. Relax - good things come to those who wait.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/psd3sm5kbu9kmpupymmb.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/psd3sm5kbu9kmpupymmb.jpg","size":"cover_small"}],"airtableId":"recAWiOtqGaWFggv3","igdbName":"Osmos","genre":"","date":"2015-02-10","developers":[7475],"completed":true,"igdbId":14951},{"rating":60,"slug":"outernauts","cloudHash":"wltf1p8uhjzvxaqfbzhy","title":"Outernauts","url":"https://www.igdb.com/games/outernauts","support":["iOS","Android"],"summary":"A social game set in space with turn-based battles.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/wltf1p8uhjzvxaqfbzhy.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/wltf1p8uhjzvxaqfbzhy.jpg","size":"cover_small"}],"airtableId":"recbJHxkLvrLknYDA","igdbName":"Outernauts","genre":"","date":"2014-09-01","developers":"","completed":true,"igdbId":22273},{"rating":85,"slug":"outland","cloudHash":"mkyt4nbgmxo6wyt0iqv2","title":"Outland","url":"https://www.igdb.com/games/outland","support":["PC"],"summary":"An action platformer with a combat/interactivity system based on polarity, Outland focuses on a hero who can switch between light and dark forms, an ability he'll need to exploit in order to destroy monsters and avoid attacks. He'll take damage from opposite-colored bullets but will be impervious to those of the same polarity. He'll also only be able to control objects that match his polarity. By switching between forms, he will be able to solve platforming puzzles and crush enemies in this mysterious new land he finds himself in.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/mkyt4nbgmxo6wyt0iqv2.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/mkyt4nbgmxo6wyt0iqv2.jpg","size":"cover_small"}],"airtableId":"recTxOSciA4GXxeRj","igdbName":"Outland","genre":["Metroidvania"],"date":"2016-04-20","developers":[1006],"completed":true,"igdbId":8371},{"rating":81.3333333333333,"slug":"overcooked","cloudHash":"zqjb9a7dp6umn2jtjsj9","title":"Overcooked","url":"https://www.igdb.com/games/overcooked","support":["PC"],"summary":"Overcooked is a co-op cooking game for 1-4 players. Working as a team, you and your fellow chefs must prepare, cook and serve up a variety of tasty orders before the baying customers storm out. \n \nTake part in an epic journey across the Onion Kingdom and tackle an increasingly challenging and bizarre gauntlet of kitchens which will push your skills of co-operation and co-ordination to the very limits.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/zqjb9a7dp6umn2jtjsj9.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/zqjb9a7dp6umn2jtjsj9.jpg","size":"cover_small"}],"airtableId":"recOw43qnA3TvtKeN","igdbName":"Overcooked","genre":"","date":"2017-03-12","developers":[9431],"completed":true,"igdbId":18433},{"rating":59,"slug":"pac-man-world-3","cloudHash":"i4wujyqmzl3eqbi242d6","title":"Pac-Man World 3","url":"https://www.igdb.com/games/pac-man-world-3","support":["PSP"],"summary":"The classic gaming character Pac-Man is back for the third iteration of the Pac-Man World series. The game features the classic Pac-Man powers and adds a few new abilities--such as superstomp and electric shock--to assist the yellow-ball-like hero against his ghost foes.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/i4wujyqmzl3eqbi242d6.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/i4wujyqmzl3eqbi242d6.jpg","size":"cover_small"}],"airtableId":"rec5fWZWbH1FohsUO","igdbName":"Pac-Man World 3","genre":["3D platform"],"date":"","developers":[263,1286],"completed":true,"igdbId":4064},{"rating":"","slug":"pajama-sam-in-no-need-to-hide-when-it-s-dark-outside","cloudHash":"faiq0i3zvmilxtsi1ugr","title":"Pajama Sam in No need to Hide When It's Dark Outside","url":"https://www.igdb.com/games/pajama-sam-in-no-need-to-hide-when-it-s-dark-outside","support":["PC"],"summary":"There's no reason to be afraid of the dark. Fed up with his fear of the dark, Sam transforms himself into Pajama Sam - world's youngest superhero and resolves to confront Darkness! With help from King the mine car, Otto the boat, and a host of fascinating characters.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/faiq0i3zvmilxtsi1ugr.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/faiq0i3zvmilxtsi1ugr.jpg","size":"cover_small"}],"airtableId":"recrKlhAKKpXg495e","igdbName":"Pajama Sam In: No Need to Hide When It's Dark Outside","genre":["Point'n'click"],"date":"","developers":[603,1889],"completed":true,"igdbId":3730},{"rating":65,"slug":"paranautical-activity","cloudHash":"ddixivevtsy0188jxbkj","title":"Paranautical Activity: Deluxe Atonement Edition","url":"https://www.igdb.com/games/paranautical-activity","support":["PC"],"summary":"Paranautical Activity combines the classic FPS action of games like Doom and Quake, with the randomness and difficulty of modern roguelikes like Binding of Isaac and Spelunky.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ddixivevtsy0188jxbkj.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ddixivevtsy0188jxbkj.jpg","size":"cover_small"}],"airtableId":"recaGa94D7kkj4bqz","igdbName":"Paranautical Activity","genre":["Roguelike","FPS"],"date":"2015-05-15","developers":[10417],"completed":"","igdbId":20981},{"rating":"","slug":"parodius-from-myth-to-laughter","cloudHash":"clsylvwqsx1ygvokbk0g","title":"Parodius! From Myth to Laughter","url":"https://www.igdb.com/games/parodius-from-myth-to-laughter","support":["SNES"],"summary":"A shoot'em up arcade game and the second title in the Parodius series.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/clsylvwqsx1ygvokbk0g.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/clsylvwqsx1ygvokbk0g.jpg","size":"cover_small"}],"airtableId":"recTJo2AsR9AdHWLX","igdbName":"Parodius! From Myth to Laughter","genre":["Shoot'em Up"],"date":"2017-12-21","developers":[2843],"completed":true,"igdbId":37307},{"rating":76.8,"slug":"penarium","cloudHash":"uvmw5k4cgnnua9ipcogq","title":"Penarium","url":"https://www.igdb.com/games/penarium","support":["PC"],"summary":"Poor Willy. Trapped in a sinister circus, his only hope of seeing his family is to run and jump his way past an array of deathtraps while being cheered on by a sadistically bloodthirsty crowd.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/uvmw5k4cgnnua9ipcogq.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/uvmw5k4cgnnua9ipcogq.jpg","size":"cover_small"}],"airtableId":"recGKpYJEVEcIQ0Eo","igdbName":"Penarium","genre":["2D platform"],"date":"2017-01-08","developers":"","completed":true,"igdbId":14381},{"rating":77,"slug":"pitfall-the-lost-expedition","cloudHash":"sw1j76zixc61uux82fr3","title":"Pitfall: The Lost Expedition","url":"https://www.igdb.com/games/pitfall-the-lost-expedition","support":["PC"],"summary":"Twenty-two years after making his groundbreaking debut on the Atari 2600, Activision's Pitfall Harry returns for more jungle-exploring action. The intrepid adventurer is brought to life for more than 50 perilous levels set in such exotic South American locales as rainforests, glaciers, mines, and ancient ruins. As in the original, players must utilize Harry's athletic prowess to swing from vines, run from rolling logs, hop over treacherous pits, avoid snapping crocodiles, and more, while trying to survive the hostile environment. \n \nHis objectives? To retrieve lost artifacts before they fall into the hands of his rival and to save those in danger. Pitfall Harry will eventually encounter situations that even he can't conquer with a well-timed jump or two, so players can pull items stored in his knapsack to assist him. Like the character's single foray on the original PlayStation, this game is designed to make players smile while exploring the mysterious lands before them. Although Pitfall 3D made use of Bruce Campbell's voice for its comic effect, Pitfall Harry attempts to use its visuals to elicit grins, with the protagonist drawn as a caricature, with a large head balanced atop a slender body. \n \n \nAs the story begins, Harry is a member of a treasure-hunting expedition whose plane goes down in the forest. The other survivors are scattered throughout the game; an older, wiser adventurer who was on the plane -- and who becomes incapacitated during the accident -- urges Harry to embark on a quest to save them while battling a rival, eco-unfriendly group of treasure hunters for the relics of the jungle so they can be returned to their rightful owners. He hands Harry the \"Hero's Handbook\" and Harry's off to adventure. The \"Hero's Handbook's\" pages are scattered throughout the levels just like the crash survivors are. Find new pages, and Harry will learn new moves.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/sw1j76zixc61uux82fr3.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/sw1j76zixc61uux82fr3.jpg","size":"cover_small"}],"airtableId":"recpR3nnqMJ8KMBKg","igdbName":"Pitfall: The Lost Expedition","genre":"","date":"2013-06-20","developers":[223,690,432],"completed":true,"igdbId":4070},{"rating":82.6666666666667,"slug":"pixeljunk-shooter","cloudHash":"ns1q2klytspkocbokr8a","title":"PixelJunk Shooter","url":"https://www.igdb.com/games/pixeljunk-shooter","support":["PC"],"summary":"In PixelJunk Shooter, you must pilot your spacecraft through a range of cavernous environments in a bid to save the scientists trapped underground. Making your way through the game will rely on your keen sense of observation and the ability to manipulate your surroundings. Add in a swarm of dangerous enemies, hazardous substances and stranded survivors in need of your help and your mission objectives are pretty clear! \n \nAction, adventure and entertainment await you. Be the hero and rescue the stranded scientists while enjoying a world of fun retro visuals and a dynamic soundtrack that reacts to the level of danger that you find yourself in!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ns1q2klytspkocbokr8a.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ns1q2klytspkocbokr8a.jpg","size":"cover_small"}],"airtableId":"rechTJSMiiCIlnxiZ","igdbName":"PixelJunk Shooter","genre":"","date":"2015-04-02","developers":[2933,748],"completed":true,"igdbId":9912},{"rating":60,"slug":"pokemon-emerald","cloudHash":"pu264qq6ttcbyks2vufo","title":"Pokemon Emerald","url":"https://www.igdb.com/games/pokemon-emerald","support":["GBA"],"summary":"Pokémon Emerald Version is a sister game to Pokémon Ruby and Sapphire. Emerald Version provided the main storyline with more depth and length, as well as making small aesthetic changes to the world and adding unique animations for each Pokémon.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/pu264qq6ttcbyks2vufo.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/pu264qq6ttcbyks2vufo.jpg","size":"cover_small"}],"airtableId":"rectV3uWMAH4vkX4f","igdbName":"Pokémon Emerald","genre":["JRPG"],"date":"","developers":[1617],"completed":true,"igdbId":1517},{"rating":"","slug":"pokemon-firered","cloudHash":"dsjsi589vmgdnavmegvf","title":"Pokemon Fire Red","url":"https://www.igdb.com/games/pokemon-firered","support":["GBA"],"summary":"Pokémon FireRed Version and Pokémon LeafGreen Version are a pair of core series Generation III games that are set in the Kanto region. They were released in Japan on January 29, 2004, in North America on September 9, 2004, in Australia on September 23, 2004 and in Europe on October 1, 2004.\nAs the first remakes in the Pokémon franchise, the games revisit the original pair of Pokémon games, Pokémon Red and Green Versions, and so feature all of the characters, plot elements, and challenges of them, but with several important upgrades to bring them up to speed with other Generation III games.\nThe Game Boy Advance Wireless Adapter was initially included with the games when they were first released, eliminating the need for Game Link Cables when trading between the two games (and later Pokémon Emerald Version). In later copies, it was sold separately.\nFireRed and LeafGreen went on to become the second best-selling games of the Game Boy Advance, only behind Pokémon Ruby and Sapphire Versions. They also received Nintendo's Player's Choice awards.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/dsjsi589vmgdnavmegvf.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/dsjsi589vmgdnavmegvf.jpg","size":"cover_small"}],"airtableId":"reca7srklzcWjLUqe","igdbName":"Pokémon FireRed","genre":["JRPG"],"date":"","developers":[1617],"completed":true,"igdbId":1559},{"rating":65,"slug":"poker-night-2","cloudHash":"bdoqqyprgivzxqfn61qd","title":"Poker Night 2","url":"https://www.igdb.com/games/poker-night-2","support":["PC"],"summary":"Poker Night 2 is a poker video game developed by Telltale Games.[1] It is the sequel to Poker Night at the Inventory and, like its predecessor, features crossover characters from different franchises. The game was released for Steam, PlayStation Network and Xbox Live Arcade in April 2013.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/bdoqqyprgivzxqfn61qd.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/bdoqqyprgivzxqfn61qd.jpg","size":"cover_small"}],"airtableId":"rectBAPMMUgyhGNa2","igdbName":"Poker Night 2","genre":["Plateau"],"date":"2016-06-26","developers":[294],"completed":"","igdbId":2047},{"rating":"","slug":"poker-night-at-the-inventory","cloudHash":"ra78dbfjixti2aletj2p","title":"Poker Night at the Inventory","url":"https://www.igdb.com/games/poker-night-at-the-inventory","support":["PC"],"summary":"Prepare for a different kind of poker night in a very different kind of club and play against familiar faces.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ra78dbfjixti2aletj2p.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ra78dbfjixti2aletj2p.jpg","size":"cover_small"}],"airtableId":"recS4vwyhKewWRuH8","igdbName":"Poker Night at the Inventory","genre":["Plateau"],"date":"2016-06-07","developers":[294],"completed":"","igdbId":8040},{"rating":80,"slug":"portal","cloudHash":"hlsitdvwt8awh56a6nbv","title":"Portal","url":"https://www.igdb.com/games/portal","support":["PC"],"summary":"Portal is a new single player game from Valve. Set in the mysterious Aperture Science Laboratories, Portal has been called one of the most innovative new games on the horizon and will offer gamers hours of unique gameplay. The game is designed to change the way players approach, manipulate, and surmise the possibilities in a given environment; similar to how Half-Life® 2's Gravity Gun innovated new ways to leverage an object in any given situation. \nPlayers must solve physical puzzles and challenges by opening portals to maneuvering objects, and themselves, through space.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/hlsitdvwt8awh56a6nbv.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/hlsitdvwt8awh56a6nbv.jpg","size":"cover_small"}],"airtableId":"recui1sWKNxzZXj4n","igdbName":"Portal","genre":["FPS","Puzzle"],"date":"2013-12-30","developers":[56],"completed":true,"igdbId":71},{"rating":92.4444444444444,"slug":"portal-2","cloudHash":"w6kusdugzlssi3yqcbwl","title":"Portal 2","url":"https://www.igdb.com/games/portal-2","support":["PC"],"summary":"Sequel to the acclaimed Portal (2007), Portal 2 pits the protagonist of the original game, Chell, and her new robot friend, Wheatley, against more puzzles conceived by GLaDOS, an A.I. with the sole purpose of testing the Portal Gun's mechanics and taking revenge on Chell for the events of Portal. As a result of several interactions and revelations, Chell once again pushes to escape Aperture Science Labs.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/w6kusdugzlssi3yqcbwl.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/w6kusdugzlssi3yqcbwl.jpg","size":"cover_small"}],"airtableId":"recIlDr4NxDsqpnRu","igdbName":"Portal 2","genre":["FPS","Puzzle"],"date":"2014-03-22","developers":[56],"completed":true,"igdbId":72},{"rating":59.25,"slug":"postal-2","cloudHash":"x4hsejxccmswvocvigzd","title":"Postal 2","url":"https://www.igdb.com/games/postal-2","support":["PC"],"summary":"Try to live a week as The Postal Dude doing everyday chores on your to-do list, such as picking up milk at the grocery store. In a world where cats can be used as assault rifle silencers, it's not surprising that a milk carton costs 5 bucks. Stealing said carton might be relatively easy in your basic corner shop, but when the shop is owned by a bunch of trigger happy jihadists, you might want to think twice about trying to leave without paying for your overpriced groceries. Little mistakes like that might just flip the switch and make you go postal.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/x4hsejxccmswvocvigzd.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/x4hsejxccmswvocvigzd.jpg","size":"cover_small"}],"airtableId":"rec0ayv09175f55Pc","igdbName":"Postal 2","genre":["FPS"],"date":"2014-07-13","developers":[935],"completed":"","igdbId":3109},{"rating":84.2222222222222,"slug":"prince-of-persia-the-sands-of-time","cloudHash":"fnjwyprolmvgdkniu7fa","title":"Prince of Persia: The Sands of Time","url":"https://www.igdb.com/games/prince-of-persia-the-sands-of-time","support":["PS2","PC"],"summary":"Prince of Persia: The Sands of Time is a third-person puzzle-platformer and action-adventure computer and video game published by Ubisoft. It was released on November 21, 2003 and is a reboot of the landmark video game series Prince of Persia, created by Jordan Mechner in 1989. \n \nThe Sands of Time, developed internally at Ubisoft Montreal, successfully captures the mechanics of the original platformer and extends it to the 3D generation. An earlier attempt by The Learning Company to transfer the game to 3D (Prince of Persia 3D) was released in 1999, but despite its initial good reception failed to sell enough and the company responsible for the original trilogy was already closing doors. The game was praised for its visual design, finely tuned game mechanics and intriguing storyline, winning the game several awards. \n \nThe game was developed for the PC, PlayStation 2, GameCube, Xbox, and later a 2D-version for the Game Boy Advance and mobile phones. The success of The Sands of Time led to three followups, Prince of Persia: Warrior Within (2004), Prince of Persia: The Two Thrones (2005), and Prince of Persia: The Forgotten Sands (2010). A remastered, high-definition, version of The Sands of Time was released on the PlayStation Network for the PlayStation 3 on November 16, 2010.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/fnjwyprolmvgdkniu7fa.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/fnjwyprolmvgdkniu7fa.jpg","size":"cover_small"}],"airtableId":"recFzCdULxhIzzBWq","igdbName":"Prince of Persia: The Sands of Time","genre":"","date":"","developers":[38],"completed":true,"igdbId":836},{"rating":80,"slug":"prince-of-persia-the-two-thrones","cloudHash":"p88wht0e3txbdj1n6wqj","title":"Prince of Persia: The Two Thrones","url":"https://www.igdb.com/games/prince-of-persia-the-two-thrones","support":["PC"],"summary":"Prince of Persia: The Two Thrones is an action-adventure video game developed and published by Ubisoft Montreal. It was released in December, 2005 in North America for the Xbox, Microsoft Windows, PlayStation 2, and the Nintendo GameCube. It was ported to the PlayStation Portable and Wii, under the title Prince of Persia: Rival Swords with the Wii version utilizing the motion-sensing functionality of its controller, while the PSP version added exclusive content. A remastered, high-definition, version of The Two Thrones was released on the PlayStation Network for the PlayStation 3 on December 21, 2010. \nFollowing Warrior Within, The Two Thrones is the closing chapter in the Sands of Time saga. Prince of Persia: Warrior Within, in which the Prince kills the Dahaka, essentially saving Kaileena. The game opens with the Prince and Kaileena about to sail into Babylon's port. Kaileena offers narration of the events passed and the story following, similar to the Prince's role as both protagonist and narrator in The Sands of Time.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/p88wht0e3txbdj1n6wqj.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/p88wht0e3txbdj1n6wqj.jpg","size":"cover_small"}],"airtableId":"recID4BrkRpxLZNju","igdbName":"Prince of Persia: The Two Thrones","genre":"","date":"","developers":[38,680],"completed":true,"igdbId":2437},{"rating":79.6,"slug":"prince-of-persia-warrior-within","cloudHash":"naykkl8olyfl1qearnzq","title":"Prince of Persia: Warrior Within","url":"https://www.igdb.com/games/prince-of-persia-warrior-within","support":["PS2"],"summary":"Prince of Persia: Warrior Within is a video game and sequel to Prince of Persia: The Sands of Time. Warrior Within was developed and published by Ubisoft, and released on December 2, 2004 for the Xbox, PlayStation 2, GameCube, and Microsoft Windows. It picks up where The Sands of Time left off, adding new features, specifically, options in combat. The Prince now has the ability to wield two weapons at a time as well as the ability to steal his enemies' weapons and throw them. The Prince's repertoire of combat moves has been expanded into varying strings that allow players to attack enemies with more complexity than was possible in the previous game. Warrior Within has a darker tone than its predecessor adding in the ability for the Prince to dispatch his enemies with various finishing moves. In addition to the rewind, slow-down, and speed-up powers from The Sands of Time, the Prince also has a new sand power: a circular \"wave\" of sand that knocks down all surrounding enemies as well as damaging them. The dark tone, a vastly increased level of blood and violence as well as sexualized female NPCs earned the game an M ESRB rating.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/naykkl8olyfl1qearnzq.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/naykkl8olyfl1qearnzq.jpg","size":"cover_small"}],"airtableId":"recKbOp5OzUQmsrqW","igdbName":"Prince of Persia: Warrior Within","genre":"","date":"","developers":[38],"completed":true,"igdbId":837},{"rating":"","slug":"pro-tennis-wta-tour","cloudHash":"a6riavk9hflllks2ntsg","title":"Pro Tennis WTA Tour","url":"https://www.igdb.com/games/pro-tennis-wta-tour","support":["GBA"],"summary":"Also Known As: Pro Tennis WTA Tour (EU), WTA Tour Tennis Pro Evolution (JP) \n \nTake to the court and experience the realism and authenticity of WTA Tour Tennis. First, choose one of 20 professional tennis players such as Serena Williams, Martina Hingis, and Jelina Dokic--each with lifelike facial expressions and movements. Then, engage in fast-paced competition on grass, clay, and hard surfaces. With simple controls, multiple levels of difficulty, and AI based on actual player attributes, WTA Tour Tennis challenges both newcomers and seasoned pros alike.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/a6riavk9hflllks2ntsg.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/a6riavk9hflllks2ntsg.jpg","size":"cover_small"}],"airtableId":"recj7HxRMvwPtZ5sk","igdbName":"Pro Tennis WTA Tour","genre":["Sport"],"date":"","developers":[2843],"completed":true,"igdbId":26024},{"rating":78.375,"slug":"prototype","cloudHash":"xfbecp7fcxt9qqnpitmn","title":"Prototype","url":"https://www.igdb.com/games/prototype","support":["PC"],"summary":"Prototype is the first of two games, and let's the user take control of Alex Mercer as he fights to stop the viral outbreak known as BLACKLIGHT throughout Manhattan. Alex is himself infected by the virus, which has given him special, mutant, abilities that will evolve with time and aid him in stopping the virus.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/xfbecp7fcxt9qqnpitmn.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/xfbecp7fcxt9qqnpitmn.jpg","size":"cover_small"}],"airtableId":"recSNxkOHb30ZS8TE","igdbName":"Prototype","genre":"","date":"2012-12-20","developers":[444,1926],"completed":true,"igdbId":570},{"rating":84.8333333333333,"slug":"psychonauts","cloudHash":"w236pspvkmvxaak5rq5u","title":"Psychonauts","url":"https://www.igdb.com/games/psychonauts","support":["PC"],"summary":"A Psychic Odyssey Through the Minds of Misfits, Monsters, and Madmen. This classic action/adventure platformer from acclaimed developers Double Fine Productions follows the story of a young psychic named Razputin.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/w236pspvkmvxaak5rq5u.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/w236pspvkmvxaak5rq5u.jpg","size":"cover_small"}],"airtableId":"recKYYmEPnW0xbm83","igdbName":"Psychonauts","genre":"","date":"2014-07-12","developers":[85,684],"completed":true,"igdbId":1339},{"rating":"","slug":"punch-out--2","cloudHash":"wuwrbg81vbja9igfaayg","title":"Punch-Out!!","url":"https://www.igdb.com/games/punch-out--2","support":["NES"],"summary":"Punch-Out!!, originally released in North America as Mike Tyson's Punch-Out!!, is a boxing sports fighting video game for the Nintendo Entertainment System (NES) developed and published by Nintendo in 1987. Part of the Punch-Out!! series, it is a port of both the Punch-Out!! and Super Punch-Out!! arcade games (particularly the latter) with some variations. \nPunch-Out!! features a boxer known as Little Mac working his way up the professional boxing circuits, facing a series of colorful, fictional boxers, leading to a final fight with real-life boxer, the then-World Heavyweight Champion, which is Mike Tyson in the original version and Mr. Dream in the later version. \nLittle Mac has a limited repertoire compared to most of his opponents. His punches are limited to left and right jabs, left and right body blows, and a powerful uppercut. The uppercut can only be used once the player earns a star, which is typically accomplished by counter-punching the opponent directly before or after certain attacks are launched. The player can acquire up to three stars. To perform the uppercut, the player needs to press the start button once a star is earned. To defend, Mac can dodge left or right, duck, and block punches by putting up his guard. \nLittle Mac also has a heart meter, which decreases by three upon being struck by an opponent and one upon blocking an attack or an opponent blocking/dodging the player's attack. When the heart meter decreases to zero, Little Mac temporarily turns pink and appears exhausted, leaving the player unable to attack but still able to dodge or block. At this point, Mac can regain some hearts (and his normal color palette) only by avoiding the opponent's punches. He immediately loses all of his hearts upon being knocked down, but can regain some by getting up. \nA bout can end by knockout (KO), if a fighter is unable to get up within ten seconds after being knocked down; by technical knockout (TKO), if a fighter is knocked down three times in one round; or by decision, if the bout lasts three full rounds without a clear winner. In order to win by decision, the player must accumulate higher than a certain point total by punching the opponent and/or knocking him down (different boxers require different point totals to win by decision). However, some bouts cannot be won in this manner and will automatically result in a loss for the player if the opponent is not knocked out. Mac can only get up three times during any one bout; if he is knocked down a fourth time, he will be unable to rise and thus lose by knockout. \nWhen Mac loses his first bout to a ranked opponent, he will have a chance to fight a rematch. However, if he loses a Title Bout, he will fall in the rankings - one place for the Minor or Major Circuits, two places for the World Circuit. Losing a rematch causes him to fall one place (unless he is already at the bottom of his circuit), forcing him to fight his way back up. A third loss (not necessarily a consecutive one) ends the game. The exception is the final fight against Mike Tyson/Mr. Dream; a loss to them automatically results in a game over.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/wuwrbg81vbja9igfaayg.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/wuwrbg81vbja9igfaayg.jpg","size":"cover_small"}],"airtableId":"rec1uicgAzR8OZamP","igdbName":"Punch-Out!!","genre":"","date":"2017-09-21","developers":[70],"completed":true,"igdbId":2195},{"rating":"","slug":"putt-putt-saves-the-zoo","cloudHash":"sp45bhtfycrmoopczn4l","title":"Putt-Putt Saves the Zoo","url":"https://www.igdb.com/games/putt-putt-saves-the-zoo","support":["PC"],"summary":"Today's the grand opening of the Cartown Zoo, and there's still so much to do: zoo chow is running low, and all the baby animals are missing.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/sp45bhtfycrmoopczn4l.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/sp45bhtfycrmoopczn4l.jpg","size":"cover_small"}],"airtableId":"recJmMyRHwaPcZaFY","igdbName":"Putt-Putt Saves The Zoo","genre":["Point'n'click"],"date":"","developers":[603,1890],"completed":true,"igdbId":3736},{"rating":80,"slug":"ratchet-clank","cloudHash":"yxj6qfm30pxzurc40agy","title":"Ratchet & Clank","url":"https://www.igdb.com/games/ratchet-clank","support":["PS2"],"summary":"Ratchet & Clank is a platform/adventure game in a similar vein to the 3D versions of the Rayman, Sonic, Mario, or other games. It involves the two protagonists Ratchet, a furry alien creature, and Clank, a nerdy little robot, going on a quest to find Captain Qwark and ultimately to help save the galaxy. \n \nRatchet & Clank includes many of the best features of previous similar games, but makes itself unique in a number of ways. Firstly each of the game's levels are huge sweeping vistas with extremely detailed buildings which are visible at all times (i.e. there is no distance fog). This means that a building on the horizon is not just a \"backdrop\"; in all likelihood Ratchet will be exploring it in a few moments time. Secondly, the game includes a number of sub-games, such as a space fight sequence and a number of turret shoot-outs which are akin to Missile Command in the first person. \n \nThe game has over twenty levels (planets) and includes as many real-time cut-scenes which tell the story. Also of note is that the story is non-linear, requiring the player to return to previous levels to complete objectives and to choose between multiple paths forward. There is also a respectable array of weapons, gadgets, and accessories to find or buy as the game progresses, which offer some unique gameplay features.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/yxj6qfm30pxzurc40agy.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/yxj6qfm30pxzurc40agy.jpg","size":"cover_small"}],"airtableId":"recpz88oB6uQoJrxi","igdbName":"Ratchet & Clank","genre":"","date":"","developers":[834],"completed":true,"igdbId":1289},{"rating":91.5,"slug":"ratchet-clank-future-tools-of-destruction","cloudHash":"bdyu2aizion1b6hc4uzi","title":"Ratchet & Clank Future Tools of Destruction","url":"https://www.igdb.com/games/ratchet-clank-future-tools-of-destruction","support":["PS3"],"summary":"Ratchet & Clank Future: Tools of Destruction (known as Ratchet & Clank: Tools of Destruction in most PAL countries) is a 2007 platformer video game developed by Insomniac Games and published by Sony Computer Entertainment for the PlayStation 3. The game was released on October 23, 2007 in North America and on November 9, 2007 in Europe. It is the first PlayStation 3 installment for the Ratchet & Clank franchise, as well as the first installment for the \"Future\" series. It was also one of the first PlayStation 3 games to support DualShock 3 rumble straight from the disc. \n \nRatchet & Clank Future: Tools of Destruction was met with critical acclaim upon release. Most positive comments concerned the \"engaging\" and \"fun\" gameplay, while ost criticism was aimed at the game's technical issues. The game was nominated for several awards from gaming publications and was considered a commercial success.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/bdyu2aizion1b6hc4uzi.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/bdyu2aizion1b6hc4uzi.jpg","size":"cover_small"}],"airtableId":"rec0oGby2ZGGttlyl","igdbName":"Ratchet & Clank Future: Tools of Destruction","genre":"","date":"2015-07-19","developers":[834],"completed":true,"igdbId":1792},{"rating":83,"slug":"ratchet-clank-future-a-crack-in-time","cloudHash":"pya60sb1k3o50kklgano","title":"Ratchet & Clank Future: Crack In Time","url":"https://www.igdb.com/games/ratchet-clank-future-a-crack-in-time","support":["PS3"],"summary":"Ratchet & Clank Future: A Crack in Time (known as Ratchet & Clank: A Crack in Time in most PAL countries) is a platform game developed by Insomniac Games and published by Sony Computer Entertainment for the PlayStation 3 video game console. It is the sequel to Ratchet & Clank Future: Tools of Destruction and Ratchet & Clank Future: Quest for Booty.] The game was released for the PlayStation 3 in North America on October 27, 2009, in Australia on November 5, 2009 and in Europe on November 6, 2009. \nA fourth installment, titled Ratchet & Clank: Into the Nexus, was released in November 2013 for the PlayStation 3.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/pya60sb1k3o50kklgano.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/pya60sb1k3o50kklgano.jpg","size":"cover_small"}],"airtableId":"recM7T0j1k5xa6Ugx","igdbName":"Ratchet & Clank Future: A Crack in Time","genre":"","date":"2015-08-11","developers":[834],"completed":true,"igdbId":1795},{"rating":70.5,"slug":"ratchet-clank-future-quest-for-booty","cloudHash":"n481u2zfjlisb1zkn2gp","title":"Ratchet & Clank Future: Quest for Booty","url":"https://www.igdb.com/games/ratchet-clank-future-quest-for-booty","support":["PS3"],"summary":"The heroic lombax, Ratchet, returns this fall in an all-new adventure with Ratchet & Clank® Future: Quest for Booty. A stand-alone adventure for both fans and newcomers to the franchise, Ratchet & Clank Future: Quest for Booty offers up to four hours of gameplay in Ratchet and Clank’s debut on the PlayStation Network. With all new wrench mechanics and light and dark illumination puzzles, Ratchet must manipulate objects and use his wits in order to succeed in his quest. New pirate-themed puzzles in four exotic locations will have gamers interacting with townspeople, manipulating shadows and playing pirate tunes, and mixing pirate brew to find hidden treasures. \n \nDeveloped by highly-acclaimed independent developer Insomniac Games, Ratchet & Clank Future: Quest for Booty finds Ratchet in a desperate search for Clank after the intense ending of Ratchet & Clank Future: Tools of Destruction®. After an unfortunate turn of events, Ratchet washes up on the shores of a small village where he must overcome life-threatening challenges, encounter new alien races and even form an alliance with dreaded Captain Slag’s first mate, Rusty Pete.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/n481u2zfjlisb1zkn2gp.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/n481u2zfjlisb1zkn2gp.jpg","size":"cover_small"}],"airtableId":"recPv29S4Eg88tx9w","igdbName":"Ratchet & Clank Future: Quest for Booty","genre":"","date":"2015-08-08","developers":[834],"completed":true,"igdbId":1794},{"rating":90,"slug":"ratchet-clank-going-commando","cloudHash":"ac85gxhda4dedbb9chhg","title":"Ratchet & Clank Going Commando","url":"https://www.igdb.com/games/ratchet-clank-going-commando","support":["PS2"],"summary":"Ratchet and Clank return as heroes for hire in Ratchet and Clank: Going Commando, the second game in this action platforming franchise.There are 18 entirely new weapons, as well as five weapons from the first game (you can upload them if using your old memory save). Each weapon is upgradeable, utilizing a new experience system, where weapons transform into more powerful forms the more they are used. In addition to main story levels, new Maxi-games give players a chance to test their skills and gain experience.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ac85gxhda4dedbb9chhg.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ac85gxhda4dedbb9chhg.jpg","size":"cover_small"}],"airtableId":"rec0KO4Q88rULqnbb","igdbName":"Ratchet & Clank: Going Commando","genre":"","date":"","developers":[834],"completed":true,"igdbId":1770},{"rating":69.2857142857143,"slug":"ratchet-clank-into-the-nexus","cloudHash":"tu12m0hn6k3ppvgbo9qg","title":"Ratchet & Clank Into the Nexus","url":"https://www.igdb.com/games/ratchet-clank-into-the-nexus","support":["PS3"],"summary":"Ratchet & Clank: Into the Nexus (known as Ratchet & Clank: Nexus in Europe) is a 2013 platform video game developed by Insomniac Games and published by Sony Computer Entertainment for the PlayStation 3. It is the fourth and final installment in the \"Future\" series. The series is noted for the inclusion of exotic and unique locations and over the top gadgets, a concept of the traditional Ratchet & Clank experience, that returns in this game.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/tu12m0hn6k3ppvgbo9qg.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/tu12m0hn6k3ppvgbo9qg.jpg","size":"cover_small"}],"airtableId":"recLYQT19BcwAyI41","igdbName":"Ratchet & Clank: Into the Nexus","genre":"","date":"2015-08-14","developers":[834],"completed":true,"igdbId":2589},{"rating":60.3333333333333,"slug":"ratchet-clank-size-matters","cloudHash":"uny82sigpc33xhdhqg3h","title":"Ratchet & Clank Size Matters","url":"https://www.igdb.com/games/ratchet-clank-size-matters","support":["PSP"],"summary":"Ratchet & Clank: Size Matters (known as Ratchet & Clank 5 in Japan) is a 2007 platformer video game developed by High Impact Games and published by Sony Computer Entertainment for the PlayStation Portable and PlayStation 2. The game is the first Ratchet & Clank title on the PSP handheld. Development company High Impact Games was spawned from the original Ratchet & Clank developer, Insomniac Games. The story is about Ratchet and Clank as they are interrupted from their vacation to search for a kidnapped girl and encounter a forgotten race known as the Technomites","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/uny82sigpc33xhdhqg3h.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/uny82sigpc33xhdhqg3h.jpg","size":"cover_small"}],"airtableId":"recam5gzz7rj99Lmi","igdbName":"Ratchet & Clank: Size Matters","genre":"","date":"","developers":"","completed":true,"igdbId":1791},{"rating":80,"slug":"ratchet-clank-up-your-arsenal","cloudHash":"z6suntdh28iuw7zxw9b3","title":"Ratchet & Clank Up Your Arsenal","url":"https://www.igdb.com/games/ratchet-clank-up-your-arsenal","support":["PS2"],"summary":"Developed by Insomniac Games, Ratchet & Clank: Up Your Arsenal incorporates new elements of gameplay not seen previously in the series, including online and offline multiplayer capabilities.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/z6suntdh28iuw7zxw9b3.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/z6suntdh28iuw7zxw9b3.jpg","size":"cover_small"}],"airtableId":"recnwX0FBZqwzPVhD","igdbName":"Ratchet & Clank: Up Your Arsenal","genre":"","date":"","developers":[834],"completed":true,"igdbId":1773},{"rating":65,"slug":"rayman-3-hoodlum-havoc","cloudHash":"w7iyypafwzw5pgg0t5sj","title":"Rayman 3: Hoodlum Havoc","url":"https://www.igdb.com/games/rayman-3-hoodlum-havoc","support":["PC","GameCube"],"summary":"Hoodlum Havoc is a 3-D platformer from Ubisoft starring limbless hero Rayman. A hilarious story takes a few twists as Rayman sets out to stop the evil black lum Andre and his army of hoodlums.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/w7iyypafwzw5pgg0t5sj.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/w7iyypafwzw5pgg0t5sj.jpg","size":"cover_small"}],"airtableId":"recQi0ExnlE5EDJAn","igdbName":"Rayman 3: Hoodlum Havoc","genre":["3D platform"],"date":"","developers":[398,104,61],"completed":true,"igdbId":1966},{"rating":77.6666666666667,"slug":"rayman","cloudHash":"qtxesoewo5wfmperfojc","title":"Rayman Forever","url":"https://www.igdb.com/games/rayman","support":["PC"],"summary":"Rayman combines a challenging nonlinear platform style with striking animation. Come face to face with over 50 outrageous creatures in six mind-boggling worlds, in over 30 different levels. Accumulate and put together your skills as you advance, helping Rayman defeat his bizarre enemies, rescue his friends, and restore peace and harmony to the world!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/qtxesoewo5wfmperfojc.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/qtxesoewo5wfmperfojc.jpg","size":"cover_small"}],"airtableId":"recbdDFtXwGA7WkmN","igdbName":"Rayman","genre":["2D platform"],"date":"","developers":[13072,4788],"completed":"","igdbId":1963},{"rating":89.375,"slug":"rayman-origins","cloudHash":"h5emwoxmyqft6v50gonj","title":"Rayman Origins","url":"https://www.igdb.com/games/rayman-origins","support":["PC"],"summary":"Bubble Dreamer, Rayman, his best friend Globox, and some Teensy friends are chilling out at the Bubble Dreamer's resting grounds, the Snoring Tree. However, their snoring disturbs an old granny from the Land of the Livid Dead, who retaliates by sending an evil army of horrendous creatures and the Darktoons across the world, capturing the Electoons that inhabit the world, imprisoning Betilla the Nymph and her sisters, and plunging the Glade into chaos. As a result, the ensuing disaster causes the Bubble Dreamer to go crazy and have nightmares. Although they are captured, Rayman and his friends are able to escape the Darktoons. They are then tasked by the Magician to gather enough Electoons to cure the Bubble Dreamer and restore the Glade of Dreams. Their efforts to locate the Electoons allow them to gain access to the various lands of the Glade, rescuing the Nymphs along the way.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/h5emwoxmyqft6v50gonj.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/h5emwoxmyqft6v50gonj.jpg","size":"cover_small"}],"airtableId":"recn70d0FgHfAO9kb","igdbName":"Rayman Origins","genre":["2D platform"],"date":"2016-06-26","developers":[702],"completed":true,"igdbId":981},{"rating":"","slug":"receiver","cloudHash":"ol8bldrg1v9bmnmoaenk","title":"Receiver","url":"https://www.igdb.com/games/receiver","support":["PC"],"summary":"Receiver was created for the 7-day FPS challenge to explore gun handling mechanics, randomized levels, and unordered storytelling. Armed only with a handgun and an audio cassette player, you must uncover the secrets of the Mindkill in a building complex infested with automated turrets and hovering shock drones.\n\nWatch the videos to learn more about our design experiments in this game!Key FeaturesDetailed simulations of a Colt 1911 pistol, S&W Model 10 \"Victory\" revolver, and Glock 17 with full-auto mod\nTaser robots and machine gun turrets with physically-based damage models\nBallistic modeling of ricochets and bullet drop\n11 audio tapes to prepare you to defend yourself against the inevitable Mindkill event\nBecome literate in how guns actually operate","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ol8bldrg1v9bmnmoaenk.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ol8bldrg1v9bmnmoaenk.jpg","size":"cover_small"}],"airtableId":"recU66KvQExyJHN8q","igdbName":"Receiver","genre":["FPS"],"date":"2017-01-07","developers":[2497],"completed":true,"igdbId":8141},{"rating":91.8,"slug":"red-dead-redemption","cloudHash":"mjvhqswqme9gxd5jtun2","title":"Red Dead Redemption","url":"https://www.igdb.com/games/red-dead-redemption","support":["PS3"],"summary":"Red Dead Redemption is a Western epic, set at the turn of the 20th century when the lawless and chaotic badlands began to give way to the expanding reach of government and the spread of the Industrial Age. A follow up to the 2004 hit Red Dead Revolver, this game tells the story of former outlaw John Marston, taking players on a great adventure across the American frontier. Red Dead Redemption features an open-world environment for players to explore, including frontier towns, rolling prairies teaming with wildlife, and perilous mountain passes - each packed with an endless flow of varied distractions. Along the way, players will experience the heat of gunfights and battles, meet a host of unique characters, struggle against the harshness of one of the world’s last remaining wildernesses, and ultimately pick their own precarious path through an epic story about the death of the Wild West and the gunslingers that inhabited it.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/mjvhqswqme9gxd5jtun2.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/mjvhqswqme9gxd5jtun2.jpg","size":"cover_small"}],"airtableId":"recNSiIUUKq4G6wLu","igdbName":"Red Dead Redemption","genre":"","date":"2015-08-02","developers":[365,364],"completed":true,"igdbId":434},{"rating":"","slug":"refunct","cloudHash":"o3t0sdly4awbboskqatd","title":"Refunct","url":"https://www.igdb.com/games/refunct","support":["PC"],"summary":"Refunct is a first-person platformer about restoring a vibrant world by running, jumping, sliding and climbing.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/o3t0sdly4awbboskqatd.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/o3t0sdly4awbboskqatd.jpg","size":"cover_small"}],"airtableId":"reczzOPocICMCXy5J","igdbName":"Refunct","genre":["FPS","3D platform"],"date":"2016-09-09","developers":[7047],"completed":true,"igdbId":13542},{"rating":75,"slug":"reigns","cloudHash":"qwggpw6u2qadkygfh9p0","title":"Reigns","url":"https://www.igdb.com/games/reigns","support":["Android"],"summary":"You are the King. For each decision, you only have two choices. Survive the exercise of power and the craziness of your advisors... as long as you can.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/qwggpw6u2qadkygfh9p0.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/qwggpw6u2qadkygfh9p0.jpg","size":"cover_small"}],"airtableId":"recV4gMqsyiCsTI9o","igdbName":"Reigns","genre":"","date":"2017-11-06","developers":[9364],"completed":true,"igdbId":22436},{"rating":70.4166666666667,"slug":"remember-me","cloudHash":"saox1ja5gaehnmzcbphm","title":"Remember Me","url":"https://www.igdb.com/games/remember-me","support":["PC"],"summary":"A visionary 3rd person action adventure, Remember Me puts players into the role of Nilin, a former elite memory hunter with the ability to break into people's minds and steal or even alter their memories. The authorities, fearful of her knowledge and capabilities have arrested Nilin and wiped her memory clean. After her escape from prison, Nilin sets out on a mission to recover her identity, helped by her last and only friend. This search for her past leads to her being hunted by the very people that created this surveillance society.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/saox1ja5gaehnmzcbphm.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/saox1ja5gaehnmzcbphm.jpg","size":"cover_small"}],"airtableId":"recAw1rcLkS4P1wZk","igdbName":"Remember Me","genre":"","date":"2016-03-12","developers":[894],"completed":true,"igdbId":1827},{"rating":85.9090909090909,"slug":"resogun","cloudHash":"rbinzvvxmvkpdprmzd3x","title":"RESOGUN","url":"https://www.igdb.com/games/resogun","support":["PS4"],"summary":"RESOGUN is a new exclusive PlayStation®4 shoot ‘em up from the same team that brought you Super Stardust HD, Super Stardust Delta and Dead Nation.\n\nUnleash an explosive array of devastating weapons to obliterate hordes of ruthless enemies while making sure you rescue the last survivors and keep your multiplier going!\n\nExperience the most intense destruction ever, as the power of PlayStation®4 renders all enemies and levels using hundred of thousands of individual voxels that blow up in real time as you battle your way through.\n\nPush yourself to the limits trying to climb the global leaderboards for each game mode and difficulty setting.\n\nJoin forces with your friends online and show off your skills in action packed co-op multiplayer.\n\nWelcome to RESOGUN… the most insanely intensive, ultra-responsive, fully HD, 60FPS shoot ‘em up, only on PlayStation®4!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/rbinzvvxmvkpdprmzd3x.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/rbinzvvxmvkpdprmzd3x.jpg","size":"cover_small"}],"airtableId":"recevvyTSDLx3HqKk","igdbName":"RESOGUN","genre":["Shoot'em Up"],"date":"2014-08-06","developers":[1006,163],"completed":true,"igdbId":6007},{"rating":75.8,"slug":"ridge-racer-unbounded","cloudHash":"gjzyfsltj8pcitugyfko","title":"Ridge Racer Unbounded","url":"https://www.igdb.com/games/ridge-racer-unbounded","support":["PC"],"summary":"Ridge Racer Unbounded takes the Ridge Racer series in whole new direction by adding a dose of destruction to the familiar arcade gameplay.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/gjzyfsltj8pcitugyfko.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/gjzyfsltj8pcitugyfko.jpg","size":"cover_small"}],"airtableId":"recJUghGWK1VOZgGM","igdbName":"Ridge Racer Unbounded","genre":["Racing"],"date":"2015-10-31","developers":[427],"completed":true,"igdbId":541},{"rating":85,"slug":"risk-of-rain","cloudHash":"okhrs0w7ilzxsychwdig","title":"Risk of Rain","url":"https://www.igdb.com/games/risk-of-rain","support":["PC"],"summary":"Risk of Rain is an action platformer/adventure game with randomized elements.While we don’t want to spoil the story, we can let a few things through! The game is set in the distant future, where space transportation is common. Space trains carry passengers and goods all across space. A particular space train, however, had some very special cargo. Through a series of unfortunate events, this space train gets shot out of orbit and crash lands on a mysterious planet.. with one survivor. \n \nThe big feature of our game is the randomized elements. The position you spawn on the map, which map you spawn on, the location of chests, enemy spawns, item spawns and more are all randomly chosen by the AI Director! We also have a massive amount of content in our game: we have 100 unique items planned, all with interesting effects. No +HP or +DAMAGE, but chance to spawn missiles and stop time. You have the option of choosing between 10 characters, all with their own different moveset. \n \nAnother thing that’s important in our game is that as time increases, so does difficulty. Represented in a bar on the HUD, every minute increases the enemies’ power and spawn count, developing a great sense of urgency.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/okhrs0w7ilzxsychwdig.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/okhrs0w7ilzxsychwdig.jpg","size":"cover_small"}],"airtableId":"rec9gQdJAZA8833eL","igdbName":"Risk of Rain","genre":["Roguelike"],"date":"2016-05-07","developers":[1532],"completed":true,"igdbId":3173},{"rating":89,"slug":"rocket-league","cloudHash":"edkpgyqgfsxyiby9pyj5","title":"Rocket League","url":"https://www.igdb.com/games/rocket-league","support":["PC"],"summary":"Soccer meets racing once again in our long-awaited, MP-focused sequel to Supersonic Acrobatic Rocket-Powered Battle-Cars! \n \nA futuristic Sports-Action game, Rocket League, equips players with booster-rigged vehicles that can be crashed into balls for incredible goals or epic saves across multiple, highly-detailed arenas. Using an advanced physics system to simulate realistic interactions, Rocket League relies on mass and momentum to give players a complete sense of intuitive control in this unbelievable, high-octane re-imagining of association football.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/edkpgyqgfsxyiby9pyj5.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/edkpgyqgfsxyiby9pyj5.jpg","size":"cover_small"}],"airtableId":"recg5sreUzo29gKjV","igdbName":"Rocket League","genre":["Racing","Sport"],"date":"2016-12-19","developers":[711],"completed":"","igdbId":11198},{"rating":56.6666666666667,"slug":"rocketbirds-2-evolution","cloudHash":"ibexux92h5tqcgvwf17q","title":"Rocketbirds 2: Evolution","url":"https://www.igdb.com/games/rocketbirds-2-evolution","support":["PC"],"summary":"Rocketbirds 2: Evolution picks up right where the cinematic adventure of Hardboiled Chicken left off. Players again will gear up as Hardboiled, the tough-asnails, plucky chicken super-agent and the original “Cock of War.” The evil megalomaniacal despot Putzki, who wants nothing more than to bend the world to his wing, is still alive, and his evil plans force Hardboiled to hunt him down and eliminate him once and for all.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ibexux92h5tqcgvwf17q.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ibexux92h5tqcgvwf17q.jpg","size":"cover_small"}],"airtableId":"recDXWkIVyQIgKFH9","igdbName":"Rocketbirds 2: Evolution","genre":"","date":"2018-01-28","developers":[6331],"completed":true,"igdbId":20074},{"rating":65,"slug":"rocketbirds-hardboiled-chicken","cloudHash":"z6umozuzf6kuvkuv6lpr","title":"Rocketbirds: Hardboiled Chicken","url":"https://www.igdb.com/games/rocketbirds-hardboiled-chicken","support":["PC"],"summary":"Annihilate an evil penguin regime in this cinematic platform adventure game offering full solo and co-op campaigns with anaglyph 3D support. Set out on a mission to assassinate the totalitarian penguin leader as Hardboiled Chicken. Destroy enemies with a slew of weapons and illuminate the secrets to his past while uncovering the real enemies of Albatropolis. Master fowl play in the co-op campaign as a pair of Budgie commandos on a mission to save the general's daughter. Many lives will be destroyed, countless penguins will die!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/z6umozuzf6kuvkuv6lpr.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/z6umozuzf6kuvkuv6lpr.jpg","size":"cover_small"}],"airtableId":"recX6AV9cZwoO57Io","igdbName":"Rocketbirds: Hardboiled Chicken","genre":"","date":"2014-02-22","developers":[6331,2345],"completed":true,"igdbId":10767},{"rating":85.5,"slug":"rogue-legacy","cloudHash":"b8mz09waqqzvcyrtgbda","title":"Rogue Legacy","url":"https://www.igdb.com/games/rogue-legacy","support":["PC"],"summary":"You control a family of characters one at a time, and when your character dies, you choose who his or her successor is, whether it is a barbarian son of yours who has OCD, your daughter who became a ninja even though she can't see well, an assassin who is fighting for the gays, or a miner who wants to collect gold! Traits are randomized each time upon death, leading to multiple playthroughs with 35 traits, each character will be unique.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/b8mz09waqqzvcyrtgbda.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/b8mz09waqqzvcyrtgbda.jpg","size":"cover_small"}],"airtableId":"recTOizzZWmkYkcka","igdbName":"Rogue Legacy","genre":["Roguelike"],"date":"2015-12-24","developers":[2345,1639],"completed":true,"igdbId":3221},{"rating":"","slug":"run-or-die","cloudHash":"kpqfazs1pqmg914jqrbb","title":"Run or Die","url":"https://www.igdb.com/games/run-or-die","support":["PC"],"summary":"Run or Die is a fast paced Endless Runner that focuses on movement based abilities (and a huge Ion Cannon)! Players must make decisions in the blink of an eye and react quickly in order to make their way through a hazardous city environment where every run is different! Can you make it to the Lab to save Flow?","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/kpqfazs1pqmg914jqrbb.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/kpqfazs1pqmg914jqrbb.jpg","size":"cover_small"}],"airtableId":"recRpjbcXAfluVSe4","igdbName":"Run or Die","genre":["2D platform","Runner"],"date":"2016-12-27","developers":[7383],"completed":"","igdbId":14721},{"rating":"","slug":"runaway-a-road-adventure","cloudHash":"fdekfdxlgqzzioumd3nm","title":"Runaway: A Road Adventure","url":"https://www.igdb.com/games/runaway-a-road-adventure","support":["PC"],"summary":"Runaway: A Road Adventure is a point and click adventure game developed by Péndulo Studios, S.L. in 2001. The game follows the long tradition of two-dimensional adventure games like the first two installments of the Broken Sword series. It enjoyed immense popularity in countries like Germany and France, where the adventure genre is still popular.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/fdekfdxlgqzzioumd3nm.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/fdekfdxlgqzzioumd3nm.jpg","size":"cover_small"}],"airtableId":"recKNwcIZZ3rharVw","igdbName":"Runaway: A Road Adventure","genre":["Point'n'click"],"date":"2017-01-13","developers":[370],"completed":true,"igdbId":278},{"rating":"","slug":"runespell-overture","cloudHash":"jdmoktqplzjc1ypa0bqy","title":"Runespell: Overture","url":"https://www.igdb.com/games/runespell-overture","support":["PC"],"summary":"Runespell: Overture is a role-playing game combining poker mechanics with power ups and collectable cards. The world is set in an alternate medieval Europe linking historical characters with Norse mythology and sagas. The player takes on the role of the Changeling, the son of a monster god, in search of his nemesis.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/jdmoktqplzjc1ypa0bqy.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/jdmoktqplzjc1ypa0bqy.jpg","size":"cover_small"}],"airtableId":"reclPzd8JqXcK7muZ","igdbName":"Runespell: Overture","genre":["Plateau"],"date":"2015-08-25","developers":[8007],"completed":true,"igdbId":16252},{"rating":"","slug":"samorost","cloudHash":"sinnpb8al4h6cggjjgz0","title":"Samorost","url":"https://www.igdb.com/games/samorost","support":["PC"],"summary":"Samorost1 is a short point-and-click adventure game. The goal is to help the little space gnome save his home asteroid from a collision with another asteroid by solving diverse puzzles.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/sinnpb8al4h6cggjjgz0.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/sinnpb8al4h6cggjjgz0.jpg","size":"cover_small"}],"airtableId":"rec4lgvV2COouPWgz","igdbName":"Samorost","genre":["Point'n'click"],"date":"2017-06-25","developers":[1396],"completed":true,"igdbId":15731},{"rating":"","slug":"samorost-2","cloudHash":"w5p6bojylsixtzz5lko8","title":"Samorost 2","url":"https://www.igdb.com/games/samorost-2","support":["PC"],"summary":"Samorost2, the sequel to free browser based game Samorost1 is a short point-and-click adventure in which you must help out a little space gnome as he searches for his dog, which has been taken away by aliens.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/w5p6bojylsixtzz5lko8.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/w5p6bojylsixtzz5lko8.jpg","size":"cover_small"}],"airtableId":"reciNMJCCG7PXNhyO","igdbName":"Samorost 2","genre":["Point'n'click"],"date":"2017-07-02","developers":[4596],"completed":true,"igdbId":8621},{"rating":"","slug":"savant-ascent","cloudHash":"gceryvdbysnn0zznlgf9","title":"Savant - Ascent","url":"https://www.igdb.com/games/savant-ascent","support":["PC"],"summary":"A malicious orb has cast Savant out of his tower and transformed his surroundings into dangerous enemies! \nDodge and shoot your way back up the tower, and blast down waves of enemies as you make your way towards the top! As you progress, you unlock CDs that not only give you new tracks to play to, but also grant you powerful new abilities! \nYou play as the powerful Alchemist, a mechanical wizard who tries to possess the power of the mysterious orb. He's able to shoot vollyes of magic missiles, aswell as being nimble enough to dodge and jump out of harms way. \nUnlock 6 unique soundtracks from musical artist Savant each with unique powers to help you ascend the Alchemist's tower, or reach new highscores in Time Attack or Endless Mode. There are also secret powers to unlock, and several achievements to challenge the most experienced of players. \n\nCan you make it to the top?","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/gceryvdbysnn0zznlgf9.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/gceryvdbysnn0zznlgf9.jpg","size":"cover_small"}],"airtableId":"recPC0KoahCR7bTfX","igdbName":"Savant - Ascent","genre":["Shoot'em Up"],"date":"","developers":[6560],"completed":true,"igdbId":7879},{"rating":72.2,"slug":"scribblenauts-unlimited","cloudHash":"c9b4cgp5syvzpskjvw4v","title":"Scribblenauts Unlimited","url":"https://www.igdb.com/games/scribblenauts-unlimited","support":["PC"],"summary":"Venture into a wide-open world where the most powerful tool is your imagination. Help Maxwell solve robust puzzles in seamless, free-roaming levels by summoning any object you can think of. Create your own original objects, assign unique properties, and share them with friends online using Steam Workshop – to be used in game or further modified as you like!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/c9b4cgp5syvzpskjvw4v.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/c9b4cgp5syvzpskjvw4v.jpg","size":"cover_small"}],"airtableId":"rec1jaA8bzfHenEAm","igdbName":"Scribblenauts Unlimited","genre":["Puzzle"],"date":"2013-12-13","developers":[2162],"completed":"","igdbId":2943},{"rating":88.5,"slug":"shadow-of-the-colossus","cloudHash":"jf69zlmxqt3umswalxhe","title":"Shadow of the Colossus","url":"https://www.igdb.com/games/shadow-of-the-colossus","support":["PS3"],"summary":"Tales speak of an ancient land where creatures the size of mountains, roam the majestic landscape. Bound to the land, these creatures hold a key to a mystical power of revival - a power you must obtain to waken a loved one. \n \n \nShadow of the Colossus is a majestic journey through ancient lands to seek out and destroy gigantic mythical beasts. With your trusty horse at your side, explore the spacious lands and unearth each Colossi. Armed with your wits, a sword and a bow, use cunning and strategy to topple each behemoth. \n \n \nFrom the original developers of the critically acclaimed ICO™, comes a masterpiece of an adventure.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/jf69zlmxqt3umswalxhe.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/jf69zlmxqt3umswalxhe.jpg","size":"cover_small"}],"airtableId":"recZ2wkkcy21XZvUu","igdbName":"Shadow of the Colossus","genre":"","date":"2015-06-12","developers":[400,44],"completed":true,"igdbId":2207},{"rating":"","slug":"shaman-king-master-of-spirits","cloudHash":"st9qr9tob82vjav1ffne","title":"Shaman King: Master of Spirits","url":"https://www.igdb.com/games/shaman-king-master-of-spirits","support":["GBA"],"summary":"Shaman King: Master of Spirits is an Action Adventure game, developed by KCEJ and published by Konami, which was released in 2004.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/st9qr9tob82vjav1ffne.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/st9qr9tob82vjav1ffne.jpg","size":"cover_small"}],"airtableId":"recCQ5hS7H1pUTEzY","igdbName":"Shaman King: Master of Spirits","genre":["Metroidvania"],"date":"","developers":[129],"completed":true,"igdbId":6590},{"rating":81,"slug":"shaman-king-master-of-spirits-2","cloudHash":"iygpxagdyyys2fsalzez","title":"Shaman King: Master of Spirits 2","url":"https://www.igdb.com/games/shaman-king-master-of-spirits-2","support":["GBA"],"summary":"","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/iygpxagdyyys2fsalzez.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/iygpxagdyyys2fsalzez.jpg","size":"cover_small"}],"airtableId":"reczMh80REzPMBnTu","igdbName":"Shaman King: Master of Spirits 2","genre":["Metroidvania"],"date":"","developers":[129],"completed":true,"igdbId":6591},{"rating":67.8571428571429,"slug":"shank","cloudHash":"b3kxyskpy6mkw95gc4u5","title":"Shank","url":"https://www.igdb.com/games/shank","support":["PC"],"summary":"Shank is the cult-classic revival of the sidescrolling beat-em-up. Play as Shank in an over-the-top grindhouse game, packed to the rim with enemies, bosses, combos, and more by the award-winning team at Klei Entertainment.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/b3kxyskpy6mkw95gc4u5.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/b3kxyskpy6mkw95gc4u5.jpg","size":"cover_small"}],"airtableId":"recD7BfusseIKPeEk","igdbName":"Shank","genre":["Beat'em Up"],"date":"2015-11-15","developers":[1005],"completed":true,"igdbId":7518},{"rating":74.75,"slug":"shank-2","cloudHash":"e9l02ufekkhlosy4w7ke","title":"Shank 2","url":"https://www.igdb.com/games/shank-2","support":["PC"],"summary":"The fan-favorite 2D brawler is back as ex-mob hit man Shank returns to action in Shank 2. With those closest to him under attack, Shank is once again forced on the offensive. Now he must put his trusty arsenal of handguns, shotguns, automatic weapons, chainsaws, machetes, grenades, plus all-new weaponry and moves to use in order to protect those close to him. The original game set a new standard for its visual style and Shank 2 raises the bar. Shank 2 expands on the original game’s amazing combat system to redefine the 2D side-scrolling brawler.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/e9l02ufekkhlosy4w7ke.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/e9l02ufekkhlosy4w7ke.jpg","size":"cover_small"}],"airtableId":"reckYbX83vnCE1CA9","igdbName":"Shank 2","genre":["Beat'em Up"],"date":"2013-05-23","developers":[1005],"completed":true,"igdbId":9623},{"rating":75,"slug":"slayaway-camp","cloudHash":"unufrohuxpcv8ktk1si3","title":"Slayaway Camp","url":"https://www.igdb.com/games/slayaway-camp","support":["Android"],"summary":"\"Slayaway Camp is a killer puzzle game in which the player controls Skullface, a psychotic slasher bent on revenge. The adorable murderer slides around colourful isometric puzzle designs decapitating, squashing, and perforating blocky teenaged victims.\n\nGAME FEATURES\n- 10 gut-wrenching “videotapes,” plus deleted scenes, for over 200 puzzle levels\n- Traps! Cops! SWAT teams! Land mines! Rotary telephones! Cats!\n- Unlock the NC-17 mode on all movies for even more puzzle insanity (+ censored shower scenes)\n- Starring Mark Meer (Cdr. Shepard from Mass Effect) as “Skullface” and Derek Mears (Jason from Friday the 13th) as “Jessica”\n- Unlock multiple psycho killers, including ones based on cult horror movies such as “American Mary”\n- Discover dozens of spectacular “Gore-Pak” kill scenes featuring wood-chippers, lawnmowers, Sumerian demon incantations, and more!\n- Genuine hair-metal soundtrack by legendary Canadian group GNÜ TRUNTION\"","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/unufrohuxpcv8ktk1si3.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/unufrohuxpcv8ktk1si3.jpg","size":"cover_small"}],"airtableId":"recQp0Ci1vQHuNtNu","igdbName":"Slayaway Camp","genre":["Plateau","Puzzle"],"date":"2017-08-28","developers":[11405],"completed":true,"igdbId":25239},{"rating":82,"slug":"solar-2","cloudHash":"ymfhbwddcv0hwjwquxmf","title":"Solar 2","url":"https://www.igdb.com/games/solar-2","support":["PC"],"summary":"Dynamic abstract sandbox universe. Changes and evolves as you do.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ymfhbwddcv0hwjwquxmf.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ymfhbwddcv0hwjwquxmf.jpg","size":"cover_small"}],"airtableId":"recIzXH5Qx6G5LPvT","igdbName":"Solar 2","genre":"","date":"2015-05-23","developers":[2771],"completed":true,"igdbId":6342},{"rating":68.9411764705882,"slug":"song-of-the-deep","cloudHash":"wsr1gak0vwzbwzmnmqpv","title":"Song of the Deep","url":"https://www.igdb.com/games/song-of-the-deep","support":["PC"],"summary":"A metroidvania-style action-adventure game following a young girl’s quest into the unknown to find her missing father.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/wsr1gak0vwzbwzmnmqpv.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/wsr1gak0vwzbwzmnmqpv.jpg","size":"cover_small"}],"airtableId":"recbuNDmzshATdEf9","igdbName":"Song of the Deep","genre":["Metroidvania"],"date":"2016-07-17","developers":[834],"completed":true,"igdbId":16998},{"rating":72,"slug":"sonic-advance-3","cloudHash":"wenlq1b37e2jhfwf0lwc","title":"Sonic Advance 3","url":"https://www.igdb.com/games/sonic-advance-3","support":["GBA"],"summary":"JOIN THE QUEST TO DEFEAT THE EVIL DR. EGGMAN! \n \n*Team up with any one of 5 different characters \n*Pull off different combinations of attack moves \n*Experience changes in game play depending on a player's partner selection \n*Multiplayer option allows up to 4 players (Game Link)","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/wenlq1b37e2jhfwf0lwc.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/wenlq1b37e2jhfwf0lwc.jpg","size":"cover_small"}],"airtableId":"recvXGebwkL5xhyiW","igdbName":"Sonic Advance 3","genre":["2D platform"],"date":"","developers":[395],"completed":true,"igdbId":6599},{"rating":79,"slug":"sonic-adventure-2","cloudHash":"zlf9si8h6ixnqa4dnz23","title":"Sonic Adventure 2","url":"https://www.igdb.com/games/sonic-adventure-2","support":["PC","GameCube"],"summary":"Experience two unique adventures featuring both long-time heroes and new and returning villains as they battle for the fate of the world!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/zlf9si8h6ixnqa4dnz23.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/zlf9si8h6ixnqa4dnz23.jpg","size":"cover_small"}],"airtableId":"recyStfdh8urX4oMn","igdbName":"Sonic Adventure 2","genre":["3D platform"],"date":"2014-12-25","developers":[395],"completed":"","igdbId":7858},{"rating":79.1111111111111,"slug":"sonic-all-stars-racing-transformed","cloudHash":"q9gxdv4ymbthwyrkxood","title":"Sonic and All-Stars Racing Transformed","url":"https://www.igdb.com/games/sonic-all-stars-racing-transformed","support":["PC"],"summary":"Compete across land, water and air in incredible transforming vehicles that change from cars to boats to planes mid-race.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/q9gxdv4ymbthwyrkxood.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/q9gxdv4ymbthwyrkxood.jpg","size":"cover_small"}],"airtableId":"rec0Yax7blh54dTop","igdbName":"Sonic & All-Stars Racing Transformed","genre":["Racing"],"date":"2016-12-06","developers":[439],"completed":true,"igdbId":2174},{"rating":75.1,"slug":"sonic-generations","cloudHash":"wndjj03tqx9u73i2ivm1","title":"Sonic Generations","url":"https://www.igdb.com/games/sonic-generations","support":["PC"],"summary":"Celebrate 20 years of Sonic in an all new adventure that delivers a definitive experience to Sonic fans new and old! \n \nThe Japanese version has different subtitles: White Time and Space (白の時空 Shiro no Jikū) for the home consoles, and Blue Adventures (青の冒険 Ao no Bōken) for the 3DS version. All versions of this game can be played in 3D, but a 3DTV as well as a pair of 3D glasses are required for the PlayStation 3 and Xbox 360 versions, being the first game of the franchise to be played in 3D. It uses stereoscopic 3D with the involvement of a pair of screens in one.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/wndjj03tqx9u73i2ivm1.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/wndjj03tqx9u73i2ivm1.jpg","size":"cover_small"}],"airtableId":"recHiIv8wspwbS72C","igdbName":"Sonic Generations","genre":["3D platform","2D platform"],"date":"2015-12-06","developers":[395],"completed":true,"igdbId":506},{"rating":75,"slug":"sonic-the-hedgehog-4-episode-i","cloudHash":"nxcc4fixqhk67cnujyz4","title":"Sonic the Hedgehog 4 Episode 1","url":"https://www.igdb.com/games/sonic-the-hedgehog-4-episode-i","support":["PC"],"summary":"The sequel fans have waited 16 years for is finally here - Sonic the Hedgehog 4 Episode I! Featuring enhanced gameplay elements, including the classic Sonic Spin Dash, and the versatile Homing Attack, Sonic the Hedgehog 4 Episode I picks up right where Sonic and Knuckles left off. Dr. Eggman’s back, and in an effort to finally rid himself of Sonic, he revisits – and improves – the very best of his creations. Get ready for the next chapter in an all new epic 2D saga built for old and new fans alike.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/nxcc4fixqhk67cnujyz4.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/nxcc4fixqhk67cnujyz4.jpg","size":"cover_small"}],"airtableId":"rec4lweizgJc9ubrI","igdbName":"Sonic the Hedgehog 4: Episode I","genre":["2D platform"],"date":"2016-05-25","developers":[396],"completed":"","igdbId":9473},{"rating":76.6666666666667,"slug":"spec-ops-the-line","cloudHash":"dmehypkbj8vhnbpf8aga","title":"Spec Ops: The Line","url":"https://www.igdb.com/games/spec-ops-the-line","support":["PC"],"summary":"Spec Ops: The Line's emotional narrative unfolds within the destroyed opulence of Dubai. Once a playground for the world's wealthiest elite, now Dubai has been reclaimed by Mother Nature, buried underneath the most devastating sandstorm ever recorded. Spec Ops: The Line allows gamers to play as Captain Martin Walker, leader of an elite Delta Force team ordered to infiltrate the treacherous region and bring home U.S. Army Colonel John Konrad.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/dmehypkbj8vhnbpf8aga.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/dmehypkbj8vhnbpf8aga.jpg","size":"cover_small"}],"airtableId":"recyrRjTdQbTa1cc5","igdbName":"Spec Ops: The Line","genre":["TPS"],"date":"2015-10-23","developers":[20,902],"completed":true,"igdbId":1377},{"rating":"","slug":"speedrunners","cloudHash":"he8nnyhpurabo4vc5hr0","title":"SpeedRunners","url":"https://www.igdb.com/games/speedrunners","support":["PC"],"summary":"Cut-throat multiplayer running game that pits 4 players against each other, locally and/or online. Run, jump, swing around, and use devious weapons and pick-ups to knock opponents off-screen","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/he8nnyhpurabo4vc5hr0.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/he8nnyhpurabo4vc5hr0.jpg","size":"cover_small"}],"airtableId":"recc0z9MWf2lclWse","igdbName":"SpeedRunners","genre":["2D platform"],"date":"2016-05-01","developers":[5103],"completed":"","igdbId":9527},{"rating":68.3333333333333,"slug":"spider-man-2","cloudHash":"xzlxmbz8mzes8wzseijy","title":"Spider-Man 2","url":"https://www.igdb.com/games/spider-man-2","support":["PS2"],"summary":"As Spider-Man, players must master new combo moves as they protect the denizens of New York City from the nefarious Doc Ock and other classic Marvel villains by swinging, jumping and wall-crawling through 19 new levels that extend beyond the film. With an unprecedented depth of gameplay, players experience original storylines featuring Vulture, Shocker, Rhino, and Mysterio all while battling through graphically rich 3D environments.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/xzlxmbz8mzes8wzseijy.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/xzlxmbz8mzes8wzseijy.jpg","size":"cover_small"}],"airtableId":"recEmskW7xYLAl10Z","igdbName":"Spider-Man 2","genre":"","date":"","developers":[428,66],"completed":true,"igdbId":6285},{"rating":67.5,"slug":"spoiler-alert","cloudHash":"remusq0w7tplf8hvnmky","title":"Spoiler Alert","url":"https://www.igdb.com/games/spoiler-alert","support":["PC"],"summary":"Spoiler Alert is a video game that tests your platforming skills… in reverse. It’s a comedy platformer that you play backwards.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/remusq0w7tplf8hvnmky.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/remusq0w7tplf8hvnmky.jpg","size":"cover_small"}],"airtableId":"reczWk3Yp50n43mdX","igdbName":"Spoiler Alert","genre":["2D platform"],"date":"2016-05-07","developers":"","completed":true,"igdbId":20097},{"rating":"","slug":"spy-fox-in-dry-cereal","cloudHash":"n5ulzdxrk9dwot0c28jz","title":"Spy Fox in \"Dry Cereal\"","url":"https://www.igdb.com/games/spy-fox-in-dry-cereal","support":["PC"],"summary":"The super-suave agent, SPY Fox, must find Mr. Udderly, rescue all the cows, and stop William the Kid from depleting the worlds supply of milk. Using ingenious SPY gadgets, keen wits, and daring moves, SPY Fox, jumps out on an udderly exhilarating adventure!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/n5ulzdxrk9dwot0c28jz.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/n5ulzdxrk9dwot0c28jz.jpg","size":"cover_small"}],"airtableId":"recjTefjhmiYBjppK","igdbName":"Spy Fox in \"Dry Cereal\"","genre":["Point'n'click"],"date":"","developers":[603],"completed":true,"igdbId":5204},{"rating":87,"slug":"star-fox-64","cloudHash":"d6scxpnrmgdru7ljvzwc","title":"Star Fox 64","url":"https://www.igdb.com/games/star-fox-64","support":["N64"],"summary":"The update to the 16-bit Super NES title continues the original's on-rails 3D shooting action on the Nintendo 64. Starring Fox McCloud, Peppy Hare, Falco Lombardi, and Slippy Toad, this new 64-bit version contains 15 plus levels, easy, medium, and difficult paths, forward-scrolling levels as well as full 3D realms, and a three-part multiplayer mode using a four-player split screen. In addition to plenty of Arwing action, the game introduces a new hover tank and even features a submarine level. The 8-megabyte cartridge also boasts voice samples from 23 different characters instead of the original's animal noises. Star Fox 64 was the first game to feature Rumble Pak support. A Rumble Pak bundle and standalone version of the game were sold. Released in Europe under the name Lylat Wars.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/d6scxpnrmgdru7ljvzwc.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/d6scxpnrmgdru7ljvzwc.jpg","size":"cover_small"}],"airtableId":"recfiWJZ3l9Sl8hBw","igdbName":"Star Fox 64","genre":["Shoot'em Up"],"date":"","developers":[421],"completed":true,"igdbId":2591},{"rating":75.6,"slug":"star-wars-battlefront-ii","cloudHash":"bh9dxoxibdb8wuogk7uh","title":"Star Wars Battlefront II","url":"https://www.igdb.com/games/star-wars-battlefront-ii","support":["PC"],"summary":"Star Wars: Battlefront II is the sequel to Star Wars: Battlefront. It is a high-selling Star Wars video game following the many adventures of several characters. The two games are very similar, as both revolve around troopers from various factions fighting in different locales. Battlefront II, however, includes elements and missions from Star Wars: Episode III Revenge of the Sith, as well as enhanced aspects of gameplay including space combat and the ability to play as Jedi characters or other heroes. \n \nWith brand new space combat, playable Jedi characters, and over 16 all new battlefronts, Star Wars Battlefront II gives you more ways than ever before to play the classic Star Wars battles any way you want.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/bh9dxoxibdb8wuogk7uh.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/bh9dxoxibdb8wuogk7uh.jpg","size":"cover_small"}],"airtableId":"recbViQWu219ZKzdL","igdbName":"Star Wars: Battlefront II","genre":"","date":"2015-06-04","developers":[63,64],"completed":true,"igdbId":142},{"rating":64.3333333333333,"slug":"star-wars-episode-iii-revenge-of-the-sith","cloudHash":"rnrdmdmlh1rlvoyjwobf","title":"Star Wars Episode III Revenge of the Sith","url":"https://www.igdb.com/games/star-wars-episode-iii-revenge-of-the-sith","support":["PS2"],"summary":"Third-person action/adventure game, Star Wars: Episode III, delivers the ultimate Jedi action experience as Anakin Skywalker and Obi-Wan Kenobi join forces in fierce battles and heroic lightsaber duels until one's lust for power and the other's devotion to duty leads to a final confrontation between good and evil. \n \nIn Star Wars: Episode III, players control all the Jedi abilities of both Anakin Skywalker and Obi-Wan Kenobi, including devastating Force powers and advanced lightsaber techniques involving robust combo attacks and defensive maneuvers. As Anakin, unleash the power of the dark side in ruthless lightsaber and Force attacks. As Obi-Wan, struggle to save the galaxy from darkness by focusing the power of the light side into swift and precise lightsaber attacks and using the Force to control enemy actions.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/rnrdmdmlh1rlvoyjwobf.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/rnrdmdmlh1rlvoyjwobf.jpg","size":"cover_small"}],"airtableId":"recfnOgm2JEZ4mixW","igdbName":"Star Wars: Episode III - Revenge of the Sith","genre":"","date":"","developers":[271,38],"completed":true,"igdbId":6159},{"rating":69.4,"slug":"star-wars-jedi-knight-jedi-academy","cloudHash":"mv6ksjqhfttxgtzq94bt","title":"Star Wars Jedi Knight: Jedi Academy","url":"https://www.igdb.com/games/star-wars-jedi-knight-jedi-academy","support":["PC"],"summary":"Star Wars: Jedi Knight: Jedi Academy, of the highly acclaimed Jedi Knight series, allows players to take on the role of a new student eager to learn the ways of the Force from Jedi Master Luke Skywalker. Interact with famous Star Wars characters in many classic Star Wars locations as you face the ultimate choice: fight for good and freedom on the light side, or follow the path of power and evil to the dark side.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/mv6ksjqhfttxgtzq94bt.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/mv6ksjqhfttxgtzq94bt.jpg","size":"cover_small"}],"airtableId":"recpTqsUlrkSkjEkR","igdbName":"Star Wars: Jedi Knight - Jedi Academy","genre":"","date":"2015-06-10","developers":[71,72],"completed":true,"igdbId":153},{"rating":79.25,"slug":"star-wars-republic-commando","cloudHash":"hgztdb7a8ietbjddes5r","title":"Star Wars Republic Commando","url":"https://www.igdb.com/games/star-wars-republic-commando","support":["PC"],"summary":"Chaos has erupted throughout the galaxy. As a leader of an elite squad of Republic Commandos, your mission is to infiltrate, dominate, and ultimately, annihalate the enemy. Your squad will follow your orders and your lead, working together as a team-instinctively, intelligently, instantly. You are their leader. They are your weapon.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/hgztdb7a8ietbjddes5r.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/hgztdb7a8ietbjddes5r.jpg","size":"cover_small"}],"airtableId":"recm4Yq3W2adfk62d","igdbName":"Star Wars: Republic Commando","genre":["FPS"],"date":"2016-06-05","developers":[10],"completed":true,"igdbId":148},{"rating":70.7142857142857,"slug":"star-wars-the-force-unleashed","cloudHash":"arwcbq1ciaecylgpx3mo","title":"Star Wars: The Force Unleashed","url":"https://www.igdb.com/games/star-wars-the-force-unleashed","support":["PC"],"summary":"Star Wars: The Force Unleashed is a Star Wars video game that takes place between the films Star Wars: Episode III Revenge of the Sith and Star Wars: Episode IV A New Hope. It is the centerpiece of the Star Wars: The Force Unleashed multimedia project, \n \nStar Wars: The Force Unleashed completely re-imagines the scope and scale of the Force and casts players as Darth Vader’s \"Secret Apprentice,\" unveiling new revelations about the Star Wars galaxy seen through the eyes of a mysterious new character armed with unprecedented powers. \n \nThe game showcases Digital Molecular Matter (DMM), an extremely detailed and realistic material physics engine developed by Pixelux, and Euphoria, a realistic bio-mechanical A.I. engine by NaturalMotion","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/arwcbq1ciaecylgpx3mo.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/arwcbq1ciaecylgpx3mo.jpg","size":"cover_small"}],"airtableId":"rec6XG4zSzPRPCWLv","igdbName":"Star Wars: The Force Unleashed","genre":["Beat'em Up"],"date":"2015-12-22","developers":[10],"completed":true,"igdbId":475},{"rating":64.5,"slug":"star-wars-the-force-unleashed-ii","cloudHash":"oq7celo1kxb3ut2kgd88","title":"Star Wars: The Force Unleashed II","url":"https://www.igdb.com/games/star-wars-the-force-unleashed-ii","support":["PC"],"summary":"The Star Wars Saga continues with Star Wars: The Force Unleashed II, the highly anticipated sequel to the fastest-selling Star Wars game ever created, which has sold more than seven million copies worldwide. \n \nIn Star Wars: The Force Unleashed, the world was introduced to Darth Vader’s now fugitive apprentice, Starkiller — the unlikely hero who would ignite the flames of rebellion in a galaxy so desperately in need of a champion. In the sequel, Starkiller returns with over-the-top Force powers and embarks on a journey to discover his own identity and to reunite with his one true love, Juno Eclipse. \n \nIn Star Wars: The Force Unleashed II, Starkiller is once again the pawn of Darth Vader — but instead of training his protégée as a ruthless assassin, the dark lord is attempting to clone his former apprentice in an attempt to create the Ultimate Sith warrior. The chase is on — Starkiller is in pursuit of Juno and Darth Vader is hunting for Starkiller. \n \nWith all-new devastating Force powers and the ability to dual-wield lightsabers, Starkiller cuts a swath through deadly new enemies across exciting worlds from the Star Wars movies — all in his desperate search for answers to his past.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/oq7celo1kxb3ut2kgd88.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/oq7celo1kxb3ut2kgd88.jpg","size":"cover_small"}],"airtableId":"reccD8XoGfeNr2eGx","igdbName":"Star Wars: The Force Unleashed II","genre":["Beat'em Up"],"date":"2016-01-06","developers":[10],"completed":true,"igdbId":137},{"rating":"","slug":"starcraft","cloudHash":"hkpgcjtvdtjb06ik8fse","title":"Starcraft","url":"https://www.igdb.com/games/starcraft","support":["PC"],"summary":"StarCraft is a strategic game set in a Galaxy far away on multiple planets. It's style and balance between the three antagonistic species it features is unique and appealed to millions.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/hkpgcjtvdtjb06ik8fse.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/hkpgcjtvdtjb06ik8fse.jpg","size":"cover_small"}],"airtableId":"recw3y7Sr4BfwbdEQ","igdbName":"StarCraft","genre":["RTS"],"date":"","developers":[51],"completed":"","igdbId":230},{"rating":79.3333333333333,"slug":"stealth-bastard-deluxe","cloudHash":"bchpwebyqjkte3fejdlr","title":"Stealth Bastard Deluxe","url":"https://www.igdb.com/games/stealth-bastard-deluxe","support":["PC"],"summary":"Stealth games are awesome. Hiding from The Man, skulking in shadows, the thrill of infiltration. But why do they have to be so... slow? \n \nThat was the question that spawned Stealth Bastard, the fast-paced, nail-biting antidote to tippy-toed sneaking simulators that the world had so desperately been craving. \n \nArmed with only your wits and a pair of top of the range Stealthing Goggles, it’s your job to sneak your way through a deadly facility that’s determined to extinguish your fragile little life. With no weapons and no armour, being seen means instant death. Stay out of the light to avoid the attention of deadly security robots! Leap like a lusty salmon to avoid those zap-happy lasers! Think fast as the walls close in around you! Only the fastest and sneakiest will make it to the exit without being mangled by the facility’s security systems. Will you be among them?","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/bchpwebyqjkte3fejdlr.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/bchpwebyqjkte3fejdlr.jpg","size":"cover_small"}],"airtableId":"recqz4AMYvsihYVk9","igdbName":"Stealth Bastard Deluxe","genre":["Stealth"],"date":"2015-01-19","developers":[4065],"completed":true,"igdbId":10922},{"rating":70,"slug":"stealth-inc-2-a-game-of-clones","cloudHash":"aetbifchuxnkrmubhbq7","title":"Stealth Inc 2: A Game of Clones","url":"https://www.igdb.com/games/stealth-inc-2-a-game-of-clones","support":["PC"],"summary":"In Stealth Inc 2, you play the role of a clone escaping a sinister and high-tech testing facility. Stealth Inc 2 tests both your brain and your reflexes over 60 varied levels linked together in a sprawling overworld. \n\nDeath is never more than a few moments away, but one of the few advantages of being a clone is that death isn’t all that permanent. With no loading screens and no lives to worry about, players are encouraged to use their inevitable demise as a learning tool as they navigate lasers, homicidal robots and terrifying bosses in the ultimate hostile work environment","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/aetbifchuxnkrmubhbq7.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/aetbifchuxnkrmubhbq7.jpg","size":"cover_small"}],"airtableId":"recCKeVjWX9ghqMKY","igdbName":"Stealth Inc 2: A Game of Clones","genre":["Stealth"],"date":"2015-11-08","developers":[10321,4065],"completed":true,"igdbId":17959},{"rating":84,"slug":"steamworld-dig","cloudHash":"v1jtxva0er1d25ui0o8p","title":"SteamWorld Dig","url":"https://www.igdb.com/games/steamworld-dig","support":["PC"],"summary":"SteamWorld Dig is 2D a platform game that revolves around mining for resources and ores. The objective of the game is to investigate the mines underneath the old Western town Tumbleton in order to unearth the secrets lurking below. The player controls Rusty who is equipped with a pickaxe but the player is given options to upgrade the tools used for digging as progression is made in the game. Besides health, the player also needs coal for light, and water for special abilities. \nSteamWorld Dig has platform elements in that the player runs, jumps and encounter foes, but the main objective is mining. That means that the player builds – or rather deconstructs – the game world and creates platforms that way. The player collects resources and other hidden resources which can be brought back to the surface and exchanged for cash. When the player progress in the game new abilities are unlocked. Each playthrough, the mines are randomized, making items and treasure appear in different locations. If the player gets stuck there is a self destruct function, but the players can also buy ladders in the store at the surface to get out of tricky situations. \nWhen progressing deeper down in the cave, the player encounters various enemies with different attack patterns and weak spots. The game features multiple worlds, each with a completely different environment. Dying results in a reparation penalty fee, and the player respawns back on the surface. All the loot that has been accumulated when the player dies can be picked up again.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/v1jtxva0er1d25ui0o8p.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/v1jtxva0er1d25ui0o8p.jpg","size":"cover_small"}],"airtableId":"recI7bv8SrxMIg60T","igdbName":"SteamWorld Dig","genre":"","date":"2015-06-18","developers":[2542],"completed":true,"igdbId":5772},{"rating":78.25,"slug":"stick-it-to-the-man","cloudHash":"dl6xarulf6havix62vtp","title":"Stick It To The Man!","url":"https://www.igdb.com/games/stick-it-to-the-man","support":["PC"],"summary":"On an ordinary day, hard hat tester; Ray has a bizarre accident and wakes up with a giant pink spaghetti arm sticking out of his brain, giving him extraordinary mind-reading powers. Ray can suddenly change the world with stickers, transforming his paper universe by tearing it, folding it and using the crazy stickers he finds (along with his awesome new powers) to solve mind-boggling puzzles! Sadly, Ray doesn't have much time to get to grips with his new-fangled psychic abilities. Instead, he’s on the run from ‘The Man’ for a crime he didn’t commit. Can you help Ray out of this sticky situation? Get ready to tear it, rip it and Stick it to the Man!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/dl6xarulf6havix62vtp.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/dl6xarulf6havix62vtp.jpg","size":"cover_small"}],"airtableId":"recYEFF6T7X8LEpok","igdbName":"Stick it to The Man!","genre":["Puzzle","2D platform"],"date":"2015-06-01","developers":[2219],"completed":true,"igdbId":6581},{"rating":68.3333333333333,"slug":"stikbold-a-dodgeball-adventure","cloudHash":"vsdknmi9ba63qo05d3y6","title":"Stikbold! A Dodgeball Adventure","url":"https://www.igdb.com/games/stikbold-a-dodgeball-adventure","support":["PC"],"summary":"Stikbold! is a single and local multiplayer dodgeball game heavily inspired by the 70's and its athletes. This is a salute to the heroic sportsmanship of the era, a time when tacky was cool and there was no such thing as bad style.\n\nFollow the story of world famous Stikbold athletes Björn and Jerome, team up with a dodgeball buddy in co-op team battles or charge head first into a manic free-for-all battles with up to five others. Get beaten in the area? Get revenge from the outside with disgruntled swans, hungry whales and one very lethal minivan.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/vsdknmi9ba63qo05d3y6.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/vsdknmi9ba63qo05d3y6.jpg","size":"cover_small"}],"airtableId":"rec3mdaNiBcqzQQEq","igdbName":"Stikbold! A Dodgeball Adventure","genre":"","date":"2016-12-05","developers":[9492],"completed":true,"igdbId":18614},{"rating":78.0625,"slug":"strider","cloudHash":"sw4ihice7utz24saknjn","title":"Strider","url":"https://www.igdb.com/games/strider","support":["PC"],"summary":"Strider Hiryu, the original assassin that inspired many third person action titles returns in a completely new game for a new generation of gamers as he takes on the Grand Master Meio. Use an arsenal of moves and weapons against your enemies whilst slicing your way through a massive interconnected game world. From scorching enemies to freezing them in their tracks or deflecting a host of bullets, the indestructible plasma charged cypher offers a range of action tactics for players to use against their foes. Jump, climb and run through the expansive game world with the speed and agility of a ninja whilst climbing surfaces to gain that extra height and engaging the enemy from virtually any direction. From cybernetic soldiers to immense bio-mechanical creatures the enemy types in Strider guarantee engaging and unique combat challenges.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/sw4ihice7utz24saknjn.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/sw4ihice7utz24saknjn.jpg","size":"cover_small"}],"airtableId":"recH8U1vi2giofly9","igdbName":"Strider","genre":["Metroidvania"],"date":"2016-03-08","developers":[160,2347],"completed":true,"igdbId":5333},{"rating":76.6666666666667,"slug":"stuntman","cloudHash":"tzrsvbarecf77l7fmboi","title":"Stuntman","url":"https://www.igdb.com/games/stuntman","support":["PS2"],"summary":"In the world of stunt driving, all it takes is one slip to end your Hollywood dreams. As a stunt driver, you can't afford to fail when performing dangerous stunts. In six famous movie locations, you'll smash up vehicles ranging from TukTuks and snowmobiles to Jeeps and high-performance sports cars. Begin a career in the stuntman industry or practice your skills in the stunt arena. After another hard day of risky work, replay the action as a polished movie trailer.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/tzrsvbarecf77l7fmboi.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/tzrsvbarecf77l7fmboi.jpg","size":"cover_small"}],"airtableId":"recXltnUPcbMKSVkJ","igdbName":"Stuntman","genre":["Racing"],"date":"","developers":[650],"completed":"","igdbId":8267},{"rating":81.75,"slug":"sunset-overdrive","cloudHash":"ukmb1oaze5ozpee5lszr","title":"Sunset Overdrive","url":"https://www.igdb.com/games/sunset-overdrive","support":["Xbox One"],"summary":"The city’s overrun with mutants. Problem? Not for you. Sunset Overdrive is an open-world playground of post-apocalyptic possibilities. Vault, grind & wall-run while using a deadly & unconventional arsenal. With hyper-agility, unique weapons, & customizable abilities, it rewrites the rules of shooters while delivering an irreverent adventure.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ukmb1oaze5ozpee5lszr.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ukmb1oaze5ozpee5lszr.jpg","size":"cover_small"}],"airtableId":"rec0FLxW5ujPIZEEr","igdbName":"Sunset Overdrive","genre":"","date":"2016-06-25","developers":[834],"completed":true,"igdbId":3247},{"rating":100,"slug":"super-castlevania-iv","cloudHash":"gj2nlq7paf68mhpjiyvb","title":"Super Castlevania IV","url":"https://www.igdb.com/games/super-castlevania-iv","support":["SNES"],"summary":"A century of Transylvanian tranquility is about to come to a shocking end. Once again the mortifying screams of helpless villagers shake the ground as they huddle against new nightmarish horrors unleashed by the Duke of Darkness, Count Dracula. And this time he has a tombstone with your name on it, Simon Belmont. \nYou must descend into Castle of the Undead and its gruesome ground, accompanied by the most chilling sound effects to ever tingle your spine. Inside, a freshly dug 11 levels maze features the treacherous Terrace of Terror, the dangerous Rotating Dungeon, the Sunken Ruins of Lost Spirits, torture chambers and creature filled caves. Use your whip like a grappling hook and swing past hundreds of traps and a host of ghost freaks, living corpses and hidden goblins. All while dodging or destroying the unpredictable spitting lizards, carnivorous coffins, and more. \nFind the concealed weapons needed to defeat everything from eerie phantoms to haunted furniture. Then prepare to find yourself face-to-thing with hideous torments like the Tongue Lasher, the Darkest Knight, the Bone-Afide Horseman and the Granite Crusher. When your nerves get shot, use your password and take a breather. But forge on, Simon Belmont, because if you though Dracula was down for the count, he's only just begun to fright!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/gj2nlq7paf68mhpjiyvb.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/gj2nlq7paf68mhpjiyvb.jpg","size":"cover_small"}],"airtableId":"rec0A9olVmj2bxYk6","igdbName":"Super Castlevania IV","genre":"","date":"2017-12-21","developers":[129],"completed":true,"igdbId":1124},{"rating":83.3333333333333,"slug":"super-hexagon","cloudHash":"hvx5qpxgmfyl70oaxbpj","title":"Super Hexagon","url":"https://www.igdb.com/games/super-hexagon","support":["Android"],"summary":"Super Hexagon is a minimal action game by Terry Cavanagh, with music by Chipzel.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/hvx5qpxgmfyl70oaxbpj.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/hvx5qpxgmfyl70oaxbpj.jpg","size":"cover_small"}],"airtableId":"recV9R9uxPgPuZVyD","igdbName":"Super Hexagon","genre":"","date":"2017-12-19","developers":[1061],"completed":"","igdbId":3251},{"rating":100,"slug":"super-mario-world-2-yoshi-s-island","cloudHash":"ldi1qiifsiki8vdzeg7s","title":"Super Mario World 2: Yoshi's Island","url":"https://www.igdb.com/games/super-mario-world-2-yoshi-s-island","support":["GBA"],"summary":"Super Mario World 2: Yoshi's Island or simply Yoshi's Island, known in Japan as Super Mario: Yoshi Island (Japanese: スーパーマリオ ヨッシーアイランド Hepburn: Sūpā Mario: Yosshī Airando?), is a 1995 platform video game developed and published by Nintendo for the Super Nintendo Entertainment System. Acting as a prequel to 1990's Super Mario World, the game casts players as Yoshi as he escorts Baby Mario through 48 levels in order to reunite him with his brother Luigi, who had been kidnapped by Baby Bowser's minions. As a Super Mario series platformer, Yoshi runs and jumps to reach the end of the level while solving puzzles and collecting items. In a style new to the series, the game has a hand-drawn aesthetic and is the first to have Yoshi as its main character. The game introduces his signature abilities to flutter jump, produce eggs from swallowed enemies, and transform into vehicles.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ldi1qiifsiki8vdzeg7s.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ldi1qiifsiki8vdzeg7s.jpg","size":"cover_small"}],"airtableId":"recREypbpgqM2PlGp","igdbName":"Super Mario World 2: Yoshi's Island","genre":["2D platform"],"date":"","developers":[421],"completed":true,"igdbId":1073},{"rating":86.6666666666667,"slug":"super-meat-boy","cloudHash":"m0keroxkyx5qu3q7sfao","title":"Super Meat Boy","url":"https://www.igdb.com/games/super-meat-boy","support":["PC"],"summary":"Super Meat Boy is a tough as nails platformer where you play as an animated cube of meat who's trying to save his girlfriend (who happens to be made of bandages) from an evil fetus in a jar wearing a tux.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/m0keroxkyx5qu3q7sfao.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/m0keroxkyx5qu3q7sfao.jpg","size":"cover_small"}],"airtableId":"recC6z0KPiIrQMi42","igdbName":"Super Meat Boy","genre":["2D platform"],"date":"2015-09-07","developers":[591],"completed":"","igdbId":885},{"rating":100,"slug":"super-metroid","cloudHash":"dcvgoopasnedwjcq74rt","title":"Super Metroid","url":"https://www.igdb.com/games/super-metroid","support":["SNES"],"summary":"Super Metroid is an 2D, side-scrolling action-adventure game, which primarily takes place on the fictional planet Zebes—a large, open-ended world with areas connected by doors and elevators. The player controls Samus Aran as she searches the planet for a Metroid that was stolen by Ridley, the leader of the Space Pirates. Samus can run, jump, crouch, and fire a weapon in eight directions; she can also perform other actions, such as wall jumping—jumping from one wall to another in rapid succession to reach higher areas. The \"Moon Walk\" ability, named after the popular dance move of the same name, allows Samus to walk backwards while firing or charging her weapon. The heads-up display shows Samus' health, the supply mode for reserve tanks, icons that represent weapons, and an automap that shows her location and its surroundings.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/dcvgoopasnedwjcq74rt.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/dcvgoopasnedwjcq74rt.jpg","size":"cover_small"}],"airtableId":"recQwwj1G666avSEK","igdbName":"Super Metroid","genre":["Metroidvania"],"date":"2016-01-02","developers":[761,765],"completed":true,"igdbId":1103},{"rating":90,"slug":"super-punch-out","cloudHash":"sg8vqvnk5otkvo0n4ghq","title":"Super Punch Out","url":"https://www.igdb.com/games/super-punch-out","support":["SNES"],"summary":"Slug your way through the grueling and sweat-pounding matches of the Minor, Major and World Circuits. Dodge bone-bruising punches and dance to the top of the supreme Special Circuit. Face off against old favorites including Bear Hugger, Piston Hurricane, Bald Bull, Mr. Sandman and Super Macho Man plus a cast of new and weird challengers. With a right hook! Body blow! And precise quick jabs! The referee announces \"Knock Out!\" Your opponent lies face down as you win the title of Nintendo Video Boxing Association Champion!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/sg8vqvnk5otkvo0n4ghq.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/sg8vqvnk5otkvo0n4ghq.jpg","size":"cover_small"}],"airtableId":"recynfvVj1MC8C6Ks","igdbName":"Super Punch-Out!!","genre":["Sport"],"date":"2016-11-26","developers":"","completed":true,"igdbId":9151},{"rating":85,"slug":"super-smash-bros","cloudHash":"dezoiewaiwbojvczsckw","title":"Super Smash Bros","url":"https://www.igdb.com/games/super-smash-bros","support":["N64"],"summary":"It's a Bumpin', Bruisin', Brawlin' Bash! The many worlds of Nintendo collide in the ultimate showdown of strength and skill! Up to four players can choose their favorite characters - complete with signature attacks - and go at it in Team Battles and Free-For-Alls. Or venture out on your own to conquer the 14 stages in single-player mode. Either way, Super Smash Bros. is a no-holds-barred action-fest that will keep you coming back for more!","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/dezoiewaiwbojvczsckw.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/dezoiewaiwbojvczsckw.jpg","size":"cover_small"}],"airtableId":"recFRxRdQ8NH2Vcsy","igdbName":"Super Smash Bros.","genre":["Vs. Fighting"],"date":"","developers":[762],"completed":true,"igdbId":1626},{"rating":100,"slug":"super-smash-bros-melee","cloudHash":"ebp44j3cgyonjxyoa5gp","title":"Super Smash Bros Melee","url":"https://www.igdb.com/games/super-smash-bros-melee","support":["GameCube"],"summary":"A classic and legendary Nintendo title, this game was the number one seller of all time for the Nintendo GameCube. To this day, this game still maintains a very strong competitive following.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ebp44j3cgyonjxyoa5gp.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ebp44j3cgyonjxyoa5gp.jpg","size":"cover_small"}],"airtableId":"rec39nnomjW2hkpaA","igdbName":"Super Smash Bros. Melee","genre":["Vs. Fighting"],"date":"","developers":[762],"completed":true,"igdbId":1627},{"rating":40,"slug":"superfrog-hd","cloudHash":"v6u7d8r04suiedsn9hek","title":"Superfrog HD","url":"https://www.igdb.com/games/superfrog-hd","support":["PC"],"summary":"Superfrog HD is an Action game, developed and published by Team 17, which was released in 2013.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/v6u7d8r04suiedsn9hek.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/v6u7d8r04suiedsn9hek.jpg","size":"cover_small"}],"airtableId":"recnxUrRdAGKF3Gxl","igdbName":"Superfrog HD","genre":["2D platform"],"date":"2016-05-07","developers":[614],"completed":"","igdbId":8873},{"rating":84.8235294117647,"slug":"superhot","cloudHash":"eiw7j5pza848qws0owyx","title":"SUPERHOT","url":"https://www.igdb.com/games/superhot","support":["PC"],"summary":"SUPERHOT is the first person shooter where time moves only when you move.\n\nWith its mesmerising gameplay and unique, stylized graphics SUPERHOT aims to finally add something new and disruptive to the FPS genre.\n\nSee the bullets crawling towards you as you carefully plan your steps and aim your gun. Enjoy the mayhem that is unleashed as you put that plan into motion.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/eiw7j5pza848qws0owyx.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/eiw7j5pza848qws0owyx.jpg","size":"cover_small"}],"airtableId":"recm3LzcfJXSG70Zu","igdbName":"Superhot","genre":["FPS"],"date":"2017-02-01","developers":[6072],"completed":true,"igdbId":7205},{"rating":80,"slug":"team-fortress-2","cloudHash":"ijp2rheve0eccuhtanli","title":"Team Fortress 2","url":"https://www.igdb.com/games/team-fortress-2","support":["PC"],"summary":"Choose from a selection of 9 unique classes with entertaining personalities to capture or defend the objective against the enemy team, consisting of your alternately coloured counterparts, with a wide variety of weapons and cosmetics to customize your multiplayer experience.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ijp2rheve0eccuhtanli.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ijp2rheve0eccuhtanli.jpg","size":"cover_small"}],"airtableId":"recIzlRcE5tx7Ejfa","igdbName":"Team Fortress 2","genre":["FPS"],"date":"2016-09-24","developers":[56],"completed":"","igdbId":891},{"rating":"","slug":"tekken-3","cloudHash":"p00a9qbgi9vmkljfjucc","title":"Tekken 3","url":"https://www.igdb.com/games/tekken-3","support":["PS1"],"summary":"Tekken 3 maintains the same core fighting system and concept as its predecessors, but brings many improvements, such as significantly more detailed graphics and animations, fifteen new characters added to the game's roster, more modern music and faster and more fluid gameplay. \nPerhaps the most noticeable change from Tekken 2 fight system is movement reform - whereas the element of depth had been largely insignificant in previous Tekken games (aside from some characters having unique sidesteps and dodging maneuvers), Tekken 3 added emphasis on the third axis, allowing all characters to sidestep in or out of the background by lightly pressing the arcade stick (or tapping the controller button in the console version) towards the corresponding direction. Another big change in movement was that jumping was toned down, no longer allowing fighters to jump to extreme heights (as was present in previous games), but keeping leaps to reasonable, realistic heights. It made air combat more controllable, and put more use to sidestep dodges, as jumping no longer became a universal dodge move that was flying above all of the ground moves. Other than that, the improved engine allowed for quick recoveries from knock-downs, more escapes from tackles and stuns, better juggling (as many old moves had changed parameters, allowing them to connect in combo-situations, where they wouldn't connect in previous games) and extra newly created combo throws. \n \nTekken 3 was the first Tekken to feature a beat 'em up minigame called \"Tekken Force\", which pitted the player in various stages against enemies in a side-scrolling fashion. If the player succeeds in beating the minigame four times, Dr. Bosconovitch would be a playable character (granted that you defeat him first). This was continued in Tekken 4 and succeeded by the Devil Within minigame in Tekken 5 - but Boskonovitch was dropped as a playable character after Tekken 3. There is also a minigame \"Tekken Ball\", similar to beach volleyball, where one has to hit the ball with a powerful attack to hurt the opponent or try to hit the ball in such a way that it hits the ground in the opponent's area, thus causing damage.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/p00a9qbgi9vmkljfjucc.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/p00a9qbgi9vmkljfjucc.jpg","size":"cover_small"}],"airtableId":"reccWWRVDg7n6FCPH","igdbName":"Tekken 3","genre":["Vs. Fighting"],"date":"2016-01-04","developers":[263],"completed":true,"igdbId":1244},{"rating":70,"slug":"temple-run","cloudHash":"exo7dnqklfcxc3enxruy","title":"Temple Run","url":"https://www.igdb.com/games/temple-run","support":["iOS","Android"],"summary":"Temple Run is an \"endless running\" video game developed by the Raleigh-based Imangi Studios. The player takes on the role of an explorer who, having stolen an idol from a temple, is chased by \"demonic monkeys\". The game is available on iOS and Android systems.[7] It was released for Windows Phone 8 towards the end of March, 2013.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/exo7dnqklfcxc3enxruy.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/exo7dnqklfcxc3enxruy.jpg","size":"cover_small"}],"airtableId":"recHeFvajdEZmOggN","igdbName":"Temple Run","genre":"","date":"","developers":[1179],"completed":"","igdbId":2475},{"rating":62.5,"slug":"the-baconing","cloudHash":"ksy0xe4cdbmrswgzpnrg","title":"The Baconing","url":"https://www.igdb.com/games/the-baconing","support":["PC"],"summary":"Prepare yourself for the ultimate sci-fi adventure by entering the hilarious and sizzling world of The Baconing created by Hothead Games. Discover exciting new worlds and battle hordes of enemies as you search to unlock the secret within the Fires of Bacon.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ksy0xe4cdbmrswgzpnrg.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ksy0xe4cdbmrswgzpnrg.jpg","size":"cover_small"}],"airtableId":"recXdZExayn8PnfZG","igdbName":"The Baconing","genre":["Hack'n'Slash"],"date":"2013-11-24","developers":[1051],"completed":true,"igdbId":2251},{"rating":83.5,"slug":"the-binding-of-isaac","cloudHash":"xxbdeyzvg9xm4xwb1q8x","title":"The Binding of Isaac","url":"https://www.igdb.com/games/the-binding-of-isaac","support":["PC"],"summary":"The Binding of Isaac is a randomly generated action RPG shooter with heavy Rogue-like elements. Following Isaac on his journey players will find bizarre treasures that change Isaac’s form giving him super human abilities and enabling him to fight off droves of mysterious creatures, discover secrets and fight his way to safety. \n \nKey features: \n \nRandomly generated dungeons, items enemies and bosses, you never play the same game twice. \nOver 100 unique items that not only give you powers but visually change your character. \n50+ enemy types each with the ability to become \"special\" making them extra deadly but they also drop better loot. \nOver 20 bosses. \n4 full chapters spanning 8 levels \n3+ unlockable classes \nMultiple endings \nTons of unlockable items, enemies, bosses and more.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/xxbdeyzvg9xm4xwb1q8x.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/xxbdeyzvg9xm4xwb1q8x.jpg","size":"cover_small"}],"airtableId":"recKR273OZNPh1M29","igdbName":"The Binding of Isaac","genre":["Roguelike"],"date":"2016-05-05","developers":[4672],"completed":"","igdbId":2132},{"rating":71.25,"slug":"the-last-tinker-city-of-colors","cloudHash":"z03aj90edgobhfomsk2s","title":"The Last Tinker: City of Colors","url":"https://www.igdb.com/games/the-last-tinker-city-of-colors","support":["PC"],"summary":"The Last Tinker: City of Colors (previously known as Tink) is a 3D action adventure game set in Tinkerworld, where everything can be built from basic materials as long as the idea behind it is strong enough. Cities, forests, mountains and seas are crafted from nothing more than color, paper and glue. It is a fantastic place, born solely of the imagination and creativity of its inhabitants. \nRecently, however, petty quarrels and disagreements have caused discord among the inhabitants of Tinkerworld and they have halted all creative ventures. Now a slowly creeping Bleakness threatens to blot out Tinkerworld and to erase all color and life, leaving nothingness in its wake. \nHelp the young boy Koru save Tinkerworld from the all-devouring Bleakness. Use the power of those colors to aggravate (red), frighten (green) and grieve (blue) your enemies as you manipulate them to solve logical puzzles and overcome various obstacles. Explore the beautifully handcrafted districts of Colortown with agile Koru in free-running fashion and meet various fantastical and charming creatures. Return the colors to Tinkerworld in this tale about the power and beauty of imagination.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/z03aj90edgobhfomsk2s.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/z03aj90edgobhfomsk2s.jpg","size":"cover_small"}],"airtableId":"recfjTUmvHMTtbKhq","igdbName":"The Last Tinker: City of Colors","genre":["3D platform"],"date":"2015-06-12","developers":[1104],"completed":true,"igdbId":2346},{"rating":100,"slug":"the-legend-of-zelda-a-link-to-the-past","cloudHash":"f9jqwcudxcicbqgzx8tf","title":"The Legend of Zelda: A Link to the Past","url":"https://www.igdb.com/games/the-legend-of-zelda-a-link-to-the-past","support":["SNES"],"summary":"Link, a blacksmith's nephew living in Hyrule, must free the land from the evildoings of Ganon. Link must take up the mythical Master Sword and collect the three Triforces in order to free the Seven Maidens, including the princess of Hyrule, Zelda, from the dungeons and castles of the Dark World to stop Ganon.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/f9jqwcudxcicbqgzx8tf.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/f9jqwcudxcicbqgzx8tf.jpg","size":"cover_small"}],"airtableId":"recZ9HeM6KBwdcaFt","igdbName":"The Legend of Zelda: A Link to the Past","genre":"","date":"2015-12-05","developers":[421],"completed":"","igdbId":1026},{"rating":90,"slug":"the-legend-of-zelda-majora-s-mask","cloudHash":"lwhx16pgr42djtjmnoji","title":"The Legend of Zelda: Majora's Mask","url":"https://www.igdb.com/games/the-legend-of-zelda-majora-s-mask","support":["N64"],"summary":"After the events of The Legend of Zelda: Ocarina of Time (1998), Link is assaulted by an imp named Skull Kid under the control of the evil Majora's Mask and gets stuck in a troubled land called Termina. Link must repeat the same 3 days, take on the identities of deceased people from other races, collect numerous masks and rid the land of evil to stop Majora from destroying the world in this third-person action/adventure game.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/lwhx16pgr42djtjmnoji.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/lwhx16pgr42djtjmnoji.jpg","size":"cover_small"}],"airtableId":"rec7J4Wejs9ID7B8N","igdbName":"The Legend of Zelda: Majora's Mask","genre":"","date":"","developers":[421],"completed":true,"igdbId":1030},{"rating":"","slug":"the-legend-of-zelda-ocarina-of-time","cloudHash":"vkhiqnscmv0cuaxjuezk","title":"The Legend of Zelda: Ocarina of Time","url":"https://www.igdb.com/games/the-legend-of-zelda-ocarina-of-time","support":["N64"],"summary":"The Legend of Zelda: Ocarina of Time reveals the genesis of the fantasy land of Hyrule, the origin of the Triforce, and the tale of the first exploits of Princess Zelda and the heroic adventurer Link. Vibrant, real-time 3-D graphics transport you into the fantasy world of Hyrule. Your quest takes you through dense forests and across wind-whipped deserts. Swim raging rivers, climb treacherous mountains, dash on horseback across rolling hills, and delve into dungeons full of creatures that fight to the finish to put an end to your adventures. With immersive graphics, a sweeping story line, swashbuckling adventure, mind-bending puzzles, and a touch of humor, The Legend of Zelda: Ocarina of Time is one of Nintendo's most epic challenges ever.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/vkhiqnscmv0cuaxjuezk.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/vkhiqnscmv0cuaxjuezk.jpg","size":"cover_small"}],"airtableId":"recR2JRxkYddWTaiw","igdbName":"The Legend of Zelda: Ocarina of Time","genre":"","date":"","developers":[421],"completed":true,"igdbId":1029},{"rating":90,"slug":"the-legend-of-zelda-the-wind-waker","cloudHash":"zar9nzpsizzlaxtpbzam","title":"The Legend of Zelda: The Wind Waker","url":"https://www.igdb.com/games/the-legend-of-zelda-the-wind-waker","support":["GameCube"],"summary":"The Legend of Zelda: The Wind Waker is the 10th sequel of the Legend of Zelda action-adventure series. It's the first game of the series to be set on a group of islands in the sea. Therefore, many of Link's actions base on sailing and travelling from island to island, making a baton for controlling the wind the key item of the game. \n \nWind Waker is the first game of the Series with a cel-shaded graphic style. Since fans expected a Zelda game with realistic graphics like being shown at the Space World in 2000, the cel-shading look was critisized and discussed controversial for being too cartoonish.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/zar9nzpsizzlaxtpbzam.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/zar9nzpsizzlaxtpbzam.jpg","size":"cover_small"}],"airtableId":"reclNGA5vT958T7DS","igdbName":"The Legend of Zelda: The Wind Waker","genre":"","date":"","developers":[421],"completed":true,"igdbId":1033},{"rating":"","slug":"the-pink-panther-hokus-pokus-pink","cloudHash":"qn6z8vcvvyy0ea4vyg9g","title":"The Pink Panther: Hokus Pokus Pink","url":"https://www.igdb.com/games/the-pink-panther-hokus-pokus-pink","support":["PC"],"summary":"A point and click adventure game on PC starring the Pink Panther.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/qn6z8vcvvyy0ea4vyg9g.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/qn6z8vcvvyy0ea4vyg9g.jpg","size":"cover_small"}],"airtableId":"recm6waj8NWawGtqE","igdbName":"The Pink Panther: Hokus Pokus Pink","genre":["Point'n'click"],"date":"","developers":[4047],"completed":true,"igdbId":8109},{"rating":89.4444444444444,"slug":"the-stanley-parable","cloudHash":"hpbntvcmrcpemencnexq","title":"The Stanley Parable","url":"https://www.igdb.com/games/the-stanley-parable","support":["PC"],"summary":"The Stanley Parable is a first person exploration game. You will play as Stanley, and you will not play as Stanley. You will follow a story, you will not follow a story. You will have a choice, you will have no choice. The game will end, the game will never end. Contradiction follows contradiction, the rules of how games should work are broken, then broken again. This world was not made for you to understand.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/hpbntvcmrcpemencnexq.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/hpbntvcmrcpemencnexq.jpg","size":"cover_small"}],"airtableId":"recF7RLf8AMs7Mo9P","igdbName":"The Stanley Parable","genre":"","date":"2016-02-07","developers":[1424],"completed":true,"igdbId":3035},{"rating":70,"slug":"the-typing-of-the-dead-overkill","cloudHash":"d3xaw9m45qqjeeuj37lu","title":"The Typing of the Dead Overkilll","url":"https://www.igdb.com/games/the-typing-of-the-dead-overkill","support":["PC"],"summary":"The Typing of the Dead: Overkill fuses the horror and comedy of the legendary House of the Dead series with unique typing mechanics in order to deliver a truly original gaming experience! This gruesome shooter puts you in the middle of a mutant outbreak in Bayou county. Blast pieces out of the zombie horde across 9 stages, one keystroke at a time, in order to save you and a friends life as you work to uncover the mystery behind the outbreak.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/d3xaw9m45qqjeeuj37lu.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/d3xaw9m45qqjeeuj37lu.jpg","size":"cover_small"}],"airtableId":"recqlEFHodMmOn3AY","igdbName":"The Typing of the Dead: Overkill","genre":"","date":"2015-05-28","developers":[2203],"completed":"","igdbId":9438},{"rating":79.5227272727273,"slug":"the-wolf-among-us","cloudHash":"fihdg4v9kg7unaoq0s9f","title":"The Wolf Among Us","url":"https://www.igdb.com/games/the-wolf-among-us","support":["PC"],"summary":"The Wolf Among Us is a five episode series from the creators of the 2012 Game of the Year: The Walking Dead. Based on Fables (DC Comics/Vertigo), an award-winning comic book series, it is an often violent, mature and hard-boiled thriller where the characters and creatures of myth, lore and legend are real and exist in our world. As Bigby Wolf - The Big Bad Wolf in human form - you will discover that the brutal, bloody murder of a Fable is just a taste of things to come, in a game series where your every decision can have enormous consequences.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/fihdg4v9kg7unaoq0s9f.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/fihdg4v9kg7unaoq0s9f.jpg","size":"cover_small"}],"airtableId":"recYDHGV71sYbPe0O","igdbName":"The Wolf Among Us","genre":["Point'n'click"],"date":"2017-01-25","developers":[294],"completed":true,"igdbId":2993},{"rating":76.7142857142857,"slug":"titan-souls","cloudHash":"xleinqx2g4mdqifhlmex","title":"Titan Souls","url":"https://www.igdb.com/games/titan-souls","support":["PC"],"summary":"Between our world and the world beyond lie the Titan Souls, the spiritual source and sum of all living things. Now scattered amongst the ruins and guarded by the idle titans charged with their care, a solitary hero armed with but a single arrow is once again assembling shards of the Titan Soul in a quest for truth and power.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/xleinqx2g4mdqifhlmex.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/xleinqx2g4mdqifhlmex.jpg","size":"cover_small"}],"airtableId":"recOMKLUCO11Qvfqx","igdbName":"Titan Souls","genre":"","date":"2016-09-11","developers":[5120,2345],"completed":true,"igdbId":9559},{"rating":84.5555555555556,"slug":"tom-clancy-s-splinter-cell","cloudHash":"sirlrkxjkqerudsevbk1","title":"Tom Clancy's Splinter Cell","url":"https://www.igdb.com/games/tom-clancy-s-splinter-cell","support":["PC"],"summary":"Infiltrate terrorists' positions, acquire critical intelligence by any means necessary, execute with extreme prejudice, and exit without a trace! \n \nYou are Sam Fisher, a highly trained secret operative of the NSA's secret arm: Third Echelon. The world balance is in your hands, as cyber terrorism and international tensions are about to explode into WWIII.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/sirlrkxjkqerudsevbk1.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/sirlrkxjkqerudsevbk1.jpg","size":"cover_small"}],"airtableId":"recjpQeo4IHSvn7Sn","igdbName":"Tom Clancy's Splinter Cell","genre":["Stealth"],"date":"2016-06-23","developers":[38],"completed":true,"igdbId":910},{"rating":84.6428571428571,"slug":"tomb-raider--2","cloudHash":"ittzyszzkfreqqyp4e0l","title":"Tomb Raider","url":"https://www.igdb.com/games/tomb-raider--2","support":["PC"],"summary":"Tomb Raider explores the intense and gritty origin story of Lara Croft and her ascent from a young woman to a hardened survivor. Armed only with raw instincts and the ability to push beyond the limits of human endurance, Lara must fight to unravel the dark history of a forgotten island to escape its relentless hold.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ittzyszzkfreqqyp4e0l.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ittzyszzkfreqqyp4e0l.jpg","size":"cover_small"}],"airtableId":"recvCyN2mCrnUVTTV","igdbName":"Tomb Raider","genre":"","date":"2017-07-27","developers":[552,291],"completed":true,"igdbId":1164},{"rating":69,"slug":"tomb-raider-anniversary","cloudHash":"kqcsrll1qwd2smaag4qd","title":"Tomb Raider Anniversary","url":"https://www.igdb.com/games/tomb-raider-anniversary","support":["PC","PSP"],"summary":"Tomb Raider: Anniversary retraces Lara Croft's original genre-defining adventure — globe-trotting 3rd person action-adventure in pursuit of the legendary Scion artifact. Using an enhanced 'Tomb Raider: Legend' game engine, the graphics, technology and physics bring Lara's adventure and pursuit of a mystical artifact known only as the Scion right up to today's technology standards and offers gamers a completely new gameplay experience. Re-imagined, Anniversary delivers a dynamic fluidly and fast Lara Croft, massive environments of stunning visuals, intense combat and game pacing, and an enhanced and clarified original story.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/kqcsrll1qwd2smaag4qd.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/kqcsrll1qwd2smaag4qd.jpg","size":"cover_small"}],"airtableId":"recJOMzWF6CiCpuXP","igdbName":"Tomb Raider: Anniversary","genre":"","date":"","developers":[552,725],"completed":true,"igdbId":1162},{"rating":60,"slug":"tomb-raider-legend","cloudHash":"lbxlatpw7p4qpffqvcuq","title":"Tomb Raider Legend","url":"https://www.igdb.com/games/tomb-raider-legend","support":["PC","PS2"],"summary":"Travel across the world with gaming's most famous heroine, as Lara Croft uncovers ancient secrets that hold the answers to her own mysterious past.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/lbxlatpw7p4qpffqvcuq.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/lbxlatpw7p4qpffqvcuq.jpg","size":"cover_small"}],"airtableId":"recDg1GTfqZBDGxps","igdbName":"Tomb Raider: Legend","genre":"","date":"","developers":[552,725,2814],"completed":true,"igdbId":1161},{"rating":72.25,"slug":"tomb-raider-underworld","cloudHash":"dqwpsfir7kl3eiywf77t","title":"Tomb Raider Underworld","url":"https://www.igdb.com/games/tomb-raider-underworld","support":["PC"],"summary":"Tomb Raider: Underworld represents a new advancement in exploration-based gameplay. As fearless adventurer Lara Croft explore exotic locations around the world, each designed with an incredible attention to detail resulting in breathtaking high-definition visual fidelity that creates a truly believable world and delivers a new level of challenge and choice. \n \nMaster your surroundings: Reach new heights with the broadest range of acrobatic abilities and utilize objects within the environment to uncover new paths to explore. Explore epic and unknown worlds: Discover ancient mysteries of the underworld hidden within the coast of Thailand, frozen islands of the Arctic Sea, the jungles of Mexico, and more. \n \nTreacherous and unpredictable challenges: Each level is an elaborate multi-stage puzzle masked within an interactive environmental playground offering more flexibility over how the area is solved. New range of combat options: Choose to pacify or kill, target multiple enemies at once with the new dual-target system, and shoot with one hand while suspended with the other.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/dqwpsfir7kl3eiywf77t.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/dqwpsfir7kl3eiywf77t.jpg","size":"cover_small"}],"airtableId":"recMpoLiPBTCx9xqZ","igdbName":"Tomb Raider: Underworld","genre":"","date":"","developers":[552,725,3842],"completed":true,"igdbId":1163},{"rating":89,"slug":"towerfall-ascension","cloudHash":"dinoki4ts8kw1wwzaob7","title":"TowerFall Ascension","url":"https://www.igdb.com/games/towerfall-ascension","support":["PS4","PC"],"summary":"Enter the land of TowerFall with your friends and engage in the noble and brutal tradition of bow-and-arrow combat. TowerFall is an archery combat platformer for 1-4 players, with an arcade co-op mode and hilarious, intense versus matches. The core mechanics are simple and accessible, but combat is fast and fierce. The focus is on player mastery and friendly rivalry.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/dinoki4ts8kw1wwzaob7.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/dinoki4ts8kw1wwzaob7.jpg","size":"cover_small"}],"airtableId":"reccp45FuCfoXTHEB","igdbName":"Towerfall Ascension","genre":"","date":"2016-05-22","developers":[5542],"completed":true,"igdbId":9567},{"rating":"","slug":"trackmania-nations","cloudHash":"trbjfgu2fkg6g3r6votr","title":"TrackMania Nations","url":"https://www.igdb.com/games/trackmania-nations","support":["PC"],"summary":"Trackmania Nations ESWC is a version of Trackmania that was released for free in 2006 to be featured in the upcoming Electronic Sports World Cup of that year.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/trbjfgu2fkg6g3r6votr.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/trbjfgu2fkg6g3r6votr.jpg","size":"cover_small"}],"airtableId":"recslmeE1iLBCNezA","igdbName":"TrackMania Nations","genre":["Racing"],"date":"","developers":[394],"completed":"","igdbId":9909},{"rating":85.7272727272727,"slug":"transistor","cloudHash":"fjnmv3woh9vy3dddk00m","title":"Transistor","url":"https://www.igdb.com/games/transistor","support":["PC"],"summary":"Transistor is a sci-fi themed action RPG that invites you to wield an extraordinary weapon of unknown origin as you fight through a stunning futuristic city. Transistor seamlessly integrates thoughtful strategic planning into a fast-paced action experience, melding responsive gameplay and rich atmospheric storytelling. During the course of the adventure, you will piece together the Transistor's mysteries as you pursue its former owners.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/fjnmv3woh9vy3dddk00m.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/fjnmv3woh9vy3dddk00m.jpg","size":"cover_small"}],"airtableId":"rec0igh1cJWDyanoa","igdbName":"Transistor","genre":["Action RPG"],"date":"2016-09-15","developers":[928],"completed":true,"igdbId":3022},{"rating":85,"slug":"trine-2","cloudHash":"jfg8cxy9rhojaneetyip","title":"Trine 2","url":"https://www.igdb.com/games/trine-2","support":["PC"],"summary":"Three Heroes survive in countless dangers in a fairy-tale world, with physics-based jigsaw puzzles, beautiful scenery, and cooperative online mode.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/jfg8cxy9rhojaneetyip.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/jfg8cxy9rhojaneetyip.jpg","size":"cover_small"}],"airtableId":"recC1ghGYTZslovpQ","igdbName":"Trine 2","genre":"","date":"2013-12-13","developers":[2729],"completed":"","igdbId":6250},{"rating":73.6666666666667,"slug":"ultimate-spider-man","cloudHash":"g8zf6j0gway2kdacozgv","title":"Ultimate Spider-Man","url":"https://www.igdb.com/games/ultimate-spider-man","support":["PS2"],"summary":"Based on the comic book of the same name, Ultimate Spider-Man lets you play as either the hero Spider-Man or his arch-nemesis, Venom. Use the unique combat techniques of either Spider-Man or Venom to battle a host of Spider-Man characters. Artistic contributions by the creators of the series make for an authentic Spider-Man experience.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/g8zf6j0gway2kdacozgv.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/g8zf6j0gway2kdacozgv.jpg","size":"cover_small"}],"airtableId":"reccgTcC6P4v1SC7X","igdbName":"Ultimate Spider-Man","genre":"","date":"","developers":[432,72,428],"completed":true,"igdbId":4225},{"rating":79.4285714285714,"slug":"ultra-street-fighter-iv","cloudHash":"wi4aw7crhlnowuzgmhob","title":"Ultra Street Fighter IV","url":"https://www.igdb.com/games/ultra-street-fighter-iv","support":["PC"],"summary":"The world’s greatest fighting game evolves to a whole new level with Ultra Street Fighter IV. Continuing the tradition of excellence the series is known for, five new characters and six new stages have been added for even more fighting mayhem, with rebalanced gameplay and original modes topping off this ultimate offering.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/wi4aw7crhlnowuzgmhob.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/wi4aw7crhlnowuzgmhob.jpg","size":"cover_small"}],"airtableId":"recuGcNkjFb2jl2du","igdbName":"Ultra Street Fighter IV","genre":["Vs. Fighting"],"date":"2016-01-08","developers":[37],"completed":true,"igdbId":6656},{"rating":95.375,"slug":"uncharted-2-among-thieves","cloudHash":"ynje7ojmdnnzhrdpz4ot","title":"Uncharted 2 Among Thieves","url":"https://www.igdb.com/games/uncharted-2-among-thieves","support":["PS3"],"summary":"In the sequel to Drake's Fortune, Nathan Drake comes across a map that showcases the location of Marco Polo's missing ships. It takes him on a journey to find the infamous Cintamani Stone, and uncover the truth behind it.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ynje7ojmdnnzhrdpz4ot.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ynje7ojmdnnzhrdpz4ot.jpg","size":"cover_small"}],"airtableId":"rec8CwPJ72tBO0BFn","igdbName":"Uncharted 2: Among Thieves","genre":["3D platform","TPS"],"date":"2015-06-24","developers":[401],"completed":true,"igdbId":565},{"rating":93.25,"slug":"uncharted-3-drake-s-deception","cloudHash":"sc9bs2nsgbe9pem7bgwt","title":"Uncharted 3 Drake's Deception","url":"https://www.igdb.com/games/uncharted-3-drake-s-deception","support":["PS3"],"summary":"A search for the fabled \"Atlantis of the Sands\" propels fortune hunter Nathan Drake on a trek into the heart of the Arabian Desert. When the terrible secrets of this lost city are unearthed, Drake's quest descends into a desperate bid for survival that strains the limits of his endurance and forces him to confront his deepest fears.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/sc9bs2nsgbe9pem7bgwt.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/sc9bs2nsgbe9pem7bgwt.jpg","size":"cover_small"}],"airtableId":"recccOfXhSMMSTa5v","igdbName":"Uncharted 3: Drake's Deception","genre":["TPS","3D platform"],"date":"2015-06-25","developers":[401],"completed":true,"igdbId":512},{"rating":89.75,"slug":"uncharted-drake-s-fortune","cloudHash":"q44ptmlddwayjfpfdgh5","title":"Uncharted Drake's Fortune","url":"https://www.igdb.com/games/uncharted-drake-s-fortune","support":["PS3"],"summary":"A 400-year-old clue in the coffin of Sir Francis Drake sets a modern-day fortune hunter on an exploration for the fabled treasure of El Dorado, leading to the discovery of a forgotten island in the middle of the Pacific Ocean.\n\nThe search turns deadly when Nathan Drake becomes stranded on the island and hunted by mercenaries. Outnumbered and outgunned, Drake and his companions must fight to survive as they begin to unravel the terrible secrets hidden on the Island.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/q44ptmlddwayjfpfdgh5.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/q44ptmlddwayjfpfdgh5.jpg","size":"cover_small"}],"airtableId":"rec6SuKAGFSB6eoVP","igdbName":"Uncharted: Drake's Fortune","genre":["3D platform","TPS"],"date":"2015-06-23","developers":[401],"completed":true,"igdbId":431},{"rating":"","slug":"uncle-alberts-fabulous-voyage","cloudHash":"c9wtccncwqwgj41om9ct","title":"Uncle Albert's Fabulous Voyage","url":"https://www.igdb.com/games/uncle-alberts-fabulous-voyage","support":["PC"],"summary":"Tom the chameleon is in grave danger. Can you trace Uncle Albert's route to the four corners of the Earth in order to save Tom? From Istanbul to Zanzibar, passing by Borneo, the Amazon, and numerous other far away places, Uncle Albert will take children on an amazing journey full of surprises and unexpected trails. Crocodiles, carnivorous plants, mischievous crabs, and a magic recipe--Uncle Albert is counting on his young companions to overcome the obstacles in his path. Kids go on four different missions in a world full of realistic backgrounds and poetic humor. The program also features pages kids can personalize and print.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/c9wtccncwqwgj41om9ct.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/c9wtccncwqwgj41om9ct.jpg","size":"cover_small"}],"airtableId":"recHN2gG9yqwOA3mh","igdbName":"Uncle Albert's Fabulous Voyage","genre":["Point'n'click"],"date":"2000-01-01","developers":[1780],"completed":true,"igdbId":25916},{"rating":70,"slug":"vector","cloudHash":"eza3lcr4zvnj2xmmjcer","title":"Vector","url":"https://www.igdb.com/games/vector","support":["PC"],"summary":"Vector is an exciting, arcade-style game featuring you as the exceptional free runner who won’t be held down by the system. The game opens with a view into a totalitarian world where freedom and individually is nothing more than a distant dream. But the heart of a freerunner is strong, and you so break free. Run, vault, slide and climb using extraordinary techniques based on the urban ninja sport of Parkour all while being chased by “Big Brother” who’s sole purpose is to capture you and bring you back.\nInspired by the practice and principles of Parkour, Vector’s intuitive controls please players of all levels, and sophisticated level designs challenge the most demanding players with fast-paced timing puzzles as the traceur “flows” over the rooftops.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/eza3lcr4zvnj2xmmjcer.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/eza3lcr4zvnj2xmmjcer.jpg","size":"cover_small"}],"airtableId":"recSC7f5AVRO4scz1","igdbName":"Vector","genre":["2D platform"],"date":"2014-08-08","developers":[7830],"completed":true,"igdbId":15545},{"rating":90,"slug":"viewtiful-joe","cloudHash":"od2vm4mbqi3yh2wpzfqq","title":"Viewtiful Joe","url":"https://www.igdb.com/games/viewtiful-joe","support":["GameCube"],"summary":"Joe is no ordinary man and Viewtiful Joe is no ordinary game. Capcom's new superhero action game mixes funky cartoon-style visuals with classic side-scrolling gameplay and introduces the world's quirkiest million dollar action hero. More than just any ordinary dude, Joe must transform into the ultimate superhero. It's up to you to activate the correct view mode like \"slow\" or \"zoom in\" in order to clobber your enemies with beautiful style. You can also speed up or slow down your visual effects for even more \"viewtiful\" moves. Viewtiful Joe mixes an innovative viewpoint with an amazing stunt-filled action movie universe.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/od2vm4mbqi3yh2wpzfqq.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/od2vm4mbqi3yh2wpzfqq.jpg","size":"cover_small"}],"airtableId":"reccOUmfOhoSleGXz","igdbName":"Viewtiful Joe","genre":["Beat'em Up"],"date":"","developers":[2054,2055],"completed":"","igdbId":4229},{"rating":80,"slug":"volgarr-the-viking","cloudHash":"a9utmp3pida6m2npg533","title":"Volgarr the Viking","url":"https://www.igdb.com/games/volgarr-the-viking","support":["PC"],"summary":"Remember when games were tough? Return to the Golden Age of arcades with an all-NEW hardcore action experience that pulls no punches. Volgarr the Viking possesses all the hallmarks of the true classics - simple controls, high challenge, and meticulous design - combined with hand-made pixel","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/a9utmp3pida6m2npg533.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/a9utmp3pida6m2npg533.jpg","size":"cover_small"}],"airtableId":"recf4PucsUlEnKict","igdbName":"Volgarr the Viking","genre":"","date":"2015-07-08","developers":[4439],"completed":"","igdbId":8465},{"rating":74.1111111111111,"slug":"volume","cloudHash":"gzgl27qrxxdrmxzu9umx","title":"Volume","url":"https://www.igdb.com/games/volume","support":["PC"],"summary":"Volume is a near-future retelling of the Robin Hood legend, starring Danny Wallace (Thomas Was Alone), Charlie McDonnell and award-winning, critically-acclaimed actor Andy Serkis (The Lord of the Rings, Planet of the Apes) as Gisborne.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/gzgl27qrxxdrmxzu9umx.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/gzgl27qrxxdrmxzu9umx.jpg","size":"cover_small"}],"airtableId":"rectROxR28JjNoXyV","igdbName":"Volume","genre":["Stealth"],"date":"2016-06-04","developers":[5152],"completed":true,"igdbId":9647},{"rating":93,"slug":"warcraft-iii-reign-of-chaos","cloudHash":"pgpby3sk2vo1dkwc9vgl","title":"Warcraft III: Reign of Chaos","url":"https://www.igdb.com/games/warcraft-iii-reign-of-chaos","support":["PC"],"summary":"Warcraft 3: Reign of Chaos is an RTS made by Blizzard Entertainment. Take control of either the Humans, the Orcs, the Night Elves or the Undead, all with different unit types and heroes with unique abilities.Play the story driven single player campaign, go online to play default- or custom maps against people around the world or create your own maps with the map creation tool.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/pgpby3sk2vo1dkwc9vgl.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/pgpby3sk2vo1dkwc9vgl.jpg","size":"cover_small"}],"airtableId":"reciutlpFKkLto7CZ","igdbName":"Warcraft III: Reign of Chaos","genre":["RTS"],"date":"","developers":[51],"completed":"","igdbId":132},{"rating":"","slug":"where-in-time-is-carmen-sandiego","cloudHash":"rzzds6p0foqwixtjur8w","title":"Where in Time Is Carmen Sandiego? ","url":"https://www.igdb.com/games/where-in-time-is-carmen-sandiego","support":["PC"],"summary":"Carmen Sandiego and her gang are loose once again, and it is the players job to capture her! This time around the player not only has to find where she is, but also when she is. Traveling to various locations, they need to assemble clues by questioning witnesses and searching locations to close in and capture Carmen Sandiego. Included with the game is The New America Desk Encyclopedia to help make clues more meaningful (and act as a form of copy protection!).","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/rzzds6p0foqwixtjur8w.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/rzzds6p0foqwixtjur8w.jpg","size":"cover_small"}],"airtableId":"recZ3DFMHqGHN0PKi","igdbName":"Where in Time is Carmen Sandiego?","genre":["Point'n'click"],"date":"","developers":[195],"completed":true,"igdbId":4376},{"rating":80,"slug":"worms-3d","cloudHash":"qimriziafdwkra8nwhxx","title":"Worms 3D","url":"https://www.igdb.com/games/worms-3d","support":["PS2"],"summary":"Join the party as worm battles ensue across 3D worlds. Worms 3D pits four players--each with a customizable team of worms--against one another in fully deformable landscapes. All the bizarre weapons from the Worms series--including Banana Bomb, flying Super Sheep, Earthquakes, Air Strikes, and Holy Hand Grenade--appear for your destructive pleasure. Wreak havoc in turn-based multiplayer action or unlock landscapes, sound sets, challenges, and secret missions in the immersive single-player mode.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/qimriziafdwkra8nwhxx.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/qimriziafdwkra8nwhxx.jpg","size":"cover_small"}],"airtableId":"recokY9GEXoZ692Y6","igdbName":"Worms 3D","genre":["TBS"],"date":"","developers":[614,631],"completed":"","igdbId":1047},{"rating":47,"slug":"x-blades","cloudHash":"creztkwhllarkodzfh7j","title":"X-Blades","url":"https://www.igdb.com/games/x-blades","support":["PC"],"summary":"In X-Blades, the player takes on the role of the enchanting heroine Ayumi, who survives a breathtaking dance of blades through the Hordes of Darkness. The long-haired beautiful anime, with her pistol blades and mind-blowing leaps, whirls and swirls from one fantastic level to the next.\n\nIn brief: An anime-style, opulent hack n' slay spectacle for fans of entertaining action games. X-Blades creates a fantastic universe around the attractive heroine, who has to fend off innumerable monsters and imposing boss opponents with her power and tactics. A long list of all sorts of magic spells widens the range of potential forms of attack. Once Ayumi has collected enough experience points, she can activate new skills. The anime-style level design is what really gives X-Blades its special flair. Around 40 magical indoor and outdoor worlds dazzle in an enthralling rhapsody of color. Action and magical effects are impressively incorporated through the use of cinema stylistics such as bullet time or motion blurring.Offense is the best form of defense!Forget the competition - I'll give you all the action you'll ever need! OK... I am a treasure hunter, so my motives maybe aren't always angelic - but my \"Slash Dance\" through the hordes of the Dark is a thing of beauty! Innovative Gunblades and an arsenal of spectacular spells, power-ups and incredible leap combos - you have to catch the cinematic presentation of my adventures - awesome!FEATURES:An absorbing fantasy story with 40 spectacular landscapes\nMore than 25 types of magic in different classes\nLearn to play easily with 4 difficulty modes AND alternative endings that depend on your actions!\nInnovative Gunblades for long-range and close combat, plus new weapons and new outfits\nRPG elements in the upgrading of skills and weapons, demonic special mode for the heroine (that's me!)\nHidden Power-ups and a Stats screen will hook you into exploring all the levels\nOver 30 classes of opponents, plus powerful Boss opponents and an ingenious level design","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/creztkwhllarkodzfh7j.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/creztkwhllarkodzfh7j.jpg","size":"cover_small"}],"airtableId":"recH6zKEkDMVnfPdp","igdbName":"X-Blades","genre":["Beat'em Up"],"date":"","developers":[1018],"completed":"","igdbId":7256},{"rating":60,"slug":"x-men-2-wolverines-revenge","cloudHash":"ujkhdwzfrmjrfxxauxqk","title":"X-Men 2 Wolverine's Revenge","url":"https://www.igdb.com/games/x-men-2-wolverines-revenge","support":["GBA"],"summary":"","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/ujkhdwzfrmjrfxxauxqk.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/ujkhdwzfrmjrfxxauxqk.jpg","size":"cover_small"}],"airtableId":"reca9pb9IBVo1gRF6","igdbName":"X-Men 2: Wolverine's Revenge","genre":"","date":"","developers":"","completed":true,"igdbId":22234},{"rating":60,"slug":"yu-gi-oh-duel-monsters-gx-tag-force-2","cloudHash":"xcehwgmrsbcscrol8hle","title":"Yu-Gi-Oh! Duel Monsters GX: Tag Force 2","url":"https://www.igdb.com/games/yu-gi-oh-duel-monsters-gx-tag-force-2","support":["PSP"],"summary":"","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/xcehwgmrsbcscrol8hle.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/xcehwgmrsbcscrol8hle.jpg","size":"cover_small"}],"airtableId":"recszWe5WnaLsyLjw","igdbName":"Yu-Gi-Oh! Duel Monsters GX: Tag Force 2","genre":"","date":"","developers":"","completed":"","igdbId":21945},{"rating":70,"slug":"yu-gi-oh-world-championship-tournament-2004","cloudHash":"j79525yncs2yaoknlkro","title":"Yu-Gi-Oh! World Championship Tournament 2004","url":"https://www.igdb.com/games/yu-gi-oh-world-championship-tournament-2004","support":["GBA"],"summary":"Find out who's the best card-battle player in Yu-Gi-Oh! World Championship Tournament 2004. Construct your monster cards, spell cards, trap cards, and special summon cards into three separate decks for different dueling strategies. You can conquer the tournament solo or link up with a friend in a multiplayer battle. With over 1000 game cards and dozens of popular characters from the Yu-Gi-Oh! TV series, the excitement and exhilaration of the Yu-Gi-Oh trading card game is captured in full force.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/j79525yncs2yaoknlkro.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/j79525yncs2yaoknlkro.jpg","size":"cover_small"}],"airtableId":"rechpPkSMrsCTavSV","igdbName":"Yu-Gi-Oh! World Championship Tournament 2004","genre":"","date":"","developers":[129],"completed":"","igdbId":6698},{"rating":"","slug":"zen-bound-2","cloudHash":"kgdf3il7nljbsr0ofxps","title":"Zen Bound 2","url":"https://www.igdb.com/games/zen-bound-2","support":["PC"],"summary":"Wrap your way to bliss in Zen Bound 2, the unique down-tempo indie game! This is a different gaming experience: an opportunity to slow down, zone out and focus on a task that’s challenging but not stressful, a set of gentle puzzles for the mind and fingers to solve. \n \nThe goal of the game is to paint wooden sculptures by wrapping them in rope - a task that may sound simple but has surprising complexity. Each of the levels presents a spatial puzzle that becomes obvious through inspection. Some levels feature paint bombs that are helpful in covering complex areas of the object. \n \nZen Bound 2 is a calm and meditative gameplay experience, with tactile, dusty visuals and a sublime, enveloping soundtrack by the sensational electronic artist ‘Ghost Monkey’.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/kgdf3il7nljbsr0ofxps.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/kgdf3il7nljbsr0ofxps.jpg","size":"cover_small"}],"airtableId":"rec35p2u8EGscE1nT","igdbName":"Zen Bound 2","genre":["Puzzle"],"date":"2016-06-04","developers":[7526],"completed":"","igdbId":15063},{"rating":50,"slug":"zenge","cloudHash":"kanrl8euf3miryushxda","title":"Zenge","url":"https://www.igdb.com/games/zenge","support":["Android"],"summary":"Zenge is a peculiar puzzle game, telling the story of Eon - a lonely journeyer who's stuck between worlds and time.\n\nThe game is intended to be a relaxing experience, thus there are no points, stars, tutorials, move counters, in-game shops or any other distractions. Just a pure, immersive journey with Eon, told through gorgeous art and music.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/kanrl8euf3miryushxda.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/kanrl8euf3miryushxda.jpg","size":"cover_small"}],"airtableId":"reci5WaQTcDYjD06V","igdbName":"Zenge","genre":["Puzzle"],"date":"2017-08-12","developers":[9559],"completed":true,"igdbId":18792},{"rating":60,"slug":"zombie-driver-hd","cloudHash":"qfdjzdpds7wviciik5xz","title":"Zombie Driver HD","url":"https://www.igdb.com/games/zombie-driver-hd","support":["PC"],"summary":"Insane mix of cars, speed, explosions, blood and zombies! Fight through an epic narrative campaign or test yourself in the Slaughter and Blood Race modes.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/qfdjzdpds7wviciik5xz.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/qfdjzdpds7wviciik5xz.jpg","size":"cover_small"}],"airtableId":"recyOynWX0gloKFrI","igdbName":"Zombie Driver HD","genre":"","date":"2015-08-29","developers":[4780],"completed":"","igdbId":9051},{"rating":83.2,"slug":"castlevania-lords-of-shadow","cloudHash":"dazio9h4xrcqykwe6rsq","title":"Castlevania: Lords of Shadow","url":"https://www.igdb.com/games/castlevania-lords-of-shadow","support":["PC"],"summary":"Gabriel Belmont learns of a mask with the power to raise the dead and sets out on a mission to obtain it to bring his recently murdered wife back from the dead. \n \nLords of Shadow builds upon the combat systems first explored in this series in 2003's Lament of Innocence and adds more violent kills to the mix. Inspiration for these changes seems to have come from 2005's God of War.","coverURL":[{"url":"https://images.igdb.com/igdb/image/upload/t_cover_big/dazio9h4xrcqykwe6rsq.jpg","size":"cover_big"},{"url":"https://images.igdb.com/igdb/image/upload/t_cover_small/dazio9h4xrcqykwe6rsq.jpg","size":"cover_small"}],"airtableId":"recIOZpIHfA7MLPfo","igdbName":"Castlevania: Lords of Shadow","genre":"","date":"2018-03-08","developers":[170,169],"completed":true,"igdbId":491}]
 
 /***/ }),
-/* 44 */
+/* 269 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(45);
+var content = __webpack_require__(270);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -20221,7 +31915,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(47)(content, options);
+var update = __webpack_require__(272)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -20253,10 +31947,10 @@ if(false) {
 }
 
 /***/ }),
-/* 45 */
+/* 270 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(46)(false);
+exports = module.exports = __webpack_require__(271)(false);
 // imports
 
 
@@ -20267,7 +31961,7 @@ exports.push([module.i, "body {\n    margin: 0;\n    padding: 0;\n    font-famil
 
 
 /***/ }),
-/* 46 */
+/* 271 */
 /***/ (function(module, exports) {
 
 /*
@@ -20349,7 +32043,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 47 */
+/* 272 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -20415,7 +32109,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(48);
+var	fixUrls = __webpack_require__(273);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -20731,7 +32425,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 48 */
+/* 273 */
 /***/ (function(module, exports) {
 
 
@@ -20824,6 +32518,6167 @@ module.exports = function (css) {
 	return fixedCss;
 };
 
+
+/***/ }),
+/* 274 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (recalc) {
+  if (!size && size !== 0 || recalc) {
+    if (_inDOM2.default) {
+      var scrollDiv = document.createElement('div');
+
+      scrollDiv.style.position = 'absolute';
+      scrollDiv.style.top = '-9999px';
+      scrollDiv.style.width = '50px';
+      scrollDiv.style.height = '50px';
+      scrollDiv.style.overflow = 'scroll';
+
+      document.body.appendChild(scrollDiv);
+      size = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+      document.body.removeChild(scrollDiv);
+    }
+  }
+
+  return size;
+};
+
+var _inDOM = __webpack_require__(248);
+
+var _inDOM2 = _interopRequireDefault(_inDOM);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var size = void 0;
+
+module.exports = exports['default'];
+
+/***/ }),
+/* 275 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject(value) {
+  var type = typeof value;
+  return value != null && (type == 'object' || type == 'function');
+}
+
+module.exports = isObject;
+
+
+/***/ }),
+/* 276 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var freeGlobal = __webpack_require__(293);
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+module.exports = root;
+
+
+/***/ }),
+/* 277 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var root = __webpack_require__(276);
+
+/** Built-in value references. */
+var Symbol = root.Symbol;
+
+module.exports = Symbol;
+
+
+/***/ }),
+/* 278 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = activeElement;
+
+var _ownerDocument = __webpack_require__(110);
+
+var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function activeElement() {
+  var doc = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : (0, _ownerDocument2.default)();
+
+  try {
+    return doc.activeElement;
+  } catch (e) {/* ie throws if no active element */}
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 279 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.specialProperty = undefined;
+
+var _defineProperty2 = __webpack_require__(25);
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _keys = __webpack_require__(36);
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _extends3 = __webpack_require__(11);
+
+var _extends4 = _interopRequireDefault(_extends3);
+
+exports.default = exactProp;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// This module is based on https://github.com/airbnb/prop-types-exact repository.
+// However, in order to reduce the number of dependencies and to remove some extra safe checks
+// the module was forked.
+
+var specialProperty = exports.specialProperty = 'exact-prop: \u200B';
+
+function exactProp(propTypes, componentNameInError) {
+  return (0, _extends4.default)({}, propTypes, (0, _defineProperty3.default)({}, specialProperty, function (props) {
+    var unknownProps = (0, _keys2.default)(props).filter(function (prop) {
+      return !propTypes.hasOwnProperty(prop);
+    });
+    if (unknownProps.length > 0) {
+      return new TypeError(componentNameInError + ': unknown props found: ' + unknownProps.join(', ') + '. Please remove the unknown properties.');
+    }
+    return null;
+  }));
+}
+
+/***/ }),
+/* 280 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _keys = __webpack_require__(36);
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _style = __webpack_require__(309);
+
+var _style2 = _interopRequireDefault(_style);
+
+var _ownerDocument = __webpack_require__(110);
+
+var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
+
+var _scrollbarSize = __webpack_require__(274);
+
+var _scrollbarSize2 = _interopRequireDefault(_scrollbarSize);
+
+var _isOverflowing = __webpack_require__(317);
+
+var _isOverflowing2 = _interopRequireDefault(_isOverflowing);
+
+var _manageAriaHidden = __webpack_require__(319);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function findIndexOf(data, callback) {
+  var idx = -1;
+  data.some(function (item, index) {
+    if (callback(item)) {
+      idx = index;
+      return true;
+    }
+    return false;
+  });
+  return idx;
+}
+
+function findContainer(data, modal) {
+  return findIndexOf(data, function (item) {
+    return item.modals.indexOf(modal) !== -1;
+  });
+}
+
+function getPaddingRight(node) {
+  return parseInt((0, _style2.default)(node, 'paddingRight') || 0, 10);
+}
+
+function setContainerStyle(data, container) {
+  var style = { overflow: 'hidden' };
+
+  // We are only interested in the actual `style` here because we will override it.
+  data.style = {
+    overflow: container.style.overflow,
+    paddingRight: container.style.paddingRight
+  };
+
+  if (data.overflowing) {
+    var scrollbarSize = (0, _scrollbarSize2.default)();
+
+    // Use computed style, here to get the real padding to add our scrollbar width.
+    style.paddingRight = getPaddingRight(container) + scrollbarSize + 'px';
+
+    // .mui-fixed is a global helper.
+    var fixedNodes = (0, _ownerDocument2.default)(container).querySelectorAll('.mui-fixed');
+    for (var i = 0; i < fixedNodes.length; i += 1) {
+      var paddingRight = getPaddingRight(fixedNodes[i]);
+      data.prevPaddings.push(paddingRight);
+      fixedNodes[i].style.paddingRight = paddingRight + scrollbarSize + 'px';
+    }
+  }
+
+  (0, _keys2.default)(style).forEach(function (key) {
+    container.style[key] = style[key];
+  });
+}
+
+function removeContainerStyle(data, container) {
+  (0, _keys2.default)(data.style).forEach(function (key) {
+    container.style[key] = data.style[key];
+  });
+
+  var fixedNodes = (0, _ownerDocument2.default)(container).querySelectorAll('.mui-fixed');
+  for (var i = 0; i < fixedNodes.length; i += 1) {
+    fixedNodes[i].style.paddingRight = data.prevPaddings[i] + 'px';
+  }
+}
+/**
+ * @ignore - do not document.
+ *
+ * Proper state managment for containers and the modals in those containers.
+ * Simplified, but inspired by react-overlay's ModalManager class
+ * Used by the Modal to ensure proper styling of containers.
+ */
+
+var ModalManager = function () {
+  function ModalManager() {
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        _ref$hideSiblingNodes = _ref.hideSiblingNodes,
+        hideSiblingNodes = _ref$hideSiblingNodes === undefined ? true : _ref$hideSiblingNodes,
+        _ref$handleContainerO = _ref.handleContainerOverflow,
+        handleContainerOverflow = _ref$handleContainerO === undefined ? true : _ref$handleContainerO;
+
+    (0, _classCallCheck3.default)(this, ModalManager);
+
+    this.hideSiblingNodes = hideSiblingNodes;
+    this.handleContainerOverflow = handleContainerOverflow;
+    // this.modals[modalIdx] = modal
+    this.modals = [];
+    // this.containers[containerIdx] = container
+    this.containers = [];
+    // this.data[containerIdx] = {
+    //   modals: [],
+    // }
+    this.data = [];
+  }
+
+  (0, _createClass3.default)(ModalManager, [{
+    key: 'add',
+    value: function add(modal, container) {
+      var modalIdx = this.modals.indexOf(modal);
+      var containerIdx = this.containers.indexOf(container);
+
+      if (modalIdx !== -1) {
+        return modalIdx;
+      }
+
+      modalIdx = this.modals.length;
+      this.modals.push(modal);
+
+      if (this.hideSiblingNodes) {
+        (0, _manageAriaHidden.hideSiblings)(container, modal.mountNode);
+      }
+
+      if (containerIdx !== -1) {
+        this.data[containerIdx].modals.push(modal);
+        return modalIdx;
+      }
+
+      var data = {
+        modals: [modal],
+        overflowing: (0, _isOverflowing2.default)(container),
+        prevPaddings: []
+      };
+
+      if (this.handleContainerOverflow) {
+        setContainerStyle(data, container);
+      }
+
+      this.containers.push(container);
+      this.data.push(data);
+
+      return modalIdx;
+    }
+  }, {
+    key: 'remove',
+    value: function remove(modal) {
+      var modalIdx = this.modals.indexOf(modal);
+
+      if (modalIdx === -1) {
+        return modalIdx;
+      }
+
+      var containerIdx = findContainer(this.data, modal);
+      var data = this.data[containerIdx];
+      var container = this.containers[containerIdx];
+
+      data.modals.splice(data.modals.indexOf(modal), 1);
+      this.modals.splice(modalIdx, 1);
+
+      // If that was the last modal in a container, clean up the container.
+      if (data.modals.length === 0) {
+        if (this.handleContainerOverflow) {
+          removeContainerStyle(data, container);
+        }
+
+        if (this.hideSiblingNodes) {
+          (0, _manageAriaHidden.showSiblings)(container, modal.mountNode);
+        }
+        this.containers.splice(containerIdx, 1);
+        this.data.splice(containerIdx, 1);
+      } else if (this.hideSiblingNodes) {
+        // Otherwise make sure the next top modal is visible to a SR.
+        (0, _manageAriaHidden.ariaHidden)(false, data.modals[data.modals.length - 1].mountNode);
+      }
+
+      return modalIdx;
+    }
+  }, {
+    key: 'isTopModal',
+    value: function isTopModal(modal) {
+      return !!this.modals.length && this.modals[this.modals.length - 1] === modal;
+    }
+  }]);
+  return ModalManager;
+}();
+
+exports.default = ModalManager;
+
+/***/ }),
+/* 281 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = camelizeStyleName;
+
+var _camelize = __webpack_require__(310);
+
+var _camelize2 = _interopRequireDefault(_camelize);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var msPattern = /^-ms-/; /**
+                          * Copyright 2014-2015, Facebook, Inc.
+                          * All rights reserved.
+                          * https://github.com/facebook/react/blob/2aeb8a2a6beb00617a4217f7f8284924fa2ad819/src/vendor/core/camelizeStyleName.js
+                          */
+function camelizeStyleName(string) {
+  return (0, _camelize2.default)(string.replace(msPattern, 'ms-'));
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 282 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styles = undefined;
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _defineProperty2 = __webpack_require__(25);
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = __webpack_require__(35);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _withStyles = __webpack_require__(61);
+
+var _withStyles2 = _interopRequireDefault(_withStyles);
+
+var _Fade = __webpack_require__(320);
+
+var _Fade2 = _interopRequireDefault(_Fade);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = exports.styles = {
+  root: {
+    zIndex: -1,
+    width: '100%',
+    height: '100%',
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    // Remove grey highlight
+    WebkitTapHighlightColor: 'transparent',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  invisible: {
+    backgroundColor: 'transparent'
+  }
+};
+
+function Backdrop(props) {
+  var classes = props.classes,
+      className = props.className,
+      invisible = props.invisible,
+      open = props.open,
+      transitionDuration = props.transitionDuration,
+      other = (0, _objectWithoutProperties3.default)(props, ['classes', 'className', 'invisible', 'open', 'transitionDuration']);
+
+
+  return _react2.default.createElement(
+    _Fade2.default,
+    (0, _extends3.default)({ appear: true, 'in': open, timeout: transitionDuration }, other),
+    _react2.default.createElement('div', {
+      className: (0, _classnames2.default)(classes.root, (0, _defineProperty3.default)({}, classes.invisible, invisible), className),
+      'aria-hidden': 'true'
+    })
+  );
+}
+
+Backdrop.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * @ignore
+   */
+  className: _propTypes2.default.string,
+  /**
+   * If `true`, the backdrop is invisible.
+   * It can be used when rendering a popover or a custom select component.
+   */
+  invisible: _propTypes2.default.bool,
+  /**
+   * If `true`, the backdrop is open.
+   */
+  open: _propTypes2.default.bool.isRequired,
+  /**
+   * The duration for the transition, in milliseconds.
+   * You may specify a single timeout for all transitions, or individually with an object.
+   */
+  transitionDuration: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.shape({ enter: _propTypes2.default.number, exit: _propTypes2.default.number })])
+} : {};
+
+Backdrop.defaultProps = {
+  invisible: false
+};
+
+exports.default = (0, _withStyles2.default)(styles, { name: 'MuiBackdrop' })(Backdrop);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 283 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _getPrototypeOf = __webpack_require__(37);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(40);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(43);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _hoistNonReactStatics = __webpack_require__(185);
+
+var _hoistNonReactStatics2 = _interopRequireDefault(_hoistNonReactStatics);
+
+var _wrapDisplayName = __webpack_require__(186);
+
+var _wrapDisplayName2 = _interopRequireDefault(_wrapDisplayName);
+
+var _createMuiTheme = __webpack_require__(222);
+
+var _createMuiTheme2 = _interopRequireDefault(_createMuiTheme);
+
+var _themeListener = __webpack_require__(239);
+
+var _themeListener2 = _interopRequireDefault(_themeListener);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var defaultTheme = void 0;
+
+function getDefaultTheme() {
+  if (defaultTheme) {
+    return defaultTheme;
+  }
+
+  defaultTheme = (0, _createMuiTheme2.default)();
+  return defaultTheme;
+}
+
+// Provide the theme object as a property to the input component.
+var withTheme = function withTheme() {
+  return function (Component) {
+    var WithTheme = function (_React$Component) {
+      (0, _inherits3.default)(WithTheme, _React$Component);
+
+      function WithTheme(props, context) {
+        (0, _classCallCheck3.default)(this, WithTheme);
+
+        var _this = (0, _possibleConstructorReturn3.default)(this, (WithTheme.__proto__ || (0, _getPrototypeOf2.default)(WithTheme)).call(this, props, context));
+
+        _this.state = {};
+        _this.unsubscribeId = null;
+
+        _this.state = {
+          // We use || as the function call is lazy evaluated.
+          theme: _themeListener2.default.initial(context) || getDefaultTheme()
+        };
+        return _this;
+      }
+
+      (0, _createClass3.default)(WithTheme, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+          var _this2 = this;
+
+          this.unsubscribeId = _themeListener2.default.subscribe(this.context, function (theme) {
+            _this2.setState({ theme: theme });
+          });
+        }
+      }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+          if (this.unsubscribeId !== null) {
+            _themeListener2.default.unsubscribe(this.context, this.unsubscribeId);
+          }
+        }
+      }, {
+        key: 'render',
+        value: function render() {
+          return _react2.default.createElement(Component, (0, _extends3.default)({ theme: this.state.theme }, this.props));
+        }
+      }]);
+      return WithTheme;
+    }(_react2.default.Component);
+
+    WithTheme.contextTypes = _themeListener2.default.contextTypes;
+
+    if (process.env.NODE_ENV !== 'production') {
+      WithTheme.displayName = (0, _wrapDisplayName2.default)(Component, 'WithTheme');
+    }
+
+    (0, _hoistNonReactStatics2.default)(WithTheme, Component);
+
+    if (process.env.NODE_ENV !== 'production') {
+      // Exposed for test purposes.
+      WithTheme.Naked = Component;
+    }
+
+    return WithTheme;
+  };
+};
+
+exports.default = withTheme;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 284 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getTransitionProps = getTransitionProps;
+var reflow = exports.reflow = function reflow(node) {
+  return node.scrollTop;
+};
+
+function getTransitionProps(props, options) {
+  var timeout = props.timeout,
+      _props$style = props.style,
+      style = _props$style === undefined ? {} : _props$style;
+
+
+  return {
+    duration: style.transitionDuration || typeof timeout === 'number' ? timeout : timeout[options.mode],
+    delay: style.transitionDelay
+  };
+}
+
+/***/ }),
+/* 285 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _toConsumableArray2 = __webpack_require__(250);
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+var _getPrototypeOf = __webpack_require__(37);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(40);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(43);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactDom = __webpack_require__(24);
+
+var _keycode = __webpack_require__(109);
+
+var _keycode2 = _interopRequireDefault(_keycode);
+
+var _contains = __webpack_require__(247);
+
+var _contains2 = _interopRequireDefault(_contains);
+
+var _activeElement = __webpack_require__(278);
+
+var _activeElement2 = _interopRequireDefault(_activeElement);
+
+var _ownerDocument = __webpack_require__(110);
+
+var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
+
+var _List = __webpack_require__(324);
+
+var _List2 = _interopRequireDefault(_List);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// @inheritedComponent List
+
+var MenuList = function (_React$Component) {
+  (0, _inherits3.default)(MenuList, _React$Component);
+
+  function MenuList() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    (0, _classCallCheck3.default)(this, MenuList);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = MenuList.__proto__ || (0, _getPrototypeOf2.default)(MenuList)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+      currentTabIndex: undefined
+    }, _this.list = undefined, _this.selectedItem = undefined, _this.blurTimer = undefined, _this.handleBlur = function (event) {
+      _this.blurTimer = setTimeout(function () {
+        if (_this.list) {
+          var list = (0, _reactDom.findDOMNode)(_this.list);
+          var currentFocus = (0, _activeElement2.default)((0, _ownerDocument2.default)(list));
+          if (!(0, _contains2.default)(list, currentFocus)) {
+            _this.resetTabIndex();
+          }
+        }
+      }, 30);
+
+      if (_this.props.onBlur) {
+        _this.props.onBlur(event);
+      }
+    }, _this.handleKeyDown = function (event) {
+      var list = (0, _reactDom.findDOMNode)(_this.list);
+      var key = (0, _keycode2.default)(event);
+      var currentFocus = (0, _activeElement2.default)((0, _ownerDocument2.default)(list));
+
+      if ((key === 'up' || key === 'down') && (!currentFocus || currentFocus && !(0, _contains2.default)(list, currentFocus))) {
+        if (_this.selectedItem) {
+          (0, _reactDom.findDOMNode)(_this.selectedItem).focus();
+        } else {
+          list.firstChild.focus();
+        }
+      } else if (key === 'down') {
+        event.preventDefault();
+        if (currentFocus.nextElementSibling) {
+          currentFocus.nextElementSibling.focus();
+        }
+      } else if (key === 'up') {
+        event.preventDefault();
+        if (currentFocus.previousElementSibling) {
+          currentFocus.previousElementSibling.focus();
+        }
+      }
+
+      if (_this.props.onKeyDown) {
+        _this.props.onKeyDown(event, key);
+      }
+    }, _this.handleItemFocus = function (event) {
+      var list = (0, _reactDom.findDOMNode)(_this.list);
+      if (list) {
+        for (var i = 0; i < list.children.length; i += 1) {
+          if (list.children[i] === event.currentTarget) {
+            _this.setTabIndex(i);
+            break;
+          }
+        }
+      }
+    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+  }
+
+  (0, _createClass3.default)(MenuList, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.resetTabIndex();
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      clearTimeout(this.blurTimer);
+    }
+  }, {
+    key: 'setTabIndex',
+    value: function setTabIndex(index) {
+      this.setState({ currentTabIndex: index });
+    }
+  }, {
+    key: 'focus',
+    value: function focus() {
+      var currentTabIndex = this.state.currentTabIndex;
+
+      var list = (0, _reactDom.findDOMNode)(this.list);
+      if (!list || !list.children || !list.firstChild) {
+        return;
+      }
+
+      if (currentTabIndex && currentTabIndex >= 0) {
+        list.children[currentTabIndex].focus();
+      } else {
+        list.firstChild.focus();
+      }
+    }
+  }, {
+    key: 'resetTabIndex',
+    value: function resetTabIndex() {
+      var list = (0, _reactDom.findDOMNode)(this.list);
+      var currentFocus = (0, _activeElement2.default)((0, _ownerDocument2.default)(list));
+      var items = [].concat((0, _toConsumableArray3.default)(list.children));
+      var currentFocusIndex = items.indexOf(currentFocus);
+
+      if (currentFocusIndex !== -1) {
+        return this.setTabIndex(currentFocusIndex);
+      }
+
+      if (this.selectedItem) {
+        return this.setTabIndex(items.indexOf((0, _reactDom.findDOMNode)(this.selectedItem)));
+      }
+
+      return this.setTabIndex(0);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _props = this.props,
+          children = _props.children,
+          className = _props.className,
+          onBlur = _props.onBlur,
+          onKeyDown = _props.onKeyDown,
+          other = (0, _objectWithoutProperties3.default)(_props, ['children', 'className', 'onBlur', 'onKeyDown']);
+
+
+      return _react2.default.createElement(
+        _List2.default,
+        (0, _extends3.default)({
+          role: 'menu',
+          ref: function ref(node) {
+            _this2.list = node;
+          },
+          className: className,
+          onKeyDown: this.handleKeyDown,
+          onBlur: this.handleBlur
+        }, other),
+        _react2.default.Children.map(children, function (child, index) {
+          if (!_react2.default.isValidElement(child)) {
+            return null;
+          }
+
+          return _react2.default.cloneElement(child, {
+            tabIndex: index === _this2.state.currentTabIndex ? 0 : -1,
+            ref: child.props.selected ? function (node) {
+              _this2.selectedItem = node;
+            } : undefined,
+            onFocus: _this2.handleItemFocus
+          });
+        })
+      );
+    }
+  }]);
+  return MenuList;
+}(_react2.default.Component);
+
+MenuList.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * MenuList contents, normally `MenuItem`s.
+   */
+  children: _propTypes2.default.node,
+  /**
+   * @ignore
+   */
+  className: _propTypes2.default.string,
+  /**
+   * @ignore
+   */
+  onBlur: _propTypes2.default.func,
+  /**
+   * @ignore
+   */
+  onKeyDown: _propTypes2.default.func
+} : {};
+
+exports.default = MenuList;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 286 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styles = undefined;
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _defineProperty2 = __webpack_require__(25);
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _getPrototypeOf = __webpack_require__(37);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(40);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(43);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = __webpack_require__(35);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _withStyles = __webpack_require__(61);
+
+var _withStyles2 = _interopRequireDefault(_withStyles);
+
+var _ButtonBase = __webpack_require__(243);
+
+var _ButtonBase2 = _interopRequireDefault(_ButtonBase);
+
+var _reactHelpers = __webpack_require__(326);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = exports.styles = function styles(theme) {
+  return {
+    root: {
+      display: 'flex',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      position: 'relative',
+      textDecoration: 'none',
+      width: '100%',
+      boxSizing: 'border-box',
+      textAlign: 'left'
+    },
+    container: {
+      position: 'relative'
+    },
+    keyboardFocused: {
+      backgroundColor: theme.palette.action.hover
+    },
+    default: {
+      paddingTop: 12,
+      paddingBottom: 12
+    },
+    dense: {
+      paddingTop: theme.spacing.unit,
+      paddingBottom: theme.spacing.unit
+    },
+    disabled: {
+      opacity: 0.5
+    },
+    divider: {
+      borderBottom: '1px solid ' + theme.palette.divider,
+      backgroundClip: 'padding-box'
+    },
+    gutters: theme.mixins.gutters(),
+    button: {
+      transition: theme.transitions.create('background-color', {
+        duration: theme.transitions.duration.shortest
+      }),
+      '&:hover': {
+        textDecoration: 'none',
+        backgroundColor: theme.palette.action.hover,
+        // Reset on mouse devices
+        '@media (hover: none)': {
+          backgroundColor: 'transparent'
+        }
+      }
+    },
+    secondaryAction: {
+      // Add some space to avoid collision as `ListItemSecondaryAction`
+      // is absolutely positionned.
+      paddingRight: theme.spacing.unit * 4
+    }
+  };
+};
+
+var ListItem = function (_React$Component) {
+  (0, _inherits3.default)(ListItem, _React$Component);
+
+  function ListItem() {
+    (0, _classCallCheck3.default)(this, ListItem);
+    return (0, _possibleConstructorReturn3.default)(this, (ListItem.__proto__ || (0, _getPrototypeOf2.default)(ListItem)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(ListItem, [{
+    key: 'getChildContext',
+    value: function getChildContext() {
+      return {
+        dense: this.props.dense || this.context.dense || false
+      };
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _classNames;
+
+      var _props = this.props,
+          button = _props.button,
+          childrenProp = _props.children,
+          classes = _props.classes,
+          classNameProp = _props.className,
+          componentProp = _props.component,
+          ContainerComponent = _props.ContainerComponent,
+          _props$ContainerProps = _props.ContainerProps;
+      _props$ContainerProps = _props$ContainerProps === undefined ? {} : _props$ContainerProps;
+      var ContainerClassName = _props$ContainerProps.className,
+          ContainerProps = (0, _objectWithoutProperties3.default)(_props$ContainerProps, ['className']),
+          dense = _props.dense,
+          disabled = _props.disabled,
+          disableGutters = _props.disableGutters,
+          divider = _props.divider,
+          other = (0, _objectWithoutProperties3.default)(_props, ['button', 'children', 'classes', 'className', 'component', 'ContainerComponent', 'ContainerProps', 'dense', 'disabled', 'disableGutters', 'divider']);
+
+
+      var isDense = dense || this.context.dense || false;
+      var children = _react2.default.Children.toArray(childrenProp);
+      var hasAvatar = children.some(function (value) {
+        return (0, _reactHelpers.isMuiElement)(value, ['ListItemAvatar']);
+      });
+      var hasSecondaryAction = children.length && (0, _reactHelpers.isMuiElement)(children[children.length - 1], ['ListItemSecondaryAction']);
+
+      var className = (0, _classnames2.default)(classes.root, isDense || hasAvatar ? classes.dense : classes.default, (_classNames = {}, (0, _defineProperty3.default)(_classNames, classes.gutters, !disableGutters), (0, _defineProperty3.default)(_classNames, classes.divider, divider), (0, _defineProperty3.default)(_classNames, classes.disabled, disabled), (0, _defineProperty3.default)(_classNames, classes.button, button), (0, _defineProperty3.default)(_classNames, classes.secondaryAction, hasSecondaryAction), _classNames), classNameProp);
+
+      var componentProps = (0, _extends3.default)({ className: className, disabled: disabled }, other);
+      var Component = componentProp || 'li';
+
+      if (button) {
+        componentProps.component = componentProp || 'div';
+        componentProps.classes = {
+          keyboardFocused: classes.keyboardFocused
+        };
+        Component = _ButtonBase2.default;
+      }
+
+      if (hasSecondaryAction) {
+        // Use div by default.
+        Component = !componentProps.component && !componentProp ? 'div' : Component;
+
+        // Avoid nesting of li > li.
+        if (ContainerComponent === 'li') {
+          if (Component === 'li') {
+            Component = 'div';
+          } else if (componentProps.component === 'li') {
+            componentProps.component = 'div';
+          }
+        }
+
+        return _react2.default.createElement(
+          ContainerComponent,
+          (0, _extends3.default)({
+            className: (0, _classnames2.default)(classes.container, ContainerClassName)
+          }, ContainerProps),
+          _react2.default.createElement(
+            Component,
+            componentProps,
+            children
+          ),
+          children.pop()
+        );
+      }
+
+      return _react2.default.createElement(
+        Component,
+        componentProps,
+        children
+      );
+    }
+  }]);
+  return ListItem;
+}(_react2.default.Component);
+
+ListItem.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * If `true`, the list item will be a button (using `ButtonBase`).
+   */
+  button: _propTypes2.default.bool,
+  /**
+   * The content of the component.
+   */
+  children: _propTypes2.default.node,
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * @ignore
+   */
+  className: _propTypes2.default.string,
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   * By default, it's a `li` when `button` is `false` and a `div` when `button` is `true`.
+   */
+  component: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  /**
+   * The container component. Useful when a `ListItemSecondaryAction` is rendered.
+   */
+  ContainerComponent: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  /**
+   * Properties applied to the container element when the component
+   * is used to display a `ListItemSecondaryAction`.
+   */
+  ContainerProps: _propTypes2.default.object,
+  /**
+   * If `true`, compact vertical padding designed for keyboard and mouse input will be used.
+   */
+  dense: _propTypes2.default.bool,
+  /**
+   * @ignore
+   */
+  disabled: _propTypes2.default.bool,
+  /**
+   * If `true`, the left and right padding is removed.
+   */
+  disableGutters: _propTypes2.default.bool,
+  /**
+   * If `true`, a 1px light border is added to the bottom of the list item.
+   */
+  divider: _propTypes2.default.bool
+} : {};
+
+ListItem.defaultProps = {
+  button: false,
+  ContainerComponent: 'li',
+  dense: false,
+  disabled: false,
+  disableGutters: false,
+  divider: false
+};
+
+ListItem.contextTypes = {
+  dense: _propTypes2.default.bool
+};
+
+ListItem.childContextTypes = {
+  dense: _propTypes2.default.bool
+};
+
+exports.default = (0, _withStyles2.default)(styles, { name: 'MuiListItem' })(ListItem);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 287 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Menu = __webpack_require__(288);
+
+Object.defineProperty(exports, 'default', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Menu).default;
+  }
+});
+
+var _MenuList = __webpack_require__(285);
+
+Object.defineProperty(exports, 'MenuList', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_MenuList).default;
+  }
+});
+
+var _MenuItem = __webpack_require__(334);
+
+Object.defineProperty(exports, 'MenuItem', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_MenuItem).default;
+  }
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+/* 288 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styles = undefined;
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _getPrototypeOf = __webpack_require__(37);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(40);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(43);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactDom = __webpack_require__(24);
+
+var _scrollbarSize = __webpack_require__(274);
+
+var _scrollbarSize2 = _interopRequireDefault(_scrollbarSize);
+
+var _withStyles = __webpack_require__(61);
+
+var _withStyles2 = _interopRequireDefault(_withStyles);
+
+var _Popover = __webpack_require__(289);
+
+var _Popover2 = _interopRequireDefault(_Popover);
+
+var _MenuList = __webpack_require__(285);
+
+var _MenuList2 = _interopRequireDefault(_MenuList);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var RTL_ORIGIN = {
+  vertical: 'top',
+  horizontal: 'right'
+}; // @inheritedComponent Popover
+
+var LTR_ORIGIN = {
+  vertical: 'top',
+  horizontal: 'left'
+};
+
+var styles = exports.styles = {
+  paper: {
+    // specZ: The maximum height of a simple menu should be one or more rows less than the view
+    // height. This ensures a tappable area outside of the simple menu with which to dismiss
+    // the menu.
+    maxHeight: 'calc(100vh - 96px)',
+    // Add iOS momentum scrolling.
+    WebkitOverflowScrolling: 'touch'
+  }
+};
+
+var Menu = function (_React$Component) {
+  (0, _inherits3.default)(Menu, _React$Component);
+
+  function Menu() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    (0, _classCallCheck3.default)(this, Menu);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = Menu.__proto__ || (0, _getPrototypeOf2.default)(Menu)).call.apply(_ref, [this].concat(args))), _this), _this.getContentAnchorEl = function () {
+      if (!_this.menuList || !_this.menuList.selectedItem) {
+        return (0, _reactDom.findDOMNode)(_this.menuList).firstChild;
+      }
+
+      return (0, _reactDom.findDOMNode)(_this.menuList.selectedItem);
+    }, _this.menuList = undefined, _this.focus = function () {
+      if (_this.menuList && _this.menuList.selectedItem) {
+        (0, _reactDom.findDOMNode)(_this.menuList.selectedItem).focus();
+        return;
+      }
+
+      var menuList = (0, _reactDom.findDOMNode)(_this.menuList);
+      if (menuList && menuList.firstChild) {
+        menuList.firstChild.focus();
+      }
+    }, _this.handleEnter = function (element) {
+      var theme = _this.props.theme;
+
+      var menuList = (0, _reactDom.findDOMNode)(_this.menuList);
+
+      // Focus so the scroll computation of the Popover works as expected.
+      _this.focus();
+
+      // Let's ignore that piece of logic if users are already overriding the width
+      // of the menu.
+      if (menuList && element.clientHeight < menuList.clientHeight && !menuList.style.width) {
+        var size = (0, _scrollbarSize2.default)() + 'px';
+        menuList.style[theme.direction === 'rtl' ? 'paddingLeft' : 'paddingRight'] = size;
+        menuList.style.width = 'calc(100% + ' + size + ')';
+      }
+
+      if (_this.props.onEnter) {
+        _this.props.onEnter(element);
+      }
+    }, _this.handleListKeyDown = function (event, key) {
+      if (key === 'tab') {
+        event.preventDefault();
+
+        if (_this.props.onClose) {
+          _this.props.onClose(event);
+        }
+      }
+    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+  }
+
+  (0, _createClass3.default)(Menu, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      if (this.props.open) {
+        this.focus();
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _props = this.props,
+          children = _props.children,
+          classes = _props.classes,
+          MenuListProps = _props.MenuListProps,
+          onEnter = _props.onEnter,
+          _props$PaperProps = _props.PaperProps,
+          PaperProps = _props$PaperProps === undefined ? {} : _props$PaperProps,
+          PopoverClasses = _props.PopoverClasses,
+          theme = _props.theme,
+          other = (0, _objectWithoutProperties3.default)(_props, ['children', 'classes', 'MenuListProps', 'onEnter', 'PaperProps', 'PopoverClasses', 'theme']);
+
+
+      return _react2.default.createElement(
+        _Popover2.default,
+        (0, _extends3.default)({
+          getContentAnchorEl: this.getContentAnchorEl,
+          classes: PopoverClasses,
+          onEnter: this.handleEnter,
+          anchorOrigin: theme.direction === 'rtl' ? RTL_ORIGIN : LTR_ORIGIN,
+          transformOrigin: theme.direction === 'rtl' ? RTL_ORIGIN : LTR_ORIGIN,
+          PaperProps: (0, _extends3.default)({}, PaperProps, {
+            classes: (0, _extends3.default)({}, PaperProps.classes, {
+              root: classes.paper
+            })
+          })
+        }, other),
+        _react2.default.createElement(
+          _MenuList2.default,
+          (0, _extends3.default)({
+            role: 'menu',
+            onKeyDown: this.handleListKeyDown
+          }, MenuListProps, {
+            ref: function ref(node) {
+              _this2.menuList = node;
+            }
+          }),
+          children
+        )
+      );
+    }
+  }]);
+  return Menu;
+}(_react2.default.Component);
+
+Menu.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * The DOM element used to set the position of the menu.
+   */
+  anchorEl: _propTypes2.default.object,
+  /**
+   * Menu contents, normally `MenuItem`s.
+   */
+  children: _propTypes2.default.node,
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * Properties applied to the `MenuList` element.
+   */
+  MenuListProps: _propTypes2.default.object,
+  /**
+   * Callback fired when the component requests to be closed.
+   *
+   * @param {object} event The event source of the callback
+   */
+  onClose: _propTypes2.default.func,
+  /**
+   * Callback fired before the Menu enters.
+   */
+  onEnter: _propTypes2.default.func,
+  /**
+   * Callback fired when the Menu has entered.
+   */
+  onEntered: _propTypes2.default.func,
+  /**
+   * Callback fired when the Menu is entering.
+   */
+  onEntering: _propTypes2.default.func,
+  /**
+   * Callback fired before the Menu exits.
+   */
+  onExit: _propTypes2.default.func,
+  /**
+   * Callback fired when the Menu has exited.
+   */
+  onExited: _propTypes2.default.func,
+  /**
+   * Callback fired when the Menu is exiting.
+   */
+  onExiting: _propTypes2.default.func,
+  /**
+   * If `true`, the menu is visible.
+   */
+  open: _propTypes2.default.bool.isRequired,
+  /**
+   * @ignore
+   */
+  PaperProps: _propTypes2.default.object,
+  /**
+   * `classes` property applied to the `Popover` element.
+   */
+  PopoverClasses: _propTypes2.default.object,
+  /**
+   * @ignore
+   */
+  theme: _propTypes2.default.object.isRequired,
+  /**
+   * The length of the transition in `ms`, or 'auto'
+   */
+  transitionDuration: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.shape({ enter: _propTypes2.default.number, exit: _propTypes2.default.number }), _propTypes2.default.oneOf(['auto'])])
+} : {};
+
+Menu.defaultProps = {
+  transitionDuration: 'auto'
+};
+
+exports.default = (0, _withStyles2.default)(styles, { name: 'MuiMenu', withTheme: true })(Menu);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 289 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Popover = __webpack_require__(290);
+
+Object.defineProperty(exports, 'default', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Popover).default;
+  }
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+/* 290 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styles = undefined;
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _getPrototypeOf = __webpack_require__(37);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(40);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(43);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactDom = __webpack_require__(24);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+var _contains = __webpack_require__(247);
+
+var _contains2 = _interopRequireDefault(_contains);
+
+var _ownerDocument = __webpack_require__(110);
+
+var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
+
+var _ownerWindow = __webpack_require__(245);
+
+var _ownerWindow2 = _interopRequireDefault(_ownerWindow);
+
+var _debounce = __webpack_require__(291);
+
+var _debounce2 = _interopRequireDefault(_debounce);
+
+var _reactEventListener = __webpack_require__(300);
+
+var _reactEventListener2 = _interopRequireDefault(_reactEventListener);
+
+var _withStyles = __webpack_require__(61);
+
+var _withStyles2 = _interopRequireDefault(_withStyles);
+
+var _Modal = __webpack_require__(302);
+
+var _Modal2 = _interopRequireDefault(_Modal);
+
+var _Grow = __webpack_require__(321);
+
+var _Grow2 = _interopRequireDefault(_Grow);
+
+var _Paper = __webpack_require__(322);
+
+var _Paper2 = _interopRequireDefault(_Paper);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getOffsetTop(rect, vertical) {
+  var offset = 0;
+
+  if (typeof vertical === 'number') {
+    offset = vertical;
+  } else if (vertical === 'center') {
+    offset = rect.height / 2;
+  } else if (vertical === 'bottom') {
+    offset = rect.height;
+  }
+
+  return offset;
+} // @inheritedComponent Modal
+
+function getOffsetLeft(rect, horizontal) {
+  var offset = 0;
+
+  if (typeof horizontal === 'number') {
+    offset = horizontal;
+  } else if (horizontal === 'center') {
+    offset = rect.width / 2;
+  } else if (horizontal === 'right') {
+    offset = rect.width;
+  }
+
+  return offset;
+}
+
+function getTransformOriginValue(transformOrigin) {
+  return [transformOrigin.horizontal, transformOrigin.vertical].map(function (n) {
+    return typeof n === 'number' ? n + 'px' : n;
+  }).join(' ');
+}
+
+// Sum the scrollTop between two elements.
+function getScrollParent(parent, child) {
+  var element = child;
+  var scrollTop = 0;
+
+  while (element && element !== parent) {
+    element = element.parentNode;
+    scrollTop += element.scrollTop;
+  }
+  return scrollTop;
+}
+
+function getAnchorEl(anchorEl) {
+  return typeof anchorEl === 'function' ? anchorEl() : anchorEl;
+}
+
+var styles = exports.styles = {
+  paper: {
+    position: 'absolute',
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    // So we see the popover when it's empty.
+    // It's most likely on issue on userland.
+    minWidth: 16,
+    minHeight: 16,
+    maxWidth: 'calc(100vw - 32px)',
+    maxHeight: 'calc(100vh - 32px)',
+    '&:focus': {
+      outline: 'none'
+    }
+  }
+};
+
+var Popover = function (_React$Component) {
+  (0, _inherits3.default)(Popover, _React$Component);
+
+  function Popover() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    (0, _classCallCheck3.default)(this, Popover);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = Popover.__proto__ || (0, _getPrototypeOf2.default)(Popover)).call.apply(_ref, [this].concat(args))), _this), _this.componentWillUnmount = function () {
+      _this.handleResize.cancel();
+    }, _this.setPositioningStyles = function (element) {
+      if (element && element.style) {
+        var positioning = _this.getPositioningStyle(element);
+        element.style.top = positioning.top;
+        element.style.left = positioning.left;
+        element.style.transformOrigin = positioning.transformOrigin;
+      }
+    }, _this.getPositioningStyle = function (element) {
+      var _this$props = _this.props,
+          anchorEl = _this$props.anchorEl,
+          marginThreshold = _this$props.marginThreshold;
+
+      // Check if the parent has requested anchoring on an inner content node
+
+      var contentAnchorOffset = _this.getContentAnchorOffset(element);
+      // Get the offset of of the anchoring element
+      var anchorOffset = _this.getAnchorOffset(contentAnchorOffset);
+
+      var elemRect = {
+        width: element.clientWidth,
+        height: element.clientHeight
+      };
+      // Get the transform origin point on the element itself
+      var transformOrigin = _this.getTransformOrigin(elemRect, contentAnchorOffset);
+
+      // Calculate element positioning
+      var top = anchorOffset.top - transformOrigin.vertical;
+      var left = anchorOffset.left - transformOrigin.horizontal;
+      var bottom = top + elemRect.height;
+      var right = left + elemRect.width;
+
+      // Use the parent window of the anchorEl if provided
+      var containerWindow = (0, _ownerWindow2.default)(getAnchorEl(anchorEl));
+
+      // Window thresholds taking required margin into account
+      var heightThreshold = containerWindow.innerHeight - marginThreshold;
+      var widthThreshold = containerWindow.innerWidth - marginThreshold;
+
+      // Check if the vertical axis needs shifting
+      if (top < marginThreshold) {
+        var diff = top - marginThreshold;
+        top -= diff;
+        transformOrigin.vertical += diff;
+      } else if (bottom > heightThreshold) {
+        var _diff = bottom - heightThreshold;
+        top -= _diff;
+        transformOrigin.vertical += _diff;
+      }
+
+      process.env.NODE_ENV !== "production" ? (0, _warning2.default)(elemRect.height < heightThreshold || !elemRect.height || !heightThreshold, ['Material-UI: the popover component is too tall.', 'Some part of it can not be seen on the screen (' + (elemRect.height - heightThreshold) + 'px).', 'Please consider adding a `max-height` to improve the user-experience.'].join('\n')) : void 0;
+
+      // Check if the horizontal axis needs shifting
+      if (left < marginThreshold) {
+        var _diff2 = left - marginThreshold;
+        left -= _diff2;
+        transformOrigin.horizontal += _diff2;
+      } else if (right > widthThreshold) {
+        var _diff3 = right - widthThreshold;
+        left -= _diff3;
+        transformOrigin.horizontal += _diff3;
+      }
+
+      return {
+        top: top + 'px',
+        left: left + 'px',
+        transformOrigin: getTransformOriginValue(transformOrigin)
+      };
+    }, _this.transitionEl = undefined, _this.handleGetOffsetTop = getOffsetTop, _this.handleGetOffsetLeft = getOffsetLeft, _this.handleEnter = function (element) {
+      if (_this.props.onEnter) {
+        _this.props.onEnter(element);
+      }
+
+      _this.setPositioningStyles(element);
+    }, _this.handleResize = (0, _debounce2.default)(function () {
+      var element = _reactDom2.default.findDOMNode(_this.transitionEl);
+      _this.setPositioningStyles(element);
+    }, 166), _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+  }
+
+  (0, _createClass3.default)(Popover, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      if (this.props.action) {
+        this.props.action({
+          updatePosition: this.handleResize
+        });
+      }
+    }
+  }, {
+    key: 'getAnchorOffset',
+
+
+    // Returns the top/left offset of the position
+    // to attach to on the anchor element (or body if none is provided)
+    value: function getAnchorOffset(contentAnchorOffset) {
+      var _props = this.props,
+          anchorEl = _props.anchorEl,
+          anchorOrigin = _props.anchorOrigin,
+          anchorReference = _props.anchorReference,
+          anchorPosition = _props.anchorPosition;
+
+
+      if (anchorReference === 'anchorPosition') {
+        return anchorPosition;
+      }
+
+      // If an anchor element wasn't provided, just use the parent body element of this Popover
+      var anchorElement = getAnchorEl(anchorEl) || (0, _ownerDocument2.default)(_reactDom2.default.findDOMNode(this.transitionEl)).body;
+      var anchorRect = anchorElement.getBoundingClientRect();
+      var anchorVertical = contentAnchorOffset === 0 ? anchorOrigin.vertical : 'center';
+
+      return {
+        top: anchorRect.top + this.handleGetOffsetTop(anchorRect, anchorVertical),
+        left: anchorRect.left + this.handleGetOffsetLeft(anchorRect, anchorOrigin.horizontal)
+      };
+    }
+
+    // Returns the vertical offset of inner content to anchor the transform on if provided
+
+  }, {
+    key: 'getContentAnchorOffset',
+    value: function getContentAnchorOffset(element) {
+      var _props2 = this.props,
+          getContentAnchorEl = _props2.getContentAnchorEl,
+          anchorReference = _props2.anchorReference;
+
+      var contentAnchorOffset = 0;
+
+      if (getContentAnchorEl && anchorReference === 'anchorEl') {
+        var contentAnchorEl = getContentAnchorEl(element);
+
+        if (contentAnchorEl && (0, _contains2.default)(element, contentAnchorEl)) {
+          var scrollTop = getScrollParent(element, contentAnchorEl);
+          contentAnchorOffset = contentAnchorEl.offsetTop + contentAnchorEl.clientHeight / 2 - scrollTop || 0;
+        }
+
+        // != the default value
+        process.env.NODE_ENV !== "production" ? (0, _warning2.default)(this.props.anchorOrigin.vertical === 'top', ['Material-UI: you can not change the default `anchorOrigin.vertical` value ', 'when also providing the `getContentAnchorEl` property to the popover component.', 'Only use one of the two properties.', 'Set `getContentAnchorEl` to null or left `anchorOrigin.vertical` unchanged.'].join('\n')) : void 0;
+      }
+
+      return contentAnchorOffset;
+    }
+
+    // Return the base transform origin using the element
+    // and taking the content anchor offset into account if in use
+
+  }, {
+    key: 'getTransformOrigin',
+    value: function getTransformOrigin(elemRect) {
+      var contentAnchorOffset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      var transformOrigin = this.props.transformOrigin;
+
+      return {
+        vertical: this.handleGetOffsetTop(elemRect, transformOrigin.vertical) + contentAnchorOffset,
+        horizontal: this.handleGetOffsetLeft(elemRect, transformOrigin.horizontal)
+      };
+    }
+  }, {
+    key: 'render',
+    // Corresponds to 10 frames at 60 Hz.
+
+    value: function render() {
+      var _this2 = this;
+
+      var _props3 = this.props,
+          action = _props3.action,
+          anchorEl = _props3.anchorEl,
+          anchorOrigin = _props3.anchorOrigin,
+          anchorPosition = _props3.anchorPosition,
+          anchorReference = _props3.anchorReference,
+          children = _props3.children,
+          classes = _props3.classes,
+          containerProp = _props3.container,
+          elevation = _props3.elevation,
+          getContentAnchorEl = _props3.getContentAnchorEl,
+          marginThreshold = _props3.marginThreshold,
+          onEnter = _props3.onEnter,
+          onEntered = _props3.onEntered,
+          onEntering = _props3.onEntering,
+          onExit = _props3.onExit,
+          onExited = _props3.onExited,
+          onExiting = _props3.onExiting,
+          open = _props3.open,
+          PaperProps = _props3.PaperProps,
+          role = _props3.role,
+          transformOrigin = _props3.transformOrigin,
+          TransitionProp = _props3.transition,
+          transitionDuration = _props3.transitionDuration,
+          other = (0, _objectWithoutProperties3.default)(_props3, ['action', 'anchorEl', 'anchorOrigin', 'anchorPosition', 'anchorReference', 'children', 'classes', 'container', 'elevation', 'getContentAnchorEl', 'marginThreshold', 'onEnter', 'onEntered', 'onEntering', 'onExit', 'onExited', 'onExiting', 'open', 'PaperProps', 'role', 'transformOrigin', 'transition', 'transitionDuration']);
+
+      // If the container prop is provided, use that
+      // If the anchorEl prop is provided, use its parent body element as the container
+      // If neither are provided let the Modal take care of choosing the container
+
+      var container = containerProp || (anchorEl ? (0, _ownerDocument2.default)(getAnchorEl(anchorEl)).body : undefined);
+
+      var transitionProps = {};
+      // The provided transition might not support the auto timeout value.
+      if (TransitionProp === _Grow2.default) {
+        transitionProps.timeout = transitionDuration;
+      }
+
+      return _react2.default.createElement(
+        _Modal2.default,
+        (0, _extends3.default)({ container: container, open: open, BackdropProps: { invisible: true } }, other),
+        _react2.default.createElement(
+          TransitionProp,
+          (0, _extends3.default)({
+            appear: true,
+            'in': open,
+            onEnter: this.handleEnter,
+            onEntered: onEntered,
+            onEntering: onEntering,
+            onExit: onExit,
+            onExited: onExited,
+            onExiting: onExiting,
+            role: role,
+            ref: function ref(node) {
+              _this2.transitionEl = node;
+            }
+          }, transitionProps),
+          _react2.default.createElement(
+            _Paper2.default,
+            (0, _extends3.default)({
+              className: classes.paper,
+
+              elevation: elevation
+            }, PaperProps),
+            _react2.default.createElement(_reactEventListener2.default, { target: 'window', onResize: this.handleResize }),
+            children
+          )
+        )
+      );
+    }
+  }]);
+  return Popover;
+}(_react2.default.Component);
+
+Popover.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * This is callback property. It's called by the component on mount.
+   * This is useful when you want to trigger an action programmatically.
+   * It currently only supports updatePosition() action.
+   *
+   * @param {object} actions This object contains all posible actions
+   * that can be triggered programmatically.
+   */
+  action: _propTypes2.default.func,
+  /**
+   * This is the DOM element, or a function that returns the DOM element,
+   * that may be used to set the position of the popover.
+   */
+  anchorEl: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.func]),
+  /**
+   * This is the point on the anchor where the popover's
+   * `anchorEl` will attach to. This is not used when the
+   * anchorReference is 'anchorPosition'.
+   *
+   * Options:
+   * vertical: [top, center, bottom];
+   * horizontal: [left, center, right].
+   */
+  anchorOrigin: _propTypes2.default.shape({
+    horizontal: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.oneOf(['left', 'center', 'right'])]),
+    vertical: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.oneOf(['top', 'center', 'bottom'])])
+  }),
+  /**
+   * This is the position that may be used
+   * to set the position of the popover.
+   * The coordinates are relative to
+   * the application's client area.
+   */
+  anchorPosition: _propTypes2.default.shape({
+    top: _propTypes2.default.number,
+    left: _propTypes2.default.number
+  }),
+  /*
+   * This determines which anchor prop to refer to to set
+   * the position of the popover.
+   */
+  anchorReference: _propTypes2.default.oneOf(['anchorEl', 'anchorPosition']),
+  /**
+   * The content of the component.
+   */
+  children: _propTypes2.default.node,
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * A node, component instance, or function that returns either.
+   * The `container` will passed to the Modal component.
+   * By default, it's using the body of the anchorEl's top-level document object,
+   * so it's simply `document.body` most of the time.
+   */
+  container: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.func]),
+  /**
+   * The elevation of the popover.
+   */
+  elevation: _propTypes2.default.number,
+  /**
+   * This function is called in order to retrieve the content anchor element.
+   * It's the opposite of the `anchorEl` property.
+   * The content anchor element should be an element inside the popover.
+   * It's used to correctly scroll and set the position of the popover.
+   * The positioning strategy tries to make the content anchor element just above the
+   * anchor element.
+   */
+  getContentAnchorEl: _propTypes2.default.func,
+  /**
+   * Specifies how close to the edge of the window the popover can appear.
+   */
+  marginThreshold: _propTypes2.default.number,
+  /**
+   * Callback fired when the component requests to be closed.
+   *
+   * @param {object} event The event source of the callback.
+   */
+  onClose: _propTypes2.default.func,
+  /**
+   * Callback fired before the component is entering.
+   */
+  onEnter: _propTypes2.default.func,
+  /**
+   * Callback fired when the component has entered.
+   */
+  onEntered: _propTypes2.default.func,
+  /**
+   * Callback fired when the component is entering.
+   */
+  onEntering: _propTypes2.default.func,
+  /**
+   * Callback fired before the component is exiting.
+   */
+  onExit: _propTypes2.default.func,
+  /**
+   * Callback fired when the component has exited.
+   */
+  onExited: _propTypes2.default.func,
+  /**
+   * Callback fired when the component is exiting.
+   */
+  onExiting: _propTypes2.default.func,
+  /**
+   * If `true`, the popover is visible.
+   */
+  open: _propTypes2.default.bool.isRequired,
+  /**
+   * Properties applied to the `Paper` element.
+   */
+  PaperProps: _propTypes2.default.object,
+  /**
+   * @ignore
+   */
+  role: _propTypes2.default.string,
+  /**
+   * This is the point on the popover which
+   * will attach to the anchor's origin.
+   *
+   * Options:
+   * vertical: [top, center, bottom, x(px)];
+   * horizontal: [left, center, right, x(px)].
+   */
+  transformOrigin: _propTypes2.default.shape({
+    horizontal: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.oneOf(['left', 'center', 'right'])]),
+    vertical: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.oneOf(['top', 'center', 'bottom'])])
+  }),
+  /**
+   * Transition component.
+   */
+  transition: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  /**
+   * Set to 'auto' to automatically calculate transition time based on height.
+   */
+  transitionDuration: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.shape({ enter: _propTypes2.default.number, exit: _propTypes2.default.number }), _propTypes2.default.oneOf(['auto'])])
+} : {};
+
+Popover.defaultProps = {
+  anchorReference: 'anchorEl',
+  anchorOrigin: {
+    vertical: 'top',
+    horizontal: 'left'
+  },
+  elevation: 8,
+  marginThreshold: 16,
+  transformOrigin: {
+    vertical: 'top',
+    horizontal: 'left'
+  },
+  transition: _Grow2.default,
+  transitionDuration: 'auto'
+};
+
+exports.default = (0, _withStyles2.default)(styles, { name: 'MuiPopover' })(Popover);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 291 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(275),
+    now = __webpack_require__(292),
+    toNumber = __webpack_require__(294);
+
+/** Error message constants. */
+var FUNC_ERROR_TEXT = 'Expected a function';
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeMax = Math.max,
+    nativeMin = Math.min;
+
+/**
+ * Creates a debounced function that delays invoking `func` until after `wait`
+ * milliseconds have elapsed since the last time the debounced function was
+ * invoked. The debounced function comes with a `cancel` method to cancel
+ * delayed `func` invocations and a `flush` method to immediately invoke them.
+ * Provide `options` to indicate whether `func` should be invoked on the
+ * leading and/or trailing edge of the `wait` timeout. The `func` is invoked
+ * with the last arguments provided to the debounced function. Subsequent
+ * calls to the debounced function return the result of the last `func`
+ * invocation.
+ *
+ * **Note:** If `leading` and `trailing` options are `true`, `func` is
+ * invoked on the trailing edge of the timeout only if the debounced function
+ * is invoked more than once during the `wait` timeout.
+ *
+ * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
+ * until to the next tick, similar to `setTimeout` with a timeout of `0`.
+ *
+ * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
+ * for details over the differences between `_.debounce` and `_.throttle`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Function
+ * @param {Function} func The function to debounce.
+ * @param {number} [wait=0] The number of milliseconds to delay.
+ * @param {Object} [options={}] The options object.
+ * @param {boolean} [options.leading=false]
+ *  Specify invoking on the leading edge of the timeout.
+ * @param {number} [options.maxWait]
+ *  The maximum time `func` is allowed to be delayed before it's invoked.
+ * @param {boolean} [options.trailing=true]
+ *  Specify invoking on the trailing edge of the timeout.
+ * @returns {Function} Returns the new debounced function.
+ * @example
+ *
+ * // Avoid costly calculations while the window size is in flux.
+ * jQuery(window).on('resize', _.debounce(calculateLayout, 150));
+ *
+ * // Invoke `sendMail` when clicked, debouncing subsequent calls.
+ * jQuery(element).on('click', _.debounce(sendMail, 300, {
+ *   'leading': true,
+ *   'trailing': false
+ * }));
+ *
+ * // Ensure `batchLog` is invoked once after 1 second of debounced calls.
+ * var debounced = _.debounce(batchLog, 250, { 'maxWait': 1000 });
+ * var source = new EventSource('/stream');
+ * jQuery(source).on('message', debounced);
+ *
+ * // Cancel the trailing debounced invocation.
+ * jQuery(window).on('popstate', debounced.cancel);
+ */
+function debounce(func, wait, options) {
+  var lastArgs,
+      lastThis,
+      maxWait,
+      result,
+      timerId,
+      lastCallTime,
+      lastInvokeTime = 0,
+      leading = false,
+      maxing = false,
+      trailing = true;
+
+  if (typeof func != 'function') {
+    throw new TypeError(FUNC_ERROR_TEXT);
+  }
+  wait = toNumber(wait) || 0;
+  if (isObject(options)) {
+    leading = !!options.leading;
+    maxing = 'maxWait' in options;
+    maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
+    trailing = 'trailing' in options ? !!options.trailing : trailing;
+  }
+
+  function invokeFunc(time) {
+    var args = lastArgs,
+        thisArg = lastThis;
+
+    lastArgs = lastThis = undefined;
+    lastInvokeTime = time;
+    result = func.apply(thisArg, args);
+    return result;
+  }
+
+  function leadingEdge(time) {
+    // Reset any `maxWait` timer.
+    lastInvokeTime = time;
+    // Start the timer for the trailing edge.
+    timerId = setTimeout(timerExpired, wait);
+    // Invoke the leading edge.
+    return leading ? invokeFunc(time) : result;
+  }
+
+  function remainingWait(time) {
+    var timeSinceLastCall = time - lastCallTime,
+        timeSinceLastInvoke = time - lastInvokeTime,
+        timeWaiting = wait - timeSinceLastCall;
+
+    return maxing
+      ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke)
+      : timeWaiting;
+  }
+
+  function shouldInvoke(time) {
+    var timeSinceLastCall = time - lastCallTime,
+        timeSinceLastInvoke = time - lastInvokeTime;
+
+    // Either this is the first call, activity has stopped and we're at the
+    // trailing edge, the system time has gone backwards and we're treating
+    // it as the trailing edge, or we've hit the `maxWait` limit.
+    return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
+      (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
+  }
+
+  function timerExpired() {
+    var time = now();
+    if (shouldInvoke(time)) {
+      return trailingEdge(time);
+    }
+    // Restart the timer.
+    timerId = setTimeout(timerExpired, remainingWait(time));
+  }
+
+  function trailingEdge(time) {
+    timerId = undefined;
+
+    // Only invoke if we have `lastArgs` which means `func` has been
+    // debounced at least once.
+    if (trailing && lastArgs) {
+      return invokeFunc(time);
+    }
+    lastArgs = lastThis = undefined;
+    return result;
+  }
+
+  function cancel() {
+    if (timerId !== undefined) {
+      clearTimeout(timerId);
+    }
+    lastInvokeTime = 0;
+    lastArgs = lastCallTime = lastThis = timerId = undefined;
+  }
+
+  function flush() {
+    return timerId === undefined ? result : trailingEdge(now());
+  }
+
+  function debounced() {
+    var time = now(),
+        isInvoking = shouldInvoke(time);
+
+    lastArgs = arguments;
+    lastThis = this;
+    lastCallTime = time;
+
+    if (isInvoking) {
+      if (timerId === undefined) {
+        return leadingEdge(lastCallTime);
+      }
+      if (maxing) {
+        // Handle invocations in a tight loop.
+        timerId = setTimeout(timerExpired, wait);
+        return invokeFunc(lastCallTime);
+      }
+    }
+    if (timerId === undefined) {
+      timerId = setTimeout(timerExpired, wait);
+    }
+    return result;
+  }
+  debounced.cancel = cancel;
+  debounced.flush = flush;
+  return debounced;
+}
+
+module.exports = debounce;
+
+
+/***/ }),
+/* 292 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var root = __webpack_require__(276);
+
+/**
+ * Gets the timestamp of the number of milliseconds that have elapsed since
+ * the Unix epoch (1 January 1970 00:00:00 UTC).
+ *
+ * @static
+ * @memberOf _
+ * @since 2.4.0
+ * @category Date
+ * @returns {number} Returns the timestamp.
+ * @example
+ *
+ * _.defer(function(stamp) {
+ *   console.log(_.now() - stamp);
+ * }, _.now());
+ * // => Logs the number of milliseconds it took for the deferred invocation.
+ */
+var now = function() {
+  return root.Date.now();
+};
+
+module.exports = now;
+
+
+/***/ }),
+/* 293 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
+var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+
+module.exports = freeGlobal;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(70)))
+
+/***/ }),
+/* 294 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(275),
+    isSymbol = __webpack_require__(295);
+
+/** Used as references for various `Number` constants. */
+var NAN = 0 / 0;
+
+/** Used to match leading and trailing whitespace. */
+var reTrim = /^\s+|\s+$/g;
+
+/** Used to detect bad signed hexadecimal string values. */
+var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
+
+/** Used to detect binary string values. */
+var reIsBinary = /^0b[01]+$/i;
+
+/** Used to detect octal string values. */
+var reIsOctal = /^0o[0-7]+$/i;
+
+/** Built-in method references without a dependency on `root`. */
+var freeParseInt = parseInt;
+
+/**
+ * Converts `value` to a number.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to process.
+ * @returns {number} Returns the number.
+ * @example
+ *
+ * _.toNumber(3.2);
+ * // => 3.2
+ *
+ * _.toNumber(Number.MIN_VALUE);
+ * // => 5e-324
+ *
+ * _.toNumber(Infinity);
+ * // => Infinity
+ *
+ * _.toNumber('3.2');
+ * // => 3.2
+ */
+function toNumber(value) {
+  if (typeof value == 'number') {
+    return value;
+  }
+  if (isSymbol(value)) {
+    return NAN;
+  }
+  if (isObject(value)) {
+    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
+    value = isObject(other) ? (other + '') : other;
+  }
+  if (typeof value != 'string') {
+    return value === 0 ? value : +value;
+  }
+  value = value.replace(reTrim, '');
+  var isBinary = reIsBinary.test(value);
+  return (isBinary || reIsOctal.test(value))
+    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
+    : (reIsBadHex.test(value) ? NAN : +value);
+}
+
+module.exports = toNumber;
+
+
+/***/ }),
+/* 295 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseGetTag = __webpack_require__(296),
+    isObjectLike = __webpack_require__(299);
+
+/** `Object#toString` result references. */
+var symbolTag = '[object Symbol]';
+
+/**
+ * Checks if `value` is classified as a `Symbol` primitive or object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+ * @example
+ *
+ * _.isSymbol(Symbol.iterator);
+ * // => true
+ *
+ * _.isSymbol('abc');
+ * // => false
+ */
+function isSymbol(value) {
+  return typeof value == 'symbol' ||
+    (isObjectLike(value) && baseGetTag(value) == symbolTag);
+}
+
+module.exports = isSymbol;
+
+
+/***/ }),
+/* 296 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(277),
+    getRawTag = __webpack_require__(297),
+    objectToString = __webpack_require__(298);
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (symToStringTag && symToStringTag in Object(value))
+    ? getRawTag(value)
+    : objectToString(value);
+}
+
+module.exports = baseGetTag;
+
+
+/***/ }),
+/* 297 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(277);
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the raw `toStringTag`.
+ */
+function getRawTag(value) {
+  var isOwn = hasOwnProperty.call(value, symToStringTag),
+      tag = value[symToStringTag];
+
+  try {
+    value[symToStringTag] = undefined;
+    var unmasked = true;
+  } catch (e) {}
+
+  var result = nativeObjectToString.call(value);
+  if (unmasked) {
+    if (isOwn) {
+      value[symToStringTag] = tag;
+    } else {
+      delete value[symToStringTag];
+    }
+  }
+  return result;
+}
+
+module.exports = getRawTag;
+
+
+/***/ }),
+/* 298 */
+/***/ (function(module, exports) {
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/**
+ * Converts `value` to a string using `Object.prototype.toString`.
+ *
+ * @private
+ * @param {*} value The value to convert.
+ * @returns {string} Returns the converted string.
+ */
+function objectToString(value) {
+  return nativeObjectToString.call(value);
+}
+
+module.exports = objectToString;
+
+
+/***/ }),
+/* 299 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return value != null && typeof value == 'object';
+}
+
+module.exports = isObjectLike;
+
+
+/***/ }),
+/* 300 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _getPrototypeOf = __webpack_require__(37);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(40);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(43);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _typeof2 = __webpack_require__(62);
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+var _keys = __webpack_require__(36);
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _assign = __webpack_require__(134);
+
+var _assign2 = _interopRequireDefault(_assign);
+
+exports.withOptions = withOptions;
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _shallowEqual = __webpack_require__(76);
+
+var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+var _supports = __webpack_require__(301);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var defaultEventOptions = {
+  capture: false,
+  passive: false
+};
+
+function mergeDefaultEventOptions(options) {
+  return (0, _assign2.default)({}, defaultEventOptions, options);
+}
+
+function getEventListenerArgs(eventName, callback, options) {
+  var args = [eventName, callback];
+  args.push(_supports.passiveOption ? options : options.capture);
+  return args;
+}
+
+function on(target, eventName, callback, options) {
+  // eslint-disable-next-line prefer-spread
+  target.addEventListener.apply(target, getEventListenerArgs(eventName, callback, options));
+}
+
+function off(target, eventName, callback, options) {
+  // eslint-disable-next-line prefer-spread
+  target.removeEventListener.apply(target, getEventListenerArgs(eventName, callback, options));
+}
+
+function forEachListener(props, iteratee) {
+  var children = props.children,
+      target = props.target,
+      eventProps = (0, _objectWithoutProperties3.default)(props, ['children', 'target']);
+
+
+  (0, _keys2.default)(eventProps).forEach(function (name) {
+    if (name.substring(0, 2) !== 'on') {
+      return;
+    }
+
+    var prop = eventProps[name];
+    var type = typeof prop === 'undefined' ? 'undefined' : (0, _typeof3.default)(prop);
+    var isObject = type === 'object';
+    var isFunction = type === 'function';
+
+    if (!isObject && !isFunction) {
+      return;
+    }
+
+    var capture = name.substr(-7).toLowerCase() === 'capture';
+    var eventName = name.substring(2).toLowerCase();
+    eventName = capture ? eventName.substring(0, eventName.length - 7) : eventName;
+
+    if (isObject) {
+      iteratee(eventName, prop.handler, prop.options);
+    } else {
+      iteratee(eventName, prop, mergeDefaultEventOptions({ capture: capture }));
+    }
+  });
+}
+
+function withOptions(handler, options) {
+  process.env.NODE_ENV !== "production" ? (0, _warning2.default)(options, 'react-event-listener: should be specified options in withOptions.') : void 0;
+
+  return {
+    handler: handler,
+    options: mergeDefaultEventOptions(options)
+  };
+}
+
+var EventListener = function (_React$Component) {
+  (0, _inherits3.default)(EventListener, _React$Component);
+
+  function EventListener() {
+    (0, _classCallCheck3.default)(this, EventListener);
+    return (0, _possibleConstructorReturn3.default)(this, (EventListener.__proto__ || (0, _getPrototypeOf2.default)(EventListener)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(EventListener, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.addListeners();
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps) {
+      return !(0, _shallowEqual2.default)(this.props, nextProps);
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+      this.removeListeners();
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      this.addListeners();
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.removeListeners();
+    }
+  }, {
+    key: 'addListeners',
+    value: function addListeners() {
+      this.applyListeners(on);
+    }
+  }, {
+    key: 'removeListeners',
+    value: function removeListeners() {
+      this.applyListeners(off);
+    }
+  }, {
+    key: 'applyListeners',
+    value: function applyListeners(onOrOff) {
+      var target = this.props.target;
+
+
+      if (target) {
+        var element = target;
+
+        if (typeof target === 'string') {
+          element = window[target];
+        }
+
+        forEachListener(this.props, onOrOff.bind(null, element));
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return this.props.children || null;
+    }
+  }]);
+  return EventListener;
+}(_react2.default.Component);
+
+EventListener.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * You can provide a single child too.
+   */
+  children: _propTypes2.default.node,
+  /**
+   * The DOM target to listen to.
+   */
+  target: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.string]).isRequired
+} : {};
+
+exports.default = EventListener;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 301 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.passiveOption = undefined;
+
+var _defineProperty = __webpack_require__(79);
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function defineProperty(object, property, attr) {
+  return (0, _defineProperty2.default)(object, property, attr);
+}
+
+// Passive options
+// Inspired by https://github.com/Modernizr/Modernizr/blob/master/feature-detects/dom/passiveeventlisteners.js
+var passiveOption = exports.passiveOption = function () {
+  var cache = null;
+
+  return function () {
+    if (cache !== null) {
+      return cache;
+    }
+
+    var supportsPassiveOption = false;
+
+    try {
+      window.addEventListener('test', null, defineProperty({}, 'passive', {
+        get: function get() {
+          supportsPassiveOption = true;
+        }
+      }));
+    } catch (err) {
+      //
+    }
+
+    cache = supportsPassiveOption;
+
+    return supportsPassiveOption;
+  }();
+}();
+
+exports.default = {};
+
+/***/ }),
+/* 302 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Modal = __webpack_require__(303);
+
+Object.defineProperty(exports, 'default', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Modal).default;
+  }
+});
+
+var _Backdrop = __webpack_require__(282);
+
+Object.defineProperty(exports, 'Backdrop', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Backdrop).default;
+  }
+});
+
+var _ModalManager = __webpack_require__(280);
+
+Object.defineProperty(exports, 'ModalManager', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_ModalManager).default;
+  }
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+/* 303 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styles = undefined;
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _defineProperty2 = __webpack_require__(25);
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _getPrototypeOf = __webpack_require__(37);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(40);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(43);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(24);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = __webpack_require__(35);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+var _keycode = __webpack_require__(109);
+
+var _keycode2 = _interopRequireDefault(_keycode);
+
+var _activeElement = __webpack_require__(278);
+
+var _activeElement2 = _interopRequireDefault(_activeElement);
+
+var _contains = __webpack_require__(247);
+
+var _contains2 = _interopRequireDefault(_contains);
+
+var _inDOM = __webpack_require__(248);
+
+var _inDOM2 = _interopRequireDefault(_inDOM);
+
+var _ownerDocument = __webpack_require__(110);
+
+var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
+
+var _RefHolder = __webpack_require__(304);
+
+var _RefHolder2 = _interopRequireDefault(_RefHolder);
+
+var _Portal = __webpack_require__(305);
+
+var _Portal2 = _interopRequireDefault(_Portal);
+
+var _addEventListener = __webpack_require__(308);
+
+var _addEventListener2 = _interopRequireDefault(_addEventListener);
+
+var _helpers = __webpack_require__(262);
+
+var _withStyles = __webpack_require__(61);
+
+var _withStyles2 = _interopRequireDefault(_withStyles);
+
+var _ModalManager = __webpack_require__(280);
+
+var _ModalManager2 = _interopRequireDefault(_ModalManager);
+
+var _Backdrop = __webpack_require__(282);
+
+var _Backdrop2 = _interopRequireDefault(_Backdrop);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getContainer(container, defaultContainer) {
+  container = typeof container === 'function' ? container() : container;
+  return _reactDom2.default.findDOMNode(container) || defaultContainer;
+} // @inheritedComponent Portal
+
+function getHasTransition(props) {
+  return props.children ? props.children.props.hasOwnProperty('in') : false;
+}
+
+var styles = exports.styles = function styles(theme) {
+  return {
+    root: {
+      display: 'flex',
+      width: '100%',
+      height: '100%',
+      position: 'fixed',
+      zIndex: theme.zIndex.modal,
+      top: 0,
+      left: 0
+    },
+    hidden: {
+      visibility: 'hidden'
+    }
+  };
+};
+
+var Modal = function (_React$Component) {
+  (0, _inherits3.default)(Modal, _React$Component);
+
+  function Modal(props, context) {
+    (0, _classCallCheck3.default)(this, Modal);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, (Modal.__proto__ || (0, _getPrototypeOf2.default)(Modal)).call(this, props, context));
+
+    _this.dialog = null;
+    _this.mounted = false;
+    _this.mountNode = null;
+
+    _this.handleRendered = function () {
+      _this.autoFocus();
+
+      if (_this.props.onRendered) {
+        _this.props.onRendered();
+      }
+    };
+
+    _this.handleOpen = function () {
+      var doc = (0, _ownerDocument2.default)(_this.mountNode);
+      var container = getContainer(_this.props.container, doc.body);
+
+      _this.props.manager.add(_this, container);
+      _this.onDocumentKeydownListener = (0, _addEventListener2.default)(doc, 'keydown', _this.handleDocumentKeyDown);
+      _this.onFocusinListener = (0, _addEventListener2.default)(doc, 'focus', _this.enforceFocus, true);
+    };
+
+    _this.handleClose = function () {
+      _this.props.manager.remove(_this);
+      _this.onDocumentKeydownListener.remove();
+      _this.onFocusinListener.remove();
+      _this.restoreLastFocus();
+    };
+
+    _this.handleExited = function () {
+      _this.setState({ exited: true });
+      _this.handleClose();
+    };
+
+    _this.handleBackdropClick = function (event) {
+      if (event.target !== event.currentTarget) {
+        return;
+      }
+
+      if (_this.props.onBackdropClick) {
+        _this.props.onBackdropClick(event);
+      }
+
+      if (!_this.props.disableBackdropClick && _this.props.onClose) {
+        _this.props.onClose(event, 'backdropClick');
+      }
+    };
+
+    _this.handleDocumentKeyDown = function (event) {
+      if (!_this.isTopModal() || (0, _keycode2.default)(event) !== 'esc') {
+        return;
+      }
+
+      if (_this.props.onEscapeKeyDown) {
+        _this.props.onEscapeKeyDown(event);
+      }
+
+      if (!_this.props.disableEscapeKeyDown && _this.props.onClose) {
+        _this.props.onClose(event, 'escapeKeyDown');
+      }
+    };
+
+    _this.checkForFocus = function () {
+      if (_inDOM2.default) {
+        _this.lastFocus = (0, _activeElement2.default)();
+      }
+    };
+
+    _this.enforceFocus = function () {
+      if (_this.props.disableEnforceFocus || !_this.mounted || !_this.isTopModal()) {
+        return;
+      }
+
+      var dialogElement = _this.getDialogElement();
+      var currentActiveElement = (0, _activeElement2.default)((0, _ownerDocument2.default)(_this.mountNode));
+
+      if (dialogElement && !(0, _contains2.default)(dialogElement, currentActiveElement)) {
+        dialogElement.focus();
+      }
+    };
+
+    _this.state = {
+      exited: !_this.props.open
+    };
+    return _this;
+  }
+
+  (0, _createClass3.default)(Modal, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.mounted = true;
+      if (this.props.open) {
+        this.handleOpen();
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (nextProps.open) {
+        this.setState({ exited: false });
+      } else if (!getHasTransition(nextProps)) {
+        // Otherwise let handleExited take care of marking exited.
+        this.setState({ exited: true });
+      }
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps) {
+      if (!prevProps.open && this.props.open) {
+        this.checkForFocus();
+      }
+
+      if (prevProps.open && !this.props.open && !getHasTransition(this.props)) {
+        // Otherwise handleExited will call this.
+        this.handleClose();
+      } else if (!prevProps.open && this.props.open) {
+        this.handleOpen();
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.mounted = false;
+
+      if (this.props.open || getHasTransition(this.props) && !this.state.exited) {
+        this.handleClose();
+      }
+    }
+  }, {
+    key: 'getDialogElement',
+    value: function getDialogElement() {
+      return _reactDom2.default.findDOMNode(this.dialog);
+    }
+  }, {
+    key: 'autoFocus',
+    value: function autoFocus() {
+      if (this.props.disableAutoFocus) {
+        return;
+      }
+
+      var dialogElement = this.getDialogElement();
+      var currentActiveElement = (0, _activeElement2.default)((0, _ownerDocument2.default)(this.mountNode));
+
+      if (dialogElement && !(0, _contains2.default)(dialogElement, currentActiveElement)) {
+        this.lastFocus = currentActiveElement;
+
+        if (!dialogElement.hasAttribute('tabIndex')) {
+          process.env.NODE_ENV !== "production" ? (0, _warning2.default)(false, ['Material-UI: the modal content node does not accept focus.', 'For the benefit of assistive technologies, ' + 'the tabIndex of the node is being set to "-1".'].join('\n')) : void 0;
+          dialogElement.setAttribute('tabIndex', -1);
+        }
+
+        dialogElement.focus();
+      }
+    }
+  }, {
+    key: 'restoreLastFocus',
+    value: function restoreLastFocus() {
+      if (this.props.disableRestoreFocus) {
+        return;
+      }
+
+      if (this.lastFocus) {
+        this.lastFocus.focus();
+        this.lastFocus = null;
+      }
+    }
+  }, {
+    key: 'isTopModal',
+    value: function isTopModal() {
+      return this.props.manager.isTopModal(this);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _props = this.props,
+          BackdropComponent = _props.BackdropComponent,
+          BackdropProps = _props.BackdropProps,
+          children = _props.children,
+          classes = _props.classes,
+          className = _props.className,
+          container = _props.container,
+          disableAutoFocus = _props.disableAutoFocus,
+          disableBackdropClick = _props.disableBackdropClick,
+          disableEnforceFocus = _props.disableEnforceFocus,
+          disableEscapeKeyDown = _props.disableEscapeKeyDown,
+          disableRestoreFocus = _props.disableRestoreFocus,
+          hideBackdrop = _props.hideBackdrop,
+          keepMounted = _props.keepMounted,
+          onBackdropClick = _props.onBackdropClick,
+          onClose = _props.onClose,
+          onEscapeKeyDown = _props.onEscapeKeyDown,
+          onRendered = _props.onRendered,
+          open = _props.open,
+          manager = _props.manager,
+          other = (0, _objectWithoutProperties3.default)(_props, ['BackdropComponent', 'BackdropProps', 'children', 'classes', 'className', 'container', 'disableAutoFocus', 'disableBackdropClick', 'disableEnforceFocus', 'disableEscapeKeyDown', 'disableRestoreFocus', 'hideBackdrop', 'keepMounted', 'onBackdropClick', 'onClose', 'onEscapeKeyDown', 'onRendered', 'open', 'manager']);
+      var exited = this.state.exited;
+
+      var hasTransition = getHasTransition(this.props);
+      var childProps = {};
+
+      if (!keepMounted && !open && (!hasTransition || exited)) {
+        return null;
+      }
+
+      // It's a Transition like component
+      if (hasTransition) {
+        childProps.onExited = (0, _helpers.createChainedFunction)(this.handleExited, children.props.onExited);
+      }
+
+      if (children.props.role === undefined) {
+        childProps.role = children.props.role || 'document';
+      }
+
+      if (children.props.tabIndex === undefined) {
+        childProps.tabIndex = children.props.tabIndex || '-1';
+      }
+
+      return _react2.default.createElement(
+        _Portal2.default,
+        {
+          ref: function ref(node) {
+            _this2.mountNode = node ? node.getMountNode() : node;
+          },
+          container: container,
+          onRendered: this.handleRendered
+        },
+        _react2.default.createElement(
+          'div',
+          (0, _extends3.default)({
+            className: (0, _classnames2.default)(classes.root, className, (0, _defineProperty3.default)({}, classes.hidden, exited))
+          }, other),
+          hideBackdrop ? null : _react2.default.createElement(BackdropComponent, (0, _extends3.default)({ open: open, onClick: this.handleBackdropClick }, BackdropProps)),
+          _react2.default.createElement(
+            _RefHolder2.default,
+            {
+              ref: function ref(node) {
+                _this2.dialog = node;
+              }
+            },
+            _react2.default.cloneElement(children, childProps)
+          )
+        )
+      );
+    }
+  }]);
+  return Modal;
+}(_react2.default.Component);
+
+Modal.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * A backdrop component. Useful for custom backdrop rendering.
+   */
+  BackdropComponent: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  /**
+   * Properties applied to the `Backdrop` element.
+   */
+  BackdropProps: _propTypes2.default.object,
+  /**
+   * A single child content element.
+   */
+  children: _propTypes2.default.element,
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * @ignore
+   */
+  className: _propTypes2.default.string,
+  /**
+   * A node, component instance, or function that returns either.
+   * The `container` will have the portal children appended to it.
+   */
+  container: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.func]),
+  /**
+   * If `true`, the modal will not automatically shift focus to itself when it opens, and
+   * replace it to the last focused element when it closes.
+   * This also works correctly with any modal children that have the `disableAutoFocus` prop.
+   *
+   * Generally this should never be set to `true` as it makes the modal less
+   * accessible to assistive technologies, like screen readers.
+   */
+  disableAutoFocus: _propTypes2.default.bool,
+  /**
+   * If `true`, clicking the backdrop will not fire any callback.
+   */
+  disableBackdropClick: _propTypes2.default.bool,
+  /**
+   * If `true`, the modal will not prevent focus from leaving the modal while open.
+   *
+   * Generally this should never be set to `true` as it makes the modal less
+   * accessible to assistive technologies, like screen readers.
+   */
+  disableEnforceFocus: _propTypes2.default.bool,
+  /**
+   * If `true`, hitting escape will not fire any callback.
+   */
+  disableEscapeKeyDown: _propTypes2.default.bool,
+  /**
+   * If `true`, the modal will not restore focus to previously focused element once
+   * modal is hidden.
+   */
+  disableRestoreFocus: _propTypes2.default.bool,
+  /**
+   * If `true`, the backdrop is not rendered.
+   */
+  hideBackdrop: _propTypes2.default.bool,
+  /**
+   * Always keep the children in the DOM.
+   * This property can be useful in SEO situation or
+   * when you want to maximize the responsiveness of the Modal.
+   */
+  keepMounted: _propTypes2.default.bool,
+  /**
+   * A modal manager used to track and manage the state of open
+   * Modals. Useful when customizing how modals interact within a container.
+   */
+  manager: _propTypes2.default.object,
+  /**
+   * Callback fired when the backdrop is clicked.
+   */
+  onBackdropClick: _propTypes2.default.func,
+  /**
+   * Callback fired when the component requests to be closed.
+   * The `reason` parameter can optionally be used to control the response to `onClose`.
+   *
+   * @param {object} event The event source of the callback
+   * @param {string} reason Can be:`"escapeKeyDown"`, `"backdropClick"`
+   */
+  onClose: _propTypes2.default.func,
+  /**
+   * Callback fired when the escape key is pressed,
+   * `disableEscapeKeyDown` is false and the modal is in focus.
+   */
+  onEscapeKeyDown: _propTypes2.default.func,
+  /**
+   * Callback fired once the children has been mounted into the `container`.
+   * It signals that the `open={true}` property took effect.
+   */
+  onRendered: _propTypes2.default.func,
+  /**
+   * If `true`, the modal is open.
+   */
+  open: _propTypes2.default.bool.isRequired
+} : {};
+
+Modal.defaultProps = {
+  disableAutoFocus: false,
+  disableBackdropClick: false,
+  disableEnforceFocus: false,
+  disableEscapeKeyDown: false,
+  disableRestoreFocus: false,
+  hideBackdrop: false,
+  keepMounted: false,
+  // Modals don't open on the server so this won't conflict with concurrent requests.
+  manager: new _ModalManager2.default(),
+  BackdropComponent: _Backdrop2.default
+};
+
+exports.default = (0, _withStyles2.default)(styles, { flip: false, name: 'MuiModal' })(Modal);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 304 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _getPrototypeOf = __webpack_require__(37);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(40);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(43);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @ignore - internal component.
+ *
+ * Internal helper component to allow attaching a ref to a
+ * child element that may not accept refs (functional component).
+ */
+var RefHolder = function (_React$Component) {
+  (0, _inherits3.default)(RefHolder, _React$Component);
+
+  function RefHolder() {
+    (0, _classCallCheck3.default)(this, RefHolder);
+    return (0, _possibleConstructorReturn3.default)(this, (RefHolder.__proto__ || (0, _getPrototypeOf2.default)(RefHolder)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(RefHolder, [{
+    key: 'render',
+    value: function render() {
+      return this.props.children;
+    }
+  }]);
+  return RefHolder;
+}(_react2.default.Component);
+
+RefHolder.propTypes = process.env.NODE_ENV !== "production" ? {
+  children: _propTypes2.default.node
+} : {};
+
+exports.default = RefHolder;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 305 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactDom = __webpack_require__(24);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _Portal = __webpack_require__(306);
+
+var _Portal2 = _interopRequireDefault(_Portal);
+
+var _LegacyPortal = __webpack_require__(307);
+
+var _LegacyPortal2 = _interopRequireDefault(_LegacyPortal);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _reactDom2.default.createPortal ? _Portal2.default : _LegacyPortal2.default;
+
+/***/ }),
+/* 306 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _getPrototypeOf = __webpack_require__(37);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(40);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(43);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(24);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _ownerDocument = __webpack_require__(110);
+
+var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
+
+var _exactProp = __webpack_require__(279);
+
+var _exactProp2 = _interopRequireDefault(_exactProp);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getContainer(container, defaultContainer) {
+  container = typeof container === 'function' ? container() : container;
+  return _reactDom2.default.findDOMNode(container) || defaultContainer;
+}
+
+function getOwnerDocument(element) {
+  return (0, _ownerDocument2.default)(_reactDom2.default.findDOMNode(element));
+}
+
+/**
+ * This component shares many concepts with
+ * [react-overlays](https://react-bootstrap.github.io/react-overlays/#portals)
+ * But has been forked in order to fix some bugs, reduce the number of dependencies
+ * and take the control of our destiny.
+ */
+
+var Portal = function (_React$Component) {
+  (0, _inherits3.default)(Portal, _React$Component);
+
+  function Portal() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    (0, _classCallCheck3.default)(this, Portal);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = Portal.__proto__ || (0, _getPrototypeOf2.default)(Portal)).call.apply(_ref, [this].concat(args))), _this), _this.getMountNode = function () {
+      return _this.mountNode;
+    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+  }
+
+  (0, _createClass3.default)(Portal, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.setContainer(this.props.container);
+      this.forceUpdate(this.props.onRendered);
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (nextProps.container !== this.props.container) {
+        this.setContainer(nextProps.container);
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.mountNode = null;
+    }
+  }, {
+    key: 'setContainer',
+    value: function setContainer(container) {
+      this.mountNode = getContainer(container, getOwnerDocument(this).body);
+    }
+
+    /**
+     * @public
+     */
+
+  }, {
+    key: 'render',
+    value: function render() {
+      var children = this.props.children;
+
+
+      return this.mountNode ? _reactDom2.default.createPortal(children, this.mountNode) : null;
+    }
+  }]);
+  return Portal;
+}(_react2.default.Component);
+
+Portal.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * The children to render into the `container`.
+   */
+  children: _propTypes2.default.node.isRequired,
+  /**
+   * A node, component instance, or function that returns either.
+   * The `container` will have the portal children appended to it.
+   * By default, it's using the body of the top-level document object,
+   * so it's simply `document.body` most of the time.
+   */
+  container: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.func]),
+  /**
+   * Callback fired once the children has been mounted into the `container`.
+   */
+  onRendered: _propTypes2.default.func
+} : {};
+
+Portal.propTypes = process.env.NODE_ENV !== "production" ? (0, _exactProp2.default)(Portal.propTypes, 'Portal') : {};
+
+exports.default = Portal;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 307 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _getPrototypeOf = __webpack_require__(37);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(40);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(43);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(24);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _ownerDocument = __webpack_require__(110);
+
+var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
+
+var _exactProp = __webpack_require__(279);
+
+var _exactProp2 = _interopRequireDefault(_exactProp);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getContainer(container, defaultContainer) {
+  container = typeof container === 'function' ? container() : container;
+  return _reactDom2.default.findDOMNode(container) || defaultContainer;
+}
+
+function getOwnerDocument(element) {
+  return (0, _ownerDocument2.default)(_reactDom2.default.findDOMNode(element));
+}
+
+/**
+ * @ignore - internal component.
+ *
+ * This module will soon be gone. We should drop it as soon as react@15.x support stop.
+ */
+
+var LegacyPortal = function (_React$Component) {
+  (0, _inherits3.default)(LegacyPortal, _React$Component);
+
+  function LegacyPortal() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    (0, _classCallCheck3.default)(this, LegacyPortal);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = LegacyPortal.__proto__ || (0, _getPrototypeOf2.default)(LegacyPortal)).call.apply(_ref, [this].concat(args))), _this), _this.getMountNode = function () {
+      return _this.mountNode;
+    }, _this.mountOverlayTarget = function () {
+      if (!_this.overlayTarget) {
+        _this.overlayTarget = document.createElement('div');
+        _this.mountNode = getContainer(_this.props.container, getOwnerDocument(_this).body);
+        _this.mountNode.appendChild(_this.overlayTarget);
+      }
+    }, _this.unmountOverlayTarget = function () {
+      if (_this.overlayTarget) {
+        _this.mountNode.removeChild(_this.overlayTarget);
+        _this.overlayTarget = null;
+      }
+      _this.mountNode = null;
+    }, _this.unrenderOverlay = function () {
+      if (_this.overlayTarget) {
+        _reactDom2.default.unmountComponentAtNode(_this.overlayTarget);
+        _this.overlayInstance = null;
+      }
+    }, _this.renderOverlay = function () {
+      var overlay = _this.props.children;
+      _this.mountOverlayTarget();
+      var initialRender = !_this.overlayInstance;
+      _this.overlayInstance = _reactDom2.default.unstable_renderSubtreeIntoContainer(_this, overlay, _this.overlayTarget, function () {
+        if (initialRender && _this.props.onRendered) {
+          _this.props.onRendered();
+        }
+      });
+    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+  }
+
+  (0, _createClass3.default)(LegacyPortal, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.mounted = true;
+      this.renderOverlay();
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (this.overlayTarget && nextProps.container !== this.props.container) {
+        this.mountNode.removeChild(this.overlayTarget);
+        this.mountNode = getContainer(nextProps.container, getOwnerDocument(this).body);
+        this.mountNode.appendChild(this.overlayTarget);
+      }
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      this.renderOverlay();
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.mounted = false;
+      this.unrenderOverlay();
+      this.unmountOverlayTarget();
+    }
+
+    /**
+     * @public
+     */
+
+  }, {
+    key: 'render',
+    value: function render() {
+      return null;
+    }
+  }]);
+  return LegacyPortal;
+}(_react2.default.Component);
+
+LegacyPortal.propTypes = process.env.NODE_ENV !== "production" ? {
+  children: _propTypes2.default.element.isRequired,
+  container: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.func]),
+  onRendered: _propTypes2.default.func
+} : {};
+
+LegacyPortal.propTypes = process.env.NODE_ENV !== "production" ? (0, _exactProp2.default)(LegacyPortal.propTypes, 'LegacyPortal') : {};
+
+exports.default = LegacyPortal;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 308 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (node, event, handler, capture) {
+  node.addEventListener(event, handler, capture);
+  return {
+    remove: function remove() {
+      node.removeEventListener(event, handler, capture);
+    }
+  };
+};
+
+/***/ }),
+/* 309 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = style;
+
+var _camelizeStyle = __webpack_require__(281);
+
+var _camelizeStyle2 = _interopRequireDefault(_camelizeStyle);
+
+var _hyphenateStyle = __webpack_require__(311);
+
+var _hyphenateStyle2 = _interopRequireDefault(_hyphenateStyle);
+
+var _getComputedStyle2 = __webpack_require__(313);
+
+var _getComputedStyle3 = _interopRequireDefault(_getComputedStyle2);
+
+var _removeStyle = __webpack_require__(314);
+
+var _removeStyle2 = _interopRequireDefault(_removeStyle);
+
+var _properties = __webpack_require__(315);
+
+var _isTransform = __webpack_require__(316);
+
+var _isTransform2 = _interopRequireDefault(_isTransform);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function style(node, property, value) {
+  var css = '';
+  var transforms = '';
+  var props = property;
+
+  if (typeof property === 'string') {
+    if (value === undefined) {
+      return node.style[(0, _camelizeStyle2.default)(property)] || (0, _getComputedStyle3.default)(node).getPropertyValue((0, _hyphenateStyle2.default)(property));
+    } else {
+      (props = {})[property] = value;
+    }
+  }
+
+  Object.keys(props).forEach(function (key) {
+    var value = props[key];
+    if (!value && value !== 0) {
+      (0, _removeStyle2.default)(node, (0, _hyphenateStyle2.default)(key));
+    } else if ((0, _isTransform2.default)(key)) {
+      transforms += key + '(' + value + ') ';
+    } else {
+      css += (0, _hyphenateStyle2.default)(key) + ': ' + value + ';';
+    }
+  });
+
+  if (transforms) {
+    css += _properties.transform + ': ' + transforms + ';';
+  }
+
+  node.style.cssText += ';' + css;
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 310 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = camelize;
+var rHyphen = /-(.)/g;
+
+function camelize(string) {
+  return string.replace(rHyphen, function (_, chr) {
+    return chr.toUpperCase();
+  });
+}
+module.exports = exports["default"];
+
+/***/ }),
+/* 311 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = hyphenateStyleName;
+
+var _hyphenate = __webpack_require__(312);
+
+var _hyphenate2 = _interopRequireDefault(_hyphenate);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var msPattern = /^ms-/; /**
+                         * Copyright 2013-2014, Facebook, Inc.
+                         * All rights reserved.
+                         * https://github.com/facebook/react/blob/2aeb8a2a6beb00617a4217f7f8284924fa2ad819/src/vendor/core/hyphenateStyleName.js
+                         */
+
+function hyphenateStyleName(string) {
+  return (0, _hyphenate2.default)(string).replace(msPattern, '-ms-');
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 312 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = hyphenate;
+
+var rUpper = /([A-Z])/g;
+
+function hyphenate(string) {
+  return string.replace(rUpper, '-$1').toLowerCase();
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 313 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _getComputedStyle;
+
+var _camelizeStyle = __webpack_require__(281);
+
+var _camelizeStyle2 = _interopRequireDefault(_camelizeStyle);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var rposition = /^(top|right|bottom|left)$/;
+var rnumnonpx = /^([+-]?(?:\d*\.|)\d+(?:[eE][+-]?\d+|))(?!px)[a-z%]+$/i;
+
+function _getComputedStyle(node) {
+  if (!node) throw new TypeError('No Element passed to `getComputedStyle()`');
+  var doc = node.ownerDocument;
+
+  return 'defaultView' in doc ? doc.defaultView.opener ? node.ownerDocument.defaultView.getComputedStyle(node, null) : window.getComputedStyle(node, null) : {
+    //ie 8 "magic" from: https://github.com/jquery/jquery/blob/1.11-stable/src/css/curCSS.js#L72
+    getPropertyValue: function getPropertyValue(prop) {
+      var style = node.style;
+
+      prop = (0, _camelizeStyle2.default)(prop);
+
+      if (prop == 'float') prop = 'styleFloat';
+
+      var current = node.currentStyle[prop] || null;
+
+      if (current == null && style && style[prop]) current = style[prop];
+
+      if (rnumnonpx.test(current) && !rposition.test(prop)) {
+        // Remember the original values
+        var left = style.left;
+        var runStyle = node.runtimeStyle;
+        var rsLeft = runStyle && runStyle.left;
+
+        // Put in the new values to get a computed value out
+        if (rsLeft) runStyle.left = node.currentStyle.left;
+
+        style.left = prop === 'fontSize' ? '1em' : current;
+        current = style.pixelLeft + 'px';
+
+        // Revert the changed values
+        style.left = left;
+        if (rsLeft) runStyle.left = rsLeft;
+      }
+
+      return current;
+    }
+  };
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 314 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = removeStyle;
+function removeStyle(node, key) {
+  return 'removeProperty' in node.style ? node.style.removeProperty(key) : node.style.removeAttribute(key);
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 315 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.animationEnd = exports.animationDelay = exports.animationTiming = exports.animationDuration = exports.animationName = exports.transitionEnd = exports.transitionDuration = exports.transitionDelay = exports.transitionTiming = exports.transitionProperty = exports.transform = undefined;
+
+var _inDOM = __webpack_require__(248);
+
+var _inDOM2 = _interopRequireDefault(_inDOM);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var transform = 'transform';
+var prefix = void 0,
+    transitionEnd = void 0,
+    animationEnd = void 0;
+var transitionProperty = void 0,
+    transitionDuration = void 0,
+    transitionTiming = void 0,
+    transitionDelay = void 0;
+var animationName = void 0,
+    animationDuration = void 0,
+    animationTiming = void 0,
+    animationDelay = void 0;
+
+if (_inDOM2.default) {
+  var _getTransitionPropert = getTransitionProperties();
+
+  prefix = _getTransitionPropert.prefix;
+  exports.transitionEnd = transitionEnd = _getTransitionPropert.transitionEnd;
+  exports.animationEnd = animationEnd = _getTransitionPropert.animationEnd;
+
+
+  exports.transform = transform = prefix + '-' + transform;
+  exports.transitionProperty = transitionProperty = prefix + '-transition-property';
+  exports.transitionDuration = transitionDuration = prefix + '-transition-duration';
+  exports.transitionDelay = transitionDelay = prefix + '-transition-delay';
+  exports.transitionTiming = transitionTiming = prefix + '-transition-timing-function';
+
+  exports.animationName = animationName = prefix + '-animation-name';
+  exports.animationDuration = animationDuration = prefix + '-animation-duration';
+  exports.animationTiming = animationTiming = prefix + '-animation-delay';
+  exports.animationDelay = animationDelay = prefix + '-animation-timing-function';
+}
+
+exports.transform = transform;
+exports.transitionProperty = transitionProperty;
+exports.transitionTiming = transitionTiming;
+exports.transitionDelay = transitionDelay;
+exports.transitionDuration = transitionDuration;
+exports.transitionEnd = transitionEnd;
+exports.animationName = animationName;
+exports.animationDuration = animationDuration;
+exports.animationTiming = animationTiming;
+exports.animationDelay = animationDelay;
+exports.animationEnd = animationEnd;
+exports.default = {
+  transform: transform,
+  end: transitionEnd,
+  property: transitionProperty,
+  timing: transitionTiming,
+  delay: transitionDelay,
+  duration: transitionDuration
+};
+
+
+function getTransitionProperties() {
+  var style = document.createElement('div').style;
+
+  var vendorMap = {
+    O: function O(e) {
+      return 'o' + e.toLowerCase();
+    },
+    Moz: function Moz(e) {
+      return e.toLowerCase();
+    },
+    Webkit: function Webkit(e) {
+      return 'webkit' + e;
+    },
+    ms: function ms(e) {
+      return 'MS' + e;
+    }
+  };
+
+  var vendors = Object.keys(vendorMap);
+
+  var transitionEnd = void 0,
+      animationEnd = void 0;
+  var prefix = '';
+
+  for (var i = 0; i < vendors.length; i++) {
+    var vendor = vendors[i];
+
+    if (vendor + 'TransitionProperty' in style) {
+      prefix = '-' + vendor.toLowerCase();
+      transitionEnd = vendorMap[vendor]('TransitionEnd');
+      animationEnd = vendorMap[vendor]('AnimationEnd');
+      break;
+    }
+  }
+
+  if (!transitionEnd && 'transitionProperty' in style) transitionEnd = 'transitionend';
+
+  if (!animationEnd && 'animationName' in style) animationEnd = 'animationend';
+
+  style = null;
+
+  return { animationEnd: animationEnd, transitionEnd: transitionEnd, prefix: prefix };
+}
+
+/***/ }),
+/* 316 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = isTransform;
+var supportedTransforms = /^((translate|rotate|scale)(X|Y|Z|3d)?|matrix(3d)?|perspective|skew(X|Y)?)$/i;
+
+function isTransform(property) {
+  return !!(property && supportedTransforms.test(property));
+}
+module.exports = exports["default"];
+
+/***/ }),
+/* 317 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isBody = isBody;
+exports.default = isOverflowing;
+
+var _isWindow = __webpack_require__(318);
+
+var _isWindow2 = _interopRequireDefault(_isWindow);
+
+var _ownerDocument = __webpack_require__(110);
+
+var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
+
+var _ownerWindow = __webpack_require__(245);
+
+var _ownerWindow2 = _interopRequireDefault(_ownerWindow);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function isBody(node) {
+  return node && node.tagName.toLowerCase() === 'body';
+}
+
+// Do we have a scroll bar?
+function isOverflowing(container) {
+  var doc = (0, _ownerDocument2.default)(container);
+  var win = (0, _ownerWindow2.default)(doc);
+
+  /* istanbul ignore next */
+  if (!(0, _isWindow2.default)(doc) && !isBody(container)) {
+    return container.scrollHeight > container.clientHeight;
+  }
+
+  // Takes in account potential non zero margin on the body.
+  var style = win.getComputedStyle(doc.body);
+  var marginLeft = parseInt(style.getPropertyValue('margin-left'), 10);
+  var marginRight = parseInt(style.getPropertyValue('margin-right'), 10);
+
+  return marginLeft + doc.body.clientWidth + marginRight < win.innerWidth;
+}
+
+/***/ }),
+/* 318 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getWindow;
+function getWindow(node) {
+  return node === node.window ? node : node.nodeType === 9 ? node.defaultView || node.parentWindow : false;
+}
+module.exports = exports["default"];
+
+/***/ }),
+/* 319 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ariaHidden = ariaHidden;
+exports.hideSiblings = hideSiblings;
+exports.showSiblings = showSiblings;
+var BLACKLIST = ['template', 'script', 'style'];
+
+function isHidable(node) {
+  return node.nodeType === 1 && BLACKLIST.indexOf(node.tagName.toLowerCase()) === -1;
+}
+
+function siblings(container, mount, callback) {
+  mount = [].concat(mount); // eslint-disable-line no-param-reassign
+  [].forEach.call(container.children, function (node) {
+    if (mount.indexOf(node) === -1 && isHidable(node)) {
+      callback(node);
+    }
+  });
+}
+
+function ariaHidden(show, node) {
+  if (!node) {
+    return;
+  }
+  if (show) {
+    node.setAttribute('aria-hidden', 'true');
+  } else {
+    node.removeAttribute('aria-hidden');
+  }
+}
+
+function hideSiblings(container, mountNode) {
+  siblings(container, mountNode, function (node) {
+    return ariaHidden(true, node);
+  });
+}
+
+function showSiblings(container, mountNode) {
+  siblings(container, mountNode, function (node) {
+    return ariaHidden(false, node);
+  });
+}
+
+/***/ }),
+/* 320 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _getPrototypeOf = __webpack_require__(37);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(40);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(43);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _Transition = __webpack_require__(259);
+
+var _Transition2 = _interopRequireDefault(_Transition);
+
+var _transitions = __webpack_require__(233);
+
+var _withTheme = __webpack_require__(283);
+
+var _withTheme2 = _interopRequireDefault(_withTheme);
+
+var _utils = __webpack_require__(284);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// @inheritedComponent Transition
+
+var styles = {
+  entering: {
+    opacity: 1
+  },
+  entered: {
+    opacity: 1
+  }
+};
+
+/**
+ * The Fade transition is used by the [Modal](/utils/modals) component.
+ * It uses [react-transition-group](https://github.com/reactjs/react-transition-group) internally.
+ */
+
+var Fade = function (_React$Component) {
+  (0, _inherits3.default)(Fade, _React$Component);
+
+  function Fade() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    (0, _classCallCheck3.default)(this, Fade);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = Fade.__proto__ || (0, _getPrototypeOf2.default)(Fade)).call.apply(_ref, [this].concat(args))), _this), _this.handleEnter = function (node) {
+      var theme = _this.props.theme;
+
+      (0, _utils.reflow)(node); // So the animation always start from the start.
+
+      var transitionProps = (0, _utils.getTransitionProps)(_this.props, {
+        mode: 'enter'
+      });
+      node.style.webkitTransition = theme.transitions.create('opacity', transitionProps);
+      node.style.transition = theme.transitions.create('opacity', transitionProps);
+
+      if (_this.props.onEnter) {
+        _this.props.onEnter(node);
+      }
+    }, _this.handleExit = function (node) {
+      var theme = _this.props.theme;
+
+      var transitionProps = (0, _utils.getTransitionProps)(_this.props, {
+        mode: 'exit'
+      });
+      node.style.webkitTransition = theme.transitions.create('opacity', transitionProps);
+      node.style.transition = theme.transitions.create('opacity', transitionProps);
+
+      if (_this.props.onExit) {
+        _this.props.onExit(node);
+      }
+    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+  }
+
+  (0, _createClass3.default)(Fade, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          children = _props.children,
+          onEnter = _props.onEnter,
+          onExit = _props.onExit,
+          styleProp = _props.style,
+          theme = _props.theme,
+          other = (0, _objectWithoutProperties3.default)(_props, ['children', 'onEnter', 'onExit', 'style', 'theme']);
+
+
+      var style = (0, _extends3.default)({}, styleProp, _react2.default.isValidElement(children) ? children.props.style : {});
+
+      return _react2.default.createElement(
+        _Transition2.default,
+        (0, _extends3.default)({ appear: true, onEnter: this.handleEnter, onExit: this.handleExit }, other),
+        function (state, childProps) {
+          return _react2.default.cloneElement(children, (0, _extends3.default)({
+            style: (0, _extends3.default)({
+              opacity: 0,
+              willChange: 'opacity'
+            }, styles[state], style)
+          }, childProps));
+        }
+      );
+    }
+  }]);
+  return Fade;
+}(_react2.default.Component);
+
+Fade.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * A single child content element.
+   */
+  children: _propTypes2.default.oneOfType([_propTypes2.default.element, _propTypes2.default.func]),
+  /**
+   * If `true`, the component will transition in.
+   */
+  in: _propTypes2.default.bool,
+  /**
+   * @ignore
+   */
+  onEnter: _propTypes2.default.func,
+  /**
+   * @ignore
+   */
+  onExit: _propTypes2.default.func,
+  /**
+   * @ignore
+   */
+  style: _propTypes2.default.object,
+  /**
+   * @ignore
+   */
+  theme: _propTypes2.default.object.isRequired,
+  /**
+   * The duration for the transition, in milliseconds.
+   * You may specify a single timeout for all transitions, or individually with an object.
+   */
+  timeout: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.shape({ enter: _propTypes2.default.number, exit: _propTypes2.default.number })])
+} : {};
+
+Fade.defaultProps = {
+  timeout: {
+    enter: _transitions.duration.enteringScreen,
+    exit: _transitions.duration.leavingScreen
+  }
+};
+
+exports.default = (0, _withTheme2.default)()(Fade);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 321 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _getPrototypeOf = __webpack_require__(37);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(40);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(43);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _Transition = __webpack_require__(259);
+
+var _Transition2 = _interopRequireDefault(_Transition);
+
+var _withTheme = __webpack_require__(283);
+
+var _withTheme2 = _interopRequireDefault(_withTheme);
+
+var _utils = __webpack_require__(284);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getScale(value) {
+  return 'scale(' + value + ', ' + Math.pow(value, 2) + ')';
+} // @inheritedComponent Transition
+
+var styles = {
+  entering: {
+    opacity: 1,
+    transform: getScale(1)
+  },
+  entered: {
+    opacity: 1,
+    transform: getScale(1)
+  }
+};
+
+/**
+ * The Grow transition is used by the [Popover](/utils/popovers) component.
+ * It uses [react-transition-group](https://github.com/reactjs/react-transition-group) internally.
+ */
+
+var Grow = function (_React$Component) {
+  (0, _inherits3.default)(Grow, _React$Component);
+
+  function Grow() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    (0, _classCallCheck3.default)(this, Grow);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = Grow.__proto__ || (0, _getPrototypeOf2.default)(Grow)).call.apply(_ref, [this].concat(args))), _this), _this.autoTimeout = undefined, _this.timer = null, _this.handleEnter = function (node) {
+      var _this$props = _this.props,
+          theme = _this$props.theme,
+          timeout = _this$props.timeout;
+
+      (0, _utils.reflow)(node); // So the animation always start from the start.
+
+      var _getTransitionProps = (0, _utils.getTransitionProps)(_this.props, {
+        mode: 'enter'
+      }),
+          transitionDuration = _getTransitionProps.duration,
+          delay = _getTransitionProps.delay;
+
+      var duration = 0;
+      if (timeout === 'auto') {
+        duration = theme.transitions.getAutoHeightDuration(node.clientHeight);
+        _this.autoTimeout = duration;
+      } else {
+        duration = transitionDuration;
+      }
+
+      node.style.transition = [theme.transitions.create('opacity', {
+        duration: duration,
+        delay: delay
+      }), theme.transitions.create('transform', {
+        duration: duration * 0.666,
+        delay: delay
+      })].join(',');
+
+      if (_this.props.onEnter) {
+        _this.props.onEnter(node);
+      }
+    }, _this.handleExit = function (node) {
+      var _this$props2 = _this.props,
+          theme = _this$props2.theme,
+          timeout = _this$props2.timeout;
+
+      var duration = 0;
+
+      var _getTransitionProps2 = (0, _utils.getTransitionProps)(_this.props, {
+        mode: 'exit'
+      }),
+          transitionDuration = _getTransitionProps2.duration,
+          delay = _getTransitionProps2.delay;
+
+      if (timeout === 'auto') {
+        duration = theme.transitions.getAutoHeightDuration(node.clientHeight);
+        _this.autoTimeout = duration;
+      } else {
+        duration = transitionDuration;
+      }
+
+      node.style.transition = [theme.transitions.create('opacity', {
+        duration: duration,
+        delay: delay
+      }), theme.transitions.create('transform', {
+        duration: duration * 0.666,
+        delay: delay || duration * 0.333
+      })].join(',');
+
+      node.style.opacity = '0';
+      node.style.transform = getScale(0.75);
+
+      if (_this.props.onExit) {
+        _this.props.onExit(node);
+      }
+    }, _this.addEndListener = function (_, next) {
+      if (_this.props.timeout === 'auto') {
+        _this.timer = setTimeout(next, _this.autoTimeout || 0);
+      }
+    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+  }
+
+  (0, _createClass3.default)(Grow, [{
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      clearTimeout(this.timer);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          children = _props.children,
+          onEnter = _props.onEnter,
+          onExit = _props.onExit,
+          styleProp = _props.style,
+          theme = _props.theme,
+          timeout = _props.timeout,
+          other = (0, _objectWithoutProperties3.default)(_props, ['children', 'onEnter', 'onExit', 'style', 'theme', 'timeout']);
+
+
+      var style = (0, _extends3.default)({}, styleProp, _react2.default.isValidElement(children) ? children.props.style : {});
+
+      return _react2.default.createElement(
+        _Transition2.default,
+        (0, _extends3.default)({
+          appear: true,
+          onEnter: this.handleEnter,
+          onExit: this.handleExit,
+          addEndListener: this.addEndListener,
+          timeout: timeout === 'auto' ? null : timeout
+        }, other),
+        function (state, childProps) {
+          return _react2.default.cloneElement(children, (0, _extends3.default)({
+            style: (0, _extends3.default)({
+              opacity: 0,
+              transform: getScale(0.75)
+            }, styles[state], style)
+          }, childProps));
+        }
+      );
+    }
+  }]);
+  return Grow;
+}(_react2.default.Component);
+
+Grow.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * A single child content element.
+   */
+  children: _propTypes2.default.oneOfType([_propTypes2.default.element, _propTypes2.default.func]),
+  /**
+   * If `true`, show the component; triggers the enter or exit animation.
+   */
+  in: _propTypes2.default.bool,
+  /**
+   * @ignore
+   */
+  onEnter: _propTypes2.default.func,
+  /**
+   * @ignore
+   */
+  onExit: _propTypes2.default.func,
+  /**
+   * @ignore
+   */
+  style: _propTypes2.default.object,
+  /**
+   * @ignore
+   */
+  theme: _propTypes2.default.object.isRequired,
+  /**
+   * The duration for the transition, in milliseconds.
+   * You may specify a single timeout for all transitions, or individually with an object.
+   *
+   * Set to 'auto' to automatically calculate transition time based on height.
+   */
+  timeout: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.shape({ enter: _propTypes2.default.number, exit: _propTypes2.default.number }), _propTypes2.default.oneOf(['auto'])])
+} : {};
+
+Grow.defaultProps = {
+  timeout: 'auto'
+};
+
+exports.default = (0, _withTheme2.default)()(Grow);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 322 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Paper = __webpack_require__(323);
+
+Object.defineProperty(exports, 'default', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Paper).default;
+  }
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+/* 323 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styles = undefined;
+
+var _defineProperty2 = __webpack_require__(25);
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = __webpack_require__(35);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+var _withStyles = __webpack_require__(61);
+
+var _withStyles2 = _interopRequireDefault(_withStyles);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = exports.styles = function styles(theme) {
+  var elevations = {};
+  theme.shadows.forEach(function (shadow, index) {
+    elevations['elevation' + index] = {
+      boxShadow: shadow
+    };
+  });
+
+  return (0, _extends3.default)({
+    root: {
+      backgroundColor: theme.palette.background.paper
+    },
+    rounded: {
+      borderRadius: 2
+    }
+  }, elevations);
+};
+
+function Paper(props) {
+  var classes = props.classes,
+      classNameProp = props.className,
+      Component = props.component,
+      square = props.square,
+      elevation = props.elevation,
+      other = (0, _objectWithoutProperties3.default)(props, ['classes', 'className', 'component', 'square', 'elevation']);
+
+
+  process.env.NODE_ENV !== "production" ? (0, _warning2.default)(elevation >= 0 && elevation < 25, 'Material-UI: this elevation `' + elevation + '` is not implemented.') : void 0;
+
+  var className = (0, _classnames2.default)(classes.root, classes['elevation' + elevation], (0, _defineProperty3.default)({}, classes.rounded, !square), classNameProp);
+
+  return _react2.default.createElement(Component, (0, _extends3.default)({ className: className }, other));
+}
+
+Paper.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * The content of the component.
+   */
+  children: _propTypes2.default.node,
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * @ignore
+   */
+  className: _propTypes2.default.string,
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  /**
+   * Shadow depth, corresponds to `dp` in the spec.
+   * It's accepting values between 0 and 24 inclusive.
+   */
+  elevation: _propTypes2.default.number,
+  /**
+   * If `true`, rounded corners are disabled.
+   */
+  square: _propTypes2.default.bool
+} : {};
+
+Paper.defaultProps = {
+  component: 'div',
+  elevation: 2,
+  square: false
+};
+
+exports.default = (0, _withStyles2.default)(styles, { name: 'MuiPaper' })(Paper);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 324 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _List = __webpack_require__(325);
+
+Object.defineProperty(exports, 'default', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_List).default;
+  }
+});
+
+var _ListItem = __webpack_require__(286);
+
+Object.defineProperty(exports, 'ListItem', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_ListItem).default;
+  }
+});
+
+var _ListItemAvatar = __webpack_require__(327);
+
+Object.defineProperty(exports, 'ListItemAvatar', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_ListItemAvatar).default;
+  }
+});
+
+var _ListItemText = __webpack_require__(328);
+
+Object.defineProperty(exports, 'ListItemText', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_ListItemText).default;
+  }
+});
+
+var _ListItemIcon = __webpack_require__(331);
+
+Object.defineProperty(exports, 'ListItemIcon', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_ListItemIcon).default;
+  }
+});
+
+var _ListItemSecondaryAction = __webpack_require__(332);
+
+Object.defineProperty(exports, 'ListItemSecondaryAction', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_ListItemSecondaryAction).default;
+  }
+});
+
+var _ListSubheader = __webpack_require__(333);
+
+Object.defineProperty(exports, 'ListSubheader', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_ListSubheader).default;
+  }
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+/* 325 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styles = undefined;
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _defineProperty2 = __webpack_require__(25);
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _getPrototypeOf = __webpack_require__(37);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(38);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(39);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(40);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(43);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = __webpack_require__(35);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _withStyles = __webpack_require__(61);
+
+var _withStyles2 = _interopRequireDefault(_withStyles);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = exports.styles = function styles(theme) {
+  return {
+    root: {
+      listStyle: 'none',
+      margin: 0,
+      padding: 0,
+      position: 'relative'
+    },
+    padding: {
+      paddingTop: theme.spacing.unit,
+      paddingBottom: theme.spacing.unit
+    },
+    dense: {
+      paddingTop: theme.spacing.unit / 2,
+      paddingBottom: theme.spacing.unit / 2
+    },
+    subheader: {
+      paddingTop: 0
+    }
+  };
+};
+
+var List = function (_React$Component) {
+  (0, _inherits3.default)(List, _React$Component);
+
+  function List() {
+    (0, _classCallCheck3.default)(this, List);
+    return (0, _possibleConstructorReturn3.default)(this, (List.__proto__ || (0, _getPrototypeOf2.default)(List)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(List, [{
+    key: 'getChildContext',
+    value: function getChildContext() {
+      return {
+        dense: this.props.dense
+      };
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _classNames;
+
+      var _props = this.props,
+          children = _props.children,
+          classes = _props.classes,
+          classNameProp = _props.className,
+          Component = _props.component,
+          dense = _props.dense,
+          disablePadding = _props.disablePadding,
+          subheader = _props.subheader,
+          other = (0, _objectWithoutProperties3.default)(_props, ['children', 'classes', 'className', 'component', 'dense', 'disablePadding', 'subheader']);
+
+      var className = (0, _classnames2.default)(classes.root, (_classNames = {}, (0, _defineProperty3.default)(_classNames, classes.dense, dense && !disablePadding), (0, _defineProperty3.default)(_classNames, classes.padding, !disablePadding), (0, _defineProperty3.default)(_classNames, classes.subheader, subheader), _classNames), classNameProp);
+
+      return _react2.default.createElement(
+        Component,
+        (0, _extends3.default)({ className: className }, other),
+        subheader,
+        children
+      );
+    }
+  }]);
+  return List;
+}(_react2.default.Component);
+
+List.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * The content of the component.
+   */
+  children: _propTypes2.default.node,
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * @ignore
+   */
+  className: _propTypes2.default.string,
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  /**
+   * If `true`, compact vertical padding designed for keyboard and mouse input will be used for
+   * the list and list items. The property is available to descendant components as the
+   * `dense` context.
+   */
+  dense: _propTypes2.default.bool,
+  /**
+   * If `true`, vertical padding will be removed from the list.
+   */
+  disablePadding: _propTypes2.default.bool,
+  /**
+   * The content of the subheader, normally `ListSubheader`.
+   */
+  subheader: _propTypes2.default.node
+} : {};
+
+List.defaultProps = {
+  component: 'ul',
+  dense: false,
+  disablePadding: false
+};
+
+List.childContextTypes = {
+  dense: _propTypes2.default.bool
+};
+
+exports.default = (0, _withStyles2.default)(styles, { name: 'MuiList' })(List);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 326 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.cloneElementWithClassName = cloneElementWithClassName;
+exports.cloneChildrenWithClassName = cloneChildrenWithClassName;
+exports.isMuiElement = isMuiElement;
+exports.isMuiComponent = isMuiComponent;
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _classnames = __webpack_require__(35);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* eslint-disable import/prefer-default-export */
+
+function cloneElementWithClassName(child, className) {
+  return _react2.default.cloneElement(child, {
+    className: (0, _classnames2.default)(child.props.className, className)
+  });
+}
+
+function cloneChildrenWithClassName(children, className) {
+  return _react2.default.Children.map(children, function (child) {
+    return _react2.default.isValidElement(child) && cloneElementWithClassName(child, className);
+  });
+}
+
+function isMuiElement(element, muiNames) {
+  return _react2.default.isValidElement(element) && muiNames.indexOf(element.type.muiName) !== -1;
+}
+
+function isMuiComponent(element, muiNames) {
+  return muiNames.indexOf(element.muiName) !== -1;
+}
+
+/***/ }),
+/* 327 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styles = undefined;
+
+var _defineProperty2 = __webpack_require__(25);
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = __webpack_require__(35);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _warning = __webpack_require__(2);
+
+var _warning2 = _interopRequireDefault(_warning);
+
+var _withStyles = __webpack_require__(61);
+
+var _withStyles2 = _interopRequireDefault(_withStyles);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = exports.styles = function styles(theme) {
+  return {
+    root: {
+      width: 36,
+      height: 36,
+      fontSize: theme.typography.pxToRem(18),
+      marginRight: 4
+    },
+    icon: {
+      width: 20,
+      height: 20,
+      fontSize: theme.typography.pxToRem(20)
+    }
+  };
+};
+
+/**
+ * It's a simple wrapper to apply the `dense` mode styles to `Avatar`.
+ */
+function ListItemAvatar(props, context) {
+  var children = props.children,
+      classes = props.classes,
+      classNameProp = props.className,
+      other = (0, _objectWithoutProperties3.default)(props, ['children', 'classes', 'className']);
+
+
+  if (context.dense === undefined) {
+    process.env.NODE_ENV !== "production" ? (0, _warning2.default)(false, 'Material-UI: <ListItemAvatar> is a simple wrapper to apply the dense styles\n      to <Avatar>. You do not need it unless you are controlling the <List> dense property.') : void 0;
+    return props.children;
+  }
+
+  return _react2.default.cloneElement(children, (0, _extends3.default)({
+    className: (0, _classnames2.default)((0, _defineProperty3.default)({}, classes.root, context.dense), classNameProp, children.props.className),
+    childrenClassName: (0, _classnames2.default)((0, _defineProperty3.default)({}, classes.icon, context.dense), children.props.childrenClassName)
+  }, other));
+}
+
+ListItemAvatar.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * The content of the component, normally `Avatar`.
+   */
+  children: _propTypes2.default.element.isRequired,
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * @ignore
+   */
+  className: _propTypes2.default.string
+} : {};
+
+ListItemAvatar.contextTypes = {
+  dense: _propTypes2.default.bool
+};
+
+ListItemAvatar.muiName = 'ListItemAvatar';
+
+exports.default = (0, _withStyles2.default)(styles, { name: 'MuiListItemAvatar' })(ListItemAvatar);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 328 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styles = undefined;
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _defineProperty2 = __webpack_require__(25);
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = __webpack_require__(35);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _withStyles = __webpack_require__(61);
+
+var _withStyles2 = _interopRequireDefault(_withStyles);
+
+var _Typography = __webpack_require__(329);
+
+var _Typography2 = _interopRequireDefault(_Typography);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = exports.styles = function styles(theme) {
+  return {
+    root: {
+      flex: '1 1 auto',
+      minWidth: 0,
+      padding: '0 ' + theme.spacing.unit * 2 + 'px',
+      '&:first-child': {
+        paddingLeft: 0
+      }
+    },
+    inset: {
+      '&:first-child': {
+        paddingLeft: theme.spacing.unit * 7
+      }
+    },
+    dense: {
+      fontSize: theme.typography.pxToRem(13)
+    },
+    primary: {
+      '&$textDense': {
+        fontSize: 'inherit'
+      }
+    },
+    secondary: {
+      '&$textDense': {
+        fontSize: 'inherit'
+      }
+    },
+    textDense: {}
+  };
+};
+
+function ListItemText(props, context) {
+  var _classNames3;
+
+  var children = props.children,
+      classes = props.classes,
+      classNameProp = props.className,
+      disableTypography = props.disableTypography,
+      inset = props.inset,
+      primaryProp = props.primary,
+      secondaryProp = props.secondary,
+      other = (0, _objectWithoutProperties3.default)(props, ['children', 'classes', 'className', 'disableTypography', 'inset', 'primary', 'secondary']);
+  var dense = context.dense;
+
+
+  var primary = primaryProp || children;
+  if (primary && !disableTypography) {
+    primary = _react2.default.createElement(
+      _Typography2.default,
+      {
+        variant: 'subheading',
+        className: (0, _classnames2.default)(classes.primary, (0, _defineProperty3.default)({}, classes.textDense, dense))
+      },
+      primary
+    );
+  }
+
+  var secondary = secondaryProp;
+  if (secondary && !disableTypography) {
+    secondary = _react2.default.createElement(
+      _Typography2.default,
+      {
+        variant: 'body1',
+        className: (0, _classnames2.default)(classes.secondary, (0, _defineProperty3.default)({}, classes.textDense, dense)),
+        color: 'textSecondary'
+      },
+      secondary
+    );
+  }
+
+  return _react2.default.createElement(
+    'div',
+    (0, _extends3.default)({
+      className: (0, _classnames2.default)(classes.root, (_classNames3 = {}, (0, _defineProperty3.default)(_classNames3, classes.dense, dense), (0, _defineProperty3.default)(_classNames3, classes.inset, inset), _classNames3), classNameProp)
+    }, other),
+    primary,
+    secondary
+  );
+}
+
+ListItemText.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * Alias for the `primary` property.
+   */
+  children: _propTypes2.default.element,
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * @ignore
+   */
+  className: _propTypes2.default.string,
+  /**
+   * If `true`, the children won't be wrapped by a typography component.
+   * For instance, that can be useful to can render an h4 instead of a
+   */
+  disableTypography: _propTypes2.default.bool,
+  /**
+   * If `true`, the children will be indented.
+   * This should be used if there is no left avatar or left icon.
+   */
+  inset: _propTypes2.default.bool,
+  primary: _propTypes2.default.node,
+  secondary: _propTypes2.default.node
+} : {};
+
+ListItemText.defaultProps = {
+  disableTypography: false,
+  inset: false
+};
+
+ListItemText.contextTypes = {
+  dense: _propTypes2.default.bool
+};
+
+exports.default = (0, _withStyles2.default)(styles, { name: 'MuiListItemText' })(ListItemText);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 329 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Typography = __webpack_require__(330);
+
+Object.defineProperty(exports, 'default', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Typography).default;
+  }
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+/* 330 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styles = undefined;
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _defineProperty2 = __webpack_require__(25);
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = __webpack_require__(35);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _withStyles = __webpack_require__(61);
+
+var _withStyles2 = _interopRequireDefault(_withStyles);
+
+var _helpers = __webpack_require__(262);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = exports.styles = function styles(theme) {
+  return {
+    root: {
+      display: 'block',
+      margin: 0
+    },
+    display4: theme.typography.display4,
+    display3: theme.typography.display3,
+    display2: theme.typography.display2,
+    display1: theme.typography.display1,
+    headline: theme.typography.headline,
+    title: theme.typography.title,
+    subheading: theme.typography.subheading,
+    body2: theme.typography.body2,
+    body1: theme.typography.body1,
+    caption: theme.typography.caption,
+    button: theme.typography.button,
+    alignLeft: {
+      textAlign: 'left'
+    },
+    alignCenter: {
+      textAlign: 'center'
+    },
+    alignRight: {
+      textAlign: 'right'
+    },
+    alignJustify: {
+      textAlign: 'justify'
+    },
+    noWrap: {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap'
+    },
+    gutterBottom: {
+      marginBottom: '0.35em'
+    },
+    paragraph: {
+      marginBottom: theme.spacing.unit * 2
+    },
+    colorInherit: {
+      color: 'inherit'
+    },
+    colorPrimary: {
+      color: theme.palette.primary.main
+    },
+    colorSecondary: {
+      color: theme.palette.secondary.main
+    },
+    colorTextSecondary: {
+      color: theme.palette.text.secondary
+    },
+    colorError: {
+      color: theme.palette.error.main
+    }
+  };
+};
+
+function Typography(props) {
+  var _classNames;
+
+  var align = props.align,
+      classes = props.classes,
+      classNameProp = props.className,
+      componentProp = props.component,
+      color = props.color,
+      gutterBottom = props.gutterBottom,
+      headlineMapping = props.headlineMapping,
+      noWrap = props.noWrap,
+      paragraph = props.paragraph,
+      variant = props.variant,
+      other = (0, _objectWithoutProperties3.default)(props, ['align', 'classes', 'className', 'component', 'color', 'gutterBottom', 'headlineMapping', 'noWrap', 'paragraph', 'variant']);
+
+
+  var className = (0, _classnames2.default)(classes.root, classes[variant], (_classNames = {}, (0, _defineProperty3.default)(_classNames, classes['color' + (0, _helpers.capitalize)(color)], color !== 'default'), (0, _defineProperty3.default)(_classNames, classes.noWrap, noWrap), (0, _defineProperty3.default)(_classNames, classes.gutterBottom, gutterBottom), (0, _defineProperty3.default)(_classNames, classes.paragraph, paragraph), (0, _defineProperty3.default)(_classNames, classes['align' + (0, _helpers.capitalize)(align)], align !== 'inherit'), _classNames), classNameProp);
+
+  var Component = componentProp || (paragraph ? 'p' : headlineMapping[variant]) || 'span';
+
+  return _react2.default.createElement(Component, (0, _extends3.default)({ className: className }, other));
+}
+
+Typography.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * Set the text-align on the component.
+   */
+  align: _propTypes2.default.oneOf(['inherit', 'left', 'center', 'right', 'justify']),
+  /**
+   * The content of the component.
+   */
+  children: _propTypes2.default.node,
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * @ignore
+   */
+  className: _propTypes2.default.string,
+  /**
+   * The color of the component. It supports those theme colors that make sense for this component.
+   */
+  color: _propTypes2.default.oneOf(['inherit', 'primary', 'textSecondary', 'secondary', 'error', 'default']),
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   * By default, it maps the variant to a good default headline component.
+   */
+  component: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  /**
+   * If `true`, the text will have a bottom margin.
+   */
+  gutterBottom: _propTypes2.default.bool,
+  /**
+   * We are empirically mapping the variant property to a range of different DOM element types.
+   * For instance, h1 to h6. If you wish to change that mapping, you can provide your own.
+   * Alternatively, you can use the `component` property.
+   */
+  headlineMapping: _propTypes2.default.object,
+  /**
+   * If `true`, the text will not wrap, but instead will truncate with an ellipsis.
+   */
+  noWrap: _propTypes2.default.bool,
+  /**
+   * If `true`, the text will have a bottom margin.
+   */
+  paragraph: _propTypes2.default.bool,
+  /**
+   * Applies the theme typography styles.
+   */
+  variant: _propTypes2.default.oneOf(['display4', 'display3', 'display2', 'display1', 'headline', 'title', 'subheading', 'body2', 'body1', 'caption', 'button'])
+} : {};
+
+Typography.defaultProps = {
+  align: 'inherit',
+  color: 'default',
+  gutterBottom: false,
+  headlineMapping: {
+    display4: 'h1',
+    display3: 'h1',
+    display2: 'h1',
+    display1: 'h1',
+    headline: 'h1',
+    title: 'h2',
+    subheading: 'h3',
+    body2: 'aside',
+    body1: 'p'
+  },
+  noWrap: false,
+  paragraph: false,
+  variant: 'body1'
+};
+
+exports.default = (0, _withStyles2.default)(styles, { name: 'MuiTypography' })(Typography);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 331 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styles = undefined;
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = __webpack_require__(35);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _withStyles = __webpack_require__(61);
+
+var _withStyles2 = _interopRequireDefault(_withStyles);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = exports.styles = function styles(theme) {
+  return {
+    root: {
+      height: 24,
+      marginRight: theme.spacing.unit * 2,
+      width: 24,
+      color: theme.palette.action.active,
+      flexShrink: 0
+    }
+  };
+};
+
+/**
+ * A simple wrapper to apply `List` styles to an `Icon` or `SvgIcon`.
+ */
+function ListItemIcon(props) {
+  var children = props.children,
+      classes = props.classes,
+      classNameProp = props.className,
+      other = (0, _objectWithoutProperties3.default)(props, ['children', 'classes', 'className']);
+
+
+  return _react2.default.cloneElement(children, (0, _extends3.default)({
+    className: (0, _classnames2.default)(classes.root, classNameProp, children.props.className)
+  }, other));
+}
+
+ListItemIcon.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * The content of the component, normally `Icon`, `SvgIcon`,
+   * or a `material-ui-icons` SVG icon element.
+   */
+  children: _propTypes2.default.element.isRequired,
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * @ignore
+   */
+  className: _propTypes2.default.string
+} : {};
+
+exports.default = (0, _withStyles2.default)(styles, { name: 'MuiListItemIcon' })(ListItemIcon);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 332 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styles = undefined;
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = __webpack_require__(35);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _withStyles = __webpack_require__(61);
+
+var _withStyles2 = _interopRequireDefault(_withStyles);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = exports.styles = {
+  root: {
+    position: 'absolute',
+    right: 4,
+    top: '50%',
+    transform: 'translateY(-50%)'
+  }
+};
+
+function ListItemSecondaryAction(props) {
+  var children = props.children,
+      classes = props.classes,
+      className = props.className,
+      other = (0, _objectWithoutProperties3.default)(props, ['children', 'classes', 'className']);
+
+
+  return _react2.default.createElement(
+    'div',
+    (0, _extends3.default)({ className: (0, _classnames2.default)(classes.root, className) }, other),
+    children
+  );
+}
+
+ListItemSecondaryAction.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * The content of the component, normally an `IconButton` or selection control.
+   */
+  children: _propTypes2.default.node,
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * @ignore
+   */
+  className: _propTypes2.default.string
+} : {};
+
+ListItemSecondaryAction.muiName = 'ListItemSecondaryAction';
+
+exports.default = (0, _withStyles2.default)(styles, { name: 'MuiListItemSecondaryAction' })(ListItemSecondaryAction);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 333 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styles = undefined;
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _defineProperty2 = __webpack_require__(25);
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = __webpack_require__(35);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _withStyles = __webpack_require__(61);
+
+var _withStyles2 = _interopRequireDefault(_withStyles);
+
+var _helpers = __webpack_require__(262);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = exports.styles = function styles(theme) {
+  return {
+    root: theme.mixins.gutters({
+      boxSizing: 'border-box',
+      lineHeight: '48px',
+      listStyle: 'none',
+      color: theme.palette.text.secondary,
+      fontFamily: theme.typography.fontFamily,
+      fontWeight: theme.typography.fontWeightMedium,
+      fontSize: theme.typography.pxToRem(14)
+    }),
+    colorPrimary: {
+      color: theme.palette.primary.main
+    },
+    colorInherit: {
+      color: 'inherit'
+    },
+    inset: {
+      paddingLeft: theme.spacing.unit * 9
+    },
+    sticky: {
+      position: 'sticky',
+      top: 0,
+      zIndex: 1,
+      backgroundColor: 'inherit'
+    }
+  };
+};
+
+function ListSubheader(props) {
+  var _classNames;
+
+  var classes = props.classes,
+      className = props.className,
+      color = props.color,
+      Component = props.component,
+      disableSticky = props.disableSticky,
+      inset = props.inset,
+      other = (0, _objectWithoutProperties3.default)(props, ['classes', 'className', 'color', 'component', 'disableSticky', 'inset']);
+
+
+  return _react2.default.createElement(Component, (0, _extends3.default)({
+    className: (0, _classnames2.default)(classes.root, (_classNames = {}, (0, _defineProperty3.default)(_classNames, classes['color' + (0, _helpers.capitalize)(color)], color !== 'default'), (0, _defineProperty3.default)(_classNames, classes.inset, inset), (0, _defineProperty3.default)(_classNames, classes.sticky, !disableSticky), _classNames), className)
+  }, other));
+}
+
+ListSubheader.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * The content of the component.
+   */
+  children: _propTypes2.default.node,
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * @ignore
+   */
+  className: _propTypes2.default.string,
+  /**
+   * The color of the component. It supports those theme colors that make sense for this component.
+   */
+  color: _propTypes2.default.oneOf(['default', 'primary', 'inherit']),
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  /**
+   * If `true`, the List Subheader will not stick to the top during scroll.
+   */
+  disableSticky: _propTypes2.default.bool,
+  /**
+   * If `true`, the List Subheader will be indented.
+   */
+  inset: _propTypes2.default.bool
+} : {};
+
+ListSubheader.defaultProps = {
+  color: 'default',
+  component: 'li',
+  disableSticky: false,
+  inset: false
+};
+
+ListSubheader.muiName = 'ListSubheader';
+
+exports.default = (0, _withStyles2.default)(styles, { name: 'MuiListSubheader' })(ListSubheader);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 334 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.styles = undefined;
+
+var _defineProperty2 = __webpack_require__(25);
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _objectWithoutProperties2 = __webpack_require__(10);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _extends2 = __webpack_require__(11);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = __webpack_require__(35);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _withStyles = __webpack_require__(61);
+
+var _withStyles2 = _interopRequireDefault(_withStyles);
+
+var _ListItem = __webpack_require__(286);
+
+var _ListItem2 = _interopRequireDefault(_ListItem);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = exports.styles = function styles(theme) {
+  return {
+    root: (0, _extends3.default)({}, theme.typography.subheading, {
+      height: theme.spacing.unit * 3,
+      boxSizing: 'content-box',
+      width: 'auto',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      paddingLeft: theme.spacing.unit * 2,
+      paddingRight: theme.spacing.unit * 2,
+      '&$selected': {
+        backgroundColor: theme.palette.action.selected
+      }
+    }),
+    selected: {}
+  };
+}; // @inheritedComponent ListItem
+
+function MenuItem(props) {
+  var classes = props.classes,
+      className = props.className,
+      component = props.component,
+      selected = props.selected,
+      role = props.role,
+      other = (0, _objectWithoutProperties3.default)(props, ['classes', 'className', 'component', 'selected', 'role']);
+
+
+  return _react2.default.createElement(_ListItem2.default, (0, _extends3.default)({
+    button: true,
+    role: role,
+    tabIndex: -1,
+    className: (0, _classnames2.default)(classes.root, (0, _defineProperty3.default)({}, classes.selected, selected), className),
+    component: component
+  }, other));
+}
+
+MenuItem.propTypes = process.env.NODE_ENV !== "production" ? {
+  /**
+   * Menu item contents.
+   */
+  children: _propTypes2.default.node,
+  /**
+   * Useful to extend the style applied to components.
+   */
+  classes: _propTypes2.default.object.isRequired,
+  /**
+   * @ignore
+   */
+  className: _propTypes2.default.string,
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  /**
+   * @ignore
+   */
+  role: _propTypes2.default.string,
+  /**
+   * Use to apply selected styling.
+   */
+  selected: _propTypes2.default.bool
+} : {};
+
+MenuItem.defaultProps = {
+  component: 'li',
+  role: 'menuitem',
+  selected: false
+};
+
+exports.default = (0, _withStyles2.default)(styles, { name: 'MuiMenuItem' })(MenuItem);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ })
 /******/ ]);
