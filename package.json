@@ -9,25 +9,28 @@
   },
   "author": "abrochard",
   "dependencies": {
-    "file-loader": "^1.1.11",
     "lodash": "~4.17.4",
     "material-ui": "^1.0.0-beta.39",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-event-timeline": "^1.5.1",
+    "react-icons": "^2.2.7",
     "react-lazyload": "^2.3.0",
+    "react-mfb": "^0.6.0",
+    "react-vertical-timeline-component": "^2.0.5",
     "reactstrap": "~5.0.0-alpha.4"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-react": "^6.24.1",
-    "css-loader": "^0.28.9",
+    "css-loader": "^0.28.11",
     "express": "~4.16.2",
     "html-webpack-plugin": "^2.30.1",
-    "style-loader": "^0.20.2",
+    "node-sass": "^4.8.3",
+    "sass-loader": "^6.0.7",
+    "style-loader": "^0.20.3",
     "url-loader": "^0.6.2",
-    "webpack": "^3.10.0",
+    "webpack": "^3.11.0",
     "webpack-dev-server": "^2.11.1"
   }
 }
