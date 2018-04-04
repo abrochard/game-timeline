@@ -5,7 +5,7 @@ import LazyLoad, { forceCheck } from 'react-lazyload';
 import { Menu, MainButton, ChildButton } from 'react-mfb';
 import 'react-mfb/mfb.css';
 
-import GamesJSON from './games.json';
+import GamesJSON from '../games.json';
 
 import Game from './game.js';
 import { Shuffle, SortAlphaDesc, SortAlphaAsc, SortPlayedDateAsc, SortPlayedDateDesc } from './sort.js';

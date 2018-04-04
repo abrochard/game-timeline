@@ -1,13 +1,9 @@
-generate: generate.py
-	python generate.py
+build: clean node_modules
+	python generate.py && node node_modules/webpack/bin/webpack.js
 
-commit: game-timeline-data.js
-	git add covers/* game-timeline-data.js
-	git commit -m 'updating'
+node_modules:
+	npm install
 
 .PHONY: clean
 clean:
 	rm -f *.data.pickle
-
-.PHONY: all
-all: clean generate commit

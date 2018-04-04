@@ -110,7 +110,7 @@ def titleDiff(title, slug):
     lt = len(title.replace('-', ' ').replace("'", ' ').split(' '))
     ls = len(slug.split('-'))
     return ls - lt
-	
+
 def has_id(game):
     return game['igdbId'] != ''
 
@@ -135,12 +135,12 @@ def matchIGDB(games):
     for i in range(len(with_id)):
         with_id[i] = parseFields(with_id[i], data[i], IGDB_FIELDS)
         with_id[i] = setCover(with_id[i], data[i])
-		
+
     for i in range(len(without_id)):
         r = igdbSearch(without_id[i]['title'])
         without_id[i] = parseFields(without_id[i], r[0], IGDB_FIELDS)
         without_id[i] = setCover(without_id[i], r[0])
-	
+
     games = with_id + without_id
     for g in games:
         if titleDiff(g['title'], g['slug']) > 0:
@@ -202,9 +202,7 @@ def loadGames():
 
 def main():
     games = loadGames()
-    with open('game-timeline-data.js', 'w') as f:
-        f.write('var games = ')
+    with open('games.json', 'w') as f:
         f.write(json.dumps(games))
-        f.write(';')
 
 main()
