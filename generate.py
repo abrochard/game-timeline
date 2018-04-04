@@ -87,7 +87,7 @@ def getAllRecords(records=[], offset=''):
 
 def getGameCover(game):
     for cover in game['coverURL']:
-        dest='covers/'+cover['size']+'/'+game['slug']+'.jpg'
+        dest='public/covers/'+cover['size']+'/'+game['slug']+'.jpg'
         if os.path.isfile(dest) == False:
             call(["wget", cover['url'], "-O", dest])
     return True
