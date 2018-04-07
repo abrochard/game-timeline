@@ -80,8 +80,7 @@ class App extends Component {
   }
 
   shuffleGames() {
-    this.setState({games: Shuffle(this.state.games)});
-    forceCheck();
+    this.setState({games: Shuffle(this.state.games)}, () => {forceCheck();});
   }
 
   filterGames() {
