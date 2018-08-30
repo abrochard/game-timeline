@@ -12,7 +12,11 @@ generate: clean
 clean:
 	rm -f *.data.pickle
 
-.PHONY: up
-up: generate build
+.PHONY: commit
+commit:
 	git add games.json public/*
 	git status
+
+
+.PHONY: up
+up: generate build commit
