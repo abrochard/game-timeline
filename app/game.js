@@ -2,8 +2,8 @@ import React from 'react';
 import { VerticalTimelineElement }  from 'react-vertical-timeline-component';
 import UncheckBox from 'react-icons/lib/md/check-box-outline-blank';
 import CheckedBox from 'react-icons/lib/md/check-box';
-import Divider from 'material-ui/Divider';
-import Chip from 'material-ui/Chip';
+import Divider from '@material-ui/core/Divider';
+import Chip from '@material-ui/core/Chip';
 
 
 const Game = ({game}) => {
