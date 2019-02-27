@@ -119,13 +119,13 @@ def no_id(game):
 
 def split_chunks(l, n):
     chunks = []
-    for i in xrange(0, len(l), n):
+    for i in range(0, len(l), n):
         chunks.append(l[i:i+n])
     return chunks
 
 def matchIGDB(games):
-    with_id = filter(has_id, games)
-    without_id = filter(no_id, games)
+    with_id = list(filter(has_id, games))
+    without_id = list(filter(no_id, games))
 
     chunks = split_chunks(with_id, MAX_CHUNKS)
     data = []

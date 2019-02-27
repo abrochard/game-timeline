@@ -6,7 +6,7 @@ node_modules:
 
 .PHONY: generate
 generate: clean
-	python2 generate.py
+	python3 generate.py
 
 .PHONY: clean
 clean:
