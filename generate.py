@@ -1,7 +1,6 @@
 import requests
 import pickle
 import os.path
-import hashlib
 import urllib
 import json
 from subprocess import call
@@ -16,10 +15,9 @@ import private
 IGDB_FIELDS = {'igdbId'     :['id'],
                'slug'       :['slug'],
                'igdbName'   :['name'],
-               'summary'    :['summary'],
+               'cover'      :['cover'],
                'url'        :['url'],
-               'rating'     :['aggregated_rating'],
-               'developers' :['developers']}
+               'rating'     :['aggregated_rating']}
 
 AIRTABLE_FIELDS = {'airtableId' :['id'],
                    'title'      :['fields', 'Title'],
@@ -32,7 +30,21 @@ AIRTABLE_FIELDS = {'airtableId' :['id'],
 IGDB_COVERS_BASE = 'https://images.igdb.com/igdb/image/upload/'
 IGDB_COVERS_SIZES = ['cover_big', 'cover_small']
 
-MAX_CHUNKS = 50
+MAX_CHUNKS = 10
+
+def igdb_get_games(ids):
+	url= private.IGDB['HOST'] + '/games'
+	query = 'fields id,slug,name,cover,url,aggregated_rating; where id=({});'.format(','.join(ids))
+	headers = {'user-key': private.IGDB['KEY'],'Accept': 'application/json'}
+	r = requests.post(url, headers=headers, data=query)
+	return r.json()
+	
+def igdb_get_covers_url(ids):
+	url=private.IGDB['HOST'] + '/covers'
+	query = 'fields id,game,url; where id=({});'.format(','.join(ids))
+	headers = {'user-key': private.IGDB['KEY'],'Accept': 'application/json'}
+	r = requests.post(url, headers=headers, data=query)
+	return r.json()
 
 def parseFields(game, data, fields):
     for key in fields:
@@ -50,29 +62,7 @@ def parseFields(game, data, fields):
             game[key] = x
     return game
 
-def setCover(game, data):
-    if 'cover' in data:
-        h=data['cover']['cloudinary_id']
-        url=data['cover']['url']
-        game['cloudHash']=h
-        game['coverURL']=[]
-        for size in IGDB_COVERS_SIZES:
-            #game['coverURL'].append({'size': size, 'url': IGDB_COVERS_BASE + 't_' + size + '/' + h + '.jpg'})
-            game['coverURL'].append({'size': size, 'url': 'https:' + url.replace('t_thumb', 't_' + size)})
-    else:
-        game['cloudHash']=''
-        game['coverURL']=[]
-    return game
-
-def igdbSearch(title):
-    title = title.replace(' ', '+')
-    url = private.IGDB['HOST'] + '?fields=*&limit=1&search=' + title
-    headers = {'user-key': private.IGDB['KEY'],
-               'Accept': 'application/json'}
-    r = requests.get(url, headers=headers)
-    return r.json()
-
-def getAllRecords(records=[], offset=''):
+def airtable_get_all_records(records=[], offset=''):
     url=private.AIRTABLE['HOST']
     if offset != '':
         url += '&offset='+offset
@@ -81,41 +71,34 @@ def getAllRecords(records=[], offset=''):
     response=r.json()
     records+=response['records']
     if 'offset' in response:
-        return getAllRecords(records, response['offset'])
+        return airtable_get_all_records(records, response['offset'])
     else:
         return records
 
-def getGameCover(game):
-    for cover in game['coverURL']:
-        dest='public/covers/'+cover['size']+'/'+game['slug']+'.jpg'
+def download_cover(game, dest, size):
+    data = igdb_get_covers_url([str(game['cover'])])
+    url = 'https:' + data[0]['url'].replace('t_thumb', 't_'+size)
+    call(["wget", url, "-O", dest])
+
+def check_cover(game):
+    for size in IGDB_COVERS_SIZES:
+        dest='public/covers/'+size+'/'+game['slug']+'.jpg'
         if os.path.isfile(dest) == False:
-            call(["wget", cover['url'], "-O", dest])
+            download_cover(game, dest, size)
     return True
+    
+def get_covers(games):
+    for g in games:
+        check_cover(g)
+    return games
 
-def md5(fname):
-    hash_md5 = hashlib.md5()
-    with open(fname, "rb") as f:
-        for chunk in iter(lambda: f.read(4096), b""):
-            hash_md5.update(chunk)
-    return hash_md5.hexdigest()
-
-def parseRecords(records):
+def parse_records(records):
     games = []
     for r in records:
         game = parseFields({}, r, AIRTABLE_FIELDS)
         games.append(game)
     return games
 
-def titleDiff(title, slug):
-    lt = len(title.replace('-', ' ').replace("'", ' ').split(' '))
-    ls = len(slug.split('-'))
-    return ls - lt
-
-def has_id(game):
-    return game['igdbId'] != ''
-
-def no_id(game):
-    return game['igdbId'] == ''
 
 def split_chunks(l, n):
     chunks = []
@@ -123,75 +106,44 @@ def split_chunks(l, n):
         chunks.append(l[i:i+n])
     return chunks
 
-def matchIGDB(games):
-    with_id = list(filter(has_id, games))
-    without_id = list(filter(no_id, games))
-
-    chunks = split_chunks(with_id, MAX_CHUNKS)
+def load_from_igdb(games):
+    chunks = split_chunks(games, MAX_CHUNKS)
     data = []
     for chunk in chunks:
-        data = data + getGameData(chunk)
-
-    for i in range(len(with_id)):
-        with_id[i] = parseFields(with_id[i], data[i], IGDB_FIELDS)
-        with_id[i] = setCover(with_id[i], data[i])
-
-    for i in range(len(without_id)):
-        r = igdbSearch(without_id[i]['title'])
-        without_id[i] = parseFields(without_id[i], r[0], IGDB_FIELDS)
-        without_id[i] = setCover(without_id[i], r[0])
-
-    games = with_id + without_id
-    for g in games:
-        if titleDiff(g['title'], g['slug']) > 0:
-            print(g['title'], g['slug'])
-
+        data = data + igdb_get_games(map(lambda g: str(g['igdbId']), chunk))
+      
+    dict = {d['id']:d for d in data}
+     
+    for i,g in enumerate(games):
+        id = g['igdbId']
+        if id not in dict:
+            print('Error: unmatched game')
+        else:
+            games[i] = parseFields(g, dict[id], IGDB_FIELDS)
+        
     return games
 
-def getGameData(games):
-    url= private.IGDB['HOST']
-    for g in games:
-        url += str(g['igdbId']) + ','
-    url = url[:-1] # remove final char
-    url += '?fields=*'
-    headers = {'user-key': private.IGDB['KEY'],
-               'Accept': 'application/json'}
-    r = requests.get(url, headers=headers)
-    return r.json()
-
-def loadRecords():
+def load_from_airtable():
     print('Loading records')
     if os.path.isfile('airtable.data.pickle'):
         with open('airtable.data.pickle', 'rb') as f:
             records = pickle.load(f)
     else:
-        records=getAllRecords()
+        records=parse_records(airtable_get_all_records())
         with open('airtable.data.pickle', 'wb') as f:
             pickle.dump(records, f, pickle.HIGHEST_PROTOCOL)
     print('Records loaded')
     return records
 
-def loadGames():
+def load_games():
     print('Loading games')
     if os.path.isfile('games.data.pickle'):
         with open('games.data.pickle', 'rb') as f:
             games = pickle.load(f)
-        print('Games loaded')
+        print('Games loaded from disk')
         return games
-
-    if not os.path.exists('covers/'):
-        os.makedirs('covers/')
-    for size in IGDB_COVERS_SIZES:
-        if not os.path.exists('covers/'+size):
-            os.makedirs('covers/'+size)
-
-    records=loadRecords()
-    games=parseRecords(records)
-    games = matchIGDB(games)
-
-    for i in range(len(games)):
-        #games[i]=matchIGDB(games[i])
-        getGameCover(games[i])
+    
+    games = get_covers(load_from_igdb(load_from_airtable()))
 
     with open('games.data.pickle', 'wb') as f:
         pickle.dump(games, f, pickle.HIGHEST_PROTOCOL)
@@ -199,10 +151,17 @@ def loadGames():
     print('Games loaded')
     return games
 
+def setup_folders():
+    if not os.path.exists('public/covers/'):
+        os.makedirs('public/covers/')
+    for size in IGDB_COVERS_SIZES:
+        if not os.path.exists('public/covers/'+size):
+            os.makedirs('public/covers/'+size)
+			
 
 def main():
-    games = loadGames()
+    setup_folders()
     with open('games.json', 'w') as f:
-        f.write(json.dumps(games))
+        f.write(json.dumps(load_games()))
 
 main()
