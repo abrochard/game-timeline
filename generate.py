@@ -6,11 +6,8 @@ import json
 from subprocess import call
 
 import private
-# IGDB = {'KEY': 'XXXXXXXXXXXXXXXXXXXXXXXXXX',
-#         'HOST': 'https://igdbcom-internet-game-database-v1.p.mashape.com/games/'}
-
-# AIRTABLE = {'KEY': 'XXXXXXXXXXXXXXXXXXXXXXXXX',
-#             'HOST': 'https://api.airtable.com/v0/XXXXXXXXXXXXXXXXXXXXX'}
+# IGBD[CLIENTID,SECRET,HOST]
+# AIRTABLE[KEY,HOST,HOST2]
 
 IGDB_FIELDS = {'igdbId'     :['id'],
                'slug'       :['slug'],
@@ -32,17 +29,30 @@ IGDB_COVERS_SIZES = ['cover_big', 'cover_small']
 
 MAX_CHUNKS = 10
 
+igdb_auth = None
+
+def igdb_login():
+	global igdb_auth
+	r = requests.post('https://id.twitch.tv/oauth2/token?client_id={}&client_secret={}&grant_type=client_credentials'.format(private.IGDB['CLIENTID'], private.IGDB['SECRET']))
+	igdb_auth = r.json()['access_token']
+	
+def igdb_headers():
+	global igdb_auth
+	if not igdb_auth:
+		igdb_login()
+	return {'Client-ID': private.IGDB['CLIENTID'], 'Authorization': 'Bearer {}'.format(igdb_auth)}
+
 def igdb_get_games(ids):
 	url= private.IGDB['HOST'] + '/games'
 	query = 'fields id,slug,name,cover,url,aggregated_rating; where id=({});'.format(','.join(ids))
-	headers = {'user-key': private.IGDB['KEY'],'Accept': 'application/json'}
+	headers = igdb_headers()
 	r = requests.post(url, headers=headers, data=query)
 	return r.json()
 	
 def igdb_get_covers_url(ids):
 	url=private.IGDB['HOST'] + '/covers'
 	query = 'fields id,game,url; where id=({});'.format(','.join(ids))
-	headers = {'user-key': private.IGDB['KEY'],'Accept': 'application/json'}
+	headers = igdb_headers()
 	r = requests.post(url, headers=headers, data=query)
 	return r.json()
 
@@ -82,6 +92,9 @@ def download_cover(game, dest, size):
 
 def check_cover(game):
     for size in IGDB_COVERS_SIZES:
+        if 'slug' not in game:
+            print('Game {} has no slug? Skipping'.format(game['title']))
+            continue
         dest='public/covers/'+size+'/'+game['slug']+'.jpg'
         if os.path.isfile(dest) == False:
             download_cover(game, dest, size)
