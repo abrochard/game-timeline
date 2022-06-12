@@ -4,6 +4,7 @@ import os.path
 import urllib
 import json
 from subprocess import call
+from PIL import Image 
 
 import private
 # IGBD[CLIENTID,SECRET,HOST]
@@ -90,13 +91,18 @@ def download_cover(game, dest, size):
     url = 'https:' + data[0]['url'].replace('t_thumb', 't_'+size)
     call(["wget", url, "-O", dest])
 
+def small_cover(dest):
+    return False
+    img = Image.open(dest)
+    return img.height <= img.width
+
 def check_cover(game):
     for size in IGDB_COVERS_SIZES:
         if 'slug' not in game:
             print('Game {} has no slug? Skipping'.format(game['title']))
             continue
         dest='public/covers/'+size+'/'+game['slug']+'.jpg'
-        if os.path.isfile(dest) == False:
+        if os.path.isfile(dest) == False or small_cover(dest):
             download_cover(game, dest, size)
     return True
     

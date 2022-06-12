@@ -16,7 +16,16 @@ clean:
 commit:
 	git add games.json public/*
 	git status
+	git commit -m 'updating'
 
+
+.PHONY: push
+push:
+	git push
+
+.PHONY: pull
+pull:
+	git pull
 
 .PHONY: up
-up: generate build commit
+up: pull generate build commit push
