@@ -14,13 +14,20 @@ const Game = ({game}) => {
 
   var chips = [];
 
+  chips.push(<p />);
+
   if (game.support.length > 0) {
     chips.push(<Chip key="support" label={game.support[0]}/>);
   }
+
   if (game.genre != '') {
+	chips.push(<div style={{height: '5px'}}></div>);
     chips.push(<Divider key="divider"/>);
+	chips.push(<div style={{height: '5px'}}></div>);
     chips.push(<Chip key="genre" label={game.genre}/>);
   }
+
+  chips.push(<p />);
 
   return (
     <VerticalTimelineElement
