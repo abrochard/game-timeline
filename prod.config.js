@@ -1,11 +1,10 @@
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require("terser-webpack-plugin");
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.config.js');
 
 module.exports = merge(baseConfig, {
-  plugins: [
-    new UglifyJsPlugin({
-      test: /\.js($|\?)/i
-    })
-  ]
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+  },
 });
