@@ -1,11 +1,11 @@
 module.exports = {
   entry: __dirname + '/app/index.js',
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader'
+        use: 'babel-loader'
       },
       {
         test: /\.css$/,
@@ -13,7 +13,7 @@ module.exports = {
       },
       {
         test: /\.(png|gif|woff|woff2|eot|ttf|svg)$/,
-        loader: 'url-loader?limit=100000'
+        use: 'url-loader?limit=100000'
       },
       {
         test: /\.scss$/,
