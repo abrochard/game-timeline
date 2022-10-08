@@ -29,6 +29,7 @@ IGDB_COVERS_BASE = 'https://images.igdb.com/igdb/image/upload/'
 IGDB_COVERS_SIZES = ['cover_big', 'cover_small']
 
 MAX_CHUNKS = 10
+FORCE_COVER_DOWNLOAD = False
 
 igdb_auth = None
 
@@ -95,14 +96,14 @@ def small_cover(dest):
     return False
     img = Image.open(dest)
     return img.height <= img.width
-
+	
 def check_cover(game):
     for size in IGDB_COVERS_SIZES:
         if 'slug' not in game:
             print('Game {} has no slug? Skipping'.format(game['title']))
             continue
         dest='public/covers/'+size+'/'+game['slug']+'.jpg'
-        if os.path.isfile(dest) == False or small_cover(dest):
+        if os.path.isfile(dest) == False or small_cover(dest) or FORCE_COVER_DOWNLOAD:
             download_cover(game, dest, size)
     return True
     
