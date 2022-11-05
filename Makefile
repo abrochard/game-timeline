@@ -1,5 +1,6 @@
 build: node_modules
 	node node_modules/webpack/bin/webpack.js --config prod.config.js
+	rm -f public/index.js.LICENSE.txt
 
 node_modules:
 	npm install

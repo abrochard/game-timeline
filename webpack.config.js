@@ -1,4 +1,5 @@
 module.exports = {
+  mode: 'development',
   entry: __dirname + '/app/index.js',
   module: {
     rules: [
@@ -30,5 +31,8 @@ module.exports = {
   output: {
     filename: 'index.js',
     path: __dirname + '/public'
+  },
+  performance: {
+    hints: false
   }
 };
