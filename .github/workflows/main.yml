@@ -7,12 +7,10 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "Log level: $LEVEL"
-          echo "Tags: $TAGS"
-          echo "Environment: $ENVIRONMENT"
-        env:
-          LEVEL: ${{ inputs.logLevel }}
-          TAGS: ${{ inputs.tags }}
-          ENVIRONMENT: ${{ inputs.environment }}
-  
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4.6.0
+        with:
+          python-version: '3.10'
+      - run: ls -l
+      - run: python -v
