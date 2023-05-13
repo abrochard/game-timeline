@@ -4,11 +4,43 @@ import os.path
 import urllib
 import json
 from subprocess import call
-from PIL import Image 
+# from PIL import Image
 
-import private
 # IGBD[CLIENTID,SECRET,HOST]
 # AIRTABLE[KEY,HOST,HOST2]
+
+class Config():
+        def __init__(self):
+                self.secret_file = {}
+                with open('.env', 'r') as f:
+                    self.secret_file = json.load(f)
+                self.IGDB = {
+                        'CLIENTID': self._read_value('IGDB_CLIENTID', self.secret_file, None),
+                        'SECRET': self._read_value('IGDB_SECRET', self.secret_file, None),
+                        'HOST': self._read_value('IGDB_HOST', self.secret_file, 'https://api.igdb.com/v4'), # TODO
+                }
+                self.AIRTABLE = {
+                        'HOST': self._read_value('AIRTABLE_HOST', self.secret_file, None),
+                        'KEY': self._read_value('AIRTABLE_KEY', self.secret_file, None)
+                }
+
+        def _read_value(self, key, secrets, default):
+                # check env var first
+            v = os.getenv(key)
+            if v is not None:
+                return v
+
+            # check secrets file next
+            if key in secrets:
+                return secrets[key]
+
+            # if all failed
+            if default is None:
+                raise Exception(f'Missing required value {key}')
+            return default
+
+private = Config()
+
 
 IGDB_FIELDS = {'igdbId'     :['id'],
                'slug'       :['slug'],
@@ -37,7 +69,7 @@ def igdb_login():
 	global igdb_auth
 	r = requests.post('https://id.twitch.tv/oauth2/token?client_id={}&client_secret={}&grant_type=client_credentials'.format(private.IGDB['CLIENTID'], private.IGDB['SECRET']))
 	igdb_auth = r.json()['access_token']
-	
+
 def igdb_headers():
 	global igdb_auth
 	if not igdb_auth:
@@ -50,7 +82,7 @@ def igdb_get_games(ids):
 	headers = igdb_headers()
 	r = requests.post(url, headers=headers, data=query)
 	return r.json()
-	
+
 def igdb_get_covers_url(ids):
 	url=private.IGDB['HOST'] + '/covers'
 	query = 'fields id,game,url; where id=({});'.format(','.join(ids))
@@ -77,10 +109,12 @@ def parseFields(game, data, fields):
 def airtable_get_all_records(records=[], offset=''):
     url=private.AIRTABLE['HOST']
     if offset != '':
-        url += '&offset='+offset
+        url += '?offset='+offset
     headers={"Authorization": "Bearer "+private.AIRTABLE['KEY']}
     r=requests.get(url, headers=headers)
     response=r.json()
+    if 'records' not in response:
+            print(response)
     records+=response['records']
     if 'offset' in response:
         return airtable_get_all_records(records, response['offset'])
@@ -94,9 +128,9 @@ def download_cover(game, dest, size):
 
 def small_cover(dest):
     return False
-    img = Image.open(dest)
-    return img.height <= img.width
-	
+    # img = Image.open(dest)
+    # return img.height <= img.width
+
 def check_cover(game):
     for size in IGDB_COVERS_SIZES:
         if 'slug' not in game:
@@ -106,7 +140,7 @@ def check_cover(game):
         if os.path.isfile(dest) == False or small_cover(dest) or FORCE_COVER_DOWNLOAD:
             download_cover(game, dest, size)
     return True
-    
+
 def get_covers(games):
     for g in games:
         check_cover(g)
@@ -131,16 +165,16 @@ def load_from_igdb(games):
     data = []
     for chunk in chunks:
         data = data + igdb_get_games(map(lambda g: str(g['igdbId']), chunk))
-      
+
     dict = {d['id']:d for d in data}
-     
+
     for i,g in enumerate(games):
         id = g['igdbId']
         if id not in dict:
             print('Error: unmatched game')
         else:
             games[i] = parseFields(g, dict[id], IGDB_FIELDS)
-        
+
     return games
 
 def load_from_airtable():
@@ -162,7 +196,7 @@ def load_games():
             games = pickle.load(f)
         print('Games loaded from disk')
         return games
-    
+
     games = get_covers(load_from_igdb(load_from_airtable()))
 
     with open('games.data.pickle', 'wb') as f:
@@ -177,7 +211,7 @@ def setup_folders():
     for size in IGDB_COVERS_SIZES:
         if not os.path.exists('public/covers/'+size):
             os.makedirs('public/covers/'+size)
-			
+
 
 def main():
     setup_folders()
