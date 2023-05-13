@@ -12,8 +12,9 @@ from subprocess import call
 class Config():
         def __init__(self):
                 self.secret_file = {}
-                with open('.env', 'r') as f:
-                    self.secret_file = json.load(f)
+                if os.path.exists('.env'):
+                        with open('.env', 'r') as f:
+                                self.secret_file = json.load(f)
                 self.IGDB = {
                         'CLIENTID': self._read_value('IGDB_CLIENTID', self.secret_file, None),
                         'SECRET': self._read_value('IGDB_SECRET', self.secret_file, None),
