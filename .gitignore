@@ -8,3 +8,5 @@
 /node_modules
 /bower_components
 /public/index.js.LICENSE.txt
+/.env
+/test.py
