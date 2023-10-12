@@ -2,7 +2,7 @@ name: generate-and-push
 run-name: Fetched latest airtable data, run generate, push results
 on:
   workflow_dispatch:
-  
+
 jobs:
   generate:
     runs-on: ubuntu-latest
@@ -25,6 +25,6 @@ jobs:
         run: |
           git config --global user.name "Github Action"
           git config --global user.email "abrochard@users.noreply.github.com"
-          git add games.json public/* 
+          git add src/lib/games.json build/*
           git commit -m 'updating'
           git push

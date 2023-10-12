@@ -1,6 +1,5 @@
 build: node_modules
-	node node_modules/webpack/bin/webpack.js --config prod.config.js
-	rm -f public/index.js.LICENSE.txt
+	npm run build
 
 node_modules:
 	npm install
@@ -15,7 +14,7 @@ clean:
 
 .PHONY: commit
 commit:
-	git add games.json public/*
+	git add src/lib/games.json build/*
 	git status
 	git commit -m 'updating'
 

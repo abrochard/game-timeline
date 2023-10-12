@@ -59,7 +59,7 @@ AIRTABLE_FIELDS = {'airtableId' :['id'],
                    'igdbId'     :['fields', 'IGDB ID']}
 
 IGDB_COVERS_BASE = 'https://images.igdb.com/igdb/image/upload/'
-IGDB_COVERS_SIZES = ['cover_big', 'cover_small']
+IGDB_COVERS_SIZES = ['cover_big']
 
 MAX_CHUNKS = 10
 FORCE_COVER_DOWNLOAD = False
@@ -207,16 +207,16 @@ def load_games():
     return games
 
 def setup_folders():
-    if not os.path.exists('public/covers/'):
-        os.makedirs('public/covers/')
+    if not os.path.exists('static/covers/'):
+        os.makedirs('static/covers/')
     for size in IGDB_COVERS_SIZES:
-        if not os.path.exists('public/covers/'+size):
-            os.makedirs('public/covers/'+size)
+        if not os.path.exists('static/covers/'+size):
+            os.makedirs('static/covers/'+size)
 
 
 def main():
     setup_folders()
-    with open('games.json', 'w') as f:
-        f.write(json.dumps(load_games()))
+    with open('src/lib/games.json', 'w') as f:
+        f.write(json.dumps(load_games(), indent=2))
 
 main()
