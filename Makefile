@@ -14,7 +14,7 @@ clean:
 
 .PHONY: commit
 commit:
-	git add src/lib/games.json build/*
+	git add src/lib/games.json
 	git status
 	git commit -m 'updating'
 
