@@ -2915,6 +2915,24 @@
     "rating": 88.8
   },
   {
+    "airtableId": "recINcF3s2H64RlMn",
+    "title": "AshenForest",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Roguelike"
+    ],
+    "date": "2023-10-13",
+    "completed": true,
+    "igdbId": 124236,
+    "slug": "ashenforest",
+    "igdbName": "AshenForest",
+    "cover": 125454,
+    "url": "https://www.igdb.com/games/ashenforest",
+    "rating": ""
+  },
+  {
     "airtableId": "recINfdiPZNnrchGc",
     "title": "Dust An Elysian Tail",
     "support": [
@@ -3723,7 +3741,7 @@
     "completed": "",
     "igdbId": 212,
     "slug": "brutal-legend",
-    "igdbName": "Brütal Legend",
+    "igdbName": "Br\u00fctal Legend",
     "cover": 102824,
     "url": "https://www.igdb.com/games/brutal-legend",
     "rating": 80.33333333333333
@@ -4083,7 +4101,7 @@
   },
   {
     "airtableId": "recNOZuhHaNCo1yG9",
-    "title": "ABZÛ",
+    "title": "ABZ\u00db",
     "support": [
       "PC"
     ],
@@ -4259,7 +4277,11 @@
     "date": "2020-06-18",
     "completed": true,
     "igdbId": 262420,
-    "url": "https://www.igdb.com/games/star-of-providence"
+    "slug": "star-of-providence",
+    "igdbName": "Star of Providence",
+    "cover": 325007,
+    "url": "https://www.igdb.com/games/star-of-providence",
+    "rating": 90.0
   },
   {
     "airtableId": "recOKms578kJ1LdLe",
@@ -6566,7 +6588,7 @@
     "completed": true,
     "igdbId": 1559,
     "slug": "pokemon-firered-version",
-    "igdbName": "Pokémon FireRed Version",
+    "igdbName": "Pok\u00e9mon FireRed Version",
     "cover": 92690,
     "url": "https://www.igdb.com/games/pokemon-firered-version",
     "rating": ""
@@ -10148,7 +10170,7 @@
     "completed": true,
     "igdbId": 1517,
     "slug": "pokemon-emerald-version",
-    "igdbName": "Pokémon Emerald Version",
+    "igdbName": "Pok\u00e9mon Emerald Version",
     "cover": 92655,
     "url": "https://www.igdb.com/games/pokemon-emerald-version",
     "rating": 60.0
@@ -11089,10 +11111,10 @@
     "date": "",
     "completed": true,
     "igdbId": 6591,
-    "slug": "shaman-king-master-of-spirits-2",
-    "igdbName": "Shaman King: Master of Spirits 2",
+    "slug": "shonen-jumps-shaman-king-master-of-spirits-2",
+    "igdbName": "Shonen Jump's Shaman King: Master of Spirits 2",
     "cover": 306815,
-    "url": "https://www.igdb.com/games/shaman-king-master-of-spirits-2",
+    "url": "https://www.igdb.com/games/shonen-jumps-shaman-king-master-of-spirits-2",
     "rating": 81.0
   },
   {
