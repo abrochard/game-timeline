@@ -137,7 +137,7 @@ def check_cover(game):
         if 'slug' not in game:
             print('Game {} has no slug? Skipping'.format(game['title']))
             continue
-        dest='public/covers/'+size+'/'+game['slug']+'.jpg'
+        dest='static/covers/'+size+'/'+game['slug']+'.jpg'
         if os.path.isfile(dest) == False or small_cover(dest) or FORCE_COVER_DOWNLOAD:
             download_cover(game, dest, size)
     return True
