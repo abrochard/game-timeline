@@ -10723,6 +10723,22 @@
     "rating": 86.25
   },
   {
+    "airtableId": "recxK9oP7kzzNImfO",
+    "title": "Gone Home",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2023-10-14",
+    "completed": true,
+    "igdbId": 1906,
+    "slug": "gone-home",
+    "igdbName": "Gone Home",
+    "cover": 11115,
+    "url": "https://www.igdb.com/games/gone-home",
+    "rating": 73.8
+  },
+  {
     "airtableId": "recxNjYFfaKfBnEXA",
     "title": "The Room: Old Sins",
     "support": [
