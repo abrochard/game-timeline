@@ -4919,6 +4919,24 @@
     "rating": 100.0
   },
   {
+    "airtableId": "recRHOMb39orboHq3",
+    "title": "Dancing Duelists",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Deckbuilding"
+    ],
+    "date": "2023-10-21",
+    "completed": true,
+    "igdbId": 272470,
+    "slug": "dancing-duelists",
+    "igdbName": "Dancing Duelists",
+    "cover": 339163,
+    "url": "https://www.igdb.com/games/dancing-duelists",
+    "rating": ""
+  },
+  {
     "airtableId": "recRO1KYeEgPGQ17f",
     "title": "Ape Out",
     "support": [
