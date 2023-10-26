@@ -4707,6 +4707,24 @@
     "rating": 65.0
   },
   {
+    "airtableId": "recQXHclzf1AjpKxJ",
+    "title": "Shadow Blade: Reload",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "2D platform"
+    ],
+    "date": "2023-10-26",
+    "completed": true,
+    "igdbId": 16953,
+    "slug": "shadow-blade-reload",
+    "igdbName": "Shadow Blade: Reload",
+    "cover": 95955,
+    "url": "https://www.igdb.com/games/shadow-blade-reload",
+    "rating": 69.33333333333333
+  },
+  {
     "airtableId": "recQbjEVAmSqP8YX9",
     "title": "Iris and the Giant",
     "support": [
