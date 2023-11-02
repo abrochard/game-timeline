@@ -3313,7 +3313,7 @@
     "igdbId": 541,
     "slug": "ridge-racer-unbounded",
     "igdbName": "Ridge Racer Unbounded",
-    "cover": 181844,
+    "cover": 340411,
     "url": "https://www.igdb.com/games/ridge-racer-unbounded",
     "rating": 75.8
   },
@@ -8529,6 +8529,24 @@
     "cover": 116666,
     "url": "https://www.igdb.com/games/prince-of-persia-the-forgotten-sands",
     "rating": 80.8
+  },
+  {
+    "airtableId": "reckJy6MherwF9VHI",
+    "title": "Castlevania: Lords of Shadow - Mirror of Fate HD",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Metroidvania"
+    ],
+    "date": "2023-11-02",
+    "completed": true,
+    "igdbId": 9715,
+    "slug": "castlevania-lords-of-shadow-mirror-of-fate-hd",
+    "igdbName": "Castlevania: Lords of Shadow - Mirror of Fate HD",
+    "cover": 112118,
+    "url": "https://www.igdb.com/games/castlevania-lords-of-shadow-mirror-of-fate-hd",
+    "rating": 80.0
   },
   {
     "airtableId": "reckOFqRtxyORl2ir",
