@@ -9106,6 +9106,24 @@
     "rating": ""
   },
   {
+    "airtableId": "recnVQrPwxZhJSsqI",
+    "title": "Inmost",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "2D platform"
+    ],
+    "date": "2023-11-10",
+    "completed": true,
+    "igdbId": 107187,
+    "slug": "inmost",
+    "igdbName": "Inmost",
+    "cover": 116480,
+    "url": "https://www.igdb.com/games/inmost",
+    "rating": 80.0
+  },
+  {
     "airtableId": "recnVkAHY3LOGvf7e",
     "title": "Last Arrows",
     "support": [
