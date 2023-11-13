@@ -4284,6 +4284,24 @@
     "rating": 90.0
   },
   {
+    "airtableId": "recOG5dmEc5lsg4qB",
+    "title": "Carto",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2023-11-12",
+    "completed": true,
+    "igdbId": 101448,
+    "slug": "carto",
+    "igdbName": "Carto",
+    "cover": 119774,
+    "url": "https://www.igdb.com/games/carto",
+    "rating": 82.5
+  },
+  {
     "airtableId": "recOKms578kJ1LdLe",
     "title": "Marvel's Spider-Man: Miles Morales",
     "support": [
