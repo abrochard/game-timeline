@@ -10370,6 +10370,24 @@
     "rating": 79.42857142857143
   },
   {
+    "airtableId": "recuGwM6vMKFXy6zx",
+    "title": "Windjammers 2",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Vs. Fighting"
+    ],
+    "date": "2023-11-14",
+    "completed": true,
+    "igdbId": 107203,
+    "slug": "windjammers-2",
+    "igdbName": "Windjammers 2",
+    "cover": 129454,
+    "url": "https://www.igdb.com/games/windjammers-2",
+    "rating": 77.57142857142857
+  },
+  {
     "airtableId": "recuKOkXUq78Rum6I",
     "title": "Please, Don't Touch Anything",
     "support": [
