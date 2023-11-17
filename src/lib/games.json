@@ -236,6 +236,24 @@
     "rating": 79.36363636363636
   },
   {
+    "airtableId": "rec0wDWDCSvsKJDMj",
+    "title": "Psychonauts 2",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "3D platform"
+    ],
+    "date": "2023-11-17",
+    "completed": true,
+    "igdbId": 14741,
+    "slug": "psychonauts-2",
+    "igdbName": "Psychonauts 2",
+    "cover": 83821,
+    "url": "https://www.igdb.com/games/psychonauts-2",
+    "rating": 87.11111111111111
+  },
+  {
     "airtableId": "rec12HkUvbnLnmtDJ",
     "title": "Castlevania",
     "support": [
