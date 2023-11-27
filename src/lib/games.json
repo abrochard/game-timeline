@@ -3899,7 +3899,7 @@
     "igdbId": 3070,
     "slug": "euro-truck-simulator-2",
     "igdbName": "Euro Truck Simulator 2",
-    "cover": 100112,
+    "cover": 345785,
     "url": "https://www.igdb.com/games/euro-truck-simulator-2",
     "rating": 87.5
   },
@@ -6033,6 +6033,24 @@
     "cover": 100602,
     "url": "https://www.igdb.com/games/advance-wars",
     "rating": 100.0
+  },
+  {
+    "airtableId": "recXFs6DjNWFK8hvX",
+    "title": "Demon Turf",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "3D platform"
+    ],
+    "date": "2023-11-27",
+    "completed": "",
+    "igdbId": 134564,
+    "slug": "demon-turf",
+    "igdbName": "Demon Turf",
+    "cover": 187492,
+    "url": "https://www.igdb.com/games/demon-turf",
+    "rating": 80.75
   },
   {
     "airtableId": "recXIpORiX3dLCraB",
@@ -8458,7 +8476,7 @@
     "igdbId": 26778,
     "slug": "alex-kidd-in-miracle-world",
     "igdbName": "Alex Kidd in Miracle World",
-    "cover": 93874,
+    "cover": 345907,
     "url": "https://www.igdb.com/games/alex-kidd-in-miracle-world",
     "rating": ""
   },
@@ -11101,7 +11119,7 @@
     "igdbId": 107329,
     "slug": "golf-peaks",
     "igdbName": "Golf Peaks",
-    "cover": 105061,
+    "cover": 345772,
     "url": "https://www.igdb.com/games/golf-peaks",
     "rating": 80.0
   },
