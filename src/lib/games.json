@@ -5720,7 +5720,7 @@
     "igdbId": 2473,
     "slug": "disney-s-aladdin",
     "igdbName": "Disney's Aladdin",
-    "cover": 227683,
+    "cover": 346415,
     "url": "https://www.igdb.com/games/disney-s-aladdin",
     "rating": ""
   },
@@ -9514,6 +9514,24 @@
     "igdbName": "Klocki",
     "cover": 85506,
     "url": "https://www.igdb.com/games/klocki",
+    "rating": ""
+  },
+  {
+    "airtableId": "recpY8UYcsQ3DUkhA",
+    "title": "If on a Winter's Night, Four Travelers",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Point'n'click"
+    ],
+    "date": "2023-11-29",
+    "completed": true,
+    "igdbId": 144554,
+    "slug": "if-on-a-winters-night-four-travelers",
+    "igdbName": "If on a Winter's Night, Four Travelers",
+    "cover": 276215,
+    "url": "https://www.igdb.com/games/if-on-a-winters-night-four-travelers",
     "rating": ""
   },
   {
