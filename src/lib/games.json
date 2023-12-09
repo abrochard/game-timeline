@@ -994,7 +994,7 @@
     "igdbId": 138590,
     "slug": "powerwash-simulator",
     "igdbName": "PowerWash Simulator",
-    "cover": 153012,
+    "cover": 347852,
     "url": "https://www.igdb.com/games/powerwash-simulator",
     "rating": 78.66666666666667
   },
@@ -2831,6 +2831,24 @@
     "rating": 70.0
   },
   {
+    "airtableId": "recHrxYtrRgGfwCju",
+    "title": "Please, Touch the Artwork",
+    "support": [
+      "Android"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2023-12-09",
+    "completed": true,
+    "igdbId": 148945,
+    "slug": "please-touch-the-artwork",
+    "igdbName": "Please, Touch the Artwork",
+    "cover": 205734,
+    "url": "https://www.igdb.com/games/please-touch-the-artwork",
+    "rating": ""
+  },
+  {
     "airtableId": "recHyABKmf1QjgKge",
     "title": "Streets of Rage 3",
     "support": [
@@ -3470,7 +3488,7 @@
     "igdbId": 375,
     "slug": "metal-gear-solid",
     "igdbName": "Metal Gear Solid",
-    "cover": 306063,
+    "cover": 348896,
     "url": "https://www.igdb.com/games/metal-gear-solid",
     "rating": 80.0
   },
@@ -7842,7 +7860,7 @@
     "completed": true,
     "igdbId": 240496,
     "slug": "pineapple-on-pizza",
-    "igdbName": "Pineapple on pizza",
+    "igdbName": "Pineapple on Pizza",
     "cover": 291990,
     "url": "https://www.igdb.com/games/pineapple-on-pizza",
     "rating": ""
