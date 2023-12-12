@@ -7748,6 +7748,24 @@
     "rating": 80.0
   },
   {
+    "airtableId": "recfGOejhYgbyMmT7",
+    "title": "Sifu",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Beat'em Up"
+    ],
+    "date": "2023-12-12",
+    "completed": true,
+    "igdbId": 144022,
+    "slug": "sifu",
+    "igdbName": "Sifu",
+    "cover": 208864,
+    "url": "https://www.igdb.com/games/sifu",
+    "rating": 78.85714285714286
+  },
+  {
     "airtableId": "recfUQMRRI4mxRkJi",
     "title": "Gunpoint",
     "support": [
