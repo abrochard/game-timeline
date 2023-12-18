@@ -1577,7 +1577,7 @@
     "igdbId": 27789,
     "slug": "pubg-battlegrounds",
     "igdbName": "PUBG: Battlegrounds",
-    "cover": 202245,
+    "cover": 351363,
     "url": "https://www.igdb.com/games/pubg-battlegrounds",
     "rating": 75.0625
   },
@@ -5421,10 +5421,10 @@
     "date": "2017-12-21",
     "completed": true,
     "igdbId": 37307,
-    "slug": "parodius--5",
-    "igdbName": "Parodius",
+    "slug": "parodius-da-shinwa-kara-owarai-he--2",
+    "igdbName": "Parodius da!: Shinwa kara Owarai he",
     "cover": 237647,
-    "url": "https://www.igdb.com/games/parodius--5",
+    "url": "https://www.igdb.com/games/parodius-da-shinwa-kara-owarai-he--2",
     "rating": ""
   },
   {
@@ -8948,6 +8948,22 @@
     "cover": 93444,
     "url": "https://www.igdb.com/games/mega-man-zero",
     "rating": ""
+  },
+  {
+    "airtableId": "reclx0sZ3yRYiSLIP",
+    "title": "Venba",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2023-12-18",
+    "completed": true,
+    "igdbId": 141704,
+    "slug": "venba",
+    "igdbName": "Venba",
+    "cover": 320944,
+    "url": "https://www.igdb.com/games/venba",
+    "rating": 85.0
   },
   {
     "airtableId": "recm3LzcfJXSG70Zu",
