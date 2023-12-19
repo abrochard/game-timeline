@@ -3701,6 +3701,24 @@
     "rating": 91.3
   },
   {
+    "airtableId": "recL5VTB00DBs1NOz",
+    "title": "Smushi Come Home",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "3D platform"
+    ],
+    "date": "2023-12-19",
+    "completed": true,
+    "igdbId": 211223,
+    "slug": "smushi-come-home",
+    "igdbName": "Smushi Come Home",
+    "cover": 302308,
+    "url": "https://www.igdb.com/games/smushi-come-home",
+    "rating": ""
+  },
+  {
     "airtableId": "recLBD0qsLoa1qNil",
     "title": "Aragami",
     "support": [
