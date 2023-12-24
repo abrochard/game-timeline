@@ -1270,7 +1270,7 @@
     "igdbId": 203366,
     "slug": "rollerdrome",
     "igdbName": "Rollerdrome",
-    "cover": 224785,
+    "cover": 352267,
     "url": "https://www.igdb.com/games/rollerdrome",
     "rating": 85.66666666666667
   },
@@ -5792,6 +5792,24 @@
     "igdbName": "Aperture Desk Job",
     "cover": 210365,
     "url": "https://www.igdb.com/games/aperture-desk-job",
+    "rating": ""
+  },
+  {
+    "airtableId": "recVY2UrrW0fkQyt2",
+    "title": "Mega Man 5",
+    "support": [
+      "NES"
+    ],
+    "genre": [
+      "2D platform"
+    ],
+    "date": "2023-12-24",
+    "completed": true,
+    "igdbId": 1718,
+    "slug": "mega-man-5",
+    "igdbName": "Mega Man 5",
+    "cover": 276197,
+    "url": "https://www.igdb.com/games/mega-man-5",
     "rating": ""
   },
   {
