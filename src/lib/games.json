@@ -313,7 +313,7 @@
     "igdbId": 163,
     "slug": "star-wars-rogue-squadron",
     "igdbName": "Star Wars: Rogue Squadron",
-    "cover": 98785,
+    "cover": 352556,
     "url": "https://www.igdb.com/games/star-wars-rogue-squadron",
     "rating": ""
   },
@@ -3488,7 +3488,7 @@
     "igdbId": 375,
     "slug": "metal-gear-solid",
     "igdbName": "Metal Gear Solid",
-    "cover": 348896,
+    "cover": 352610,
     "url": "https://www.igdb.com/games/metal-gear-solid",
     "rating": 80.0
   },
@@ -7475,6 +7475,24 @@
     "rating": 78.57142857142857
   },
   {
+    "airtableId": "recddgJpZjgdLI8C6",
+    "title": "The Cave",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2024-01-04",
+    "completed": true,
+    "igdbId": 2175,
+    "slug": "the-cave",
+    "igdbName": "The Cave",
+    "cover": 340216,
+    "url": "https://www.igdb.com/games/the-cave",
+    "rating": 70.36363636363636
+  },
+  {
     "airtableId": "recddxYUQKX4P7Ho6",
     "title": "Castlevania: Harmony of Dissonance",
     "support": [
@@ -7607,7 +7625,7 @@
     "igdbId": 1805,
     "slug": "crazy-taxi",
     "igdbName": "Crazy Taxi",
-    "cover": 185908,
+    "cover": 352266,
     "url": "https://www.igdb.com/games/crazy-taxi",
     "rating": 60.0
   },
@@ -8997,7 +9015,7 @@
     "igdbId": 1775,
     "slug": "mega-man-zero",
     "igdbName": "Mega Man Zero",
-    "cover": 93444,
+    "cover": 352966,
     "url": "https://www.igdb.com/games/mega-man-zero",
     "rating": ""
   },
@@ -10385,7 +10403,7 @@
     "igdbId": 9647,
     "slug": "volume",
     "igdbName": "Volume",
-    "cover": 109789,
+    "cover": 353079,
     "url": "https://www.igdb.com/games/volume",
     "rating": 70.4
   },
