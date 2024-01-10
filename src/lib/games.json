@@ -2709,6 +2709,24 @@
     "rating": 78.0625
   },
   {
+    "airtableId": "recHHmNVpgi2VBVol",
+    "title": "SuperHot: Mind Control Delete",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "FPS"
+    ],
+    "date": "2024-01-10",
+    "completed": true,
+    "igdbId": 27448,
+    "slug": "superhot-mind-control-delete",
+    "igdbName": "SuperHot: Mind Control Delete",
+    "cover": 138627,
+    "url": "https://www.igdb.com/games/superhot-mind-control-delete",
+    "rating": 83.9
+  },
+  {
     "airtableId": "recHIyFs3nChGiudi",
     "title": "Rayman Jungle Run",
     "support": [
@@ -3955,7 +3973,7 @@
     "igdbName": "Castle of Illusion Starring Mickey Mouse",
     "cover": 182114,
     "url": "https://www.igdb.com/games/castle-of-illusion-starring-mickey-mouse--1",
-    "rating": 68.0
+    "rating": 68.33333333333333
   },
   {
     "airtableId": "recMKHb6siNpfx5lE",
