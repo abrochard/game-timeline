@@ -5745,6 +5745,24 @@
     "rating": 83.33333333333333
   },
   {
+    "airtableId": "recVEDxFUms1jOF2k",
+    "title": "Maze Machina",
+    "support": [
+      "Android"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2024-01-16",
+    "completed": "",
+    "igdbId": 119646,
+    "slug": "maze-machina",
+    "igdbName": "Maze Machina",
+    "cover": 130138,
+    "url": "https://www.igdb.com/games/maze-machina",
+    "rating": ""
+  },
+  {
     "airtableId": "recVPrWHcQtOhhNF8",
     "title": "ENSLAVED: Odyssey to the West",
     "support": [
