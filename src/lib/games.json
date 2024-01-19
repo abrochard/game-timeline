@@ -406,6 +406,22 @@
     "rating": ""
   },
   {
+    "airtableId": "rec1oKb7PF377Mpvj",
+    "title": "Outer Wilds",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2024-01-18",
+    "completed": true,
+    "igdbId": 11737,
+    "slug": "outer-wilds",
+    "igdbName": "Outer Wilds",
+    "cover": 286788,
+    "url": "https://www.igdb.com/games/outer-wilds",
+    "rating": 84.71428571428571
+  },
+  {
     "airtableId": "rec1pmA9KoXwMF9q7",
     "title": "Blade Symphony",
     "support": [
