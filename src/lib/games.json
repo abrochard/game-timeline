@@ -1464,6 +1464,25 @@
     "rating": 70.625
   },
   {
+    "airtableId": "rec9DBPN317Y21buB",
+    "title": "Flipping Death",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "2D platform",
+      "Puzzle"
+    ],
+    "date": "2024-01-22",
+    "completed": true,
+    "igdbId": 27434,
+    "slug": "flipping-death",
+    "igdbName": "Flipping Death",
+    "cover": 169424,
+    "url": "https://www.igdb.com/games/flipping-death",
+    "rating": 74.5
+  },
+  {
     "airtableId": "rec9DtUivcfXjdXZI",
     "title": "Worms W.M.D",
     "support": [
@@ -8983,7 +9002,7 @@
     "igdbId": 41,
     "slug": "deus-ex",
     "igdbName": "Deus Ex",
-    "cover": 81923,
+    "cover": 357167,
     "url": "https://www.igdb.com/games/deus-ex",
     "rating": 90.5
   },
@@ -10264,7 +10283,7 @@
     "igdbId": 2344,
     "slug": "mario-kart-double-dash",
     "igdbName": "Mario Kart: Double Dash!!",
-    "cover": 95867,
+    "cover": 356898,
     "url": "https://www.igdb.com/games/mario-kart-double-dash",
     "rating": 85.0
   },
