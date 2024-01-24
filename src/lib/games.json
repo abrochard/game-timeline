@@ -8917,6 +8917,24 @@
     "rating": ""
   },
   {
+    "airtableId": "recl7tRAXc6SeEsGR",
+    "title": "Sludge Life",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "3D platform"
+    ],
+    "date": "2024-01-24",
+    "completed": true,
+    "igdbId": 131705,
+    "slug": "sludge-life",
+    "igdbName": "Sludge Life",
+    "cover": 104533,
+    "url": "https://www.igdb.com/games/sludge-life",
+    "rating": ""
+  },
+  {
     "airtableId": "reclKnKUffmdfuhbW",
     "title": "Mark of the Ninja Remastered",
     "support": [
