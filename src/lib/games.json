@@ -66,6 +66,24 @@
     "rating": 90.0
   },
   {
+    "airtableId": "rec0TQ1qLqc0nxEy9",
+    "title": "Way of the Passive Fist",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Beat'em Up"
+    ],
+    "date": "2024-01-25",
+    "completed": true,
+    "igdbId": 36780,
+    "slug": "way-of-the-passive-fist",
+    "igdbName": "Way of the Passive Fist",
+    "cover": 92184,
+    "url": "https://www.igdb.com/games/way-of-the-passive-fist",
+    "rating": 70.0
+  },
+  {
     "airtableId": "rec0Yax7blh54dTop",
     "title": "Sonic and All-Stars Racing Transformed",
     "support": [
@@ -2205,7 +2223,7 @@
     "igdbId": 2343,
     "slug": "mario-kart-super-circuit",
     "igdbName": "Mario Kart: Super Circuit",
-    "cover": 94783,
+    "cover": 357726,
     "url": "https://www.igdb.com/games/mario-kart-super-circuit",
     "rating": 90.0
   },
