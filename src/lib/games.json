@@ -678,6 +678,22 @@
     "rating": 89.4
   },
   {
+    "airtableId": "rec3jbilbnI000xt0",
+    "title": "En Garde!",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2024-01-27",
+    "completed": true,
+    "igdbId": 104970,
+    "slug": "en-garde",
+    "igdbName": "En Garde!",
+    "cover": 317011,
+    "url": "https://www.igdb.com/games/en-garde",
+    "rating": 71.0
+  },
+  {
     "airtableId": "rec3mdaNiBcqzQQEq",
     "title": "Stikbold! A Dodgeball Adventure",
     "support": [
