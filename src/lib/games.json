@@ -1275,6 +1275,24 @@
     "rating": 77.72222222222223
   },
   {
+    "airtableId": "rec7rxyviL1cMcHKT",
+    "title": "Injustice 2",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Vs. Fighting"
+    ],
+    "date": "2024-01-29",
+    "completed": true,
+    "igdbId": 19470,
+    "slug": "injustice-2",
+    "igdbName": "Injustice 2",
+    "cover": 90670,
+    "url": "https://www.igdb.com/games/injustice-2",
+    "rating": 86.38888888888889
+  },
+  {
     "airtableId": "rec7zL19KTJxWutN9",
     "title": "South Park: The Stick of Truth",
     "support": [
