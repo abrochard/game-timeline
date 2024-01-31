@@ -8130,6 +8130,24 @@
     "rating": 77.5
   },
   {
+    "airtableId": "recgAixMBFe9OMpKK",
+    "title": "VVVVVV",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "2D platform"
+    ],
+    "date": "2024-01-30",
+    "completed": true,
+    "igdbId": 1990,
+    "slug": "vvvvvv",
+    "igdbName": "VVVVVV",
+    "cover": 210472,
+    "url": "https://www.igdb.com/games/vvvvvv",
+    "rating": 79.75
+  },
+  {
     "airtableId": "recgCYUz4Q2Q8OqbZ",
     "title": "Donut County",
     "support": [
