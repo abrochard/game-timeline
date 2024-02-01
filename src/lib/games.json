@@ -1785,6 +1785,22 @@
     "rating": 86.95238095238095
   },
   {
+    "airtableId": "recAJYotpMs0DuQ5R",
+    "title": "Spaceplan",
+    "support": [
+      "Android"
+    ],
+    "genre": "",
+    "date": "2024-02-01",
+    "completed": true,
+    "igdbId": 28454,
+    "slug": "spaceplan",
+    "igdbName": "Spaceplan",
+    "cover": 99561,
+    "url": "https://www.igdb.com/games/spaceplan",
+    "rating": ""
+  },
+  {
     "airtableId": "recAN4XCYXbyOiwE1",
     "title": "Machinarium",
     "support": [
