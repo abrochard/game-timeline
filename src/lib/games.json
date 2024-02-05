@@ -5394,6 +5394,24 @@
     "rating": ""
   },
   {
+    "airtableId": "recSQpRGNYpMc5uaN",
+    "title": "The Talos Principle",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2024-02-04",
+    "completed": true,
+    "igdbId": 7386,
+    "slug": "the-talos-principle",
+    "igdbName": "The Talos Principle",
+    "cover": 82049,
+    "url": "https://www.igdb.com/games/the-talos-principle",
+    "rating": 87.33333333333333
+  },
+  {
     "airtableId": "recSSmmXhe4B7qXiC",
     "title": "Control",
     "support": [
@@ -8227,7 +8245,7 @@
     "igdbId": 85576,
     "slug": "donkey-kong-country-tropical-freeze--1",
     "igdbName": "Donkey Kong Country: Tropical Freeze",
-    "cover": 309007,
+    "cover": 359802,
     "url": "https://www.igdb.com/games/donkey-kong-country-tropical-freeze--1",
     "rating": 88.16666666666667
   },
@@ -11107,7 +11125,7 @@
     "igdbId": 1656,
     "slug": "final-fight-2",
     "igdbName": "Final Fight 2",
-    "cover": 199613,
+    "cover": 359816,
     "url": "https://www.igdb.com/games/final-fight-2",
     "rating": ""
   },
