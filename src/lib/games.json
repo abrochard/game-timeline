@@ -2311,6 +2311,24 @@
     "rating": 60.0
   },
   {
+    "airtableId": "recDhJcgvSmOhhsFl",
+    "title": "Hot Wheels Unleashed",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Racing"
+    ],
+    "date": "2024-02-06",
+    "completed": "",
+    "igdbId": 144072,
+    "slug": "hot-wheels-unleashed",
+    "igdbName": "Hot Wheels Unleashed",
+    "cover": 132369,
+    "url": "https://www.igdb.com/games/hot-wheels-unleashed",
+    "rating": 68.375
+  },
+  {
     "airtableId": "recDzaynGpgOpkhPA",
     "title": "You Must Build A Boat",
     "support": [
