@@ -5551,6 +5551,24 @@
     "rating": 83.9090909090909
   },
   {
+    "airtableId": "recTHFd5sDgJ7V1DH",
+    "title": "Asterix & Obelix: Slap Them All!",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Beat'em Up"
+    ],
+    "date": "2024-02-08",
+    "completed": "",
+    "igdbId": 145062,
+    "slug": "asterix-and-obelix-slap-them-all",
+    "igdbName": "Asterix & Obelix: Slap Them All!",
+    "cover": 266888,
+    "url": "https://www.igdb.com/games/asterix-and-obelix-slap-them-all",
+    "rating": 86.0
+  },
+  {
     "airtableId": "recTIc787ALs1FOYw",
     "title": "Kentucky Route Zero",
     "support": [
@@ -6858,7 +6876,7 @@
     "igdbId": 231,
     "slug": "half-life",
     "igdbName": "Half-Life",
-    "cover": 85097,
+    "cover": 360585,
     "url": "https://www.igdb.com/games/half-life",
     "rating": 80.0
   },
