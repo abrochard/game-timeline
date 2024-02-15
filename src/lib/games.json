@@ -8827,7 +8827,7 @@
     "igdbName": "Vampire Survivors",
     "cover": 202171,
     "url": "https://www.igdb.com/games/vampire-survivors",
-    "rating": 89.25
+    "rating": 91.4
   },
   {
     "airtableId": "recjfcTouYSUAmzrm",
@@ -10098,6 +10098,24 @@
     "cover": 181661,
     "url": "https://www.igdb.com/games/the-typing-of-the-dead-overkill",
     "rating": 70.0
+  },
+  {
+    "airtableId": "recqozsagq5vJcozz",
+    "title": "Jetpack Joyride",
+    "support": [
+      "Android"
+    ],
+    "genre": [
+      "Runner"
+    ],
+    "date": "2024-02-15",
+    "completed": "",
+    "igdbId": 8978,
+    "slug": "jetpack-joyride",
+    "igdbName": "Jetpack Joyride",
+    "cover": 253181,
+    "url": "https://www.igdb.com/games/jetpack-joyride",
+    "rating": 67.0
   },
   {
     "airtableId": "recqprJPcaEXkY1XF",
