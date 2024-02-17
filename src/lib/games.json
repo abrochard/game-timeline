@@ -8902,6 +8902,22 @@
     "rating": 91.33333333333333
   },
   {
+    "airtableId": "reck6zblXaNstyOw6",
+    "title": "In Other Waters",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2024-02-17",
+    "completed": true,
+    "igdbId": 86504,
+    "slug": "in-other-waters",
+    "igdbName": "In Other Waters",
+    "cover": 90221,
+    "url": "https://www.igdb.com/games/in-other-waters",
+    "rating": 71.0
+  },
+  {
     "airtableId": "reckE8uvqo9GgqmlG",
     "title": "Prince of Persia: The Forgotten Sands",
     "support": [
