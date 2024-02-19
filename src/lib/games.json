@@ -9813,6 +9813,24 @@
     "rating": 80.0
   },
   {
+    "airtableId": "recoqIrA43NzM1oIt",
+    "title": "Doom",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "FPS"
+    ],
+    "date": "2024-02-19",
+    "completed": true,
+    "igdbId": 7351,
+    "slug": "doom--2",
+    "igdbName": "Doom",
+    "cover": 76903,
+    "url": "https://www.igdb.com/games/doom--2",
+    "rating": 86.96875
+  },
+  {
     "airtableId": "recovh1EpKNYaePCK",
     "title": "Freddi Fish 3: The Case of the Stolen Conch Shell",
     "support": [
