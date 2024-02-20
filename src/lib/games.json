@@ -10739,6 +10739,24 @@
     "rating": 60.0
   },
   {
+    "airtableId": "rectZCsotn4oEHQEN",
+    "title": "Tinykin",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "3D platform"
+    ],
+    "date": "2024-02-20",
+    "completed": true,
+    "igdbId": 152267,
+    "slug": "tinykin",
+    "igdbName": "Tinykin",
+    "cover": 239933,
+    "url": "https://www.igdb.com/games/tinykin",
+    "rating": 82.66666666666667
+  },
+  {
     "airtableId": "rectiZZCqrVdNRtFL",
     "title": "The Murder of Sonic the Hedgehog",
     "support": [
