@@ -5166,6 +5166,24 @@
     "rating": ""
   },
   {
+    "airtableId": "recRHd8Zt39lvZyh7",
+    "title": "Huntdown",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Run and Gun"
+    ],
+    "date": "2024-02-23",
+    "completed": true,
+    "igdbId": 19728,
+    "slug": "huntdown",
+    "igdbName": "Huntdown",
+    "cover": 101799,
+    "url": "https://www.igdb.com/games/huntdown",
+    "rating": 82.0
+  },
+  {
     "airtableId": "recRO1KYeEgPGQ17f",
     "title": "Ape Out",
     "support": [
