@@ -10897,6 +10897,24 @@
     "rating": 77.57142857142857
   },
   {
+    "airtableId": "recuHQKlgyNHzXx2x",
+    "title": "A Little to the Left",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2024-02-26",
+    "completed": true,
+    "igdbId": 152180,
+    "slug": "a-little-to-the-left",
+    "igdbName": "A Little to the Left",
+    "cover": 209583,
+    "url": "https://www.igdb.com/games/a-little-to-the-left",
+    "rating": 90.0
+  },
+  {
     "airtableId": "recuKOkXUq78Rum6I",
     "title": "Please, Don't Touch Anything",
     "support": [
