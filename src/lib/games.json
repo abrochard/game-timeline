@@ -4115,6 +4115,24 @@
     "rating": 75.5
   },
   {
+    "airtableId": "recMKoFh1hp0SAcmx",
+    "title": "Assemble With Care",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2024-02-28",
+    "completed": true,
+    "igdbId": 117008,
+    "slug": "assemble-with-care",
+    "igdbName": "Assemble With Care",
+    "cover": 81666,
+    "url": "https://www.igdb.com/games/assemble-with-care",
+    "rating": 75.0
+  },
+  {
     "airtableId": "recMLyTJznlqPYScO",
     "title": "Jotun: Valhalla Edition",
     "support": [
@@ -8542,7 +8560,7 @@
     "igdbId": 1187,
     "slug": "crash-bandicoot-warped",
     "igdbName": "Crash Bandicoot: Warped",
-    "cover": 240134,
+    "cover": 364320,
     "url": "https://www.igdb.com/games/crash-bandicoot-warped",
     "rating": ""
   },
