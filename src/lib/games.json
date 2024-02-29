@@ -2397,6 +2397,22 @@
     "rating": 73.33333333333333
   },
   {
+    "airtableId": "recETd6vtBu20BhhS",
+    "title": "Jusant",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2024-02-29",
+    "completed": true,
+    "igdbId": 252836,
+    "slug": "jusant",
+    "igdbName": "Jusant",
+    "cover": 308412,
+    "url": "https://www.igdb.com/games/jusant",
+    "rating": 86.33333333333333
+  },
+  {
     "airtableId": "recEXa1XLWNLwJAyU",
     "title": "Jet Set Radio",
     "support": [
