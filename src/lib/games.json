@@ -6282,6 +6282,24 @@
     "rating": ""
   },
   {
+    "airtableId": "recWx8wm1luUC0ub8",
+    "title": "Super Mario 3D Land",
+    "support": [
+      "3DS"
+    ],
+    "genre": [
+      "3D platform"
+    ],
+    "date": "2024-03-04",
+    "completed": true,
+    "igdbId": 1079,
+    "slug": "super-mario-3d-land",
+    "igdbName": "Super Mario 3D Land",
+    "cover": 95678,
+    "url": "https://www.igdb.com/games/super-mario-3d-land",
+    "rating": 90.0
+  },
+  {
     "airtableId": "recX0rA0iKQHFdmC9",
     "title": "Injustice: Gods Among Us",
     "support": [
