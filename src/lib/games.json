@@ -490,6 +490,24 @@
     "rating": ""
   },
   {
+    "airtableId": "rec2XtQFeXVIMzCAJ",
+    "title": "Contra 4",
+    "support": [
+      "DS"
+    ],
+    "genre": [
+      "Run and Gun"
+    ],
+    "date": "2024-03-14",
+    "completed": "",
+    "igdbId": 9545,
+    "slug": "contra-4",
+    "igdbName": "Contra 4",
+    "cover": 115159,
+    "url": "https://www.igdb.com/games/contra-4",
+    "rating": 75.0
+  },
+  {
     "airtableId": "rec2gNmcw02D5279r",
     "title": "Pirate Outlaws",
     "support": [
