@@ -9195,6 +9195,24 @@
     "rating": ""
   },
   {
+    "airtableId": "reclFBExPkOAznwwI",
+    "title": "Castlevania: Dawn of Sorrow",
+    "support": [
+      "DS"
+    ],
+    "genre": [
+      "Metroidvania"
+    ],
+    "date": "2024-03-15",
+    "completed": "",
+    "igdbId": 1136,
+    "slug": "castlevania-dawn-of-sorrow",
+    "igdbName": "Castlevania: Dawn of Sorrow",
+    "cover": 157248,
+    "url": "https://www.igdb.com/games/castlevania-dawn-of-sorrow",
+    "rating": 90.33333333333333
+  },
+  {
     "airtableId": "reclKnKUffmdfuhbW",
     "title": "Mark of the Ninja Remastered",
     "support": [
