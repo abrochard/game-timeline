@@ -508,6 +508,22 @@
     "rating": 75.0
   },
   {
+    "airtableId": "rec2ZlSgtZ3WIkwFs",
+    "title": "Kid Icarus: Uprising",
+    "support": [
+      "3DS"
+    ],
+    "genre": "",
+    "date": "2024-03-18",
+    "completed": "",
+    "igdbId": 3665,
+    "slug": "kid-icarus-uprising",
+    "igdbName": "Kid Icarus: Uprising",
+    "cover": 89307,
+    "url": "https://www.igdb.com/games/kid-icarus-uprising",
+    "rating": 88.375
+  },
+  {
     "airtableId": "rec2gNmcw02D5279r",
     "title": "Pirate Outlaws",
     "support": [
@@ -4251,7 +4267,7 @@
     "igdbName": "Bit.Trip Presents... Runner2: Future Legend of Rhythm Alien",
     "cover": 311762,
     "url": "https://www.igdb.com/games/bit-dot-trip-presents-dot-dot-dot-runner2-future-legend-of-rhythm-alien",
-    "rating": 87.22222222222223
+    "rating": 77.9090909090909
   },
   {
     "airtableId": "recN0FKVxdbTHwAR5",
