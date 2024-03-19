@@ -1441,7 +1441,7 @@
     "igdbId": 118219,
     "slug": "john-wick-hex",
     "igdbName": "John Wick Hex",
-    "cover": 74172,
+    "cover": 369028,
     "url": "https://www.igdb.com/games/john-wick-hex",
     "rating": 76.08333333333333
   },
@@ -3557,6 +3557,22 @@
     "cover": 79553,
     "url": "https://www.igdb.com/games/hitman-2-silent-assassin",
     "rating": 77.0
+  },
+  {
+    "airtableId": "recJVEhWAPHGT6FK5",
+    "title": "Dordogne",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2024-03-19",
+    "completed": true,
+    "igdbId": 132188,
+    "slug": "dordogne",
+    "igdbName": "Dordogne",
+    "cover": 308912,
+    "url": "https://www.igdb.com/games/dordogne",
+    "rating": ""
   },
   {
     "airtableId": "recJa0mNPSY8klnVc",
