@@ -4181,6 +4181,22 @@
     "rating": 75.5
   },
   {
+    "airtableId": "recMKhYRfVij5V9Ar",
+    "title": "Somerville",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2024-03-20",
+    "completed": true,
+    "igdbId": 41025,
+    "slug": "somerville",
+    "igdbName": "Somerville",
+    "cover": 314529,
+    "url": "https://www.igdb.com/games/somerville",
+    "rating": 67.5
+  },
+  {
     "airtableId": "recMKoFh1hp0SAcmx",
     "title": "Assemble With Care",
     "support": [
