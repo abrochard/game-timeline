@@ -4627,6 +4627,24 @@
     "rating": 72.375
   },
   {
+    "airtableId": "recOXrwFa5vDIADqP",
+    "title": "Battletoads",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Beat'em Up"
+    ],
+    "date": "2024-03-23",
+    "completed": true,
+    "igdbId": 103289,
+    "slug": "battletoads--2",
+    "igdbName": "Battletoads",
+    "cover": 112701,
+    "url": "https://www.igdb.com/games/battletoads--2",
+    "rating": 67.625
+  },
+  {
     "airtableId": "recOjl5tL7rytfQ9n",
     "title": "Half-Life: Opposing Force",
     "support": [
