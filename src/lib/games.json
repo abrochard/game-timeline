@@ -2893,7 +2893,7 @@
     "igdbId": 27448,
     "slug": "superhot-mind-control-delete",
     "igdbName": "SuperHot: Mind Control Delete",
-    "cover": 138627,
+    "cover": 371076,
     "url": "https://www.igdb.com/games/superhot-mind-control-delete",
     "rating": 83.9
   },
@@ -4826,7 +4826,7 @@
     "igdbId": 17026,
     "slug": "furi",
     "igdbName": "Furi",
-    "cover": 103323,
+    "cover": 371688,
     "url": "https://www.igdb.com/games/furi",
     "rating": 79.0
   },
@@ -7838,6 +7838,22 @@
     "rating": 78.57142857142857
   },
   {
+    "airtableId": "recdcpiIMURYq3Lc0",
+    "title": "Shinobi",
+    "support": [
+      "3DS"
+    ],
+    "genre": "",
+    "date": "2024-03-24",
+    "completed": true,
+    "igdbId": 86252,
+    "slug": "shinobi--2",
+    "igdbName": "Shinobi",
+    "cover": 140632,
+    "url": "https://www.igdb.com/games/shinobi--2",
+    "rating": ""
+  },
+  {
     "airtableId": "recddgJpZjgdLI8C6",
     "title": "The Cave",
     "support": [
@@ -9482,7 +9498,7 @@
     "igdbId": 7205,
     "slug": "superhot",
     "igdbName": "SuperHot",
-    "cover": 101274,
+    "cover": 371077,
     "url": "https://www.igdb.com/games/superhot",
     "rating": 84.72222222222223
   },
@@ -10595,7 +10611,7 @@
     "igdbId": 6666,
     "slug": "enduro-racer",
     "igdbName": "Enduro Racer",
-    "cover": 6906,
+    "cover": 371250,
     "url": "https://www.igdb.com/games/enduro-racer",
     "rating": ""
   },
@@ -12092,7 +12108,7 @@
     "igdbId": 49377,
     "slug": "yu-gi-oh-ultimate-masters-world-championship-tournament-2006",
     "igdbName": "Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006",
-    "cover": 276906,
+    "cover": 371046,
     "url": "https://www.igdb.com/games/yu-gi-oh-ultimate-masters-world-championship-tournament-2006",
     "rating": ""
   },
