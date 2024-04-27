@@ -1666,7 +1666,7 @@
     "igdbId": 19220,
     "slug": "snake-pass",
     "igdbName": "Snake Pass",
-    "cover": 85373,
+    "cover": 375319,
     "url": "https://www.igdb.com/games/snake-pass",
     "rating": 72.16666666666667
   },
@@ -1798,7 +1798,7 @@
     "igdbId": 21040,
     "slug": "dark-souls-prepare-to-die-edition",
     "igdbName": "Dark Souls: Prepare to Die Edition",
-    "cover": 204550,
+    "cover": 378689,
     "url": "https://www.igdb.com/games/dark-souls-prepare-to-die-edition",
     "rating": 84.33333333333333
   },
@@ -1851,6 +1851,24 @@
     "cover": 103164,
     "url": "https://www.igdb.com/games/machinarium",
     "rating": 87.5
+  },
+  {
+    "airtableId": "recAT4rCf3PI2Ssp0",
+    "title": "The World Ends with You",
+    "support": [
+      "DS"
+    ],
+    "genre": [
+      "JRPG"
+    ],
+    "date": "2024-04-26",
+    "completed": "",
+    "igdbId": 1343,
+    "slug": "the-world-ends-with-you",
+    "igdbName": "The World Ends with You",
+    "cover": 76687,
+    "url": "https://www.igdb.com/games/the-world-ends-with-you",
+    "rating": 91.0
   },
   {
     "airtableId": "recAWWzULYdar8bby",
@@ -3606,7 +3624,7 @@
     "igdbId": 2549,
     "slug": "half-life-blue-shift",
     "igdbName": "Half-Life: Blue Shift",
-    "cover": 81337,
+    "cover": 373355,
     "url": "https://www.igdb.com/games/half-life-blue-shift",
     "rating": 60.0
   },
@@ -4658,7 +4676,7 @@
     "igdbId": 232,
     "slug": "half-life-opposing-force",
     "igdbName": "Half-Life: Opposing Force",
-    "cover": 81338,
+    "cover": 373354,
     "url": "https://www.igdb.com/games/half-life-opposing-force",
     "rating": 70.0
   },
@@ -8694,7 +8712,7 @@
     "igdbId": 1187,
     "slug": "crash-bandicoot-warped",
     "igdbName": "Crash Bandicoot: Warped",
-    "cover": 364320,
+    "cover": 376736,
     "url": "https://www.igdb.com/games/crash-bandicoot-warped",
     "rating": ""
   },
