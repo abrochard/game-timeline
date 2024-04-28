@@ -4965,6 +4965,24 @@
     "rating": 81.42857142857143
   },
   {
+    "airtableId": "recQ1LVn501FqbCiM",
+    "title": "Islets",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Metroidvania"
+    ],
+    "date": "2024-04-28",
+    "completed": true,
+    "igdbId": 180154,
+    "slug": "islets",
+    "igdbName": "Islets",
+    "cover": 196843,
+    "url": "https://www.igdb.com/games/islets",
+    "rating": 81.0
+  },
+  {
     "airtableId": "recQ5rAb4oMH47w3c",
     "title": "Dustforce DX",
     "support": [
