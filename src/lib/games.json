@@ -1798,7 +1798,7 @@
     "igdbId": 21040,
     "slug": "dark-souls-prepare-to-die-edition",
     "igdbName": "Dark Souls: Prepare to Die Edition",
-    "cover": 378689,
+    "cover": 379177,
     "url": "https://www.igdb.com/games/dark-souls-prepare-to-die-edition",
     "rating": 84.33333333333333
   },
@@ -7117,6 +7117,22 @@
     "cover": 99584,
     "url": "https://www.igdb.com/games/steamworld-dig-2",
     "rating": 89.0
+  },
+  {
+    "airtableId": "reca6noTPxV8agKVa",
+    "title": "One Piece: World Seeker",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2024-05-01",
+    "completed": "",
+    "igdbId": 76742,
+    "slug": "one-piece-world-seeker",
+    "igdbName": "One Piece: World Seeker",
+    "cover": 84197,
+    "url": "https://www.igdb.com/games/one-piece-world-seeker",
+    "rating": 66.6
   },
   {
     "airtableId": "reca6zstRiEfeJuAN",
