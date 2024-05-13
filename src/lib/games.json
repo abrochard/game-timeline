@@ -217,7 +217,7 @@
     "igdbId": 1792,
     "slug": "ratchet-clank-future-tools-of-destruction",
     "igdbName": "Ratchet & Clank Future: Tools of Destruction",
-    "cover": 89584,
+    "cover": 379874,
     "url": "https://www.igdb.com/games/ratchet-clank-future-tools-of-destruction",
     "rating": 91.5
   },
@@ -1666,7 +1666,7 @@
     "igdbId": 19220,
     "slug": "snake-pass",
     "igdbName": "Snake Pass",
-    "cover": 375319,
+    "cover": 381505,
     "url": "https://www.igdb.com/games/snake-pass",
     "rating": 72.16666666666667
   },
@@ -3645,6 +3645,24 @@
     "rating": 86.66666666666667
   },
   {
+    "airtableId": "recJm2viIO8pmNZJ2",
+    "title": "Hades",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Roguelike"
+    ],
+    "date": "2024-05-13",
+    "completed": true,
+    "igdbId": 113112,
+    "slug": "hades--1",
+    "igdbName": "Hades",
+    "cover": 152760,
+    "url": "https://www.igdb.com/games/hades--1",
+    "rating": 94.0625
+  },
+  {
     "airtableId": "recJmMyRHwaPcZaFY",
     "title": "Putt-Putt Saves the Zoo",
     "support": [
@@ -4315,7 +4333,7 @@
     "igdbId": 5592,
     "slug": "bit-dot-trip-presents-dot-dot-dot-runner2-future-legend-of-rhythm-alien",
     "igdbName": "Bit.Trip Presents... Runner2: Future Legend of Rhythm Alien",
-    "cover": 311762,
+    "cover": 381434,
     "url": "https://www.igdb.com/games/bit-dot-trip-presents-dot-dot-dot-runner2-future-legend-of-rhythm-alien",
     "rating": 77.9090909090909
   },
@@ -5682,7 +5700,7 @@
     "igdbId": 6246,
     "slug": "bit-dot-trip-runner",
     "igdbName": "Bit.Trip Runner",
-    "cover": 112130,
+    "cover": 381431,
     "url": "https://www.igdb.com/games/bit-dot-trip-runner",
     "rating": 80.0
   },
@@ -6433,7 +6451,7 @@
     "igdbId": 1918,
     "slug": "injustice-gods-among-us",
     "igdbName": "Injustice: Gods Among Us",
-    "cover": 182110,
+    "cover": 381066,
     "url": "https://www.igdb.com/games/injustice-gods-among-us",
     "rating": 80.0
   },
@@ -6589,7 +6607,7 @@
     "igdbId": 6492,
     "slug": "klonoa-empire-of-dreams",
     "igdbName": "Klonoa: Empire of Dreams",
-    "cover": 220089,
+    "cover": 380521,
     "url": "https://www.igdb.com/games/klonoa-empire-of-dreams",
     "rating": ""
   },
@@ -7557,7 +7575,7 @@
     "igdbId": 9527,
     "slug": "speedrunners",
     "igdbName": "SpeedRunners",
-    "cover": 99567,
+    "cover": 382292,
     "url": "https://www.igdb.com/games/speedrunners",
     "rating": ""
   },
@@ -9432,7 +9450,7 @@
     "igdbId": 41,
     "slug": "deus-ex",
     "igdbName": "Deus Ex",
-    "cover": 357167,
+    "cover": 381512,
     "url": "https://www.igdb.com/games/deus-ex",
     "rating": 90.5
   },
@@ -11455,7 +11473,7 @@
     "igdbId": 28336,
     "slug": "there-is-no-game",
     "igdbName": "There Is No Game",
-    "cover": 100714,
+    "cover": 382285,
     "url": "https://www.igdb.com/games/there-is-no-game",
     "rating": ""
   },
@@ -11559,7 +11577,7 @@
     "igdbId": 202279,
     "slug": "marvel-snap",
     "igdbName": "Marvel Snap",
-    "cover": 325153,
+    "cover": 380167,
     "url": "https://www.igdb.com/games/marvel-snap",
     "rating": 85.0
   },
@@ -12038,7 +12056,7 @@
     "igdbId": 20097,
     "slug": "spoiler-alert",
     "igdbName": "Spoiler Alert",
-    "cover": 189186,
+    "cover": 382284,
     "url": "https://www.igdb.com/games/spoiler-alert",
     "rating": 67.5
   },
@@ -12074,7 +12092,7 @@
     "igdbId": 19847,
     "slug": "huniecam-studio",
     "igdbName": "HunieCam Studio",
-    "cover": 94963,
+    "cover": 381496,
     "url": "https://www.igdb.com/games/huniecam-studio",
     "rating": 75.0
   },
