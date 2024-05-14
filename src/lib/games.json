@@ -621,7 +621,7 @@
     "igdbId": 159298,
     "slug": "yu-gi-oh-master-duel",
     "igdbName": "Yu-Gi-Oh! Master Duel",
-    "cover": 203577,
+    "cover": 382293,
     "url": "https://www.igdb.com/games/yu-gi-oh-master-duel",
     "rating": 80.0
   },
@@ -4092,6 +4092,22 @@
     "rating": 93.85714285714286
   },
   {
+    "airtableId": "recLvuYOj7Ssk6xRq",
+    "title": "Savant: Ascent Remix",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2024-05-14",
+    "completed": true,
+    "igdbId": 261364,
+    "slug": "savant-ascent-remix",
+    "igdbName": "Savant: Ascent Remix",
+    "cover": 323458,
+    "url": "https://www.igdb.com/games/savant-ascent-remix",
+    "rating": ""
+  },
+  {
     "airtableId": "recM56E3tFotVBQfo",
     "title": "Flinthook",
     "support": [
@@ -6207,7 +6223,7 @@
     "igdbId": 20043,
     "slug": "yu-gi-oh-legacy-of-the-duelist",
     "igdbName": "Yu-Gi-Oh! Legacy of the Duelist",
-    "cover": 129510,
+    "cover": 382290,
     "url": "https://www.igdb.com/games/yu-gi-oh-legacy-of-the-duelist",
     "rating": 80.0
   },
