@@ -6058,6 +6058,24 @@
     "rating": 82.58333333333333
   },
   {
+    "airtableId": "recUwK1BmiP2c8hq5",
+    "title": "Scott Pilgrim vs. the World: The Game - Complete Edition",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Beat'em Up"
+    ],
+    "date": "2024-05-15",
+    "completed": true,
+    "igdbId": 138765,
+    "slug": "scott-pilgrim-vs-the-world-the-game-complete-edition",
+    "igdbName": "Scott Pilgrim vs. the World: The Game - Complete Edition",
+    "cover": 114322,
+    "url": "https://www.igdb.com/games/scott-pilgrim-vs-the-world-the-game-complete-edition",
+    "rating": 78.57142857142857
+  },
+  {
     "airtableId": "recV47a9hV6ZgFUP7",
     "title": "S4 League",
     "support": [
