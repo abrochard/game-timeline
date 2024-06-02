@@ -1766,7 +1766,7 @@
     "igdbName": "Toki",
     "cover": 321411,
     "url": "https://www.igdb.com/games/toki--1",
-    "rating": 70.0
+    "rating": 57.5
   },
   {
     "airtableId": "recA8x1Ta6sVOdOfo",
@@ -2140,6 +2140,24 @@
     "cover": 232359,
     "url": "https://www.igdb.com/games/spiritfarer-farewell-edition",
     "rating": ""
+  },
+  {
+    "airtableId": "recBpj1NMh9VeLGis",
+    "title": "Rhythm Heaven",
+    "support": [
+      "DS"
+    ],
+    "genre": [
+      "Rhythm"
+    ],
+    "date": "2024-05-22",
+    "completed": "",
+    "igdbId": 8167,
+    "slug": "rhythm-heaven",
+    "igdbName": "Rhythm Heaven",
+    "cover": 111493,
+    "url": "https://www.igdb.com/games/rhythm-heaven",
+    "rating": 87.33333333333333
   },
   {
     "airtableId": "recC1ghGYTZslovpQ",
@@ -3293,7 +3311,7 @@
     "igdbName": "Bridge Constructor Portal",
     "cover": 97219,
     "url": "https://www.igdb.com/games/bridge-constructor-portal",
-    "rating": 80.25
+    "rating": 78.42857142857143
   },
   {
     "airtableId": "recIiTj8JKkTBlrvM",
@@ -7168,7 +7186,7 @@
     "igdbName": "SteamWorld Dig 2",
     "cover": 99584,
     "url": "https://www.igdb.com/games/steamworld-dig-2",
-    "rating": 89.0
+    "rating": 89.0909090909091
   },
   {
     "airtableId": "reca6noTPxV8agKVa",
@@ -7252,7 +7270,7 @@
     "igdbName": "X2: Wolverine's Revenge",
     "cover": 123151,
     "url": "https://www.igdb.com/games/x2-wolverine-s-revenge",
-    "rating": 40.0
+    "rating": 45.0
   },
   {
     "airtableId": "recaCm2CRwwskWxE1",
@@ -7955,7 +7973,7 @@
     "igdbName": "Shinobi",
     "cover": 140632,
     "url": "https://www.igdb.com/games/shinobi--2",
-    "rating": ""
+    "rating": 75.0
   },
   {
     "airtableId": "recddgJpZjgdLI8C6",
@@ -8798,7 +8816,7 @@
     "igdbId": 1187,
     "slug": "crash-bandicoot-warped",
     "igdbName": "Crash Bandicoot: Warped",
-    "cover": 376736,
+    "cover": 382460,
     "url": "https://www.igdb.com/games/crash-bandicoot-warped",
     "rating": ""
   },
@@ -10661,10 +10679,10 @@
     "date": "2021-12-09",
     "completed": true,
     "igdbId": 1703,
-    "slug": "warioware-inc-mega-microgames",
-    "igdbName": "WarioWare, Inc.: Mega Microgames!",
+    "slug": "warioware-inc-dot-mega-microgame$",
+    "igdbName": "WarioWare, Inc.: Mega Microgame$!",
     "cover": 89063,
-    "url": "https://www.igdb.com/games/warioware-inc-mega-microgames",
+    "url": "https://www.igdb.com/games/warioware-inc-dot-mega-microgame$",
     "rating": 91.0
   },
   {
@@ -11112,7 +11130,7 @@
     "igdbId": 1570,
     "slug": "jet-set-radio-future",
     "igdbName": "Jet Set Radio Future",
-    "cover": 111625,
+    "cover": 382964,
     "url": "https://www.igdb.com/games/jet-set-radio-future",
     "rating": 77.75
   },
@@ -11184,7 +11202,7 @@
     "igdbId": 152180,
     "slug": "a-little-to-the-left",
     "igdbName": "A Little to the Left",
-    "cover": 209583,
+    "cover": 383881,
     "url": "https://www.igdb.com/games/a-little-to-the-left",
     "rating": 90.0
   },
@@ -12056,7 +12074,7 @@
     "igdbName": "SteamWorld Quest: Hand of Gilgamech",
     "cover": 81467,
     "url": "https://www.igdb.com/games/steamworld-quest-hand-of-gilgamech",
-    "rating": 79.83333333333333
+    "rating": 79.85714285714286
   },
   {
     "airtableId": "reczPXyQT5Bafi2Z3",
