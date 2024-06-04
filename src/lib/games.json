@@ -8925,6 +8925,24 @@
     "rating": 68.0
   },
   {
+    "airtableId": "recioxVKf8LLbO21C",
+    "title": "Metroid: Samus Returns",
+    "support": [
+      "3DS"
+    ],
+    "genre": [
+      "Metroidvania"
+    ],
+    "date": "2024-06-02",
+    "completed": true,
+    "igdbId": 37140,
+    "slug": "metroid-samus-returns",
+    "igdbName": "Metroid: Samus Returns",
+    "cover": 164882,
+    "url": "https://www.igdb.com/games/metroid-samus-returns",
+    "rating": 87.71428571428571
+  },
+  {
     "airtableId": "recir8Adn0rTM3nCV",
     "title": "Bad Dinos",
     "support": [
@@ -10886,7 +10904,7 @@
     "completed": "",
     "igdbId": 21945,
     "slug": "yu-gi-oh-gx-tag-force-2",
-    "igdbName": "Yu-Gi-Oh! GX: Tag Force 2",
+    "igdbName": "Yu-Gi-Oh! GX Tag Force 2",
     "cover": 129509,
     "url": "https://www.igdb.com/games/yu-gi-oh-gx-tag-force-2",
     "rating": 60.0
