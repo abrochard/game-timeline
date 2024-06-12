@@ -2952,6 +2952,22 @@
     "rating": 80.0
   },
   {
+    "airtableId": "recHJBgtTxENV6N7A",
+    "title": "American Arcadia",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2024-06-12",
+    "completed": true,
+    "igdbId": 198439,
+    "slug": "american-arcadia",
+    "igdbName": "American Arcadia",
+    "cover": 313315,
+    "url": "https://www.igdb.com/games/american-arcadia",
+    "rating": ""
+  },
+  {
     "airtableId": "recHKYZGWU1PtqklK",
     "title": "My Friend Pedro",
     "support": [
