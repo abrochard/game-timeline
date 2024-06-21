@@ -4039,7 +4039,7 @@
     "igdbId": 3241,
     "slug": "cookie-clicker",
     "igdbName": "Cookie Clicker",
-    "cover": 104012,
+    "cover": 389171,
     "url": "https://www.igdb.com/games/cookie-clicker",
     "rating": 85.0
   },
@@ -7785,7 +7785,7 @@
     "igdbId": 1244,
     "slug": "tekken-3",
     "igdbName": "Tekken 3",
-    "cover": 178577,
+    "cover": 390374,
     "url": "https://www.igdb.com/games/tekken-3",
     "rating": ""
   },
@@ -9557,6 +9557,22 @@
     "rating": 75.0
   },
   {
+    "airtableId": "recldsSCopvdz8CJg",
+    "title": "Hi-Fi Rush",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2024-06-21",
+    "completed": true,
+    "igdbId": 233585,
+    "slug": "hi-fi-rush",
+    "igdbName": "Hi-Fi Rush",
+    "cover": 282573,
+    "url": "https://www.igdb.com/games/hi-fi-rush",
+    "rating": 86.16666666666667
+  },
+  {
     "airtableId": "reclgHPOI7kvBpehC",
     "title": "Streets of Rage 2",
     "support": [
@@ -9758,7 +9774,7 @@
     "igdbId": 10327,
     "slug": "flyn",
     "igdbName": "Fly'n",
-    "cover": 85238,
+    "cover": 388288,
     "url": "https://www.igdb.com/games/flyn",
     "rating": ""
   },
