@@ -792,6 +792,24 @@
     "rating": 96.38461538461539
   },
   {
+    "airtableId": "rec41OhX4vWtLeHDf",
+    "title": "Ghost Song",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Metroidvania"
+    ],
+    "date": "2024-06-22",
+    "completed": "",
+    "igdbId": 18849,
+    "slug": "ghost-song",
+    "igdbName": "Ghost Song",
+    "cover": 213443,
+    "url": "https://www.igdb.com/games/ghost-song",
+    "rating": 72.6
+  },
+  {
     "airtableId": "rec4HrWh1y2ncKbPD",
     "title": "God of War 3",
     "support": [
