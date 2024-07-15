@@ -115,7 +115,7 @@
     "igdbId": 3109,
     "slug": "postal-2",
     "igdbName": "Postal 2",
-    "cover": 128289,
+    "cover": 393648,
     "url": "https://www.igdb.com/games/postal-2",
     "rating": 59.25
   },
@@ -1973,6 +1973,22 @@
     "cover": 169708,
     "url": "https://www.igdb.com/games/cat-lady-the-card-game",
     "rating": ""
+  },
+  {
+    "airtableId": "recAlpTPFpIFqg6jh",
+    "title": "Fortnite Battle Royale",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2024-07-14",
+    "completed": "",
+    "igdbId": 1905,
+    "slug": "fortnite",
+    "igdbName": "Fortnite",
+    "cover": 112205,
+    "url": "https://www.igdb.com/games/fortnite",
+    "rating": 82.6
   },
   {
     "airtableId": "recAw1rcLkS4P1wZk",
@@ -4057,7 +4073,7 @@
     "igdbId": 3241,
     "slug": "cookie-clicker",
     "igdbName": "Cookie Clicker",
-    "cover": 389171,
+    "cover": 391594,
     "url": "https://www.igdb.com/games/cookie-clicker",
     "rating": 85.0
   },
@@ -6865,7 +6881,7 @@
     "igdbId": 20478,
     "slug": "x-men-origins-wolverine-uncaged-edition",
     "igdbName": "X-Men Origins: Wolverine Uncaged Edition",
-    "cover": 151926,
+    "cover": 392853,
     "url": "https://www.igdb.com/games/x-men-origins-wolverine-uncaged-edition",
     "rating": 73.25
   },
@@ -8868,7 +8884,7 @@
     "igdbId": 8621,
     "slug": "samorost-2",
     "igdbName": "Samorost 2",
-    "cover": 95981,
+    "cover": 392618,
     "url": "https://www.igdb.com/games/samorost-2",
     "rating": ""
   },
@@ -9117,7 +9133,7 @@
     "igdbId": 20803,
     "slug": "super-puzzle-fighter-ii-turbo",
     "igdbName": "Super Puzzle Fighter II Turbo",
-    "cover": 91192,
+    "cover": 391720,
     "url": "https://www.igdb.com/games/super-puzzle-fighter-ii-turbo",
     "rating": 85.0
   },
