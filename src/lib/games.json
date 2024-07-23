@@ -998,6 +998,24 @@
     "rating": 73.66666666666667
   },
   {
+    "airtableId": "rec5MYlVffAUUORTl",
+    "title": "Doom: Eternal",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "FPS"
+    ],
+    "date": "2024-07-22",
+    "completed": true,
+    "igdbId": 119888,
+    "slug": "doom-eternal-deluxe-edition",
+    "igdbName": "Doom: Eternal - Deluxe Edition",
+    "cover": 86495,
+    "url": "https://www.igdb.com/games/doom-eternal-deluxe-edition",
+    "rating": ""
+  },
+  {
     "airtableId": "rec5UoUUKWo99aOtP",
     "title": "Grid 2",
     "support": [
