@@ -2859,7 +2859,7 @@
     "igdbName": "Monster Train",
     "cover": 101350,
     "url": "https://www.igdb.com/games/monster-train",
-    "rating": 84.25
+    "rating": 85.4
   },
   {
     "airtableId": "recGp3AHnmalkdah6",
@@ -7960,6 +7960,24 @@
     "rating": ""
   },
   {
+    "airtableId": "recd1wpxZbuE4dsjk",
+    "title": "Hidden Folks",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2024-07-27",
+    "completed": true,
+    "igdbId": 26809,
+    "slug": "hidden-folks",
+    "igdbName": "Hidden Folks",
+    "cover": 68886,
+    "url": "https://www.igdb.com/games/hidden-folks",
+    "rating": 80.0
+  },
+  {
     "airtableId": "recdDQlETHx6qvFig",
     "title": "KickBeat",
     "support": [
@@ -8025,7 +8043,7 @@
     "igdbName": "Superliminal",
     "cover": 86507,
     "url": "https://www.igdb.com/games/superliminal",
-    "rating": 78.57142857142857
+    "rating": 79.5
   },
   {
     "airtableId": "recdcpiIMURYq3Lc0",
@@ -9706,7 +9724,7 @@
     "igdbName": "Venba",
     "cover": 320944,
     "url": "https://www.igdb.com/games/venba",
-    "rating": 85.0
+    "rating": 86.66666666666667
   },
   {
     "airtableId": "recm3LzcfJXSG70Zu",
