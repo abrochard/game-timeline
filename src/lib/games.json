@@ -4715,6 +4715,24 @@
     "rating": 90.0
   },
   {
+    "airtableId": "recOBH83YRJEyr5Wh",
+    "title": "Railbound",
+    "support": [
+      "Android"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2024-08-02",
+    "completed": true,
+    "igdbId": 198623,
+    "slug": "railbound",
+    "igdbName": "Railbound",
+    "cover": 219206,
+    "url": "https://www.igdb.com/games/railbound",
+    "rating": ""
+  },
+  {
     "airtableId": "recOG5dmEc5lsg4qB",
     "title": "Carto",
     "support": [
@@ -10871,7 +10889,7 @@
     "igdbId": 9848,
     "slug": "10-second-ninja",
     "igdbName": "10 Second Ninja",
-    "cover": 10675,
+    "cover": 396736,
     "url": "https://www.igdb.com/games/10-second-ninja",
     "rating": 80.0
   },
@@ -11749,7 +11767,7 @@
     "igdbId": 202279,
     "slug": "marvel-snap",
     "igdbName": "Marvel Snap",
-    "cover": 380167,
+    "cover": 400615,
     "url": "https://www.igdb.com/games/marvel-snap",
     "rating": 85.0
   },
