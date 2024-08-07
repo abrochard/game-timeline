@@ -7141,6 +7141,24 @@
     "rating": 100.0
   },
   {
+    "airtableId": "recZVUlGZ0NnkuanA",
+    "title": "Paper Trail",
+    "support": [
+      "Android"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2024-08-07",
+    "completed": true,
+    "igdbId": 142561,
+    "slug": "paper-trail",
+    "igdbName": "Paper Trail",
+    "cover": 226754,
+    "url": "https://www.igdb.com/games/paper-trail",
+    "rating": 85.0
+  },
+  {
     "airtableId": "recZjGtiKME6CtN2d",
     "title": "Fire Emblem",
     "support": [
