@@ -490,6 +490,24 @@
     "rating": ""
   },
   {
+    "airtableId": "rec2BQsgoQX7MefOY",
+    "title": "Storyteller",
+    "support": [
+      "Android"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2024-08-11",
+    "completed": true,
+    "igdbId": 159299,
+    "slug": "storyteller--1",
+    "igdbName": "Storyteller",
+    "cover": 162526,
+    "url": "https://www.igdb.com/games/storyteller--1",
+    "rating": 81.5
+  },
+  {
     "airtableId": "rec2XtQFeXVIMzCAJ",
     "title": "Contra 4",
     "support": [
@@ -3624,7 +3642,7 @@
     "igdbId": 2136,
     "slug": "bayonetta",
     "igdbName": "Bayonetta",
-    "cover": 79382,
+    "cover": 403600,
     "url": "https://www.igdb.com/games/bayonetta",
     "rating": 90.86666666666666
   },
