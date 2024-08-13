@@ -5522,7 +5522,7 @@
     "completed": true,
     "igdbId": 81480,
     "slug": "asterix-and-obelix-xxl-2-mission-las-vegum",
-    "igdbName": "Asterix & Obelix XXL 2: Mission Las Vegum",
+    "igdbName": "Ast\u00e9rix & Ob\u00e9lix XXL 2: Mission Las Vegum",
     "cover": 253473,
     "url": "https://www.igdb.com/games/asterix-and-obelix-xxl-2-mission-las-vegum",
     "rating": ""
@@ -11012,6 +11012,22 @@
     "cover": 274571,
     "url": "https://www.igdb.com/games/deadbolt",
     "rating": 75.0
+  },
+  {
+    "airtableId": "recsgMzi9OUjXYT8l",
+    "title": "80 Days",
+    "support": [
+      "Android"
+    ],
+    "genre": "",
+    "date": "2024-08-13",
+    "completed": true,
+    "igdbId": 9053,
+    "slug": "80-days",
+    "igdbName": "80 Days",
+    "cover": 82976,
+    "url": "https://www.igdb.com/games/80-days",
+    "rating": 70.0
   },
   {
     "airtableId": "recsj0JvNOhqIOrnj",
