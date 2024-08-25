@@ -8871,6 +8871,24 @@
     "rating": ""
   },
   {
+    "airtableId": "rechzTrqCKynbGFNf",
+    "title": "Gibbon: Beyond the Trees",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "2D platform"
+    ],
+    "date": "2024-08-24",
+    "completed": true,
+    "igdbId": 190877,
+    "slug": "gibbon-beyond-the-trees",
+    "igdbName": "Gibbon: Beyond the Trees",
+    "cover": 207615,
+    "url": "https://www.igdb.com/games/gibbon-beyond-the-trees",
+    "rating": ""
+  },
+  {
     "airtableId": "reci386cBKNX4MjKC",
     "title": "Kung Fu Strike: The Warrior's Rise",
     "support": [
