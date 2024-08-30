@@ -10878,6 +10878,22 @@
     "rating": 91.0
   },
   {
+    "airtableId": "recrqQz2hyOFuOpO1",
+    "title": "Kingdom Hearts Final Mix",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2024-08-29",
+    "completed": true,
+    "igdbId": 20283,
+    "slug": "kingdom-hearts-final-mix",
+    "igdbName": "Kingdom Hearts Final Mix",
+    "cover": 141251,
+    "url": "https://www.igdb.com/games/kingdom-hearts-final-mix",
+    "rating": ""
+  },
+  {
     "airtableId": "recrqYXaIO5iGMZ75",
     "title": "Quadrilateral Cowboy",
     "support": [
