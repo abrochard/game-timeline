@@ -8271,6 +8271,24 @@
     "rating": 60.0
   },
   {
+    "airtableId": "receLqCPX1TDU7YLH",
+    "title": "Midnight Fight Express",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Beat'em Up"
+    ],
+    "date": "2024-09-06",
+    "completed": true,
+    "igdbId": 138244,
+    "slug": "midnight-fight-express",
+    "igdbName": "Midnight Fight Express",
+    "cover": 171648,
+    "url": "https://www.igdb.com/games/midnight-fight-express",
+    "rating": 79.0
+  },
+  {
     "airtableId": "receNnKqJGUXW3NIo",
     "title": "Need For Speed 6 Hot Pursuit 2",
     "support": [
@@ -10883,7 +10901,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Action RPG"
+    ],
     "date": "2024-08-29",
     "completed": true,
     "igdbId": 20283,
