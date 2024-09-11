@@ -547,7 +547,10 @@
     "support": [
       "Android"
     ],
-    "genre": "",
+    "genre": [
+      "Deckbuilding",
+      "Roguelike"
+    ],
     "date": "2021-11-22",
     "completed": true,
     "igdbId": 116137,
@@ -935,7 +938,10 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Roguelike",
+      "TBS"
+    ],
     "date": "2021-12-23",
     "completed": true,
     "igdbId": 27117,
@@ -1126,7 +1132,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Simulation"
+    ],
     "date": "2022-08-05",
     "completed": "",
     "igdbId": 138590,
@@ -2694,7 +2702,10 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Roguelike",
+      "Deckbuilding"
+    ],
     "date": "2023-06-06",
     "completed": true,
     "igdbId": 132422,
@@ -2729,7 +2740,9 @@
       "PS2",
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "3D platform"
+    ],
     "date": "",
     "completed": true,
     "igdbId": 836,
@@ -3199,7 +3212,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Roguelike"
+    ],
     "date": "2022-05-20",
     "completed": "",
     "igdbId": 8965,
@@ -3389,7 +3404,9 @@
     "support": [
       "Android"
     ],
-    "genre": "",
+    "genre": [
+      "Puzzle"
+    ],
     "date": "2019-05-01",
     "completed": true,
     "igdbId": 76770,
@@ -3879,7 +3896,9 @@
     "support": [
       "GBA"
     ],
-    "genre": "",
+    "genre": [
+      "Run and Gun"
+    ],
     "date": "2023-06-07",
     "completed": true,
     "igdbId": 6422,
@@ -3947,7 +3966,9 @@
     "support": [
       "PS2"
     ],
-    "genre": "",
+    "genre": [
+      "3D platform"
+    ],
     "date": "",
     "completed": true,
     "igdbId": 837,
@@ -4604,7 +4625,9 @@
     "support": [
       "Neo Geo"
     ],
-    "genre": "",
+    "genre": [
+      "Run and Gun"
+    ],
     "date": "2017-12-18",
     "completed": true,
     "igdbId": 1404,
@@ -5251,7 +5274,10 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Roguelike",
+      "Deckbuilding"
+    ],
     "date": "2022-03-08",
     "completed": true,
     "igdbId": 121390,
@@ -5902,7 +5928,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Visual Novel"
+    ],
     "date": "2022-06-05",
     "completed": true,
     "igdbId": 55198,
@@ -7268,7 +7296,9 @@
     "support": [
       "GBA"
     ],
-    "genre": "",
+    "genre": [
+      "2D platform"
+    ],
     "date": "2021-11-09",
     "completed": true,
     "igdbId": 1197,
@@ -7284,7 +7314,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Beat'em Up"
+    ],
     "date": "2021-09-02",
     "completed": true,
     "igdbId": 6655,
@@ -7539,7 +7571,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Roguelike"
+    ],
     "date": "2022-05-20",
     "completed": "",
     "igdbId": 3029,
@@ -8089,7 +8123,10 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "FPS",
+      "Puzzle"
+    ],
     "date": "2021-09-01",
     "completed": true,
     "igdbId": 68447,
@@ -8173,7 +8210,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "FPS"
+    ],
     "date": "2021-09-21",
     "completed": "",
     "igdbId": 18081,
@@ -8495,6 +8534,22 @@
     "rating": 78.85714285714286
   },
   {
+    "airtableId": "recfMYMfaMr7y1MCf",
+    "title": "Everything",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2024-09-11",
+    "completed": true,
+    "igdbId": 27910,
+    "slug": "everything",
+    "igdbName": "Everything",
+    "cover": 99487,
+    "url": "https://www.igdb.com/games/everything",
+    "rating": 72.0
+  },
+  {
     "airtableId": "recfUQMRRI4mxRkJi",
     "title": "Gunpoint",
     "support": [
@@ -8741,7 +8796,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "3D platform"
+    ],
     "date": "2022-06-22",
     "completed": true,
     "igdbId": 2438,
@@ -9409,7 +9466,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "3D platform"
+    ],
     "date": "2021-06-19",
     "completed": true,
     "igdbId": 2468,
@@ -9495,7 +9554,9 @@
     "support": [
       "PS2"
     ],
-    "genre": "",
+    "genre": [
+      "3D platform"
+    ],
     "date": "",
     "completed": true,
     "igdbId": 1528,
@@ -9530,7 +9591,9 @@
     "support": [
       "Android"
     ],
-    "genre": "",
+    "genre": [
+      "Puzzle"
+    ],
     "date": "2022-06-26",
     "completed": true,
     "igdbId": 102865,
@@ -9706,7 +9769,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Puzzle"
+    ],
     "date": "2021-09-30",
     "completed": "",
     "igdbId": 11597,
@@ -9910,7 +9975,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "2D platform"
+    ],
     "date": "2021-07-29",
     "completed": "",
     "igdbId": 2605,
@@ -10270,7 +10337,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Survival"
+    ],
     "date": "2022-01-27",
     "completed": "",
     "igdbId": 104967,
@@ -10579,7 +10648,9 @@
     "support": [
       "PS2"
     ],
-    "genre": "",
+    "genre": [
+      "Racing"
+    ],
     "date": "2021-07-11",
     "completed": "",
     "igdbId": 1532,
@@ -10595,7 +10666,9 @@
     "support": [
       "Neo Geo"
     ],
-    "genre": "",
+    "genre": [
+      "Run and Gun"
+    ],
     "date": "2017-12-19",
     "completed": true,
     "igdbId": 1407,
@@ -10695,7 +10768,9 @@
     "support": [
       "NES"
     ],
-    "genre": "",
+    "genre": [
+      "Run and Gun"
+    ],
     "date": "2019-06-29",
     "completed": true,
     "igdbId": 4598,
@@ -11073,7 +11148,9 @@
     "support": [
       "Android"
     ],
-    "genre": "",
+    "genre": [
+      "Visual Novel"
+    ],
     "date": "2024-08-13",
     "completed": true,
     "igdbId": 9053,
@@ -11967,7 +12044,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Visual Novel"
+    ],
     "date": "2022-04-08",
     "completed": true,
     "igdbId": 127591,
@@ -12242,7 +12321,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Beat'em Up"
+    ],
     "date": "2021-10-13",
     "completed": "",
     "igdbId": 20022,
