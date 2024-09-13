@@ -11565,6 +11565,24 @@
     "rating": 80.0
   },
   {
+    "airtableId": "recumHksONwr2GFLF",
+    "title": "Mega Man 6",
+    "support": [
+      "NES"
+    ],
+    "genre": [
+      "2D platform"
+    ],
+    "date": "2024-09-13",
+    "completed": true,
+    "igdbId": 1719,
+    "slug": "mega-man-6",
+    "igdbName": "Mega Man 6",
+    "cover": 240207,
+    "url": "https://www.igdb.com/games/mega-man-6",
+    "rating": ""
+  },
+  {
     "airtableId": "recuut0zXM3NIDRcR",
     "title": "Batman Arkham Origins",
     "support": [
