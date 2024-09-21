@@ -4860,6 +4860,24 @@
     "rating": 70.0
   },
   {
+    "airtableId": "recOkM5EyTuW1ziVE",
+    "title": "Chants of Sennaar",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2024-09-20",
+    "completed": true,
+    "igdbId": 198499,
+    "slug": "chants-of-sennaar",
+    "igdbName": "Chants of Sennaar",
+    "cover": 308145,
+    "url": "https://www.igdb.com/games/chants-of-sennaar",
+    "rating": 80.0
+  },
+  {
     "airtableId": "recOo0BoNE7QBEnbp",
     "title": "Half-Life 2",
     "support": [
