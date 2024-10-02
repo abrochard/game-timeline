@@ -12127,6 +12127,24 @@
     "rating": 84.75
   },
   {
+    "airtableId": "recy6nzz6CnSiMgpA",
+    "title": "Hyper Demon",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "FPS"
+    ],
+    "date": "2024-10-01",
+    "completed": "",
+    "igdbId": 218183,
+    "slug": "hyper-demon",
+    "igdbName": "Hyper Demon",
+    "cover": 247572,
+    "url": "https://www.igdb.com/games/hyper-demon",
+    "rating": 83.66666666666667
+  },
+  {
     "airtableId": "recyOF0PeD0aUTxLM",
     "title": "Deep Rock Galactic",
     "support": [
