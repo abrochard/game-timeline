@@ -6328,6 +6328,24 @@
     "rating": 82.44444444444444
   },
   {
+    "airtableId": "recVQc6RTu394vz3A",
+    "title": "World of Goo",
+    "support": [
+      "Android"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2024-10-02",
+    "completed": true,
+    "igdbId": 942,
+    "slug": "world-of-goo",
+    "igdbName": "World of Goo",
+    "cover": 99215,
+    "url": "https://www.igdb.com/games/world-of-goo",
+    "rating": 86.75
+  },
+  {
     "airtableId": "recVTs7aUN6Y1M2oO",
     "title": "Aladdin",
     "support": [
