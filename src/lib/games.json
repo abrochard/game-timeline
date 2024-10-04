@@ -8309,6 +8309,24 @@
     "rating": 80.0
   },
   {
+    "airtableId": "receAzZM9eCk7uLQd",
+    "title": "Balatro",
+    "support": [
+      "Android"
+    ],
+    "genre": [
+      "Roguelike"
+    ],
+    "date": "2024-10-04",
+    "completed": "",
+    "igdbId": 251833,
+    "slug": "balatro",
+    "igdbName": "Balatro",
+    "cover": 333155,
+    "url": "https://www.igdb.com/games/balatro",
+    "rating": 91.2
+  },
+  {
     "airtableId": "receCJ2leBeJL5tW3",
     "title": "Cloud Gardens",
     "support": [
