@@ -7636,6 +7636,22 @@
     "rating": 88.0
   },
   {
+    "airtableId": "recav0phIinbuAAzK",
+    "title": "Minecraft",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2024-10-08",
+    "completed": "",
+    "igdbId": 121,
+    "slug": "minecraft-java-edition",
+    "igdbName": "Minecraft: Java Edition",
+    "cover": 393774,
+    "url": "https://www.igdb.com/games/minecraft-java-edition",
+    "rating": 84.35714285714286
+  },
+  {
     "airtableId": "recb2ReLE878rcRaL",
     "title": "Megabyte Punch",
     "support": [
@@ -8874,7 +8890,7 @@
     "igdbId": 21888,
     "slug": "castlevania-the-dracula-x-chronicles",
     "igdbName": "Castlevania: The Dracula X Chronicles",
-    "cover": 79885,
+    "cover": 411059,
     "url": "https://www.igdb.com/games/castlevania-the-dracula-x-chronicles",
     "rating": 82.33333333333333
   },
@@ -9687,7 +9703,7 @@
     "igdbId": 196030,
     "slug": "shotgun-king-the-final-checkmate",
     "igdbName": "Shotgun King: the Final Checkmate",
-    "cover": 215482,
+    "cover": 414970,
     "url": "https://www.igdb.com/games/shotgun-king-the-final-checkmate",
     "rating": ""
   },
@@ -12070,10 +12086,10 @@
     "date": "2018-12-05",
     "completed": true,
     "igdbId": 27725,
-    "slug": "the-room-old-sins",
-    "igdbName": "The Room: Old Sins",
+    "slug": "the-room-4-old-sins",
+    "igdbName": "The Room 4: Old Sins",
     "cover": 155160,
-    "url": "https://www.igdb.com/games/the-room-old-sins",
+    "url": "https://www.igdb.com/games/the-room-4-old-sins",
     "rating": 80.0
   },
   {
