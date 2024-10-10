@@ -2888,7 +2888,7 @@
     "igdbId": 129483,
     "slug": "monster-train",
     "igdbName": "Monster Train",
-    "cover": 101350,
+    "cover": 411793,
     "url": "https://www.igdb.com/games/monster-train",
     "rating": 85.4
   },
@@ -5044,6 +5044,24 @@
     "cover": 371688,
     "url": "https://www.igdb.com/games/furi",
     "rating": 79.0
+  },
+  {
+    "airtableId": "recPgX6ylxbofwWMM",
+    "title": "Loop Hero",
+    "support": [
+      "Android"
+    ],
+    "genre": [
+      "Roguelike"
+    ],
+    "date": "2024-10-10",
+    "completed": "",
+    "igdbId": 141533,
+    "slug": "loop-hero",
+    "igdbName": "Loop Hero",
+    "cover": 122398,
+    "url": "https://www.igdb.com/games/loop-hero",
+    "rating": 84.85714285714286
   },
   {
     "airtableId": "recPkwQA5M8lRqpvB",
