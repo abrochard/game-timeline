@@ -299,7 +299,7 @@
     "igdbId": 27090,
     "slug": "devils-attorney",
     "igdbName": "Devil's Attorney",
-    "cover": 129926,
+    "cover": 413605,
     "url": "https://www.igdb.com/games/devils-attorney",
     "rating": ""
   },
@@ -2030,7 +2030,7 @@
     "igdbId": 1905,
     "slug": "fortnite",
     "igdbName": "Fortnite",
-    "cover": 112205,
+    "cover": 416039,
     "url": "https://www.igdb.com/games/fortnite",
     "rating": 82.6
   },
@@ -2335,7 +2335,7 @@
     "igdbId": 6524,
     "slug": "ninja-five-o",
     "igdbName": "Ninja Five-O",
-    "cover": 173623,
+    "cover": 416338,
     "url": "https://www.igdb.com/games/ninja-five-o",
     "rating": 79.0
   },
@@ -3468,7 +3468,7 @@
     "igdbId": 14593,
     "slug": "hollow-knight",
     "igdbName": "Hollow Knight",
-    "cover": 82242,
+    "cover": 416342,
     "url": "https://www.igdb.com/games/hollow-knight",
     "rating": 91.25
   },
@@ -10466,7 +10466,7 @@
     "completed": true,
     "igdbId": 11592,
     "slug": "lara-croft-go",
-    "igdbName": "Lara Croft GO",
+    "igdbName": "Lara Croft Go",
     "cover": 90289,
     "url": "https://www.igdb.com/games/lara-croft-go",
     "rating": 85.8
@@ -10641,7 +10641,7 @@
     "completed": true,
     "igdbId": 6073,
     "slug": "hitman-go",
-    "igdbName": "Hitman GO",
+    "igdbName": "Hitman Go",
     "cover": 221708,
     "url": "https://www.igdb.com/games/hitman-go",
     "rating": 74.875
@@ -10971,6 +10971,24 @@
     "cover": 24411,
     "url": "https://www.igdb.com/games/flipping-legend",
     "rating": ""
+  },
+  {
+    "airtableId": "recrMYTIdpfus0xa2",
+    "title": "Inscryption",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Deckbuilding"
+    ],
+    "date": "2024-10-29",
+    "completed": true,
+    "igdbId": 139090,
+    "slug": "inscryption",
+    "igdbName": "Inscryption",
+    "cover": 186672,
+    "url": "https://www.igdb.com/games/inscryption",
+    "rating": 82.25
   },
   {
     "airtableId": "recrVdf2SXIcg2wXv",
@@ -11764,7 +11782,7 @@
     "igdbId": 58133,
     "slug": "egg-inc",
     "igdbName": "Egg, Inc.",
-    "cover": 157192,
+    "cover": 414493,
     "url": "https://www.igdb.com/games/egg-inc",
     "rating": ""
   },
