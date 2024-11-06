@@ -9567,6 +9567,24 @@
     "rating": 80.8
   },
   {
+    "airtableId": "reckGWnOZEDULy5hM",
+    "title": "Monument Valley III",
+    "support": [
+      "Android"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2024-11-06",
+    "completed": true,
+    "igdbId": 121277,
+    "slug": "monument-valley-iii",
+    "igdbName": "Monument Valley III",
+    "cover": 413737,
+    "url": "https://www.igdb.com/games/monument-valley-iii",
+    "rating": ""
+  },
+  {
     "airtableId": "reckJy6MherwF9VHI",
     "title": "Castlevania: Lords of Shadow - Mirror of Fate HD",
     "support": [
