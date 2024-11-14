@@ -2238,6 +2238,22 @@
     "rating": 87.33333333333333
   },
   {
+    "airtableId": "recC0ye1hBhNvEvC6",
+    "title": "Cozy Grove: Camp Spirit",
+    "support": [
+      "Android"
+    ],
+    "genre": "",
+    "date": "2024-11-14",
+    "completed": "",
+    "igdbId": 305032,
+    "slug": "cozy-grove-camp-spirit",
+    "igdbName": "Cozy Grove: Camp Spirit",
+    "cover": 405965,
+    "url": "https://www.igdb.com/games/cozy-grove-camp-spirit",
+    "rating": ""
+  },
+  {
     "airtableId": "recC1ghGYTZslovpQ",
     "title": "Trine 2",
     "support": [
