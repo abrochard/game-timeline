@@ -1607,7 +1607,7 @@
     "igdbId": 6057,
     "slug": "shadow-warrior-4a585c08-b9c8-4f94-9bed-4461ac7e6a4c",
     "igdbName": "Shadow Warrior",
-    "cover": 92153,
+    "cover": 421945,
     "url": "https://www.igdb.com/games/shadow-warrior-4a585c08-b9c8-4f94-9bed-4461ac7e6a4c",
     "rating": 70.625
   },
@@ -3410,7 +3410,7 @@
     "igdbId": 19870,
     "slug": "infinity-loop",
     "igdbName": "Infinity Loop",
-    "cover": 16115,
+    "cover": 422630,
     "url": "https://www.igdb.com/games/infinity-loop",
     "rating": ""
   },
@@ -4909,7 +4909,7 @@
     "igdbName": "Half-Life 2",
     "cover": 77288,
     "url": "https://www.igdb.com/games/half-life-2",
-    "rating": 91.0
+    "rating": 79.125
   },
   {
     "airtableId": "recOrgoprF02CSmJj",
@@ -10160,6 +10160,24 @@
     "cover": 114226,
     "url": "https://www.igdb.com/games/cyber-hook",
     "rating": 71.33333333333333
+  },
+  {
+    "airtableId": "recmqsa18cTNdSXnI",
+    "title": "Alice: Madness Returns",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "3D platform"
+    ],
+    "date": "2024-11-23",
+    "completed": true,
+    "igdbId": 1040,
+    "slug": "alice-madness-returns",
+    "igdbName": "Alice: Madness Returns",
+    "cover": 123445,
+    "url": "https://www.igdb.com/games/alice-madness-returns",
+    "rating": 72.4
   },
   {
     "airtableId": "recmqwQ5gogtqylYS",
