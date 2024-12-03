@@ -1142,7 +1142,7 @@
     "igdbName": "PowerWash Simulator",
     "cover": 347852,
     "url": "https://www.igdb.com/games/powerwash-simulator",
-    "rating": 78.66666666666667
+    "rating": 76.5
   },
   {
     "airtableId": "rec6PrwalN0EeYzgM",
@@ -3484,7 +3484,7 @@
     "igdbId": 14593,
     "slug": "hollow-knight",
     "igdbName": "Hollow Knight",
-    "cover": 416342,
+    "cover": 424251,
     "url": "https://www.igdb.com/games/hollow-knight",
     "rating": 91.25
   },
@@ -6378,6 +6378,24 @@
     "cover": 99215,
     "url": "https://www.igdb.com/games/world-of-goo",
     "rating": 86.75
+  },
+  {
+    "airtableId": "recVS66RPSqOmEYO2",
+    "title": "The Case of the Golden Idol",
+    "support": [
+      "Android"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2024-12-01",
+    "completed": true,
+    "igdbId": 166722,
+    "slug": "the-case-of-the-golden-idol",
+    "igdbName": "The Case of the Golden Idol",
+    "cover": 239044,
+    "url": "https://www.igdb.com/games/the-case-of-the-golden-idol",
+    "rating": 89.0
   },
   {
     "airtableId": "recVTs7aUN6Y1M2oO",
