@@ -1371,6 +1371,24 @@
     "rating": 77.72222222222223
   },
   {
+    "airtableId": "rec7pCJ3ZRQHughjl",
+    "title": "Tetris",
+    "support": [
+      "Game Boy"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2024-12-20",
+    "completed": "",
+    "igdbId": 86490,
+    "slug": "tetris--1",
+    "igdbName": "Tetris",
+    "cover": 132753,
+    "url": "https://www.igdb.com/games/tetris--1",
+    "rating": ""
+  },
+  {
     "airtableId": "rec7rxyviL1cMcHKT",
     "title": "Injustice 2",
     "support": [
@@ -2030,7 +2048,7 @@
     "igdbId": 1905,
     "slug": "fortnite",
     "igdbName": "Fortnite",
-    "cover": 416039,
+    "cover": 424688,
     "url": "https://www.igdb.com/games/fortnite",
     "rating": 82.6
   },
@@ -9544,7 +9562,7 @@
     "igdbId": 910,
     "slug": "tom-clancy-s-splinter-cell",
     "igdbName": "Tom Clancy's Splinter Cell",
-    "cover": 138418,
+    "cover": 427374,
     "url": "https://www.igdb.com/games/tom-clancy-s-splinter-cell",
     "rating": 84.55555555555556
   },
@@ -10157,7 +10175,7 @@
     "igdbId": 493,
     "slug": "heavy-rain",
     "igdbName": "Heavy Rain",
-    "cover": 175606,
+    "cover": 425856,
     "url": "https://www.igdb.com/games/heavy-rain",
     "rating": 80.25
   },
