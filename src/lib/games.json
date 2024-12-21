@@ -2048,7 +2048,7 @@
     "igdbId": 1905,
     "slug": "fortnite",
     "igdbName": "Fortnite",
-    "cover": 424688,
+    "cover": 428917,
     "url": "https://www.igdb.com/games/fortnite",
     "rating": 82.6
   },
@@ -7925,6 +7925,22 @@
     "igdbName": "Canabalt",
     "cover": 117212,
     "url": "https://www.igdb.com/games/canabalt",
+    "rating": ""
+  },
+  {
+    "airtableId": "recc8VSelfgpelxzy",
+    "title": "Squid Game: Unleashed",
+    "support": [
+      "Android"
+    ],
+    "genre": "",
+    "date": "2024-12-21",
+    "completed": "",
+    "igdbId": 314273,
+    "slug": "squid-game-unleashed",
+    "igdbName": "Squid Game: Unleashed",
+    "cover": 406222,
+    "url": "https://www.igdb.com/games/squid-game-unleashed",
     "rating": ""
   },
   {
