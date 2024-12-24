@@ -1181,6 +1181,24 @@
     "rating": 70.0
   },
   {
+    "airtableId": "rec6Sqr3KtCgD1Okh",
+    "title": "Bomb Rush Cyberfunk",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "3D platform"
+    ],
+    "date": "2024-12-24",
+    "completed": true,
+    "igdbId": 135940,
+    "slug": "bomb-rush-cyberfunk",
+    "igdbName": "Bomb Rush Cyberfunk",
+    "cover": 324368,
+    "url": "https://www.igdb.com/games/bomb-rush-cyberfunk",
+    "rating": 83.0
+  },
+  {
     "airtableId": "rec6SuKAGFSB6eoVP",
     "title": "Uncharted Drake's Fortune",
     "support": [
