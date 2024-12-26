@@ -8708,6 +8708,24 @@
     "rating": 78.85714285714286
   },
   {
+    "airtableId": "recfLSUB0UDbC2z7Q",
+    "title": "The Pedestrian",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2024-12-26",
+    "completed": true,
+    "igdbId": 25837,
+    "slug": "the-pedestrian",
+    "igdbName": "The Pedestrian",
+    "cover": 88907,
+    "url": "https://www.igdb.com/games/the-pedestrian",
+    "rating": 72.5
+  },
+  {
     "airtableId": "recfMYMfaMr7y1MCf",
     "title": "Everything",
     "support": [
