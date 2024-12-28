@@ -9102,6 +9102,25 @@
     "rating": 70.0
   },
   {
+    "airtableId": "rechtH4U1zU3Ll1XL",
+    "title": "Mushroom 11",
+    "support": [
+      "Android"
+    ],
+    "genre": [
+      "2D platform",
+      "Puzzle"
+    ],
+    "date": "2024-12-28",
+    "completed": true,
+    "igdbId": 15549,
+    "slug": "mushroom-11",
+    "igdbName": "Mushroom 11",
+    "cover": 102318,
+    "url": "https://www.igdb.com/games/mushroom-11",
+    "rating": 81.0
+  },
+  {
     "airtableId": "rechuQUVshPHTsk5N",
     "title": "Mr. Shifty",
     "support": [
