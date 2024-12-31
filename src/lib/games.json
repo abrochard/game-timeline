@@ -2945,6 +2945,22 @@
     "rating": 85.4
   },
   {
+    "airtableId": "recGdWGxTmMQ2uFLl",
+    "title": "Before Your Eyes",
+    "support": [
+      "Android"
+    ],
+    "genre": "",
+    "date": "2024-12-30",
+    "completed": true,
+    "igdbId": 91477,
+    "slug": "before-your-eyes",
+    "igdbName": "Before Your Eyes",
+    "cover": 136349,
+    "url": "https://www.igdb.com/games/before-your-eyes",
+    "rating": 86.33333333333333
+  },
+  {
     "airtableId": "recGp3AHnmalkdah6",
     "title": "Kingdom Hearts II",
     "support": [
