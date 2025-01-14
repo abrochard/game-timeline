@@ -11026,6 +11026,22 @@
     "rating": ""
   },
   {
+    "airtableId": "recqtpe2OOX5gElz3",
+    "title": "Terra Nil",
+    "support": [
+      "Android"
+    ],
+    "genre": "",
+    "date": "2025-01-14",
+    "completed": true,
+    "igdbId": 152424,
+    "slug": "terra-nil--1",
+    "igdbName": "Terra Nil",
+    "cover": 288563,
+    "url": "https://www.igdb.com/games/terra-nil--1",
+    "rating": 80.0
+  },
+  {
     "airtableId": "recqwb8UnZo3fOWBj",
     "title": "Contra",
     "support": [
