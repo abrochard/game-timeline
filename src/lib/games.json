@@ -2834,7 +2834,7 @@
     "igdbId": 51485,
     "slug": "super-fancy-pants-adventure",
     "igdbName": "Super Fancy Pants Adventure",
-    "cover": 69428,
+    "cover": 429989,
     "url": "https://www.igdb.com/games/super-fancy-pants-adventure",
     "rating": ""
   },
@@ -12735,6 +12735,22 @@
     "cover": 102743,
     "url": "https://www.igdb.com/games/helltaker",
     "rating": ""
+  },
+  {
+    "airtableId": "reczSJWOQjRHckRUZ",
+    "title": "Devil May Cry",
+    "support": [
+      "PS2"
+    ],
+    "genre": "",
+    "date": "2025-01-13",
+    "completed": true,
+    "igdbId": 134,
+    "slug": "devil-may-cry",
+    "igdbName": "Devil May Cry",
+    "cover": 271602,
+    "url": "https://www.igdb.com/games/devil-may-cry",
+    "rating": 85.0
   },
   {
     "airtableId": "reczWk3Yp50n43mdX",
