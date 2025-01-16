@@ -10393,6 +10393,24 @@
     "rating": ""
   },
   {
+    "airtableId": "recnBWW8bJHDqx3dU",
+    "title": "Slayaway Camp 2",
+    "support": [
+      "Android"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2025-01-16",
+    "completed": "",
+    "igdbId": 273976,
+    "slug": "slayaway-camp-2",
+    "igdbName": "Slayaway Camp 2",
+    "cover": 410968,
+    "url": "https://www.igdb.com/games/slayaway-camp-2",
+    "rating": ""
+  },
+  {
     "airtableId": "recnVQrPwxZhJSsqI",
     "title": "Inmost",
     "support": [
