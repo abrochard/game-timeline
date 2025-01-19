@@ -2909,6 +2909,24 @@
     "rating": 70.23076923076923
   },
   {
+    "airtableId": "recGTUDWHB8lNv071",
+    "title": "Planet of Lana",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2025-01-19",
+    "completed": true,
+    "igdbId": 152071,
+    "slug": "planet-of-lana",
+    "igdbName": "Planet of Lana",
+    "cover": 151668,
+    "url": "https://www.igdb.com/games/planet-of-lana",
+    "rating": 93.33333333333333
+  },
+  {
     "airtableId": "recGUstRC4OjoFWlL",
     "title": "Klonoa 2: Dream Champ Tournament",
     "support": [
@@ -10401,7 +10419,7 @@
     "genre": [
       "Puzzle"
     ],
-    "date": "2025-01-16",
+    "date": "2025-01-15",
     "completed": "",
     "igdbId": 273976,
     "slug": "slayaway-camp-2",
