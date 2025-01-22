@@ -12150,6 +12150,22 @@
     "rating": 80.0
   },
   {
+    "airtableId": "recvvYGv0xEmzR4EZ",
+    "title": "Marvel Rivals",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2025-01-21",
+    "completed": true,
+    "igdbId": 294041,
+    "slug": "marvel-rivals",
+    "igdbName": "Marvel Rivals",
+    "cover": 425775,
+    "url": "https://www.igdb.com/games/marvel-rivals",
+    "rating": 78.0
+  },
+  {
     "airtableId": "recw1JTB4FHhtu06l",
     "title": "Kuru Kuru Kururin",
     "support": [
