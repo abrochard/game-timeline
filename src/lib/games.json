@@ -5116,6 +5116,24 @@
     "rating": 84.42857142857143
   },
   {
+    "airtableId": "recPUxkYvCkCyD4uO",
+    "title": "Neon White",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "3D platform"
+    ],
+    "date": "2025-01-25",
+    "completed": true,
+    "igdbId": 143612,
+    "slug": "neon-white",
+    "igdbName": "Neon White",
+    "cover": 131489,
+    "url": "https://www.igdb.com/games/neon-white",
+    "rating": 88.83333333333333
+  },
+  {
     "airtableId": "recPXiS8rZH6435I9",
     "title": "Furi",
     "support": [
