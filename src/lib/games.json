@@ -8810,6 +8810,24 @@
     "rating": 87.5
   },
   {
+    "airtableId": "recfby1xH9ggFjJE6",
+    "title": "Sonic the Hedgehog",
+    "support": [
+      "Sega Mega Drive"
+    ],
+    "genre": [
+      "2D platform"
+    ],
+    "date": "2025-01-29",
+    "completed": true,
+    "igdbId": 3192,
+    "slug": "sonic-the-hedgehog",
+    "igdbName": "Sonic the Hedgehog",
+    "cover": 325287,
+    "url": "https://www.igdb.com/games/sonic-the-hedgehog",
+    "rating": 85.0
+  },
+  {
     "airtableId": "recfiWJZ3l9Sl8hBw",
     "title": "Star Fox 64",
     "support": [
