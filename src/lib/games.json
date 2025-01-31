@@ -6009,6 +6009,24 @@
     "rating": 80.0
   },
   {
+    "airtableId": "recT7W5TJMpdo1EN7",
+    "title": "Wavetale",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "3D platform"
+    ],
+    "date": "2025-01-30",
+    "completed": true,
+    "igdbId": 165309,
+    "slug": "wavetale",
+    "igdbName": "Wavetale",
+    "cover": 368566,
+    "url": "https://www.igdb.com/games/wavetale",
+    "rating": 78.0
+  },
+  {
     "airtableId": "recTB7gpOmUpm7fmP",
     "title": "Crash Nitro Kart",
     "support": [
@@ -8585,7 +8603,7 @@
     "igdbId": 338,
     "slug": "half-life-2-episode-one",
     "igdbName": "Half-Life 2: Episode One",
-    "cover": 122979,
+    "cover": 435663,
     "url": "https://www.igdb.com/games/half-life-2-episode-one",
     "rating": 86.5
   },
