@@ -2834,7 +2834,7 @@
     "igdbId": 51485,
     "slug": "super-fancy-pants-adventure",
     "igdbName": "Super Fancy Pants Adventure",
-    "cover": 429989,
+    "cover": 436102,
     "url": "https://www.igdb.com/games/super-fancy-pants-adventure",
     "rating": ""
   },
@@ -3358,7 +3358,7 @@
     "igdbId": 3075,
     "slug": "ftl-faster-than-light",
     "igdbName": "FTL: Faster Than Light",
-    "cover": 114525,
+    "cover": 436100,
     "url": "https://www.igdb.com/games/ftl-faster-than-light",
     "rating": 88.8
   },
@@ -7690,6 +7690,24 @@
     "rating": ""
   },
   {
+    "airtableId": "recaXQChESSXiSCIN",
+    "title": "Shantae",
+    "support": [
+      "Game Boy Color"
+    ],
+    "genre": [
+      "2D platform"
+    ],
+    "date": "2025-02-15",
+    "completed": "",
+    "igdbId": 8432,
+    "slug": "shantae",
+    "igdbName": "Shantae",
+    "cover": 103146,
+    "url": "https://www.igdb.com/games/shantae",
+    "rating": ""
+  },
+  {
     "airtableId": "recacPuivxUjWE0ln",
     "title": "Rayman Junior",
     "support": [
@@ -9137,6 +9155,24 @@
     "cover": 114001,
     "url": "https://www.igdb.com/games/pixeljunk-shooter",
     "rating": 82.66666666666667
+  },
+  {
+    "airtableId": "rechZrwevaJaOwAqQ",
+    "title": "Artus contre le d\u00e9mon du mus\u00e9e",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Point'n'click"
+    ],
+    "date": "",
+    "completed": "",
+    "igdbId": 310663,
+    "slug": "artus-against-the-demon-of-the-museum",
+    "igdbName": "Artus Against the Demon of the Museum",
+    "cover": 400524,
+    "url": "https://www.igdb.com/games/artus-against-the-demon-of-the-museum",
+    "rating": ""
   },
   {
     "airtableId": "recheBPLxvcxzmvdK",
@@ -11319,7 +11355,7 @@
     "igdbId": 9047,
     "slug": "besiege",
     "igdbName": "Besiege",
-    "cover": 181992,
+    "cover": 436296,
     "url": "https://www.igdb.com/games/besiege",
     "rating": 85.0
   },
@@ -12217,7 +12253,7 @@
     "igdbName": "Marvel Rivals",
     "cover": 425775,
     "url": "https://www.igdb.com/games/marvel-rivals",
-    "rating": 78.0
+    "rating": 78.5
   },
   {
     "airtableId": "recw1JTB4FHhtu06l",
@@ -12870,7 +12906,7 @@
     "igdbId": 134,
     "slug": "devil-may-cry",
     "igdbName": "Devil May Cry",
-    "cover": 271602,
+    "cover": 436183,
     "url": "https://www.igdb.com/games/devil-may-cry",
     "rating": 85.0
   },
