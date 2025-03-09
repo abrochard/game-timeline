@@ -2205,6 +2205,22 @@
     "rating": ""
   },
   {
+    "airtableId": "recBWL8oPpYWwaeS6",
+    "title": "Mario Party 7",
+    "support": [
+      "GameCube"
+    ],
+    "genre": "",
+    "date": "2025-03-08",
+    "completed": "",
+    "igdbId": 2334,
+    "slug": "mario-party-7",
+    "igdbName": "Mario Party 7",
+    "cover": 95871,
+    "url": "https://www.igdb.com/games/mario-party-7",
+    "rating": 30.0
+  },
+  {
     "airtableId": "recBekbLOLwVbttLq",
     "title": "Stardew Valley",
     "support": [
@@ -8530,7 +8546,7 @@
     "igdbId": 251833,
     "slug": "balatro",
     "igdbName": "Balatro",
-    "cover": 333155,
+    "cover": 439504,
     "url": "https://www.igdb.com/games/balatro",
     "rating": 91.2
   },
@@ -12253,7 +12269,7 @@
     "igdbName": "Marvel Rivals",
     "cover": 425775,
     "url": "https://www.igdb.com/games/marvel-rivals",
-    "rating": 78.5
+    "rating": 83.5
   },
   {
     "airtableId": "recw1JTB4FHhtu06l",
