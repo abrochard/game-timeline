@@ -3,6 +3,7 @@ import pickle
 import os.path
 import urllib
 import json
+import time
 from subprocess import call
 # from PIL import Image
 
@@ -110,7 +111,7 @@ def parseFields(game, data, fields):
 def airtable_get_all_records(records=[], offset=''):
     url=private.AIRTABLE['HOST']
     if offset != '':
-        url += '?offset='+offset
+        url += '&offset='+offset
     headers={"Authorization": "Bearer "+private.AIRTABLE['KEY']}
     r=requests.get(url, headers=headers)
     response=r.json()
@@ -124,7 +125,11 @@ def airtable_get_all_records(records=[], offset=''):
 
 def download_cover(game, dest, size):
     data = igdb_get_covers_url([str(game['cover'])])
-    url = 'https:' + data[0]['url'].replace('t_thumb', 't_'+size)
+    game = data[0]
+    if 'url' not in game:
+        print(game)
+        return
+    url = 'https:' + game['url'].replace('t_thumb', 't_'+size)
     call(["wget", url, "-O", dest])
 
 def small_cover(dest):
@@ -165,7 +170,10 @@ def load_from_igdb(games):
     chunks = split_chunks(games, MAX_CHUNKS)
     data = []
     for chunk in chunks:
-        data = data + igdb_get_games(map(lambda g: str(g['igdbId']), chunk))
+        result = igdb_get_games(map(lambda g: str(g['igdbId']), chunk))
+        # print(result)
+        data = data + result
+        time.sleep(1)
 
     dict = {d['id']:d for d in data}
 
