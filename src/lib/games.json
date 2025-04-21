@@ -13150,5 +13150,21 @@
     "cover": 447068,
     "url": "https://www.igdb.com/games/dredge",
     "rating": 85.6
+  },
+  {
+    "airtableId": "recSC5IN2ovjcfK9F",
+    "title": "Vendr\u00e1n Las Aves",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2025-04-21",
+    "completed": true,
+    "igdbId": 329630,
+    "slug": "vendran-las-aves",
+    "igdbName": "Vendr\u00e1n las aves",
+    "cover": 435346,
+    "url": "https://www.igdb.com/games/vendran-las-aves",
+    "rating": ""
   }
 ]
