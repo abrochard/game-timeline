@@ -57,10 +57,10 @@
     "date": "",
     "completed": "",
     "igdbId": 4348,
-    "slug": "another-world",
-    "igdbName": "Another World",
+    "slug": "out-of-this-world",
+    "igdbName": "Out of This World",
     "cover": 89696,
-    "url": "https://www.igdb.com/games/another-world",
+    "url": "https://www.igdb.com/games/out-of-this-world",
     "rating": ""
   },
   {
@@ -13131,8 +13131,24 @@
     "igdbId": 339816,
     "slug": "black-mirror-thronglets",
     "igdbName": "Black Mirror: Thronglets",
-    "cover": "",
+    "cover": 451984,
     "url": "https://www.igdb.com/games/black-mirror-thronglets",
     "rating": ""
+  },
+  {
+    "airtableId": "recr3F1lhRP7Ls3wW",
+    "title": "Dredge",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2025-04-20",
+    "completed": true,
+    "igdbId": 164867,
+    "slug": "dredge",
+    "igdbName": "Dredge",
+    "cover": 447068,
+    "url": "https://www.igdb.com/games/dredge",
+    "rating": 85.6
   }
 ]
