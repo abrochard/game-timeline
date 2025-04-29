@@ -13166,5 +13166,23 @@
     "cover": 435346,
     "url": "https://www.igdb.com/games/vendran-las-aves",
     "rating": ""
+  },
+  {
+    "airtableId": "recxjVTcC2YdEwdsA",
+    "title": "Tearaway",
+    "support": [
+      "PS Vita"
+    ],
+    "genre": [
+      "3D platform"
+    ],
+    "date": "2025-04-29",
+    "completed": true,
+    "igdbId": 6363,
+    "slug": "tearaway",
+    "igdbName": "Tearaway",
+    "cover": 115357,
+    "url": "https://www.igdb.com/games/tearaway",
+    "rating": 91.2
   }
 ]
