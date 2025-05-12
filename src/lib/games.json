@@ -13202,5 +13202,23 @@
     "cover": 115357,
     "url": "https://www.igdb.com/games/tearaway",
     "rating": 91.2
+  },
+  {
+    "airtableId": "recsKWSIKSSXtpkyT",
+    "title": "Wipeout 2048",
+    "support": [
+      "PS Vita"
+    ],
+    "genre": [
+      "Racing"
+    ],
+    "date": "2025-05-12",
+    "completed": "",
+    "igdbId": 1545,
+    "slug": "wipeout-2048",
+    "igdbName": "Wipeout 2048",
+    "cover": 77014,
+    "url": "https://www.igdb.com/games/wipeout-2048",
+    "rating": 83.33333333333333
   }
 ]
