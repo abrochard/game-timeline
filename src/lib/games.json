@@ -59,7 +59,7 @@
     "igdbId": 4348,
     "slug": "out-of-this-world",
     "igdbName": "Out of This World",
-    "cover": 89696,
+    "cover": 457216,
     "url": "https://www.igdb.com/games/out-of-this-world",
     "rating": ""
   },
@@ -233,7 +233,7 @@
     "igdbId": 25912,
     "slug": "disneys-lilo-and-stitch",
     "igdbName": "Disney's Lilo & Stitch",
-    "cover": 316688,
+    "cover": 459967,
     "url": "https://www.igdb.com/games/disneys-lilo-and-stitch",
     "rating": ""
   },
@@ -407,7 +407,7 @@
     "completed": true,
     "igdbId": 81480,
     "slug": "asterix-and-obelix-xxl-2-mission-las-vegum",
-    "igdbName": "Ast\u00e9rix & Ob\u00e9lix XXL 2: Mission Las Vegum",
+    "igdbName": "Ast\u00e9rix & Ob\u00e9lix XXL 2: Mission: Las Vegum",
     "cover": 253473,
     "url": "https://www.igdb.com/games/asterix-and-obelix-xxl-2-mission-las-vegum",
     "rating": ""
@@ -1679,7 +1679,7 @@
     "igdbId": 837,
     "slug": "prince-of-persia-warrior-within",
     "igdbName": "Prince of Persia: Warrior Within",
-    "cover": 152770,
+    "cover": 462718,
     "url": "https://www.igdb.com/games/prince-of-persia-warrior-within",
     "rating": 79.6
   },
@@ -8128,7 +8128,7 @@
     "completed": true,
     "igdbId": 94969,
     "slug": "mark-of-the-ninja-remastered",
-    "igdbName": "Mark of the Ninja Remastered",
+    "igdbName": "Mark of the Ninja: Remastered",
     "cover": 228810,
     "url": "https://www.igdb.com/games/mark-of-the-ninja-remastered",
     "rating": ""
@@ -11249,7 +11249,7 @@
     "igdbId": 26820,
     "slug": "blasphemous",
     "igdbName": "Blasphemous",
-    "cover": 112703,
+    "cover": 464851,
     "url": "https://www.igdb.com/games/blasphemous",
     "rating": 78.25
   },
@@ -12348,7 +12348,7 @@
     "igdbName": "American Arcadia",
     "cover": 313315,
     "url": "https://www.igdb.com/games/american-arcadia",
-    "rating": ""
+    "rating": 80.66666666666667
   },
   {
     "airtableId": "recldsSCopvdz8CJg",
@@ -12396,7 +12396,7 @@
     "igdbId": 1905,
     "slug": "fortnite",
     "igdbName": "Fortnite",
-    "cover": 428917,
+    "cover": 467136,
     "url": "https://www.igdb.com/games/fortnite",
     "rating": 82.6
   },
@@ -12786,7 +12786,7 @@
     "igdbId": 166722,
     "slug": "the-case-of-the-golden-idol",
     "igdbName": "The Case of the Golden Idol",
-    "cover": 239044,
+    "cover": 458368,
     "url": "https://www.igdb.com/games/the-case-of-the-golden-idol",
     "rating": 89.0
   },
@@ -12927,7 +12927,7 @@
     "igdbId": 52449,
     "slug": "beach-volley-hot-sports",
     "igdbName": "Beach Volley Hot Sports",
-    "cover": "",
+    "cover": 455500,
     "url": "https://www.igdb.com/games/beach-volley-hot-sports",
     "rating": ""
   },
@@ -13011,7 +13011,7 @@
     "igdbId": 294041,
     "slug": "marvel-rivals",
     "igdbName": "Marvel Rivals",
-    "cover": 450861,
+    "cover": 461037,
     "url": "https://www.igdb.com/games/marvel-rivals",
     "rating": 78.5
   },
@@ -13220,5 +13220,23 @@
     "cover": 77014,
     "url": "https://www.igdb.com/games/wipeout-2048",
     "rating": 83.33333333333333
+  },
+  {
+    "airtableId": "recL4BX0kHgPxN9ZB",
+    "title": "Blue Prince",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2025-06-24",
+    "completed": true,
+    "igdbId": 149657,
+    "slug": "blue-prince",
+    "igdbName": "Blue Prince",
+    "cover": 449689,
+    "url": "https://www.igdb.com/games/blue-prince",
+    "rating": 90.8
   }
 ]
