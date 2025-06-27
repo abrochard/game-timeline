@@ -11191,7 +11191,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "JRPG"
+    ],
     "date": "2023-08-29",
     "completed": "",
     "igdbId": 114415,
@@ -13238,5 +13240,21 @@
     "cover": 449689,
     "url": "https://www.igdb.com/games/blue-prince",
     "rating": 90.8
+  },
+  {
+    "airtableId": "recCVpOBBBVhoZ8Sz",
+    "title": "Swordship",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2025-06-26",
+    "completed": true,
+    "igdbId": 182118,
+    "slug": "swordship",
+    "igdbName": "Swordship",
+    "cover": 198021,
+    "url": "https://www.igdb.com/games/swordship",
+    "rating": ""
   }
 ]
