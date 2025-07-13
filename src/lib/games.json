@@ -10209,8 +10209,8 @@
     "completed": true,
     "igdbId": 19520,
     "slug": "far-lone-sails",
-    "igdbName": "FAR: Lone Sails",
-    "cover": 103330,
+    "igdbName": "Far: Lone Sails",
+    "cover": 470674,
     "url": "https://www.igdb.com/games/far-lone-sails",
     "rating": 77.5
   },
@@ -12056,7 +12056,7 @@
     "igdbId": 252836,
     "slug": "jusant",
     "igdbName": "Jusant",
-    "cover": 308412,
+    "cover": 469903,
     "url": "https://www.igdb.com/games/jusant",
     "rating": 86.33333333333333
   },
@@ -13013,7 +13013,7 @@
     "igdbId": 294041,
     "slug": "marvel-rivals",
     "igdbName": "Marvel Rivals",
-    "cover": 461037,
+    "cover": 471879,
     "url": "https://www.igdb.com/games/marvel-rivals",
     "rating": 78.5
   },
@@ -13256,5 +13256,21 @@
     "cover": 198021,
     "url": "https://www.igdb.com/games/swordship",
     "rating": ""
+  },
+  {
+    "airtableId": "recVYSfusAlM0Gq3k",
+    "title": "Buckshot Roulette",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2025-07-13",
+    "completed": true,
+    "igdbId": 281275,
+    "slug": "buckshot-roulette",
+    "igdbName": "Buckshot Roulette",
+    "cover": 380345,
+    "url": "https://www.igdb.com/games/buckshot-roulette",
+    "rating": 80.0
   }
 ]
