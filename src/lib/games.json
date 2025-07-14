@@ -13272,5 +13272,23 @@
     "cover": 380345,
     "url": "https://www.igdb.com/games/buckshot-roulette",
     "rating": 80.0
+  },
+  {
+    "airtableId": "rec7c5RiEgMfeiLO1",
+    "title": "The Procession to Calvary",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Point'n'click"
+    ],
+    "date": "2025-07-14",
+    "completed": true,
+    "igdbId": 106985,
+    "slug": "the-procession-to-calvary",
+    "igdbName": "The Procession to Calvary",
+    "cover": 100419,
+    "url": "https://www.igdb.com/games/the-procession-to-calvary",
+    "rating": ""
   }
 ]
