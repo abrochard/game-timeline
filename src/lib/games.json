@@ -9866,7 +9866,7 @@
     "igdbId": 25901,
     "slug": "my-friend-pedro",
     "igdbName": "My Friend Pedro",
-    "cover": 199781,
+    "cover": 472428,
     "url": "https://www.igdb.com/games/my-friend-pedro",
     "rating": 73.44444444444444
   },
@@ -12264,7 +12264,7 @@
     "igdbName": "Hades",
     "cover": 152760,
     "url": "https://www.igdb.com/games/hades--1",
-    "rating": 94.0625
+    "rating": 93.52941176470588
   },
   {
     "airtableId": "recLvuYOj7Ssk6xRq",
@@ -13289,6 +13289,24 @@
     "igdbName": "The Procession to Calvary",
     "cover": 100419,
     "url": "https://www.igdb.com/games/the-procession-to-calvary",
+    "rating": ""
+  },
+  {
+    "airtableId": "reca6iOr8HjVJi7tO",
+    "title": "OlliOlli World: Rad Edition",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Sport"
+    ],
+    "date": "2025-07-17",
+    "completed": true,
+    "igdbId": 186224,
+    "slug": "olliolli-world-rad-edition",
+    "igdbName": "OlliOlli World: Rad Edition",
+    "cover": 202261,
+    "url": "https://www.igdb.com/games/olliolli-world-rad-edition",
     "rating": ""
   }
 ]
