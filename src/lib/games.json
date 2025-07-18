@@ -13308,5 +13308,23 @@
     "cover": 202261,
     "url": "https://www.igdb.com/games/olliolli-world-rad-edition",
     "rating": ""
+  },
+  {
+    "airtableId": "recOoNZ156U1MSTtW",
+    "title": "The Red Strings Club",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Visual Novel"
+    ],
+    "date": "2025-07-18",
+    "completed": true,
+    "igdbId": 75247,
+    "slug": "the-red-strings-club",
+    "igdbName": "The Red Strings Club",
+    "cover": 102794,
+    "url": "https://www.igdb.com/games/the-red-strings-club",
+    "rating": 78.0
   }
 ]
