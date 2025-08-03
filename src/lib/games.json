@@ -12682,7 +12682,7 @@
     "igdbId": 121,
     "slug": "minecraft-java-edition",
     "igdbName": "Minecraft: Java Edition",
-    "cover": 393774,
+    "cover": 475898,
     "url": "https://www.igdb.com/games/minecraft-java-edition",
     "rating": 84.35714285714286
   },
@@ -13326,5 +13326,21 @@
     "cover": 102794,
     "url": "https://www.igdb.com/games/the-red-strings-club",
     "rating": 78.0
+  },
+  {
+    "airtableId": "rec8JAfTkRJshAVrY",
+    "title": "Moving Out",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2025-08-03",
+    "completed": "",
+    "igdbId": 113866,
+    "slug": "moving-out",
+    "igdbName": "Moving Out",
+    "cover": 90209,
+    "url": "https://www.igdb.com/games/moving-out",
+    "rating": 74.5
   }
 ]
