@@ -3795,7 +3795,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2016-02-07",
     "completed": true,
     "igdbId": 558,
@@ -3881,7 +3883,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2016-02-28",
     "completed": true,
     "igdbId": 731,
@@ -3949,7 +3953,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2016-04-14",
     "completed": true,
     "igdbId": 127,
@@ -4019,7 +4025,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2016-05-06",
     "completed": true,
     "igdbId": 2003,
@@ -4215,7 +4223,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2016-05-29",
     "completed": true,
     "igdbId": 113,
@@ -4408,7 +4418,9 @@
     "support": [
       "Xbox One"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2016-06-25",
     "completed": true,
     "igdbId": 3247,
@@ -4951,7 +4963,7 @@
     "igdbId": 11198,
     "slug": "rocket-league",
     "igdbName": "Rocket League",
-    "cover": 274784,
+    "cover": 478255,
     "url": "https://www.igdb.com/games/rocket-league",
     "rating": 88.70588235294117
   },
@@ -5812,7 +5824,6 @@
       "Android"
     ],
     "genre": [
-      "Plateau",
       "Puzzle"
     ],
     "date": "2017-08-28",
@@ -5846,7 +5857,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2017-09-29",
     "completed": true,
     "igdbId": 2552,
@@ -6140,7 +6153,9 @@
     "support": [
       "Sega Mega Drive"
     ],
-    "genre": "",
+    "genre": [
+      "Beat'em Up"
+    ],
     "date": "2017-12-22",
     "completed": true,
     "igdbId": 3071,
@@ -6658,7 +6673,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2018-09-29",
     "completed": true,
     "igdbId": 537,
@@ -7817,7 +7834,7 @@
     "igdbId": 17000,
     "slug": "stardew-valley",
     "igdbName": "Stardew Valley",
-    "cover": 14012,
+    "cover": 478349,
     "url": "https://www.igdb.com/games/stardew-valley",
     "rating": 90.53846153846153
   },
@@ -8232,7 +8249,7 @@
     "igdbId": 103380,
     "slug": "bloons-td-6",
     "igdbName": "Bloons TD 6",
-    "cover": 76628,
+    "cover": 478256,
     "url": "https://www.igdb.com/games/bloons-td-6",
     "rating": ""
   },
@@ -8361,7 +8378,8 @@
       "PC"
     ],
     "genre": [
-      "Plateau"
+      "Plateau",
+      "Puzzle"
     ],
     "date": "2021-06-08",
     "completed": true,
@@ -8498,7 +8516,7 @@
     "igdbId": 27134,
     "slug": "deep-rock-galactic",
     "igdbName": "Deep Rock Galactic",
-    "cover": 197601,
+    "cover": 480568,
     "url": "https://www.igdb.com/games/deep-rock-galactic",
     "rating": 81.83333333333333
   },
@@ -9455,7 +9473,7 @@
     "igdbId": 8965,
     "slug": "darkest-dungeon",
     "igdbName": "Darkest Dungeon",
-    "cover": 82084,
+    "cover": 480674,
     "url": "https://www.igdb.com/games/darkest-dungeon",
     "rating": 83.1
   },
@@ -12399,7 +12417,7 @@
     "igdbId": 1905,
     "slug": "fortnite",
     "igdbName": "Fortnite",
-    "cover": 476514,
+    "cover": 478170,
     "url": "https://www.igdb.com/games/fortnite",
     "rating": 82.6
   },
@@ -13360,6 +13378,25 @@
     "igdbName": "Pok\u00e9mon Puzzle Challenge",
     "cover": 91884,
     "url": "https://www.igdb.com/games/pokemon-puzzle-challenge",
+    "rating": ""
+  },
+  {
+    "airtableId": "rec34rbMH4FS12Y7J",
+    "title": "Sly 2: Band of Thieves",
+    "support": [
+      "PS Vita"
+    ],
+    "genre": [
+      "3D platform",
+      "Stealth"
+    ],
+    "date": "2025-08-21",
+    "completed": true,
+    "igdbId": 222126,
+    "slug": "sly-2-band-of-thieves--1",
+    "igdbName": "Sly 2: Band of Thieves",
+    "cover": 259937,
+    "url": "https://www.igdb.com/games/sly-2-band-of-thieves--1",
     "rating": ""
   }
 ]
