@@ -15,5 +15,8 @@
     "svelte": "^4.2.19",
     "vite": "^5.4.14"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "canvas-confetti": "^1.9.3"
+  }
 }

@@ -1,6 +1,7 @@
 <script>
  import Games from '$lib/games.json';
  import Game from '$lib/Game.svelte';
+ import confetti from 'canvas-confetti';
 
  let total = 25;
  let games = [];
@@ -17,6 +18,13 @@
      return Math.random() - .5;
    });
    games = games;
+
+   if (games.length == 1) {
+     confetti({
+       particleCount: 150,
+       spread: 180
+     });
+   }
  }
 
  function select(side) {
@@ -53,8 +61,19 @@
    box-shadow: #363333 1px 1px 0 0;
  }
 
+ .hover:hover {
+   box-shadow: #363333 2px 2px 1px 1px;
+ }
+
  .cursor-default {
    cursor: default;
+ }
+
+ input[type=text] {
+   border-radius: 5px;
+   padding: 3px;
+   width: 50px;
+   text-align: center;
  }
 
  input[type=range] {
@@ -72,10 +91,10 @@
     {#if games.length >= 2}
       <h3>Remaining: {games.length}</h3>
       <div class="flex">
-        <div class="card" on:click="{select('left')}">
+        <div class="card hover" on:click="{select('left')}">
           <Game game="{games[0]}"/>
         </div>
-        <div class="card" on:click="{select('right')}">
+        <div class="card hover" on:click="{select('right')}">
           <Game game="{games[1]}"/>
         </div>
       </div>
@@ -87,7 +106,7 @@
         </div>
       </div>
     {:else}
-      <h3>Games pool: {total}</h3>
+      <h3>Games pool: <input type="text" bind:value={total}/></h3>
       <div class="flex">
         <input type="range" id="total" name="total" min="2" max="{Games.length}" bind:value="{total}" />
         <input type="button" value="Go" on:click="{start}" />
