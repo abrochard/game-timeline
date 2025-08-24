@@ -5,15 +5,11 @@
  let total = 25;
  let games = [];
 
- function reset() {
+ function start() {
    games = structuredClone(Games.toSorted((_) => {
      return Math.random() - .5;
    }).slice(0, total));
    pickNext();
- }
-
- function randomIndex() {
-   return Math.floor(Math.random() * games.length);
  }
 
  function pickNext() {
@@ -94,7 +90,7 @@
       <h3>Games pool: {total}</h3>
       <div class="flex">
         <input type="range" id="total" name="total" min="2" max="{Games.length}" bind:value="{total}" />
-        <input type="button" value="Go" on:click="{reset}" />
+        <input type="button" value="Go" on:click="{start}" />
       </div>
     {/if}
   </div>

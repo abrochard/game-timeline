@@ -18,6 +18,7 @@
    align-items: center;
    width: 100%;
    row-gap: 5px;
+   max-height: inherit;
  }
  .header {
    display: flex;
@@ -40,6 +41,7 @@
  }
  img {
    max-width: 100%;
+   height: auto;
    border-radius: 3px;
  }
 
