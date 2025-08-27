@@ -13569,5 +13569,21 @@
     "cover": 218193,
     "url": "https://www.igdb.com/games/whitewater-wipeout",
     "rating": ""
+  },
+  {
+    "airtableId": "recXcNLYG1L9n7Rgn",
+    "title": "Casual Birder",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2025-08-27",
+    "completed": true,
+    "igdbId": 151962,
+    "slug": "casual-birder",
+    "igdbName": "Casual Birder",
+    "cover": 218197,
+    "url": "https://www.igdb.com/games/casual-birder",
+    "rating": ""
   }
 ]
