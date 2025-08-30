@@ -7,17 +7,12 @@
  let games = [];
 
  function start() {
-   games = structuredClone(Games.toSorted((_) => {
-     return Math.random() - .5;
-   }).slice(0, total));
+   games = structuredClone(shuffle(Games).slice(0, total));
    pickNext();
  }
 
  function pickNext() {
-   games.sort(() => {
-     return Math.random() - .5;
-   });
-   games = games;
+   games = shuffle(games);
 
    if (games.length == 1) {
      confetti({
@@ -37,6 +32,17 @@
      games = games;
      pickNext();
    }
+ }
+
+ function shuffle(array) {
+   	array = [...array];
+
+	for (let index = array.length - 1; index > 0; index--) {
+		const newIndex = Math.floor(Math.random() * (index + 1));
+		[array[index], array[newIndex]] = [array[newIndex], array[index]];
+	}
+
+   return array;
  }
 
 </script>
