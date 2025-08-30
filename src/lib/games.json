@@ -5,7 +5,9 @@
     "support": [
       "GBA"
     ],
-    "genre": "",
+    "genre": [
+      "Plateau"
+    ],
     "date": "",
     "completed": "",
     "igdbId": 6698,
@@ -53,7 +55,9 @@
     "support": [
       "SNES"
     ],
-    "genre": "",
+    "genre": [
+      "2D platform"
+    ],
     "date": "",
     "completed": "",
     "igdbId": 4348,
@@ -227,7 +231,10 @@
     "support": [
       "GBA"
     ],
-    "genre": "",
+    "genre": [
+      "Run and Gun",
+      "Puzzle"
+    ],
     "date": "",
     "completed": true,
     "igdbId": 25912,
@@ -313,7 +320,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "",
     "completed": true,
     "igdbId": 732,
@@ -434,7 +443,9 @@
     "support": [
       "PS2"
     ],
-    "genre": "",
+    "genre": [
+      "3D platform"
+    ],
     "date": "",
     "completed": true,
     "igdbId": 25911,
@@ -612,7 +623,9 @@
     "support": [
       "N64"
     ],
-    "genre": "",
+    "genre": [
+      "3D platform"
+    ],
     "date": "",
     "completed": "",
     "igdbId": 1286,
@@ -750,7 +763,10 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Open World",
+      "Stealth"
+    ],
     "date": "",
     "completed": true,
     "igdbId": 128,
@@ -784,7 +800,9 @@
     "support": [
       "PS2"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "",
     "completed": true,
     "igdbId": 1529,
@@ -800,7 +818,9 @@
     "support": [
       "PS2"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "",
     "completed": true,
     "igdbId": 1530,
@@ -952,7 +972,9 @@
     "support": [
       "PS2"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "",
     "completed": true,
     "igdbId": 4225,
@@ -1058,7 +1080,9 @@
     "support": [
       "PS2"
     ],
-    "genre": "",
+    "genre": [
+      "Beat'em Up"
+    ],
     "date": "",
     "completed": true,
     "igdbId": 6159,
@@ -1178,7 +1202,10 @@
     "support": [
       "PSP"
     ],
-    "genre": "",
+    "genre": [
+      "Plateau",
+      "JRPG"
+    ],
     "date": "",
     "completed": "",
     "igdbId": 21945,
@@ -1460,7 +1487,9 @@
     "support": [
       "PS2"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "",
     "completed": true,
     "igdbId": 6285,
@@ -1602,7 +1631,10 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "3D platform",
+      "Stealth"
+    ],
     "date": "",
     "completed": true,
     "igdbId": 2437,
@@ -1707,7 +1739,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "3D platform"
+    ],
     "date": "",
     "completed": true,
     "igdbId": 1163,
@@ -1868,7 +1902,9 @@
     "support": [
       "Android"
     ],
-    "genre": "",
+    "genre": [
+      "Puzzle"
+    ],
     "date": "",
     "completed": "",
     "igdbId": 9761,
@@ -1938,7 +1974,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Simulation"
+    ],
     "date": "",
     "completed": "",
     "igdbId": 7509,
@@ -1988,7 +2026,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Puzzle"
+    ],
     "date": "",
     "completed": "",
     "igdbId": 13226,
@@ -2022,7 +2062,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2012-12-20",
     "completed": true,
     "igdbId": 570,
@@ -2163,7 +2205,10 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Stealth",
+      "Beat'em Up"
+    ],
     "date": "2013-11-28",
     "completed": true,
     "igdbId": 500,
@@ -2232,7 +2277,11 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Open World",
+      "Stealth",
+      "Beat'em Up"
+    ],
     "date": "2013-12-30",
     "completed": true,
     "igdbId": 501,
@@ -2282,7 +2331,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Simulation"
+    ],
     "date": "2014-03-22",
     "completed": "",
     "igdbId": 1023,
@@ -2317,7 +2368,11 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Beat'em Up",
+      "Open World",
+      "RTS"
+    ],
     "date": "2014-04-18",
     "completed": "",
     "igdbId": 212,
@@ -2367,7 +2422,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "3D platform"
+    ],
     "date": "2014-07-12",
     "completed": true,
     "igdbId": 1339,
@@ -2438,7 +2495,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2014-08-11",
     "completed": true,
     "igdbId": 1042,
@@ -2454,7 +2513,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Stealth"
+    ],
     "date": "2014-08-14",
     "completed": "",
     "igdbId": 1050,
@@ -2470,7 +2531,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Stealth"
+    ],
     "date": "2014-08-14",
     "completed": "",
     "igdbId": 748,
@@ -2959,7 +3022,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Stealth"
+    ],
     "date": "2015-06-15",
     "completed": "",
     "igdbId": 1049,
@@ -2975,7 +3040,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Stealth"
+    ],
     "date": "2015-06-16",
     "completed": true,
     "igdbId": 1048,
@@ -3009,7 +3076,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Metroidvania"
+    ],
     "date": "2015-06-18",
     "completed": true,
     "igdbId": 5772,
@@ -3116,7 +3185,9 @@
     "support": [
       "PS3"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2015-07-09",
     "completed": true,
     "igdbId": 523,
@@ -3132,7 +3203,9 @@
     "support": [
       "PS3"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2015-07-10",
     "completed": true,
     "igdbId": 515,
@@ -3180,7 +3253,9 @@
     "support": [
       "PS3"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2015-08-02",
     "completed": true,
     "igdbId": 434,
@@ -3279,7 +3354,9 @@
       "PS3",
       "PS1"
     ],
-    "genre": "",
+    "genre": [
+      "Stealth"
+    ],
     "date": "2015-08-18",
     "completed": true,
     "igdbId": 375,
@@ -3402,7 +3479,9 @@
     "support": [
       "PS3"
     ],
-    "genre": "",
+    "genre": [
+      "Beat'em Up"
+    ],
     "date": "2015-09-29",
     "completed": true,
     "igdbId": 5495,
@@ -3508,7 +3587,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "2D platform"
+    ],
     "date": "2015-11-17",
     "completed": true,
     "igdbId": 5618,
@@ -4347,7 +4428,10 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "3D platform",
+      "Beat'em Up"
+    ],
     "date": "2016-06-10",
     "completed": true,
     "igdbId": 2538,
@@ -4532,7 +4616,7 @@
     "igdbId": 493,
     "slug": "heavy-rain",
     "igdbName": "Heavy Rain",
-    "cover": 425856,
+    "cover": 480235,
     "url": "https://www.igdb.com/games/heavy-rain",
     "rating": 80.25
   },
@@ -5147,7 +5231,8 @@
       "PC"
     ],
     "genre": [
-      "FPS"
+      "FPS",
+      "Roguelike"
     ],
     "date": "2017-01-07",
     "completed": true,
@@ -5681,7 +5766,9 @@
     "support": [
       "Android"
     ],
-    "genre": "",
+    "genre": [
+      "Simulation"
+    ],
     "date": "2017-08-05",
     "completed": true,
     "igdbId": 7767,
@@ -5795,7 +5882,7 @@
     "igdbId": 11162,
     "slug": "for-honor",
     "igdbName": "For Honor",
-    "cover": 82052,
+    "cover": 480772,
     "url": "https://www.igdb.com/games/for-honor",
     "rating": 76.72727272727273
   },
@@ -5841,7 +5928,9 @@
     "support": [
       "NES"
     ],
-    "genre": "",
+    "genre": [
+      "Sport"
+    ],
     "date": "2017-09-21",
     "completed": true,
     "igdbId": 2195,
@@ -6463,7 +6552,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Simulation"
+    ],
     "date": "2018-06-23",
     "completed": true,
     "igdbId": 11707,
@@ -6791,7 +6882,10 @@
     "support": [
       "PS3"
     ],
-    "genre": "",
+    "genre": [
+      "3D platform",
+      "Stealth"
+    ],
     "date": "2018-11-13",
     "completed": true,
     "igdbId": 1798,
@@ -6949,7 +7043,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Plateau"
+    ],
     "date": "2019-02-13",
     "completed": true,
     "igdbId": 3751,
@@ -7049,7 +7145,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2019-04-11",
     "completed": "",
     "igdbId": 103054,
@@ -7099,7 +7197,9 @@
     "support": [
       "GBA"
     ],
-    "genre": "",
+    "genre": [
+      "Plateau"
+    ],
     "date": "2019-04-17",
     "completed": "",
     "igdbId": 49377,
@@ -7169,7 +7269,9 @@
     "support": [
       "Android"
     ],
-    "genre": "",
+    "genre": [
+      "Plateau"
+    ],
     "date": "2019-05-03",
     "completed": "",
     "igdbId": 88938,
@@ -7221,7 +7323,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "2D platform"
+    ],
     "date": "2019-05-12",
     "completed": "",
     "igdbId": 9474,
@@ -7359,7 +7463,9 @@
     "support": [
       "PS1"
     ],
-    "genre": "",
+    "genre": [
+      "Sport"
+    ],
     "date": "2019-10-31",
     "completed": true,
     "igdbId": 913,
@@ -7499,7 +7605,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2019-12-18",
     "completed": true,
     "igdbId": 7003,
@@ -7582,7 +7690,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2020-01-06",
     "completed": true,
     "igdbId": 4797,
@@ -8209,7 +8319,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Sport"
+    ],
     "date": "2020-11-24",
     "completed": "",
     "igdbId": 19554,
@@ -8311,7 +8423,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2021-03-20",
     "completed": true,
     "igdbId": 116753,
@@ -8343,7 +8457,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Plateau"
+    ],
     "date": "2021-05-24",
     "completed": "",
     "igdbId": 20043,
@@ -8462,7 +8578,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "TBS"
+    ],
     "date": "2021-06-20",
     "completed": "",
     "igdbId": 19696,
@@ -8542,7 +8660,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Sport"
+    ],
     "date": "2021-07-03",
     "completed": true,
     "igdbId": 7768,
@@ -8695,7 +8815,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Metroidvania"
+    ],
     "date": "2021-09-20",
     "completed": true,
     "igdbId": 9730,
@@ -8781,7 +8903,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Vs. Fighting"
+    ],
     "date": "2021-11-06",
     "completed": "",
     "igdbId": 76885,
@@ -8971,7 +9095,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Sport"
+    ],
     "date": "2022-01-02",
     "completed": "",
     "igdbId": 9523,
@@ -8987,7 +9113,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Plateau"
+    ],
     "date": "2022-01-06",
     "completed": true,
     "igdbId": 129839,
@@ -9003,7 +9131,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Simulation"
+    ],
     "date": "2022-01-07",
     "completed": "",
     "igdbId": 77654,
@@ -9055,7 +9185,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "TBS"
+    ],
     "date": "2022-01-18",
     "completed": true,
     "igdbId": 118219,
@@ -9105,7 +9237,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Plateau"
+    ],
     "date": "2022-01-29",
     "completed": "",
     "igdbId": 159298,
@@ -9382,7 +9516,9 @@
     "support": [
       "Nintendo Switch"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2022-05-06",
     "completed": true,
     "igdbId": 7346,
@@ -9533,7 +9669,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Sport"
+    ],
     "date": "2022-05-26",
     "completed": true,
     "igdbId": 3191,
@@ -9649,7 +9787,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "2D platform"
+    ],
     "date": "2022-06-13",
     "completed": true,
     "igdbId": 164982,
@@ -9717,7 +9857,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Roguelike"
+    ],
     "date": "2022-07-01",
     "completed": true,
     "igdbId": 115036,
@@ -9749,7 +9891,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Metroidvania"
+    ],
     "date": "2022-07-08",
     "completed": true,
     "igdbId": 27433,
@@ -9847,7 +9991,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Puzzle"
+    ],
     "date": "2022-08-07",
     "completed": true,
     "igdbId": 115843,
@@ -9981,7 +10127,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2022-09-04",
     "completed": true,
     "igdbId": 138949,
@@ -10256,7 +10404,8 @@
       "PC"
     ],
     "genre": [
-      "Roguelike"
+      "Roguelike",
+      "Deckbuilding"
     ],
     "date": "2022-11-13",
     "completed": true,
@@ -10344,7 +10493,9 @@
     "support": [
       "Android"
     ],
-    "genre": "",
+    "genre": [
+      "Plateau"
+    ],
     "date": "2022-12-06",
     "completed": "",
     "igdbId": 202279,
@@ -11022,7 +11173,9 @@
     "support": [
       "Nintendo Switch"
     ],
-    "genre": "",
+    "genre": [
+      "Open World"
+    ],
     "date": "2023-07-12",
     "completed": true,
     "igdbId": 119388,
@@ -13397,6 +13550,40 @@
     "igdbName": "Sly 2: Band of Thieves",
     "cover": 259937,
     "url": "https://www.igdb.com/games/sly-2-band-of-thieves--1",
+    "rating": ""
+  },
+  {
+    "airtableId": "rec20S48qRpQYwDnq",
+    "title": "Whitewater Wipeout",
+    "support": [
+      "Playdate"
+    ],
+    "genre": [
+      "Sport"
+    ],
+    "date": "2025-08-26",
+    "completed": "",
+    "igdbId": 151817,
+    "slug": "whitewater-wipeout",
+    "igdbName": "Whitewater Wipeout",
+    "cover": 218193,
+    "url": "https://www.igdb.com/games/whitewater-wipeout",
+    "rating": ""
+  },
+  {
+    "airtableId": "recXcNLYG1L9n7Rgn",
+    "title": "Casual Birder",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2025-08-27",
+    "completed": true,
+    "igdbId": 151962,
+    "slug": "casual-birder",
+    "igdbName": "Casual Birder",
+    "cover": 218197,
+    "url": "https://www.igdb.com/games/casual-birder",
     "rating": ""
   }
 ]
