@@ -2976,7 +2976,7 @@
     "igdbId": 2064,
     "slug": "antichamber",
     "igdbName": "Antichamber",
-    "cover": 90251,
+    "cover": 484275,
     "url": "https://www.igdb.com/games/antichamber",
     "rating": 82.66666666666667
   },
@@ -4008,7 +4008,7 @@
     "igdbId": 8900,
     "slug": "monument-valley",
     "igdbName": "Monument Valley",
-    "cover": 96666,
+    "cover": 485582,
     "url": "https://www.igdb.com/games/monument-valley",
     "rating": 89.66666666666667
   },
@@ -5756,7 +5756,7 @@
     "igdbId": 3153,
     "slug": "castle-crashers",
     "igdbName": "Castle Crashers",
-    "cover": 236138,
+    "cover": 480326,
     "url": "https://www.igdb.com/games/castle-crashers",
     "rating": 78.75
   },
@@ -9245,7 +9245,7 @@
     "igdbId": 159298,
     "slug": "yu-gi-oh-master-duel",
     "igdbName": "Yu-Gi-Oh! Master Duel",
-    "cover": 382293,
+    "cover": 480511,
     "url": "https://www.igdb.com/games/yu-gi-oh-master-duel",
     "rating": 80.0
   },
@@ -12642,7 +12642,7 @@
     "igdbId": 142561,
     "slug": "paper-trail",
     "igdbName": "Paper Trail",
-    "cover": 226754,
+    "cover": 484543,
     "url": "https://www.igdb.com/games/paper-trail",
     "rating": 85.0
   },
@@ -13584,6 +13584,22 @@
     "igdbName": "Casual Birder",
     "cover": 218197,
     "url": "https://www.igdb.com/games/casual-birder",
+    "rating": ""
+  },
+  {
+    "airtableId": "rec6seqEEwTbFiQtC",
+    "title": "Crankin's Time Travel Adventure",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2025-09-05",
+    "completed": true,
+    "igdbId": 151957,
+    "slug": "crankins-time-travel-adventure",
+    "igdbName": "Crankin's Time Travel Adventure",
+    "cover": 218880,
+    "url": "https://www.igdb.com/games/crankins-time-travel-adventure",
     "rating": ""
   }
 ]
