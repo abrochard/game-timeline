@@ -5116,7 +5116,7 @@
     "igdbId": 231,
     "slug": "half-life",
     "igdbName": "Half-Life",
-    "cover": 360585,
+    "cover": 487607,
     "url": "https://www.igdb.com/games/half-life",
     "rating": 80.0
   },
@@ -5588,7 +5588,7 @@
     "igdbId": 1976,
     "slug": "call-of-juarez-gunslinger",
     "igdbName": "Call of Juarez: Gunslinger",
-    "cover": 81303,
+    "cover": 487516,
     "url": "https://www.igdb.com/games/call-of-juarez-gunslinger",
     "rating": 74.6
   },
@@ -13185,7 +13185,7 @@
     "igdbId": 294041,
     "slug": "marvel-rivals",
     "igdbName": "Marvel Rivals",
-    "cover": 471879,
+    "cover": 487402,
     "url": "https://www.igdb.com/games/marvel-rivals",
     "rating": 78.5
   },
@@ -13617,5 +13617,21 @@
     "cover": 79008,
     "url": "https://www.igdb.com/games/ratchet-deadlocked",
     "rating": 70.0
+  },
+  {
+    "airtableId": "recnuk2MBNEXB5Npx",
+    "title": "Pok\u00e9mon Pinball",
+    "support": [
+      "Game Boy Color"
+    ],
+    "genre": "",
+    "date": "2025-09-13",
+    "completed": "",
+    "igdbId": 4068,
+    "slug": "pokemon-pinball",
+    "igdbName": "Pok\u00e9mon Pinball",
+    "cover": 92194,
+    "url": "https://www.igdb.com/games/pokemon-pinball",
+    "rating": ""
   }
 ]
