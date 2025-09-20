@@ -10749,7 +10749,7 @@
     "igdbId": 152172,
     "slug": "severed-steel",
     "igdbName": "Severed Steel",
-    "cover": 172635,
+    "cover": 489041,
     "url": "https://www.igdb.com/games/severed-steel",
     "rating": 85.0
   },
@@ -13633,5 +13633,21 @@
     "cover": 92194,
     "url": "https://www.igdb.com/games/pokemon-pinball",
     "rating": ""
+  },
+  {
+    "airtableId": "rec3Sm1QwcQlIpHCT",
+    "title": "Tunic",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2025-09-20",
+    "completed": true,
+    "igdbId": 23733,
+    "slug": "tunic",
+    "igdbName": "Tunic",
+    "cover": 67622,
+    "url": "https://www.igdb.com/games/tunic",
+    "rating": 89.2
   }
 ]
