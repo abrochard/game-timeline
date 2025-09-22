@@ -13649,5 +13649,23 @@
     "cover": 67622,
     "url": "https://www.igdb.com/games/tunic",
     "rating": 89.2
+  },
+  {
+    "airtableId": "recDon68WdtKBjiwY",
+    "title": "Celeste 64: Fragments of the Mountain",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "3D platform"
+    ],
+    "date": "2025-09-22",
+    "completed": true,
+    "igdbId": 284430,
+    "slug": "celeste-64-fragments-of-the-mountain",
+    "igdbName": "Celeste 64: Fragments of the Mountain",
+    "cover": 358960,
+    "url": "https://www.igdb.com/games/celeste-64-fragments-of-the-mountain",
+    "rating": ""
   }
 ]
