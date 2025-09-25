@@ -13685,5 +13685,21 @@
     "cover": 220259,
     "url": "https://www.igdb.com/games/pick-pack-pup",
     "rating": ""
+  },
+  {
+    "airtableId": "recD3Y6imuxCybSLo",
+    "title": "Lost Your Marbles",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2025-09-25",
+    "completed": true,
+    "igdbId": 151972,
+    "slug": "lost-your-marbles",
+    "igdbName": "Lost Your Marbles",
+    "cover": 220336,
+    "url": "https://www.igdb.com/games/lost-your-marbles",
+    "rating": ""
   }
 ]
