@@ -13701,5 +13701,21 @@
     "cover": 220336,
     "url": "https://www.igdb.com/games/lost-your-marbles",
     "rating": ""
+  },
+  {
+    "airtableId": "recqnLy8WsPk1e8d8",
+    "title": "Flipper Lifter",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2025-09-30",
+    "completed": "",
+    "igdbId": 151969,
+    "slug": "flipper-lifter",
+    "igdbName": "Flipper Lifter",
+    "cover": 221171,
+    "url": "https://www.igdb.com/games/flipper-lifter",
+    "rating": ""
   }
 ]
