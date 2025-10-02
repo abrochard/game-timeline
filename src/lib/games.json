@@ -13717,5 +13717,21 @@
     "cover": 221171,
     "url": "https://www.igdb.com/games/flipper-lifter",
     "rating": ""
+  },
+  {
+    "airtableId": "rec1bvvt5bviBdPee",
+    "title": "Echoic Memory",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2025-10-01",
+    "completed": "",
+    "igdbId": 151965,
+    "slug": "echoic-memory",
+    "igdbName": "Echoic Memory",
+    "cover": 221172,
+    "url": "https://www.igdb.com/games/echoic-memory",
+    "rating": ""
   }
 ]
