@@ -13733,5 +13733,23 @@
     "cover": 221172,
     "url": "https://www.igdb.com/games/echoic-memory",
     "rating": ""
+  },
+  {
+    "airtableId": "rec8BVEVOKFI2vYw0",
+    "title": "Cloverpit",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Roguelike"
+    ],
+    "date": "2025-10-03",
+    "completed": true,
+    "igdbId": 338902,
+    "slug": "cloverpit",
+    "igdbName": "Cloverpit",
+    "cover": 449625,
+    "url": "https://www.igdb.com/games/cloverpit",
+    "rating": ""
   }
 ]
