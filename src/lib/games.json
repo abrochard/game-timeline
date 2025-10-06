@@ -13751,5 +13751,21 @@
     "cover": 449625,
     "url": "https://www.igdb.com/games/cloverpit",
     "rating": ""
+  },
+  {
+    "airtableId": "recs87iOzSMFRmoLa",
+    "title": "Max Payne",
+    "support": [
+      "GBA"
+    ],
+    "genre": "",
+    "date": "2025-10-06",
+    "completed": true,
+    "igdbId": 133860,
+    "slug": "max-payne--1",
+    "igdbName": "Max Payne",
+    "cover": 122533,
+    "url": "https://www.igdb.com/games/max-payne--1",
+    "rating": 69.0
   }
 ]
