@@ -13767,5 +13767,21 @@
     "cover": 122533,
     "url": "https://www.igdb.com/games/max-payne--1",
     "rating": 69.0
+  },
+  {
+    "airtableId": "recXc5hUaSyVISXkd",
+    "title": "Omaze",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2025-10-08",
+    "completed": true,
+    "igdbId": 151973,
+    "slug": "omaze",
+    "igdbName": "Omaze",
+    "cover": 222145,
+    "url": "https://www.igdb.com/games/omaze",
+    "rating": ""
   }
 ]
