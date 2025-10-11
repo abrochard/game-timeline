@@ -13750,7 +13750,7 @@
     "igdbName": "Cloverpit",
     "cover": 449625,
     "url": "https://www.igdb.com/games/cloverpit",
-    "rating": ""
+    "rating": 62.0
   },
   {
     "airtableId": "recs87iOzSMFRmoLa",
@@ -13782,6 +13782,24 @@
     "igdbName": "Omaze",
     "cover": 222145,
     "url": "https://www.igdb.com/games/omaze",
+    "rating": ""
+  },
+  {
+    "airtableId": "recfdKd3SKYxJZd5W",
+    "title": "Demon Quest '85",
+    "support": [
+      "Playdate"
+    ],
+    "genre": [
+      "Visual Novel"
+    ],
+    "date": "2025-10-11",
+    "completed": true,
+    "igdbId": 151963,
+    "slug": "demon-quest-85",
+    "igdbName": "Demon Quest '85",
+    "cover": 222146,
+    "url": "https://www.igdb.com/games/demon-quest-85",
     "rating": ""
   }
 ]
