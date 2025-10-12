@@ -211,7 +211,6 @@
    transform: rotateY(180deg); /* Pre-rotated to be visible after flip */
  }
 
- /* 👇 ADDED: Style the image to fit inside the card */
  .card-front img {
    width: 90%;
    height: 90%;
