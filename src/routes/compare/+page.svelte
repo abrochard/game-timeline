@@ -1,18 +1,19 @@
 <script>
  import Games from '$lib/games.json';
  import Game from '$lib/Game.svelte';
+ import { Shuffle } from '$lib/sort.js';
  import confetti from 'canvas-confetti';
 
  let total = 25;
  let games = [];
 
  function start() {
-   games = structuredClone(shuffle(Games).slice(0, total));
+   games = structuredClone(Shuffle(Games).slice(0, total));
    pickNext();
  }
 
  function pickNext() {
-   games = shuffle(games);
+   games = Shuffle(games);
 
    if (games.length == 1) {
      confetti({
@@ -32,17 +33,6 @@
      games = games;
      pickNext();
    }
- }
-
- function shuffle(array) {
-   	array = [...array];
-
-	for (let index = array.length - 1; index > 0; index--) {
-		const newIndex = Math.floor(Math.random() * (index + 1));
-		[array[index], array[newIndex]] = [array[newIndex], array[index]];
-	}
-
-   return array;
  }
 
 </script>
