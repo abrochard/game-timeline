@@ -6610,7 +6610,7 @@
     "igdbId": 27789,
     "slug": "pubg-battlegrounds",
     "igdbName": "PUBG: Battlegrounds",
-    "cover": 351363,
+    "cover": 480316,
     "url": "https://www.igdb.com/games/pubg-battlegrounds",
     "rating": 75.0625
   },
@@ -13800,6 +13800,22 @@
     "igdbName": "Demon Quest '85",
     "cover": 222146,
     "url": "https://www.igdb.com/games/demon-quest-85",
+    "rating": ""
+  },
+  {
+    "airtableId": "rec461SkxaePbQihX",
+    "title": "Hyper Meteor",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2025-10-14",
+    "completed": "",
+    "igdbId": 151971,
+    "slug": "hyper-meteor",
+    "igdbName": "Hyper Meteor",
+    "cover": 223115,
+    "url": "https://www.igdb.com/games/hyper-meteor",
     "rating": ""
   }
 ]
