@@ -13559,7 +13559,8 @@
       "Playdate"
     ],
     "genre": [
-      "Sport"
+      "Sport",
+      "Arcade"
     ],
     "date": "2025-08-26",
     "completed": "",
@@ -13708,7 +13709,9 @@
     "support": [
       "Playdate"
     ],
-    "genre": "",
+    "genre": [
+      "Arcade"
+    ],
     "date": "2025-09-30",
     "completed": "",
     "igdbId": 151969,
@@ -13808,7 +13811,9 @@
     "support": [
       "Playdate"
     ],
-    "genre": "",
+    "genre": [
+      "Arcade"
+    ],
     "date": "2025-10-14",
     "completed": "",
     "igdbId": 151971,
@@ -13816,6 +13821,22 @@
     "igdbName": "Hyper Meteor",
     "cover": 223115,
     "url": "https://www.igdb.com/games/hyper-meteor",
+    "rating": ""
+  },
+  {
+    "airtableId": "reccddMT4FyZO8AYc",
+    "title": "Zipper",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2025-10-15",
+    "completed": true,
+    "igdbId": 151981,
+    "slug": "zipper",
+    "igdbName": "Zipper",
+    "cover": 223361,
+    "url": "https://www.igdb.com/games/zipper",
     "rating": ""
   }
 ]
