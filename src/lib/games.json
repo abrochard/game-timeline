@@ -7051,7 +7051,7 @@
     "igdbId": 3751,
     "slug": "peggle",
     "igdbName": "Peggle",
-    "cover": 192322,
+    "cover": 492232,
     "url": "https://www.igdb.com/games/peggle",
     "rating": 86.66666666666667
   },
@@ -13838,5 +13838,23 @@
     "cover": 223361,
     "url": "https://www.igdb.com/games/zipper",
     "rating": ""
+  },
+  {
+    "airtableId": "recDmiyBPex6ELsWf",
+    "title": "Crash Bandicoot",
+    "support": [
+      "PS1"
+    ],
+    "genre": [
+      "3D platform"
+    ],
+    "date": "2025-10-20",
+    "completed": true,
+    "igdbId": 1185,
+    "slug": "crash-bandicoot",
+    "igdbName": "Crash Bandicoot",
+    "cover": 239961,
+    "url": "https://www.igdb.com/games/crash-bandicoot",
+    "rating": 75.0
   }
 ]
