@@ -13856,5 +13856,21 @@
     "cover": 239961,
     "url": "https://www.igdb.com/games/crash-bandicoot",
     "rating": 75.0
+  },
+  {
+    "airtableId": "recqTyIzsxVAyOITk",
+    "title": "Executive Golf DX",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2025-10-21",
+    "completed": true,
+    "igdbId": 151968,
+    "slug": "executive-golf-dx",
+    "igdbName": "Executive Golf DX",
+    "cover": 224729,
+    "url": "https://www.igdb.com/games/executive-golf-dx",
+    "rating": ""
   }
 ]
