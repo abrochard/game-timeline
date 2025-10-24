@@ -13872,5 +13872,21 @@
     "cover": 224729,
     "url": "https://www.igdb.com/games/executive-golf-dx",
     "rating": ""
+  },
+  {
+    "airtableId": "recyLmKzOgS6VxVTt",
+    "title": "Questy Chess",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2025-10-24",
+    "completed": true,
+    "igdbId": 151976,
+    "slug": "questy-chess",
+    "igdbName": "Questy Chess",
+    "cover": 151554,
+    "url": "https://www.igdb.com/games/questy-chess",
+    "rating": ""
   }
 ]
