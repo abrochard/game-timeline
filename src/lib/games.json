@@ -13888,5 +13888,23 @@
     "cover": 151554,
     "url": "https://www.igdb.com/games/questy-chess",
     "rating": ""
+  },
+  {
+    "airtableId": "recUEL6NV87lGls8v",
+    "title": "Saturday Edition",
+    "support": [
+      "Playdate"
+    ],
+    "genre": [
+      "Point'n'click"
+    ],
+    "date": "2025-10-28",
+    "completed": true,
+    "igdbId": 151982,
+    "slug": "saturday-edition",
+    "igdbName": "Saturday Edition",
+    "cover": 225221,
+    "url": "https://www.igdb.com/games/saturday-edition",
+    "rating": ""
   }
 ]
