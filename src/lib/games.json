@@ -5047,7 +5047,7 @@
     "igdbId": 11198,
     "slug": "rocket-league",
     "igdbName": "Rocket League",
-    "cover": 478255,
+    "cover": 491138,
     "url": "https://www.igdb.com/games/rocket-league",
     "rating": 88.70588235294117
   },
@@ -13185,7 +13185,7 @@
     "igdbId": 294041,
     "slug": "marvel-rivals",
     "igdbName": "Marvel Rivals",
-    "cover": 491140,
+    "cover": 498880,
     "url": "https://www.igdb.com/games/marvel-rivals",
     "rating": 78.5
   },
@@ -13905,6 +13905,22 @@
     "igdbName": "Saturday Edition",
     "cover": 225221,
     "url": "https://www.igdb.com/games/saturday-edition",
+    "rating": ""
+  },
+  {
+    "airtableId": "recsG7lHOrMHv7mtf",
+    "title": "Star Sled",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2025-11-01",
+    "completed": true,
+    "igdbId": 198159,
+    "slug": "star-sled",
+    "igdbName": "Star Sled",
+    "cover": 225219,
+    "url": "https://www.igdb.com/games/star-sled",
     "rating": ""
   }
 ]
