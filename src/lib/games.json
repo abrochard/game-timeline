@@ -13922,5 +13922,21 @@
     "cover": 225219,
     "url": "https://www.igdb.com/games/star-sled",
     "rating": ""
+  },
+  {
+    "airtableId": "recUKa3NZtTl3cANA",
+    "title": "Inventory Hero",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2025-11-07",
+    "completed": "",
+    "igdbId": 198160,
+    "slug": "inventory-hero",
+    "igdbName": "Inventory Hero",
+    "cover": 227019,
+    "url": "https://www.igdb.com/games/inventory-hero",
+    "rating": ""
   }
 ]
