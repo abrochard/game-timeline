@@ -13938,5 +13938,21 @@
     "cover": 227019,
     "url": "https://www.igdb.com/games/inventory-hero",
     "rating": ""
+  },
+  {
+    "airtableId": "rec7q2aHnsPclaksd",
+    "title": "Spellcorked!",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2025-11-09",
+    "completed": "",
+    "igdbId": 151980,
+    "slug": "spellcorked",
+    "igdbName": "Spellcorked!",
+    "cover": 227021,
+    "url": "https://www.igdb.com/games/spellcorked",
+    "rating": ""
   }
 ]
