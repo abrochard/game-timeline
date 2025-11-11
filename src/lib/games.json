@@ -13954,5 +13954,23 @@
     "cover": 227021,
     "url": "https://www.igdb.com/games/spellcorked",
     "rating": ""
+  },
+  {
+    "airtableId": "rec6q4hgdq1z1eInM",
+    "title": "Snak",
+    "support": [
+      "Playdate"
+    ],
+    "genre": [
+      "Arcade"
+    ],
+    "date": "2025-11-10",
+    "completed": "",
+    "igdbId": 151979,
+    "slug": "snak",
+    "igdbName": "Snak",
+    "cover": 226981,
+    "url": "https://www.igdb.com/games/snak",
+    "rating": ""
   }
 ]
