@@ -13972,5 +13972,23 @@
     "cover": 226981,
     "url": "https://www.igdb.com/games/snak",
     "rating": ""
+  },
+  {
+    "airtableId": "reccFuX9F33UdDQdd",
+    "title": "Sasquatchers",
+    "support": [
+      "Playdate"
+    ],
+    "genre": [
+      "TBS"
+    ],
+    "date": "2025-11-11",
+    "completed": true,
+    "igdbId": 151978,
+    "slug": "sasquatchers",
+    "igdbName": "Sasquatchers",
+    "cover": 226985,
+    "url": "https://www.igdb.com/games/sasquatchers",
+    "rating": ""
   }
 ]
