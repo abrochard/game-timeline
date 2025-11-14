@@ -13990,5 +13990,23 @@
     "cover": 226985,
     "url": "https://www.igdb.com/games/sasquatchers",
     "rating": ""
+  },
+  {
+    "airtableId": "recOcwU6hZ1xvOEup",
+    "title": "Guncho",
+    "support": [
+      "Android"
+    ],
+    "genre": [
+      "TBS"
+    ],
+    "date": "2025-11-13",
+    "completed": true,
+    "igdbId": 194751,
+    "slug": "guncho",
+    "igdbName": "Guncho",
+    "cover": 395703,
+    "url": "https://www.igdb.com/games/guncho",
+    "rating": ""
   }
 ]
