@@ -7750,7 +7750,7 @@
     "igdbId": 2599,
     "slug": "game-dev-tycoon",
     "igdbName": "Game Dev Tycoon",
-    "cover": 18135,
+    "cover": 506023,
     "url": "https://www.igdb.com/games/game-dev-tycoon",
     "rating": 80.0
   },
@@ -13185,7 +13185,7 @@
     "igdbId": 294041,
     "slug": "marvel-rivals",
     "igdbName": "Marvel Rivals",
-    "cover": 498880,
+    "cover": 506007,
     "url": "https://www.igdb.com/games/marvel-rivals",
     "rating": 78.5
   },
@@ -14007,6 +14007,25 @@
     "igdbName": "Guncho",
     "cover": 395703,
     "url": "https://www.igdb.com/games/guncho",
+    "rating": ""
+  },
+  {
+    "airtableId": "rec18eRxH6iqc76Zl",
+    "title": "Forrest Byrnes: Up in Smoke",
+    "support": [
+      "Playdate"
+    ],
+    "genre": [
+      "2D platform",
+      "Roguelike"
+    ],
+    "date": "2025-11-18",
+    "completed": true,
+    "igdbId": 151970,
+    "slug": "forrest-byrnes-up-in-smoke",
+    "igdbName": "Forrest Byrnes: Up in Smoke",
+    "cover": 229447,
+    "url": "https://www.igdb.com/games/forrest-byrnes-up-in-smoke",
     "rating": ""
   }
 ]
