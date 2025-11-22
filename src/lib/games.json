@@ -7802,7 +7802,7 @@
     "igdbId": 57153,
     "slug": "the-battle-of-polytopia",
     "igdbName": "The Battle of Polytopia",
-    "cover": 120528,
+    "cover": 506995,
     "url": "https://www.igdb.com/games/the-battle-of-polytopia",
     "rating": ""
   },
@@ -13751,7 +13751,7 @@
     "igdbId": 338902,
     "slug": "cloverpit",
     "igdbName": "Cloverpit",
-    "cover": 449625,
+    "cover": 507244,
     "url": "https://www.igdb.com/games/cloverpit",
     "rating": 62.0
   },
@@ -14026,6 +14026,22 @@
     "igdbName": "Forrest Byrnes: Up in Smoke",
     "cover": 229447,
     "url": "https://www.igdb.com/games/forrest-byrnes-up-in-smoke",
+    "rating": ""
+  },
+  {
+    "airtableId": "recC9LTURdxBI0A6I",
+    "title": "Battleship Godios",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2025-11-21",
+    "completed": true,
+    "igdbId": 151960,
+    "slug": "battleship-godios",
+    "igdbName": "Battleship Godios",
+    "cover": 229448,
+    "url": "https://www.igdb.com/games/battleship-godios",
     "rating": ""
   }
 ]
