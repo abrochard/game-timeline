@@ -7135,7 +7135,7 @@
     "igdbId": 103341,
     "slug": "overcooked-2",
     "igdbName": "Overcooked! 2",
-    "cover": 86574,
+    "cover": 503255,
     "url": "https://www.igdb.com/games/overcooked-2",
     "rating": 80.45454545454545
   },
@@ -14042,6 +14042,22 @@
     "igdbName": "Battleship Godios",
     "cover": 229448,
     "url": "https://www.igdb.com/games/battleship-godios",
+    "rating": ""
+  },
+  {
+    "airtableId": "recF1sgGoHNTDrC4c",
+    "title": "Ratcheteer",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2025-11-25",
+    "completed": true,
+    "igdbId": 151977,
+    "slug": "ratcheteer",
+    "igdbName": "Ratcheteer",
+    "cover": 231154,
+    "url": "https://www.igdb.com/games/ratcheteer",
     "rating": ""
   }
 ]
