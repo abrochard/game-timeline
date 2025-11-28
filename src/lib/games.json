@@ -9227,7 +9227,7 @@
     "igdbId": 104967,
     "slug": "valheim",
     "igdbName": "Valheim",
-    "cover": 136297,
+    "cover": 491858,
     "url": "https://www.igdb.com/games/valheim",
     "rating": 90.0
   },
@@ -12570,7 +12570,7 @@
     "igdbId": 1905,
     "slug": "fortnite",
     "igdbName": "Fortnite",
-    "cover": 478170,
+    "cover": 505057,
     "url": "https://www.igdb.com/games/fortnite",
     "rating": 82.6
   },
@@ -14058,6 +14058,22 @@
     "igdbName": "Ratcheteer",
     "cover": 231154,
     "url": "https://www.igdb.com/games/ratcheteer",
+    "rating": ""
+  },
+  {
+    "airtableId": "rec9gIPeUyCd7RWBa",
+    "title": "B360",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2025-11-28",
+    "completed": true,
+    "igdbId": 133393,
+    "slug": "b360",
+    "igdbName": "B360",
+    "cover": 231156,
+    "url": "https://www.igdb.com/games/b360",
     "rating": ""
   }
 ]
