@@ -14075,5 +14075,23 @@
     "cover": 231156,
     "url": "https://www.igdb.com/games/b360",
     "rating": ""
+  },
+  {
+    "airtableId": "recPOAxn969OnUWcM",
+    "title": "Thomas Was Alone",
+    "support": [
+      "PS Vita"
+    ],
+    "genre": [
+      "2D platform"
+    ],
+    "date": "2025-11-30",
+    "completed": true,
+    "igdbId": 2291,
+    "slug": "thomas-was-alone",
+    "igdbName": "Thomas Was Alone",
+    "cover": 386933,
+    "url": "https://www.igdb.com/games/thomas-was-alone",
+    "rating": 76.375
   }
 ]
