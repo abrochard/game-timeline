@@ -4546,7 +4546,7 @@
     "igdbId": 2047,
     "slug": "poker-night-2",
     "igdbName": "Poker Night 2",
-    "cover": 2092,
+    "cover": 510222,
     "url": "https://www.igdb.com/games/poker-night-2",
     "rating": 65.0
   },
@@ -6400,10 +6400,10 @@
     "date": "2018-04-02",
     "completed": true,
     "igdbId": 36749,
-    "slug": "monument-valley-2",
-    "igdbName": "Monument Valley 2",
+    "slug": "monument-valley-ii",
+    "igdbName": "Monument Valley II",
     "cover": 485824,
-    "url": "https://www.igdb.com/games/monument-valley-2",
+    "url": "https://www.igdb.com/games/monument-valley-ii",
     "rating": 80.0
   },
   {
@@ -6648,7 +6648,7 @@
     "igdbName": "Hitman: Absolution",
     "cover": 81336,
     "url": "https://www.igdb.com/games/hitman-absolution",
-    "rating": 76.4
+    "rating": 71.88235294117646
   },
   {
     "airtableId": "rec1UAAkHiDiRA9sY",
@@ -12106,7 +12106,7 @@
     "igdbId": 8978,
     "slug": "jetpack-joyride",
     "igdbName": "Jetpack Joyride",
-    "cover": 253181,
+    "cover": 508093,
     "url": "https://www.igdb.com/games/jetpack-joyride",
     "rating": 67.0
   },
@@ -12570,7 +12570,7 @@
     "igdbId": 1905,
     "slug": "fortnite",
     "igdbName": "Fortnite",
-    "cover": 505057,
+    "cover": 510378,
     "url": "https://www.igdb.com/games/fortnite",
     "rating": 82.6
   },
@@ -14093,5 +14093,21 @@
     "cover": 386933,
     "url": "https://www.igdb.com/games/thomas-was-alone",
     "rating": 76.375
+  },
+  {
+    "airtableId": "recsFoHB9L1me9y6P",
+    "title": "QWOP",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2025-12-09",
+    "completed": true,
+    "igdbId": 8814,
+    "slug": "qwop",
+    "igdbName": "QWOP",
+    "cover": 124203,
+    "url": "https://www.igdb.com/games/qwop",
+    "rating": ""
   }
 ]
