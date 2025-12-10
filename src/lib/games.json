@@ -14109,5 +14109,23 @@
     "cover": 124203,
     "url": "https://www.igdb.com/games/qwop",
     "rating": ""
+  },
+  {
+    "airtableId": "recBbmwnyRgiAbzRp",
+    "title": "Daxter",
+    "support": [
+      "PSP"
+    ],
+    "genre": [
+      "3D platform"
+    ],
+    "date": "2025-12-09",
+    "completed": true,
+    "igdbId": 1533,
+    "slug": "daxter",
+    "igdbName": "Daxter",
+    "cover": 79887,
+    "url": "https://www.igdb.com/games/daxter",
+    "rating": 89.5
   }
 ]
