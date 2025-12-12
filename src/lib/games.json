@@ -944,7 +944,7 @@
     "igdbId": 1791,
     "slug": "ratchet-clank-size-matters",
     "igdbName": "Ratchet & Clank: Size Matters",
-    "cover": 97227,
+    "cover": 497119,
     "url": "https://www.igdb.com/games/ratchet-clank-size-matters",
     "rating": 60.33333333333334
   },
@@ -2267,7 +2267,7 @@
     "igdbId": 71,
     "slug": "portal",
     "igdbName": "Portal",
-    "cover": 89689,
+    "cover": 510841,
     "url": "https://www.igdb.com/games/portal",
     "rating": 80.0
   },
@@ -5756,7 +5756,7 @@
     "igdbId": 3153,
     "slug": "castle-crashers",
     "igdbName": "Castle Crashers",
-    "cover": 480326,
+    "cover": 503599,
     "url": "https://www.igdb.com/games/castle-crashers",
     "rating": 78.75
   },
@@ -11423,7 +11423,7 @@
     "igdbId": 26820,
     "slug": "blasphemous",
     "igdbName": "Blasphemous",
-    "cover": 464851,
+    "cover": 507906,
     "url": "https://www.igdb.com/games/blasphemous",
     "rating": 78.25
   },
@@ -14127,5 +14127,23 @@
     "cover": 79887,
     "url": "https://www.igdb.com/games/daxter",
     "rating": 89.5
+  },
+  {
+    "airtableId": "reccF1RsuJmrZHCjc",
+    "title": "Forza Horizon 4",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Racing"
+    ],
+    "date": "2025-12-11",
+    "completed": "",
+    "igdbId": 82090,
+    "slug": "forza-horizon-4",
+    "igdbName": "Forza Horizon 4",
+    "cover": 111502,
+    "url": "https://www.igdb.com/games/forza-horizon-4",
+    "rating": 90.78571428571429
   }
 ]
