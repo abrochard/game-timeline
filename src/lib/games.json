@@ -2853,7 +2853,7 @@
     "igdbId": 142,
     "slug": "star-wars-battlefront-ii",
     "igdbName": "Star Wars: Battlefront II",
-    "cover": 77488,
+    "cover": 515092,
     "url": "https://www.igdb.com/games/star-wars-battlefront-ii",
     "rating": 75.6
   },
@@ -3362,7 +3362,7 @@
     "igdbId": 375,
     "slug": "metal-gear-solid",
     "igdbName": "Metal Gear Solid",
-    "cover": 352610,
+    "cover": 510598,
     "url": "https://www.igdb.com/games/metal-gear-solid",
     "rating": 80.0
   },
@@ -4830,7 +4830,7 @@
     "igdbId": 3022,
     "slug": "transistor",
     "igdbName": "Transistor",
-    "cover": 79705,
+    "cover": 515940,
     "url": "https://www.igdb.com/games/transistor",
     "rating": 85.25
   },
@@ -8823,7 +8823,7 @@
     "igdbId": 9730,
     "slug": "firewatch",
     "igdbName": "Firewatch",
-    "cover": 75281,
+    "cover": 515584,
     "url": "https://www.igdb.com/games/firewatch",
     "rating": 79.27777777777777
   },
@@ -9227,7 +9227,7 @@
     "igdbId": 104967,
     "slug": "valheim",
     "igdbName": "Valheim",
-    "cover": 491858,
+    "cover": 515978,
     "url": "https://www.igdb.com/games/valheim",
     "rating": 90.0
   },
@@ -10275,7 +10275,7 @@
     "igdbId": 12517,
     "slug": "undertale",
     "igdbName": "Undertale",
-    "cover": 103865,
+    "cover": 515558,
     "url": "https://www.igdb.com/games/undertale",
     "rating": 96.38461538461539
   },
@@ -11423,7 +11423,7 @@
     "igdbId": 26820,
     "slug": "blasphemous",
     "igdbName": "Blasphemous",
-    "cover": 507906,
+    "cover": 514423,
     "url": "https://www.igdb.com/games/blasphemous",
     "rating": 78.25
   },
@@ -13221,7 +13221,7 @@
     "igdbId": 3192,
     "slug": "sonic-the-hedgehog",
     "igdbName": "Sonic the Hedgehog",
-    "cover": 325287,
+    "cover": 497143,
     "url": "https://www.igdb.com/games/sonic-the-hedgehog",
     "rating": 85.0
   },
@@ -14145,5 +14145,23 @@
     "cover": 111502,
     "url": "https://www.igdb.com/games/forza-horizon-4",
     "rating": 90.78571428571429
+  },
+  {
+    "airtableId": "rec5oEZYn8g6MH4CN",
+    "title": "Star Wars: Battle Pod",
+    "support": [
+      "Arcade"
+    ],
+    "genre": [
+      "Rail shooter"
+    ],
+    "date": "2025-12-19",
+    "completed": true,
+    "igdbId": 75086,
+    "slug": "star-wars-battle-pod",
+    "igdbName": "Star Wars: Battle Pod",
+    "cover": 403669,
+    "url": "https://www.igdb.com/games/star-wars-battle-pod",
+    "rating": ""
   }
 ]
