@@ -685,7 +685,7 @@
     "igdbId": 1439,
     "slug": "fire-emblem-the-blazing-blade",
     "igdbName": "Fire Emblem: The Blazing Blade",
-    "cover": 79320,
+    "cover": 528291,
     "url": "https://www.igdb.com/games/fire-emblem-the-blazing-blade",
     "rating": 90.0
   },
@@ -4650,7 +4650,7 @@
     "igdbId": 1352,
     "slug": "journey",
     "igdbName": "Journey",
-    "cover": 80666,
+    "cover": 525656,
     "url": "https://www.igdb.com/games/journey",
     "rating": 93.85714285714286
   },
@@ -5417,7 +5417,7 @@
     "igdbId": 7886,
     "slug": "crypt-of-the-necrodancer",
     "igdbName": "Crypt of the NecroDancer",
-    "cover": 525372,
+    "cover": 527056,
     "url": "https://www.igdb.com/games/crypt-of-the-necrodancer",
     "rating": 87.88888888888889
   },
@@ -8877,7 +8877,7 @@
     "igdbId": 20022,
     "slug": "devil-may-cry-4-special-edition",
     "igdbName": "Devil May Cry 4: Special Edition",
-    "cover": 85781,
+    "cover": 528582,
     "url": "https://www.igdb.com/games/devil-may-cry-4-special-edition",
     "rating": 80.33333333333333
   },
@@ -9175,7 +9175,7 @@
     "igdbId": 3351,
     "slug": "mario-luigi-superstar-saga",
     "igdbName": "Mario & Luigi: Superstar Saga",
-    "cover": 95596,
+    "cover": 526515,
     "url": "https://www.igdb.com/games/mario-luigi-superstar-saga",
     "rating": 86.0
   },
@@ -10135,7 +10135,7 @@
     "igdbId": 138949,
     "slug": "marvels-spider-man-remastered",
     "igdbName": "Marvel's Spider-Man Remastered",
-    "cover": 237010,
+    "cover": 526129,
     "url": "https://www.igdb.com/games/marvels-spider-man-remastered",
     "rating": 78.2
   },
@@ -10483,7 +10483,7 @@
     "igdbId": 10760,
     "slug": "bloodstained-ritual-of-the-night",
     "igdbName": "Bloodstained: Ritual of the Night",
-    "cover": 267567,
+    "cover": 528922,
     "url": "https://www.igdb.com/games/bloodstained-ritual-of-the-night",
     "rating": 82.45454545454545
   },
@@ -10573,7 +10573,7 @@
     "igdbId": 14593,
     "slug": "hollow-knight",
     "igdbName": "Hollow Knight",
-    "cover": 424251,
+    "cover": 525920,
     "url": "https://www.igdb.com/games/hollow-knight",
     "rating": 91.25
   },
@@ -10781,7 +10781,7 @@
     "igdbId": 121220,
     "slug": "undefeated--1",
     "igdbName": "Undefeated",
-    "cover": 101427,
+    "cover": 530650,
     "url": "https://www.igdb.com/games/undefeated--1",
     "rating": ""
   },
@@ -10797,7 +10797,7 @@
     "igdbId": 135337,
     "slug": "bloodstained-curse-of-the-moon-2",
     "igdbName": "Bloodstained: Curse of the Moon 2",
-    "cover": 110315,
+    "cover": 527370,
     "url": "https://www.igdb.com/games/bloodstained-curse-of-the-moon-2",
     "rating": 79.16666666666667
   },
@@ -11285,7 +11285,7 @@
     "igdbId": 134581,
     "slug": "marvels-spider-man-miles-morales",
     "igdbName": "Marvel's Spider-Man: Miles Morales",
-    "cover": 111326,
+    "cover": 526130,
     "url": "https://www.igdb.com/games/marvels-spider-man-miles-morales",
     "rating": 88.625
   },
@@ -12282,7 +12282,7 @@
     "igdbId": 1136,
     "slug": "castlevania-dawn-of-sorrow",
     "igdbName": "Castlevania: Dawn of Sorrow",
-    "cover": 525619,
+    "cover": 526140,
     "url": "https://www.igdb.com/games/castlevania-dawn-of-sorrow",
     "rating": 90.33333333333333
   },
@@ -12434,7 +12434,7 @@
     "igdbId": 113112,
     "slug": "hades--1",
     "igdbName": "Hades",
-    "cover": 152760,
+    "cover": 525627,
     "url": "https://www.igdb.com/games/hades--1",
     "rating": 93.52941176470588
   },
@@ -14181,5 +14181,41 @@
     "cover": 138980,
     "url": "https://www.igdb.com/games/va-11-hall-a-cyberpunk-bartender-action",
     "rating": 83.88888888888889
+  },
+  {
+    "airtableId": "recow93RkKzLH1wto",
+    "title": "Nine Sols",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Metroidvania"
+    ],
+    "date": "2026-01-25",
+    "completed": true,
+    "igdbId": 194821,
+    "slug": "nine-sols",
+    "igdbName": "Nine Sols",
+    "cover": 213940,
+    "url": "https://www.igdb.com/games/nine-sols",
+    "rating": 89.0
+  },
+  {
+    "airtableId": "recBvL6g3TnmWlfYn",
+    "title": "Cosmic Express",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2026-02-03",
+    "completed": true,
+    "igdbId": 27328,
+    "slug": "cosmic-express",
+    "igdbName": "Cosmic Express",
+    "cover": 77874,
+    "url": "https://www.igdb.com/games/cosmic-express",
+    "rating": 85.0
   }
 ]
