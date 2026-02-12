@@ -930,7 +930,7 @@
     "igdbName": "X2: Wolverine's Revenge",
     "cover": 123151,
     "url": "https://www.igdb.com/games/x2-wolverine-s-revenge",
-    "rating": 45.0
+    "rating": 53.33333333333334
   },
   {
     "airtableId": "recam5gzz7rj99Lmi",
@@ -7033,7 +7033,7 @@
     "igdbId": 5635,
     "slug": "ridiculous-fishing",
     "igdbName": "Ridiculous Fishing",
-    "cover": 116482,
+    "cover": 533048,
     "url": "https://www.igdb.com/games/ridiculous-fishing",
     "rating": 80.0
   },
@@ -9050,7 +9050,7 @@
     "igdbName": "WarioWare, Inc.: Mega Microgame$!",
     "cover": 89063,
     "url": "https://www.igdb.com/games/warioware-inc-dot-mega-microgame$",
-    "rating": 91.0
+    "rating": 90.5
   },
   {
     "airtableId": "rec4nAKIcRBB791YG",
@@ -10135,7 +10135,7 @@
     "igdbId": 138949,
     "slug": "marvels-spider-man-remastered",
     "igdbName": "Marvel's Spider-Man Remastered",
-    "cover": 526129,
+    "cover": 533893,
     "url": "https://www.igdb.com/games/marvels-spider-man-remastered",
     "rating": 78.2
   },
@@ -10573,7 +10573,7 @@
     "igdbId": 14593,
     "slug": "hollow-knight",
     "igdbName": "Hollow Knight",
-    "cover": 525920,
+    "cover": 533941,
     "url": "https://www.igdb.com/games/hollow-knight",
     "rating": 91.25
   },
@@ -14217,5 +14217,23 @@
     "cover": 77874,
     "url": "https://www.igdb.com/games/cosmic-express",
     "rating": 85.0
+  },
+  {
+    "airtableId": "recRqmgjWqJw2siFE",
+    "title": "Sunset Riders",
+    "support": [
+      "SNES"
+    ],
+    "genre": [
+      "Run and Gun"
+    ],
+    "date": "2026-02-11",
+    "completed": true,
+    "igdbId": 276081,
+    "slug": "sunset-riders--1",
+    "igdbName": "Sunset Riders",
+    "cover": 384921,
+    "url": "https://www.igdb.com/games/sunset-riders--1",
+    "rating": ""
   }
 ]
