@@ -10554,7 +10554,7 @@
     "igdbId": 43642,
     "slug": "maximo-vs-army-of-zin",
     "igdbName": "Maximo vs. Army of Zin",
-    "cover": 78947,
+    "cover": 539155,
     "url": "https://www.igdb.com/games/maximo-vs-army-of-zin",
     "rating": ""
   },
@@ -13185,7 +13185,7 @@
     "igdbId": 294041,
     "slug": "marvel-rivals",
     "igdbName": "Marvel Rivals",
-    "cover": 526872,
+    "cover": 538710,
     "url": "https://www.igdb.com/games/marvel-rivals",
     "rating": 78.5
   },
@@ -14234,6 +14234,24 @@
     "igdbName": "Sunset Riders",
     "cover": 384921,
     "url": "https://www.igdb.com/games/sunset-riders--1",
+    "rating": ""
+  },
+  {
+    "airtableId": "recj1lLUme7S0FksC",
+    "title": "Just Cause 3: XXL Edition",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Open World"
+    ],
+    "date": "2026-02-17",
+    "completed": true,
+    "igdbId": 118703,
+    "slug": "just-cause-3-xxl-edition",
+    "igdbName": "Just Cause 3: XXL Edition",
+    "cover": 162505,
+    "url": "https://www.igdb.com/games/just-cause-3-xxl-edition",
     "rating": ""
   }
 ]
