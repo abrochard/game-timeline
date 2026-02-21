@@ -221,7 +221,7 @@
     "igdbId": 1775,
     "slug": "mega-man-zero",
     "igdbName": "Mega Man Zero",
-    "cover": 352966,
+    "cover": 540253,
     "url": "https://www.igdb.com/games/mega-man-zero",
     "rating": ""
   },
@@ -3362,7 +3362,7 @@
     "igdbId": 375,
     "slug": "metal-gear-solid",
     "igdbName": "Metal Gear Solid",
-    "cover": 510598,
+    "cover": 537896,
     "url": "https://www.igdb.com/games/metal-gear-solid",
     "rating": 80.0
   },
@@ -13185,7 +13185,7 @@
     "igdbId": 294041,
     "slug": "marvel-rivals",
     "igdbName": "Marvel Rivals",
-    "cover": 538710,
+    "cover": 539711,
     "url": "https://www.igdb.com/games/marvel-rivals",
     "rating": 78.5
   },
@@ -14252,6 +14252,24 @@
     "igdbName": "Just Cause 3: XXL Edition",
     "cover": 162505,
     "url": "https://www.igdb.com/games/just-cause-3-xxl-edition",
+    "rating": ""
+  },
+  {
+    "airtableId": "recLQEDOYxvdjMmcB",
+    "title": "Gradius III",
+    "support": [
+      "SNES"
+    ],
+    "genre": [
+      "Shoot'em Up"
+    ],
+    "date": "2026-02-20",
+    "completed": true,
+    "igdbId": 335430,
+    "slug": "gradius-iii--1",
+    "igdbName": "Gradius III",
+    "cover": 444661,
+    "url": "https://www.igdb.com/games/gradius-iii--1",
     "rating": ""
   }
 ]
