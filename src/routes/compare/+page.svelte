@@ -4,8 +4,8 @@
  import { Shuffle } from '$lib/sort.js';
  import confetti from 'canvas-confetti';
 
- let total = 25;
- let games = [];
+ let total = $state(25);
+ let games = $state([]);
 
  function start() {
    games = structuredClone(Shuffle(Games).slice(0, total));
@@ -38,7 +38,7 @@
 </script>
 
 <style>
- h3, h4 {
+ h3 {
    text-align: center;
  }
 
@@ -87,25 +87,25 @@
     {#if games.length >= 2}
       <h3>Remaining: {games.length}</h3>
       <div class="flex">
-        <div class="card hover" on:click="{select('left')}">
-          <Game game="{games[0]}"/>
+        <div class="card hover" onclick={select('left')}>
+          <Game game={games[0]}/>
         </div>
-        <div class="card hover" on:click="{select('right')}">
-          <Game game="{games[1]}"/>
+        <div class="card hover" onclick={select('right')}>
+          <Game game={games[1]}/>
         </div>
       </div>
     {:else if games.length == 1}
       <h3>Final game:</h3>
       <div class="flex">
         <div class="card cursor-default">
-          <Game game="{games[0]}"/>
+          <Game game={games[0]}/>
         </div>
       </div>
     {:else}
       <h3>Games pool: <input type="text" bind:value={total}/></h3>
       <div class="flex">
         <input type="range" id="total" name="total" min="2" max="{Games.length}" bind:value="{total}" />
-        <input type="button" value="Go" on:click="{start}" />
+        <input type="button" value="Go" onclick={start} />
       </div>
     {/if}
   </div>

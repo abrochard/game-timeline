@@ -1,4 +1,6 @@
 <script>
+  import { stopPropagation } from 'svelte/legacy';
+
   import { onMount } from 'svelte';
 
  // The 100 civics questions and answers
@@ -107,15 +109,15 @@
 
 
   // Use a reactive store/variable to maintain the master list of questions and their status
-  let masterQuestions = civicsQuestionsData;
+  let masterQuestions = $state(civicsQuestionsData);
 
-  let shuffledQuestions = [];
-  let currentCardIndex = 0;
-  let isFlipped = false;
-  let correctCount = 0;
+  let shuffledQuestions = $state([]);
+  let currentCardIndex = $state(0);
+  let isFlipped = $state(false);
+  let correctCount = $state(0);
 
-  $: currentCard = shuffledQuestions[currentCardIndex];
-  $: totalRemaining = shuffledQuestions.length;
+  let currentCard = $derived(shuffledQuestions[currentCardIndex]);
+  let totalRemaining = $derived(shuffledQuestions.length);
 
   const shuffle = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -206,7 +208,7 @@
   <p>Correctly answered: {correctCount} / {masterQuestions.length}</p>
 
   {#if totalRemaining > 0}
-    <div class="card-container" on:click={flipCard} role="button" tabindex="0">
+    <div class="card-container" onclick={flipCard} role="button" tabindex="0">
       <div class="card-content" class:flipped={isFlipped}>
         <div class="card-face front">
           <p class="question-number">Question {currentCard.id}</p>
@@ -230,31 +232,31 @@
     </div>
 
     <div class="controls feedback-controls">
-      <button on:click|stopPropagation={markIncorrect} class="incorrect-button">
+      <button onclick={stopPropagation(markIncorrect)} class="incorrect-button">
         Mark Incorrect
       </button>
-      <button on:click|stopPropagation={markCorrect} class="correct-button">
+      <button onclick={stopPropagation(markCorrect)} class="correct-button">
         Mark Correct
       </button>
     </div>
 
     <div class="controls navigation-controls">
-        <button on:click|stopPropagation={prevCard} disabled={currentCardIndex === 0}>
+        <button onclick={stopPropagation(prevCard)} disabled={currentCardIndex === 0}>
             &larr; Previous
         </button>
-        <button on:click|stopPropagation={flipCard} class="flip-button">
+        <button onclick={stopPropagation(flipCard)} class="flip-button">
             Flip Card
         </button>
-        <button on:click|stopPropagation={nextCard} disabled={currentCardIndex === shuffledQuestions.length - 1}>
+        <button onclick={stopPropagation(nextCard)} disabled={currentCardIndex === shuffledQuestions.length - 1}>
             Next &rarr;
         </button>
     </div>
 
     <div class="restart-options">
-      <button on:click={() => shuffleAndRestart(false)} class="restart-button">
+      <button onclick={() => shuffleAndRestart(false)} class="restart-button">
         Shuffle & Restart (Exclude Correct)
       </button>
-      <button on:click={() => shuffleAndRestart(true)} class="review-all-button">
+      <button onclick={() => shuffleAndRestart(true)} class="review-all-button">
         Review All
       </button>
     </div>
@@ -263,7 +265,7 @@
     <div class="finished-message">
         <h2>🎉 All Questions Answered!</h2>
         <p>You have mastered all {masterQuestions.length} questions.</p>
-        <button on:click={() => shuffleAndRestart(true)} class="review-all-button">
+        <button onclick={() => shuffleAndRestart(true)} class="review-all-button">
           Review All Questions
         </button>
     </div>

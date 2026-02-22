@@ -8,12 +8,12 @@
 
  // Game state variables
  let games = [];
- let cards = [];
+ let cards = $state([]);
  let flippedCards = [];
- let matchedPairs = 0;
- let moves = 0;
+ let matchedPairs = $state(0);
+ let moves = $state(0);
  let isChecking = false; // Prevents clicking while a pair is being evaluated
- let isGameOver = false;
+ let isGameOver = $state(false);
 
  /**
   * Initializes or resets the game board.
@@ -113,7 +113,7 @@
         class="card"
         class:flipped={card.isFlipped}
         class:matched={card.isMatched}
-        on:click={() => handleCardClick(card)}
+        onclick={() => handleCardClick(card)}
         role="button"
         tabindex="0"
         aria-label="Memory card"
@@ -131,12 +131,12 @@
     <div class="game-over">
       <h2>You Win! 🎉</h2>
       <p>You found all the pairs in {moves} moves.</p>
-      <button on:click={initializeGame}>Play Again</button>
+      <button onclick={initializeGame}>Play Again</button>
     </div>
   {/if}
 
   {#if !isGameOver}
-    <button class="reset-button" on:click={initializeGame}>Reset Game</button>
+    <button class="reset-button" onclick={initializeGame}>Reset Game</button>
   {/if}
 </div>
 

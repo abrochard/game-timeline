@@ -12,7 +12,7 @@
 
  const narrow = window.screen.width < 700;
 
- let games = GamesJSON.sort(SortPlayedDateAsc);
+ let games = $state(GamesJSON.sort(SortPlayedDateAsc));
 
  function shuffle() {
    games = Shuffle(GamesJSON);
@@ -106,7 +106,7 @@
 </style>
 
 <div>
-  <div class="button" on:click="{shuffle}">
+  <div class="button" onclick={shuffle}>
     <ShuffleIcon/>
   </div>
 
@@ -117,13 +117,13 @@
         <div style="width: 10%;"></div>
         <div class="line"><div class="dot dot-left"></div></div>
         <div class="item wide-item">
-          <Game game="{game}"/>
+          <Game game={game}/>
         </div>
       {:else}
         <div class="flex" style="justify-content: flex-end;">
           {#if i % 2 == 1}
             <div class="item">
-              <Game game="{game}"/>
+              <Game game={game}/>
             </div>
             <div class="line"><div class="dot"></div></div>
           {/if}
@@ -132,7 +132,7 @@
           {#if i % 2 == 0}
             <div class="line"><div class="dot dot-left"></div></div>
             <div class="item">
-              <Game game="{game}"/>
+              <Game game={game}/>
             </div>
           {/if}
         </div>

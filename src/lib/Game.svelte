@@ -1,5 +1,5 @@
 <script>
- export let game;
+  let { game } = $props();
 
  if (!game.slug) {
    console.log(game);
