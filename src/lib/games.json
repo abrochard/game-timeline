@@ -1892,7 +1892,7 @@
     "igdbId": 51310,
     "slug": "s4-league",
     "igdbName": "S4 League",
-    "cover": 198285,
+    "cover": 542417,
     "url": "https://www.igdb.com/games/s4-league",
     "rating": ""
   },
@@ -2591,7 +2591,7 @@
     "igdbId": 7858,
     "slug": "sonic-adventure-2",
     "igdbName": "Sonic Adventure 2",
-    "cover": 84748,
+    "cover": 547825,
     "url": "https://www.igdb.com/games/sonic-adventure-2",
     "rating": 79.0
   },
@@ -3362,7 +3362,7 @@
     "igdbId": 375,
     "slug": "metal-gear-solid",
     "igdbName": "Metal Gear Solid",
-    "cover": 537896,
+    "cover": 545996,
     "url": "https://www.igdb.com/games/metal-gear-solid",
     "rating": 80.0
   },
@@ -7385,7 +7385,7 @@
     "igdbId": 11182,
     "slug": "enter-the-gungeon",
     "igdbName": "Enter the Gungeon",
-    "cover": 82132,
+    "cover": 540660,
     "url": "https://www.igdb.com/games/enter-the-gungeon",
     "rating": 82.46153846153847
   },
@@ -10135,7 +10135,7 @@
     "igdbId": 138949,
     "slug": "marvels-spider-man-remastered",
     "igdbName": "Marvel's Spider-Man Remastered",
-    "cover": 533893,
+    "cover": 534009,
     "url": "https://www.igdb.com/games/marvels-spider-man-remastered",
     "rating": 78.2
   },
@@ -11285,7 +11285,7 @@
     "igdbId": 134581,
     "slug": "marvels-spider-man-miles-morales",
     "igdbName": "Marvel's Spider-Man: Miles Morales",
-    "cover": 526130,
+    "cover": 534007,
     "url": "https://www.igdb.com/games/marvels-spider-man-miles-morales",
     "rating": 88.625
   },
@@ -13391,7 +13391,7 @@
     "igdbId": 1545,
     "slug": "wipeout-2048",
     "igdbName": "Wipeout 2048",
-    "cover": 77014,
+    "cover": 546747,
     "url": "https://www.igdb.com/games/wipeout-2048",
     "rating": 83.33333333333333
   },
@@ -14286,6 +14286,22 @@
     "igdbName": "Gradius III",
     "cover": 444661,
     "url": "https://www.igdb.com/games/gradius-iii--1",
+    "rating": ""
+  },
+  {
+    "airtableId": "recFz64B8RbQ1MHkY",
+    "title": "Mars After Midnight",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2026-03-12",
+    "completed": true,
+    "igdbId": 151949,
+    "slug": "mars-after-midnight",
+    "igdbName": "Mars After Midnight",
+    "cover": 445689,
+    "url": "https://www.igdb.com/games/mars-after-midnight",
     "rating": ""
   }
 ]
