@@ -683,10 +683,10 @@
     "date": "",
     "completed": true,
     "igdbId": 1439,
-    "slug": "fire-emblem-the-blazing-blade",
-    "igdbName": "Fire Emblem: The Blazing Blade",
+    "slug": "fire-emblem",
+    "igdbName": "Fire Emblem",
     "cover": 528291,
-    "url": "https://www.igdb.com/games/fire-emblem-the-blazing-blade",
+    "url": "https://www.igdb.com/games/fire-emblem",
     "rating": 90.0
   },
   {
@@ -735,7 +735,7 @@
     "igdbId": 1114,
     "slug": "castlevania",
     "igdbName": "Castlevania",
-    "cover": 525191,
+    "cover": 526272,
     "url": "https://www.igdb.com/games/castlevania",
     "rating": ""
   },
@@ -914,7 +914,7 @@
     "igdbName": "Pok\u00e9mon FireRed Version",
     "cover": 92690,
     "url": "https://www.igdb.com/games/pokemon-firered-version",
-    "rating": ""
+    "rating": 100.0
   },
   {
     "airtableId": "reca9pb9IBVo1gRF6",
@@ -11685,7 +11685,7 @@
     "igdbId": 14741,
     "slug": "psychonauts-2",
     "igdbName": "Psychonauts 2",
-    "cover": 83821,
+    "cover": 523113,
     "url": "https://www.igdb.com/games/psychonauts-2",
     "rating": 87.11111111111111
   },
@@ -12570,7 +12570,7 @@
     "igdbId": 1905,
     "slug": "fortnite",
     "igdbName": "Fortnite",
-    "cover": 510378,
+    "cover": 550523,
     "url": "https://www.igdb.com/games/fortnite",
     "rating": 82.6
   },
@@ -13185,7 +13185,7 @@
     "igdbId": 294041,
     "slug": "marvel-rivals",
     "igdbName": "Marvel Rivals",
-    "cover": 539711,
+    "cover": 550377,
     "url": "https://www.igdb.com/games/marvel-rivals",
     "rating": 78.5
   },
@@ -14302,6 +14302,22 @@
     "igdbName": "Mars After Midnight",
     "cover": 445689,
     "url": "https://www.igdb.com/games/mars-after-midnight",
+    "rating": ""
+  },
+  {
+    "airtableId": "recGPWp35fFszzZW6",
+    "title": "Sonic Blast Man",
+    "support": [
+      "Arcade"
+    ],
+    "genre": "",
+    "date": "2026-03-26",
+    "completed": "",
+    "igdbId": 39804,
+    "slug": "sonic-blast-man",
+    "igdbName": "Sonic Blast Man",
+    "cover": 472241,
+    "url": "https://www.igdb.com/games/sonic-blast-man",
     "rating": ""
   }
 ]
