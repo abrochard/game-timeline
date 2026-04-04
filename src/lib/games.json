@@ -14319,5 +14319,21 @@
     "cover": 472241,
     "url": "https://www.igdb.com/games/sonic-blast-man",
     "rating": ""
+  },
+  {
+    "airtableId": "recf4BJJ5UeIwkOOw",
+    "title": "The Simpsons: Hit & Run",
+    "support": [
+      "GameCube"
+    ],
+    "genre": "",
+    "date": "2026-04-04",
+    "completed": true,
+    "igdbId": 2844,
+    "slug": "the-simpsons-hit-run",
+    "igdbName": "The Simpsons: Hit & Run",
+    "cover": 132919,
+    "url": "https://www.igdb.com/games/the-simpsons-hit-run",
+    "rating": 72.8
   }
 ]
