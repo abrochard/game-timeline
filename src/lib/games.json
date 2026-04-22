@@ -12486,7 +12486,7 @@
     "igdbId": 8167,
     "slug": "rhythm-heaven",
     "igdbName": "Rhythm Heaven",
-    "cover": 111493,
+    "cover": 556311,
     "url": "https://www.igdb.com/games/rhythm-heaven",
     "rating": 87.33333333333333
   },
@@ -13185,7 +13185,7 @@
     "igdbId": 294041,
     "slug": "marvel-rivals",
     "igdbName": "Marvel Rivals",
-    "cover": 550377,
+    "cover": 556799,
     "url": "https://www.igdb.com/games/marvel-rivals",
     "rating": 78.5
   },
@@ -13548,7 +13548,7 @@
     "igdbId": 222126,
     "slug": "sly-2-band-of-thieves--1",
     "igdbName": "Sly 2: Band of Thieves",
-    "cover": 259937,
+    "cover": 555559,
     "url": "https://www.igdb.com/games/sly-2-band-of-thieves--1",
     "rating": ""
   },
@@ -14335,5 +14335,23 @@
     "cover": 132919,
     "url": "https://www.igdb.com/games/the-simpsons-hit-run",
     "rating": 72.8
+  },
+  {
+    "airtableId": "recaps1wrrp6PwrPn",
+    "title": "Pikmin",
+    "support": [
+      "GameCube"
+    ],
+    "genre": [
+      "RTS"
+    ],
+    "date": "2026-04-22",
+    "completed": true,
+    "igdbId": 2239,
+    "slug": "pikmin",
+    "igdbName": "Pikmin",
+    "cover": 310696,
+    "url": "https://www.igdb.com/games/pikmin",
+    "rating": 80.0
   }
 ]
