@@ -5047,7 +5047,7 @@
     "igdbId": 11198,
     "slug": "rocket-league",
     "igdbName": "Rocket League",
-    "cover": 491138,
+    "cover": 556441,
     "url": "https://www.igdb.com/games/rocket-league",
     "rating": 88.70588235294117
   },
@@ -8309,7 +8309,7 @@
     "igdbId": 17026,
     "slug": "furi",
     "igdbName": "Furi",
-    "cover": 371688,
+    "cover": 539965,
     "url": "https://www.igdb.com/games/furi",
     "rating": 79.0
   },
@@ -14353,5 +14353,21 @@
     "cover": 310696,
     "url": "https://www.igdb.com/games/pikmin",
     "rating": 80.0
+  },
+  {
+    "airtableId": "rec0F34Vk4K5YZVbv",
+    "title": "We Love Katamari Reroll + Royal Reverie",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2026-04-26",
+    "completed": true,
+    "igdbId": 228463,
+    "slug": "we-love-katamari-reroll-plus-royal-reverie",
+    "igdbName": "We Love Katamari Reroll + Royal Reverie",
+    "cover": 286713,
+    "url": "https://www.igdb.com/games/we-love-katamari-reroll-plus-royal-reverie",
+    "rating": 86.0
   }
 ]
