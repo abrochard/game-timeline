@@ -14369,5 +14369,23 @@
     "cover": 286713,
     "url": "https://www.igdb.com/games/we-love-katamari-reroll-plus-royal-reverie",
     "rating": 86.0
+  },
+  {
+    "airtableId": "recd7cLMB4YLXkBC9",
+    "title": "Castlevania: Circle of the Moon",
+    "support": [
+      "GBA"
+    ],
+    "genre": [
+      "Metroidvania"
+    ],
+    "date": "2026-05-04",
+    "completed": true,
+    "igdbId": 1132,
+    "slug": "castlevania-circle-of-the-moon",
+    "igdbName": "Castlevania: Circle of the Moon",
+    "cover": 529745,
+    "url": "https://www.igdb.com/games/castlevania-circle-of-the-moon",
+    "rating": 90.0
   }
 ]
