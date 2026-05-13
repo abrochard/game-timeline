@@ -12570,7 +12570,7 @@
     "igdbId": 1905,
     "slug": "fortnite",
     "igdbName": "Fortnite",
-    "cover": 550523,
+    "cover": 558764,
     "url": "https://www.igdb.com/games/fortnite",
     "rating": 82.6
   },
@@ -14387,5 +14387,23 @@
     "cover": 529745,
     "url": "https://www.igdb.com/games/castlevania-circle-of-the-moon",
     "rating": 90.0
+  },
+  {
+    "airtableId": "recyvjd1QawzPgLGt",
+    "title": "Sonic Frontiers",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "3D platform"
+    ],
+    "date": "2026-05-13",
+    "completed": true,
+    "igdbId": 150010,
+    "slug": "sonic-frontiers",
+    "igdbName": "Sonic Frontiers",
+    "cover": 265862,
+    "url": "https://www.igdb.com/games/sonic-frontiers",
+    "rating": 71.75
   }
 ]
