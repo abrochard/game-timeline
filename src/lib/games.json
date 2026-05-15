@@ -6853,7 +6853,7 @@
     "completed": true,
     "igdbId": 7599,
     "slug": "life-is-strange",
-    "igdbName": "Life is Strange",
+    "igdbName": "Life Is Strange",
     "cover": 81950,
     "url": "https://www.igdb.com/games/life-is-strange",
     "rating": 78.83783783783784
@@ -13185,7 +13185,7 @@
     "igdbId": 294041,
     "slug": "marvel-rivals",
     "igdbName": "Marvel Rivals",
-    "cover": 556799,
+    "cover": 562728,
     "url": "https://www.igdb.com/games/marvel-rivals",
     "rating": 78.5
   },
@@ -14405,5 +14405,23 @@
     "cover": 265862,
     "url": "https://www.igdb.com/games/sonic-frontiers",
     "rating": 71.75
+  },
+  {
+    "airtableId": "recQPcwMU7ohmdLD3",
+    "title": "Risk of Rain Returns",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Roguelike"
+    ],
+    "date": "2026-05-14",
+    "completed": "",
+    "igdbId": 229794,
+    "slug": "risk-of-rain-returns",
+    "igdbName": "Risk of Rain Returns",
+    "cover": 276842,
+    "url": "https://www.igdb.com/games/risk-of-rain-returns",
+    "rating": 80.5
   }
 ]
