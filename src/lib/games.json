@@ -14423,5 +14423,21 @@
     "cover": 276842,
     "url": "https://www.igdb.com/games/risk-of-rain-returns",
     "rating": 80.5
+  },
+  {
+    "airtableId": "recuHDWkiUTOYIrqJ",
+    "title": "Mixtape",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2026-05-18",
+    "completed": true,
+    "igdbId": 305157,
+    "slug": "mixtape--1",
+    "igdbName": "Mixtape",
+    "cover": 563634,
+    "url": "https://www.igdb.com/games/mixtape--1",
+    "rating": 74.0
   }
 ]
