@@ -19,6 +19,7 @@
    width: 100%;
    row-gap: 5px;
    max-height: inherit;
+   box-shadow: 5px 3px 3px #7d7d7d;
  }
  .header {
    display: flex;
