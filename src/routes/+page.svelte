@@ -33,6 +33,7 @@
    height: 100%;
    position: absolute;
    left: calc(50%);
+   box-shadow: 3px 1px 1px #7d7d7d;
  }
 
  .left {
@@ -66,6 +67,7 @@
    position: relative;
    top: 20%;
    border: 2px solid white;
+   box-shadow: 0px 2px 2px #7d7d7d;
  }
 
  .dot::after {
