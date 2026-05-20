@@ -5116,7 +5116,7 @@
     "igdbId": 231,
     "slug": "half-life",
     "igdbName": "Half-Life",
-    "cover": 487607,
+    "cover": 562978,
     "url": "https://www.igdb.com/games/half-life",
     "rating": 80.0
   },
@@ -13065,7 +13065,7 @@
     "igdbId": 91477,
     "slug": "before-your-eyes",
     "igdbName": "Before Your Eyes",
-    "cover": 136349,
+    "cover": 563751,
     "url": "https://www.igdb.com/games/before-your-eyes",
     "rating": 86.33333333333333
   },
@@ -14439,5 +14439,23 @@
     "cover": 563634,
     "url": "https://www.igdb.com/games/mixtape--1",
     "rating": 74.0
+  },
+  {
+    "airtableId": "recyc72gQnjcUWY3H",
+    "title": "Viewfinder",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2026-05-20",
+    "completed": true,
+    "igdbId": 142549,
+    "slug": "viewfinder",
+    "igdbName": "Viewfinder",
+    "cover": 485821,
+    "url": "https://www.igdb.com/games/viewfinder",
+    "rating": 89.0
   }
 ]
