@@ -6383,7 +6383,7 @@
     "completed": true,
     "igdbId": 18509,
     "slug": "slain-back-from-hell",
-    "igdbName": "Slain: Back From Hell",
+    "igdbName": "Slain: Back from Hell",
     "cover": 128723,
     "url": "https://www.igdb.com/games/slain-back-from-hell",
     "rating": 49.91666666666666
@@ -14457,5 +14457,23 @@
     "cover": 485821,
     "url": "https://www.igdb.com/games/viewfinder",
     "rating": 89.0
+  },
+  {
+    "airtableId": "recctUFY1VPbGmh2f",
+    "title": "Promenade",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "2D platform"
+    ],
+    "date": "2026-05-27",
+    "completed": true,
+    "igdbId": 181162,
+    "slug": "promenade",
+    "igdbName": "Promenade",
+    "cover": 336766,
+    "url": "https://www.igdb.com/games/promenade",
+    "rating": 90.0
   }
 ]
