@@ -14475,5 +14475,24 @@
     "cover": 336766,
     "url": "https://www.igdb.com/games/promenade",
     "rating": 90.0
+  },
+  {
+    "airtableId": "receblDNFxHP5JA2A",
+    "title": "Dogpile",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Roguelike",
+      "Deckbuilding"
+    ],
+    "date": "2026-05-31",
+    "completed": "",
+    "igdbId": 373491,
+    "slug": "dogpile--1",
+    "igdbName": "Dogpile",
+    "cover": 513239,
+    "url": "https://www.igdb.com/games/dogpile--1",
+    "rating": 70.0
   }
 ]
