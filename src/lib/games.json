@@ -14494,5 +14494,23 @@
     "cover": 513239,
     "url": "https://www.igdb.com/games/dogpile--1",
     "rating": 70.0
+  },
+  {
+    "airtableId": "recEEab8wLmw5qCGJ",
+    "title": "Billy Hatcher and the Giant Egg",
+    "support": [
+      "GameCube"
+    ],
+    "genre": [
+      "3D platform"
+    ],
+    "date": "2026-06-05",
+    "completed": true,
+    "igdbId": 3810,
+    "slug": "billy-hatcher-and-the-giant-egg",
+    "igdbName": "Billy Hatcher and the Giant Egg",
+    "cover": 101587,
+    "url": "https://www.igdb.com/games/billy-hatcher-and-the-giant-egg",
+    "rating": 70.0
   }
 ]
