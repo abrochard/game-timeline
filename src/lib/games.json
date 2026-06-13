@@ -13185,7 +13185,7 @@
     "igdbId": 294041,
     "slug": "marvel-rivals",
     "igdbName": "Marvel Rivals",
-    "cover": 562728,
+    "cover": 570621,
     "url": "https://www.igdb.com/games/marvel-rivals",
     "rating": 78.5
   },
@@ -14512,5 +14512,21 @@
     "cover": 101587,
     "url": "https://www.igdb.com/games/billy-hatcher-and-the-giant-egg",
     "rating": 70.0
+  },
+  {
+    "airtableId": "recxB6hMYzfr1HT5A",
+    "title": "Punch-Out!!",
+    "support": [
+      "Wii"
+    ],
+    "genre": "",
+    "date": "2026-06-13",
+    "completed": true,
+    "igdbId": 2194,
+    "slug": "punch-out",
+    "igdbName": "Punch-Out!!",
+    "cover": 113006,
+    "url": "https://www.igdb.com/games/punch-out",
+    "rating": 86.8
   }
 ]
