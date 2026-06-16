@@ -12570,7 +12570,7 @@
     "igdbId": 1905,
     "slug": "fortnite",
     "igdbName": "Fortnite",
-    "cover": 558764,
+    "cover": 570736,
     "url": "https://www.igdb.com/games/fortnite",
     "rating": 82.6
   },
@@ -14214,7 +14214,7 @@
     "igdbName": "Nine Sols",
     "cover": 213940,
     "url": "https://www.igdb.com/games/nine-sols",
-    "rating": 89.0
+    "rating": 88.25
   },
   {
     "airtableId": "recBvL6g3TnmWlfYn",
@@ -14528,5 +14528,23 @@
     "cover": 113006,
     "url": "https://www.igdb.com/games/punch-out",
     "rating": 86.8
+  },
+  {
+    "airtableId": "recrYdkAux0KtpMnD",
+    "title": "Parking Garage Rally Circuit",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Racing"
+    ],
+    "date": "2026-06-16",
+    "completed": true,
+    "igdbId": 287431,
+    "slug": "parking-garage-rally-circuit",
+    "igdbName": "Parking Garage Rally Circuit",
+    "cover": 363160,
+    "url": "https://www.igdb.com/games/parking-garage-rally-circuit",
+    "rating": 90.0
   }
 ]
