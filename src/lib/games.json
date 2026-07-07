@@ -14562,5 +14562,23 @@
     "cover": 170804,
     "url": "https://www.igdb.com/games/the-legend-of-zelda-the-minish-cap",
     "rating": 90.0
+  },
+  {
+    "airtableId": "recYCz8EBygOaZRqo",
+    "title": "Storyteller: Special Edition",
+    "support": [
+      "Android"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2026-07-07",
+    "completed": true,
+    "igdbId": 159299,
+    "slug": "storyteller--1",
+    "igdbName": "Storyteller",
+    "cover": 162526,
+    "url": "https://www.igdb.com/games/storyteller--1",
+    "rating": 81.5
   }
 ]
