@@ -3740,7 +3740,7 @@
     "igdbId": 41,
     "slug": "deus-ex",
     "igdbName": "Deus Ex",
-    "cover": 381512,
+    "cover": 575565,
     "url": "https://www.igdb.com/games/deus-ex",
     "rating": 90.5
   },
@@ -4258,7 +4258,7 @@
     "igdbId": 9567,
     "slug": "towerfall-ascension",
     "igdbName": "TowerFall Ascension",
-    "cover": 119317,
+    "cover": 573346,
     "url": "https://www.igdb.com/games/towerfall-ascension",
     "rating": 87.0
   },
@@ -6999,7 +6999,7 @@
     "igdbId": 14533,
     "slug": "rayman-jungle-run",
     "igdbName": "Rayman Jungle Run",
-    "cover": 85215,
+    "cover": 573323,
     "url": "https://www.igdb.com/games/rayman-jungle-run",
     "rating": 80.0
   },
@@ -9661,7 +9661,7 @@
     "igdbName": "Rise of the Tomb Raider: 20 Year Celebration",
     "cover": 163693,
     "url": "https://www.igdb.com/games/rise-of-the-tomb-raider-20-year-celebration",
-    "rating": 91.42857142857143
+    "rating": 80.0
   },
   {
     "airtableId": "rec0t1EcAGkUM9jTG",
@@ -14545,6 +14545,22 @@
     "igdbName": "Parking Garage Rally Circuit",
     "cover": 363160,
     "url": "https://www.igdb.com/games/parking-garage-rally-circuit",
+    "rating": 90.0
+  },
+  {
+    "airtableId": "rec6J14HFWHDbdZNM",
+    "title": "The Legend of Zelda: The Minish Cap",
+    "support": [
+      "GBA"
+    ],
+    "genre": "",
+    "date": "2026-07-06",
+    "completed": true,
+    "igdbId": 1035,
+    "slug": "the-legend-of-zelda-the-minish-cap",
+    "igdbName": "The Legend of Zelda: The Minish Cap",
+    "cover": 170804,
+    "url": "https://www.igdb.com/games/the-legend-of-zelda-the-minish-cap",
     "rating": 90.0
   }
 ]
