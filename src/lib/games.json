@@ -4312,7 +4312,7 @@
     "igdbId": 113,
     "slug": "assassins-creed-brotherhood",
     "igdbName": "Assassin's Creed Brotherhood",
-    "cover": 317677,
+    "cover": 577474,
     "url": "https://www.igdb.com/games/assassins-creed-brotherhood",
     "rating": 83.33333333333333
   },
@@ -5047,7 +5047,7 @@
     "igdbId": 11198,
     "slug": "rocket-league",
     "igdbName": "Rocket League",
-    "cover": 556441,
+    "cover": 577392,
     "url": "https://www.igdb.com/games/rocket-league",
     "rating": 88.70588235294117
   },
@@ -13185,7 +13185,7 @@
     "igdbId": 294041,
     "slug": "marvel-rivals",
     "igdbName": "Marvel Rivals",
-    "cover": 570621,
+    "cover": 577430,
     "url": "https://www.igdb.com/games/marvel-rivals",
     "rating": 78.5
   },
@@ -14580,5 +14580,21 @@
     "cover": 162526,
     "url": "https://www.igdb.com/games/storyteller--1",
     "rating": 81.5
+  },
+  {
+    "airtableId": "recMGpovZFSx8Hrvz",
+    "title": "The Dark Queen of Mortholme",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2026-07-10",
+    "completed": true,
+    "igdbId": 325202,
+    "slug": "the-dark-queen-of-mortholme",
+    "igdbName": "The Dark Queen of Mortholme",
+    "cover": 436177,
+    "url": "https://www.igdb.com/games/the-dark-queen-of-mortholme",
+    "rating": ""
   }
 ]
