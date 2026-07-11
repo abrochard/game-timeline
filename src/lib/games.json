@@ -14596,5 +14596,21 @@
     "cover": 436177,
     "url": "https://www.igdb.com/games/the-dark-queen-of-mortholme",
     "rating": ""
+  },
+  {
+    "airtableId": "reccdusPWhXYIR9IM",
+    "title": "Meccha Chameleon",
+    "support": [
+      "PC"
+    ],
+    "genre": "",
+    "date": "2026-07-10",
+    "completed": "",
+    "igdbId": 405028,
+    "slug": "meccha-chameleon--1",
+    "igdbName": "Meccha Chameleon",
+    "cover": 569403,
+    "url": "https://www.igdb.com/games/meccha-chameleon--1",
+    "rating": 82.0
   }
 ]
