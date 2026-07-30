@@ -10083,7 +10083,7 @@
     "igdbId": 101176,
     "slug": "bloodstained-curse-of-the-moon",
     "igdbName": "Bloodstained: Curse of the Moon",
-    "cover": 526564,
+    "cover": 586234,
     "url": "https://www.igdb.com/games/bloodstained-curse-of-the-moon",
     "rating": 80.0
   },
@@ -12570,7 +12570,7 @@
     "igdbId": 1905,
     "slug": "fortnite",
     "igdbName": "Fortnite",
-    "cover": 570736,
+    "cover": 584568,
     "url": "https://www.igdb.com/games/fortnite",
     "rating": 82.6
   },
@@ -14612,5 +14612,23 @@
     "cover": 569403,
     "url": "https://www.igdb.com/games/meccha-chameleon--1",
     "rating": 82.0
+  },
+  {
+    "airtableId": "recPefIRM2S3P8nta",
+    "title": "AM2R: Return of Samus",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Metroidvania"
+    ],
+    "date": "2026-07-30",
+    "completed": true,
+    "igdbId": 27238,
+    "slug": "am2r-return-of-samus",
+    "igdbName": "AM2R: Return of Samus",
+    "cover": 218238,
+    "url": "https://www.igdb.com/games/am2r-return-of-samus",
+    "rating": ""
   }
 ]
