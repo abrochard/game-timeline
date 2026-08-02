@@ -14630,5 +14630,23 @@
     "cover": 218238,
     "url": "https://www.igdb.com/games/am2r-return-of-samus",
     "rating": ""
+  },
+  {
+    "airtableId": "recucqlFD5fy5Nbz0",
+    "title": "QuackShot Starring Donald Duck",
+    "support": [
+      "Sega Mega Drive"
+    ],
+    "genre": [
+      "2D platform"
+    ],
+    "date": "2026-08-02",
+    "completed": true,
+    "igdbId": 8446,
+    "slug": "quackshot-starring-donald-duck",
+    "igdbName": "QuackShot Starring Donald Duck",
+    "cover": 91017,
+    "url": "https://www.igdb.com/games/quackshot-starring-donald-duck",
+    "rating": ""
   }
 ]
