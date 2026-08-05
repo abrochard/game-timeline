@@ -5882,7 +5882,7 @@
     "igdbId": 11162,
     "slug": "for-honor",
     "igdbName": "For Honor",
-    "cover": 480772,
+    "cover": 587627,
     "url": "https://www.igdb.com/games/for-honor",
     "rating": 76.72727272727273
   },
@@ -14647,6 +14647,24 @@
     "igdbName": "QuackShot Starring Donald Duck",
     "cover": 91017,
     "url": "https://www.igdb.com/games/quackshot-starring-donald-duck",
+    "rating": ""
+  },
+  {
+    "airtableId": "rec7UKk8HVp53jHGl",
+    "title": "World of Illusion Starring Mickey Mouse and Donald Duck",
+    "support": [
+      "Sega Mega Drive"
+    ],
+    "genre": [
+      "2D platform"
+    ],
+    "date": "2026-08-05",
+    "completed": true,
+    "igdbId": 8124,
+    "slug": "world-of-illusion-starring-mickey-mouse-and-donald-duck",
+    "igdbName": "World of Illusion Starring Mickey Mouse and Donald Duck",
+    "cover": 429235,
+    "url": "https://www.igdb.com/games/world-of-illusion-starring-mickey-mouse-and-donald-duck",
     "rating": ""
   }
 ]
