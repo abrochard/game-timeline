@@ -14666,5 +14666,23 @@
     "cover": 429235,
     "url": "https://www.igdb.com/games/world-of-illusion-starring-mickey-mouse-and-donald-duck",
     "rating": ""
+  },
+  {
+    "airtableId": "recU7QmADs73N7qtX",
+    "title": "Disney's Goof Troop",
+    "support": [
+      "SNES"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2026-08-06",
+    "completed": true,
+    "igdbId": 8163,
+    "slug": "disneys-goof-troop",
+    "igdbName": "Disney's Goof Troop",
+    "cover": 284731,
+    "url": "https://www.igdb.com/games/disneys-goof-troop",
+    "rating": ""
   }
 ]
