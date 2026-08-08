@@ -13185,7 +13185,7 @@
     "igdbId": 294041,
     "slug": "marvel-rivals",
     "igdbName": "Marvel Rivals",
-    "cover": 577430,
+    "cover": 589573,
     "url": "https://www.igdb.com/games/marvel-rivals",
     "rating": 78.5
   },
@@ -14683,6 +14683,24 @@
     "igdbName": "Disney's Goof Troop",
     "cover": 284731,
     "url": "https://www.igdb.com/games/disneys-goof-troop",
+    "rating": ""
+  },
+  {
+    "airtableId": "recM9fDlle1CVxFs5",
+    "title": "Ristar",
+    "support": [
+      "Sega Mega Drive"
+    ],
+    "genre": [
+      "2D platform"
+    ],
+    "date": "2026-08-08",
+    "completed": true,
+    "igdbId": 7431,
+    "slug": "ristar",
+    "igdbName": "Ristar",
+    "cover": 452304,
+    "url": "https://www.igdb.com/games/ristar",
     "rating": ""
   }
 ]
