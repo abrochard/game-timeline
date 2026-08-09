@@ -14702,5 +14702,23 @@
     "cover": 452304,
     "url": "https://www.igdb.com/games/ristar",
     "rating": ""
+  },
+  {
+    "airtableId": "recWvX6EVSnznCAJe",
+    "title": "Gunstar Heroes",
+    "support": [
+      "Sega Mega Drive"
+    ],
+    "genre": [
+      "Run and Gun"
+    ],
+    "date": "2026-08-09",
+    "completed": true,
+    "igdbId": 6405,
+    "slug": "gunstar-heroes",
+    "igdbName": "Gunstar Heroes",
+    "cover": 181813,
+    "url": "https://www.igdb.com/games/gunstar-heroes",
+    "rating": 60.0
   }
 ]
