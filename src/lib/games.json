@@ -14720,5 +14720,24 @@
     "cover": 181813,
     "url": "https://www.igdb.com/games/gunstar-heroes",
     "rating": 60.0
+  },
+  {
+    "airtableId": "recKwoeD2nVlbqAK4",
+    "title": "The Rogue Prince of Persia",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "2D platform",
+      "Roguelike"
+    ],
+    "date": "2026-08-17",
+    "completed": true,
+    "igdbId": 296843,
+    "slug": "the-rogue-prince-of-persia",
+    "igdbName": "The Rogue Prince of Persia",
+    "cover": 481135,
+    "url": "https://www.igdb.com/games/the-rogue-prince-of-persia",
+    "rating": 79.75
   }
 ]
