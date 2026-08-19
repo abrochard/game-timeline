@@ -14739,5 +14739,23 @@
     "cover": 481135,
     "url": "https://www.igdb.com/games/the-rogue-prince-of-persia",
     "rating": 79.75
+  },
+  {
+    "airtableId": "recMIztSIh9DxetaU",
+    "title": "Boomerang X",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "FPS"
+    ],
+    "date": "2026-08-19",
+    "completed": true,
+    "igdbId": 126851,
+    "slug": "boomerang-x",
+    "igdbName": "Boomerang X",
+    "cover": 199780,
+    "url": "https://www.igdb.com/games/boomerang-x",
+    "rating": 90.0
   }
 ]
