@@ -14757,5 +14757,23 @@
     "cover": 199780,
     "url": "https://www.igdb.com/games/boomerang-x",
     "rating": 90.0
+  },
+  {
+    "airtableId": "rec8uwdvlvsPU5zvN",
+    "title": "Rocket Knight Adventures",
+    "support": [
+      "Sega Mega Drive"
+    ],
+    "genre": [
+      "2D platform"
+    ],
+    "date": "2026-08-20",
+    "completed": true,
+    "igdbId": 9766,
+    "slug": "rocket-knight-adventures",
+    "igdbName": "Rocket Knight Adventures",
+    "cover": 237976,
+    "url": "https://www.igdb.com/games/rocket-knight-adventures",
+    "rating": ""
   }
 ]
