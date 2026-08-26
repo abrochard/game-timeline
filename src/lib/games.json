@@ -12570,7 +12570,7 @@
     "igdbId": 1905,
     "slug": "fortnite",
     "igdbName": "Fortnite",
-    "cover": 584568,
+    "cover": 594562,
     "url": "https://www.igdb.com/games/fortnite",
     "rating": 82.6
   },
@@ -14775,5 +14775,25 @@
     "cover": 237976,
     "url": "https://www.igdb.com/games/rocket-knight-adventures",
     "rating": ""
+  },
+  {
+    "airtableId": "recLzMLTsRA4wKdB9",
+    "title": "Descenders",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Simulation",
+      "Roguelike",
+      "Sport"
+    ],
+    "date": "2026-08-26",
+    "completed": true,
+    "igdbId": 52200,
+    "slug": "descenders",
+    "igdbName": "Descenders",
+    "cover": 182192,
+    "url": "https://www.igdb.com/games/descenders",
+    "rating": 76.66666666666667
   }
 ]
