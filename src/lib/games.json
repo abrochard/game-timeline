@@ -9227,7 +9227,7 @@
     "igdbId": 104967,
     "slug": "valheim",
     "igdbName": "Valheim",
-    "cover": 515978,
+    "cover": 604542,
     "url": "https://www.igdb.com/games/valheim",
     "rating": 90.0
   },
@@ -12570,7 +12570,7 @@
     "igdbId": 1905,
     "slug": "fortnite",
     "igdbName": "Fortnite",
-    "cover": 594562,
+    "cover": 603054,
     "url": "https://www.igdb.com/games/fortnite",
     "rating": 82.6
   },
@@ -13185,7 +13185,7 @@
     "igdbId": 294041,
     "slug": "marvel-rivals",
     "igdbName": "Marvel Rivals",
-    "cover": 589573,
+    "cover": 600706,
     "url": "https://www.igdb.com/games/marvel-rivals",
     "rating": 78.5
   },
@@ -14181,6 +14181,22 @@
     "rating": ""
   },
   {
+    "airtableId": "recWDUvS38lF8AfPG",
+    "title": "Pok\u00e9mon Go",
+    "support": [
+      "Android"
+    ],
+    "genre": "",
+    "date": "2016-08-01",
+    "completed": "",
+    "igdbId": 12515,
+    "slug": "pokemon-go",
+    "igdbName": "Pok\u00e9mon Go",
+    "cover": 441443,
+    "url": "https://www.igdb.com/games/pokemon-go",
+    "rating": 62.72727272727273
+  },
+  {
     "airtableId": "recn0uE0r8kQes2rh",
     "title": "VA-11 Hall-A: Cyberpunk Bartender Action",
     "support": [
@@ -14795,5 +14811,59 @@
     "cover": 182192,
     "url": "https://www.igdb.com/games/descenders",
     "rating": 76.66666666666667
+  },
+  {
+    "airtableId": "recbrKvKdF5sAZDsy",
+    "title": "Tetris 99",
+    "support": [
+      "Nintendo Switch"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2026-09-19",
+    "completed": "",
+    "igdbId": 115282,
+    "slug": "tetris-99",
+    "igdbName": "Tetris 99",
+    "cover": 586095,
+    "url": "https://www.igdb.com/games/tetris-99",
+    "rating": 84.0
+  },
+  {
+    "airtableId": "recKm6L55JEoHL70d",
+    "title": "Star Fox: Assault",
+    "support": [
+      "GameCube"
+    ],
+    "genre": [
+      "Rail shooter"
+    ],
+    "date": "2026-09-19",
+    "completed": true,
+    "igdbId": 3243,
+    "slug": "star-fox-assault",
+    "igdbName": "Star Fox: Assault",
+    "cover": 79582,
+    "url": "https://www.igdb.com/games/star-fox-assault",
+    "rating": 50.0
+  },
+  {
+    "airtableId": "recFOyZiXYzOF7xif",
+    "title": "F-Zero 99",
+    "support": [
+      "Nintendo Switch"
+    ],
+    "genre": [
+      "Racing"
+    ],
+    "date": "2026-09-21",
+    "completed": "",
+    "igdbId": 266686,
+    "slug": "f-zero-99",
+    "igdbName": "F-Zero 99",
+    "cover": 330535,
+    "url": "https://www.igdb.com/games/f-zero-99",
+    "rating": ""
   }
 ]
