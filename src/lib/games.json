@@ -5047,7 +5047,7 @@
     "igdbId": 11198,
     "slug": "rocket-league",
     "igdbName": "Rocket League",
-    "cover": 577392,
+    "cover": 604926,
     "url": "https://www.igdb.com/games/rocket-league",
     "rating": 88.70588235294117
   },
@@ -14864,6 +14864,24 @@
     "igdbName": "F-Zero 99",
     "cover": 330535,
     "url": "https://www.igdb.com/games/f-zero-99",
+    "rating": ""
+  },
+  {
+    "airtableId": "recLMMGxW8hjgSeAY",
+    "title": "Toki Tori",
+    "support": [
+      "Game Boy Color"
+    ],
+    "genre": [
+      "Puzzle"
+    ],
+    "date": "2026-09-23",
+    "completed": true,
+    "igdbId": 194909,
+    "slug": "toki-tori--1",
+    "igdbName": "Toki Tori",
+    "cover": 214120,
+    "url": "https://www.igdb.com/games/toki-tori--1",
     "rating": ""
   }
 ]
