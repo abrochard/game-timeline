@@ -14883,5 +14883,23 @@
     "cover": 214120,
     "url": "https://www.igdb.com/games/toki-tori--1",
     "rating": ""
+  },
+  {
+    "airtableId": "recprnUcQnc6CiLnm",
+    "title": "Klonoa: Door to Phantomile",
+    "support": [
+      "PS1"
+    ],
+    "genre": [
+      "2D platform"
+    ],
+    "date": "2026-09-24",
+    "completed": true,
+    "igdbId": 4959,
+    "slug": "klonoa-door-to-phantomile",
+    "igdbName": "Klonoa: Door to Phantomile",
+    "cover": 155686,
+    "url": "https://www.igdb.com/games/klonoa-door-to-phantomile",
+    "rating": 80.0
   }
 ]
