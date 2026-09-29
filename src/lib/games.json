@@ -4437,7 +4437,7 @@
     "igdbId": 2538,
     "slug": "enslaved-odyssey-to-the-west",
     "igdbName": "Enslaved: Odyssey to the West",
-    "cover": 114792,
+    "cover": 605783,
     "url": "https://www.igdb.com/games/enslaved-odyssey-to-the-west",
     "rating": 82.44444444444444
   },
@@ -14901,5 +14901,24 @@
     "cover": 155686,
     "url": "https://www.igdb.com/games/klonoa-door-to-phantomile",
     "rating": 80.0
+  },
+  {
+    "airtableId": "rec5v6lWzfypISxcL",
+    "title": "Pepsiman",
+    "support": [
+      "PS1"
+    ],
+    "genre": [
+      "Runner",
+      "3D platform"
+    ],
+    "date": "2026-09-29",
+    "completed": true,
+    "igdbId": 79500,
+    "slug": "pepsiman--1",
+    "igdbName": "Pepsiman",
+    "cover": 141651,
+    "url": "https://www.igdb.com/games/pepsiman--1",
+    "rating": ""
   }
 ]
