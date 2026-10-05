@@ -14920,5 +14920,21 @@
     "cover": 141651,
     "url": "https://www.igdb.com/games/pepsiman--1",
     "rating": ""
+  },
+  {
+    "airtableId": "recn50qBoEES43xcF",
+    "title": "SuperHot VR",
+    "support": [
+      "Steam Frame"
+    ],
+    "genre": "",
+    "date": "2026-10-04",
+    "completed": true,
+    "igdbId": 25632,
+    "slug": "superhot-vr",
+    "igdbName": "SuperHot VR",
+    "cover": 371078,
+    "url": "https://www.igdb.com/games/superhot-vr",
+    "rating": 81.66666666666667
   }
 ]
