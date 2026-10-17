@@ -3175,7 +3175,7 @@
     "igdbId": 8465,
     "slug": "volgarr-the-viking",
     "igdbName": "Volgarr the Viking",
-    "cover": 182296,
+    "cover": 607797,
     "url": "https://www.igdb.com/games/volgarr-the-viking",
     "rating": 80.0
   },
@@ -4241,7 +4241,7 @@
     "igdbId": 7864,
     "slug": "deadcore",
     "igdbName": "DeadCore",
-    "cover": 124404,
+    "cover": 611170,
     "url": "https://www.igdb.com/games/deadcore",
     "rating": 62.66666666666666
   },
@@ -8327,7 +8327,7 @@
     "igdbId": 19554,
     "slug": "steep",
     "igdbName": "Steep",
-    "cover": 118847,
+    "cover": 611436,
     "url": "https://www.igdb.com/games/steep",
     "rating": 72.89473684210526
   },
@@ -13185,7 +13185,7 @@
     "igdbId": 294041,
     "slug": "marvel-rivals",
     "igdbName": "Marvel Rivals",
-    "cover": 600706,
+    "cover": 610286,
     "url": "https://www.igdb.com/games/marvel-rivals",
     "rating": 78.5
   },
@@ -14936,5 +14936,24 @@
     "cover": 371078,
     "url": "https://www.igdb.com/games/superhot-vr",
     "rating": 81.66666666666667
+  },
+  {
+    "airtableId": "recF2lRVJFV1aNvgX",
+    "title": "MediEvil",
+    "support": [
+      "PS1"
+    ],
+    "genre": [
+      "Hack'n'Slash",
+      "3D platform"
+    ],
+    "date": "2026-10-16",
+    "completed": "",
+    "igdbId": 4000,
+    "slug": "medievil",
+    "igdbName": "MediEvil",
+    "cover": 84944,
+    "url": "https://www.igdb.com/games/medievil",
+    "rating": ""
   }
 ]
