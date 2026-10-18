@@ -14955,5 +14955,23 @@
     "cover": 84944,
     "url": "https://www.igdb.com/games/medievil",
     "rating": ""
+  },
+  {
+    "airtableId": "recQzqRUkwpNeEK8U",
+    "title": "Rez Infinite",
+    "support": [
+      "Steam Frame"
+    ],
+    "genre": [
+      "Rail shooter"
+    ],
+    "date": "2026-10-17",
+    "completed": true,
+    "igdbId": 19746,
+    "slug": "rez-infinite",
+    "igdbName": "Rez Infinite",
+    "cover": 353388,
+    "url": "https://www.igdb.com/games/rez-infinite",
+    "rating": 91.5
   }
 ]
