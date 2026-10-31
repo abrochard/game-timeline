@@ -14973,5 +14973,23 @@
     "cover": 353388,
     "url": "https://www.igdb.com/games/rez-infinite",
     "rating": 91.5
+  },
+  {
+    "airtableId": "recoNMLm1obJuVht1",
+    "title": "Citizen Sleeper",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Visual Novel"
+    ],
+    "date": "2026-10-30",
+    "completed": true,
+    "igdbId": 152271,
+    "slug": "citizen-sleeper",
+    "igdbName": "Citizen Sleeper",
+    "cover": 232745,
+    "url": "https://www.igdb.com/games/citizen-sleeper",
+    "rating": 80.0
   }
 ]
