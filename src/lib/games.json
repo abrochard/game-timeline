@@ -2539,7 +2539,7 @@
     "igdbId": 748,
     "slug": "hitman-2-silent-assassin",
     "igdbName": "Hitman 2: Silent Assassin",
-    "cover": 79553,
+    "cover": 619419,
     "url": "https://www.igdb.com/games/hitman-2-silent-assassin",
     "rating": 77.0
   },
@@ -14181,6 +14181,24 @@
     "rating": ""
   },
   {
+    "airtableId": "recYwUag0XqDb9qAT",
+    "title": "La Qu\u00eate de l'Eau",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Point'n'click"
+    ],
+    "date": "",
+    "completed": true,
+    "igdbId": 428197,
+    "slug": "la-quete-de-leau",
+    "igdbName": "La Qu\u00eate de l'Eau",
+    "cover": 620927,
+    "url": "https://www.igdb.com/games/la-quete-de-leau",
+    "rating": ""
+  },
+  {
     "airtableId": "recWDUvS38lF8AfPG",
     "title": "Pok\u00e9mon Go",
     "support": [
@@ -14991,5 +15009,23 @@
     "cover": 232745,
     "url": "https://www.igdb.com/games/citizen-sleeper",
     "rating": 80.0
+  },
+  {
+    "airtableId": "recjAK93igfcprPkE",
+    "title": "Grand Theft Auto V",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Open World"
+    ],
+    "date": "2026-11-06",
+    "completed": "",
+    "igdbId": 334647,
+    "slug": "grand-theft-auto-v-enhanced--3",
+    "igdbName": "Grand Theft Auto V Enhanced",
+    "cover": 443628,
+    "url": "https://www.igdb.com/games/grand-theft-auto-v-enhanced--3",
+    "rating": ""
   }
 ]
