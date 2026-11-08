@@ -15027,5 +15027,23 @@
     "cover": 443628,
     "url": "https://www.igdb.com/games/grand-theft-auto-v-enhanced--3",
     "rating": ""
+  },
+  {
+    "airtableId": "reczOFbjAV3H5jAkV",
+    "title": "Sonic Advance",
+    "support": [
+      "GBA"
+    ],
+    "genre": [
+      "2D platform"
+    ],
+    "date": "2026-11-07",
+    "completed": true,
+    "igdbId": 6283,
+    "slug": "sonic-advance",
+    "igdbName": "Sonic Advance",
+    "cover": 86456,
+    "url": "https://www.igdb.com/games/sonic-advance",
+    "rating": 79.0
   }
 ]
