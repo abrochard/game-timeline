@@ -11423,7 +11423,7 @@
     "igdbId": 26820,
     "slug": "blasphemous",
     "igdbName": "Blasphemous",
-    "cover": 514423,
+    "cover": 622116,
     "url": "https://www.igdb.com/games/blasphemous",
     "rating": 78.25
   },
@@ -15045,5 +15045,21 @@
     "cover": 86456,
     "url": "https://www.igdb.com/games/sonic-advance",
     "rating": 79.0
+  },
+  {
+    "airtableId": "recD2ekEs68tvCbX9",
+    "title": "Scritchy Scratchy",
+    "support": [
+      "Android"
+    ],
+    "genre": "",
+    "date": "2026-11-10",
+    "completed": true,
+    "igdbId": 371567,
+    "slug": "scritchy-scratchy",
+    "igdbName": "Scritchy Scratchy",
+    "cover": 563156,
+    "url": "https://www.igdb.com/games/scritchy-scratchy",
+    "rating": ""
   }
 ]
