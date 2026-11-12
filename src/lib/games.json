@@ -9203,7 +9203,9 @@
     "support": [
       "PC"
     ],
-    "genre": "",
+    "genre": [
+      "Auto-Battler"
+    ],
     "date": "2022-01-25",
     "completed": true,
     "igdbId": 146641,
@@ -13185,7 +13187,7 @@
     "igdbId": 294041,
     "slug": "marvel-rivals",
     "igdbName": "Marvel Rivals",
-    "cover": 610286,
+    "cover": 623039,
     "url": "https://www.igdb.com/games/marvel-rivals",
     "rating": 78.5
   },
@@ -15060,6 +15062,24 @@
     "igdbName": "Scritchy Scratchy",
     "cover": 563156,
     "url": "https://www.igdb.com/games/scritchy-scratchy",
+    "rating": ""
+  },
+  {
+    "airtableId": "rec4mOrmgp8UxvuKp",
+    "title": "How Many Dudes?",
+    "support": [
+      "Android"
+    ],
+    "genre": [
+      "Auto-Battler"
+    ],
+    "date": "2026-11-12",
+    "completed": true,
+    "igdbId": 369765,
+    "slug": "how-many-dudes",
+    "igdbName": "How Many Dudes?",
+    "cover": 562146,
+    "url": "https://www.igdb.com/games/how-many-dudes",
     "rating": ""
   }
 ]
