@@ -15081,5 +15081,21 @@
     "cover": 562146,
     "url": "https://www.igdb.com/games/how-many-dudes",
     "rating": ""
+  },
+  {
+    "airtableId": "rec3cqGuavq6Y0t0G",
+    "title": "Zone of the Enders",
+    "support": [
+      "PS2"
+    ],
+    "genre": "",
+    "date": "2026-11-13",
+    "completed": true,
+    "igdbId": 1472,
+    "slug": "zone-of-the-enders",
+    "igdbName": "Zone of the Enders",
+    "cover": 101112,
+    "url": "https://www.igdb.com/games/zone-of-the-enders",
+    "rating": ""
   }
 ]
