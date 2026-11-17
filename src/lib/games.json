@@ -15071,7 +15071,8 @@
       "Android"
     ],
     "genre": [
-      "Auto-Battler"
+      "Auto-Battler",
+      "Roguelike"
     ],
     "date": "2026-11-12",
     "completed": true,
@@ -15096,6 +15097,24 @@
     "igdbName": "Zone of the Enders",
     "cover": 101112,
     "url": "https://www.igdb.com/games/zone-of-the-enders",
+    "rating": ""
+  },
+  {
+    "airtableId": "reczOmyngUtthlWKq",
+    "title": "Slots & Daggers",
+    "support": [
+      "Android"
+    ],
+    "genre": [
+      "Roguelike"
+    ],
+    "date": "2026-11-16",
+    "completed": true,
+    "igdbId": 356904,
+    "slug": "slots-and-daggers",
+    "igdbName": "Slots & Daggers",
+    "cover": 494680,
+    "url": "https://www.igdb.com/games/slots-and-daggers",
     "rating": ""
   }
 ]
