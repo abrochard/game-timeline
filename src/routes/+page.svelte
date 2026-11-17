@@ -1,14 +1,14 @@
 <script>
- import GamesJSON from '$lib/games.json';
- import Game from '$lib/Game.svelte';
- import ShuffleIcon from '$lib/ShuffleIcon.svelte';
+ import GamesJSON from '#lib/games.json';
+ import Game from '#lib/Game.svelte';
+ import ShuffleIcon from '#lib/ShuffleIcon.svelte';
  import {
    Shuffle,
    SortAlphaDesc,
    SortAlphaAsc,
    SortPlayedDateAsc,
    SortPlayedDateDesc
- } from '$lib/sort.js';
+ } from '#lib/sort.js';
 
  const narrow = window.screen.width < 700;
 

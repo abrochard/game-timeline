@@ -1,7 +1,7 @@
 <script>
- import Games from '$lib/games.json';
- import Game from '$lib/Game.svelte';
- import { Shuffle } from '$lib/sort.js';
+ import Games from '#lib/games.json';
+ import Game from '#lib/Game.svelte';
+ import { Shuffle } from '#lib/sort.js';
  import confetti from 'canvas-confetti';
 
  let total = $state(25);

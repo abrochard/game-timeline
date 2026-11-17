@@ -1,8 +1,8 @@
 <script>
- import Games from '$lib/games.json';
- import Game from '$lib/Game.svelte';
+ import Games from '#lib/games.json';
+ import Game from '#lib/Game.svelte';
  import { onMount } from 'svelte';
- import { Shuffle } from '$lib/sort.js';
+ import { Shuffle } from '#lib/sort.js';
 
  const Total = 8;
 
