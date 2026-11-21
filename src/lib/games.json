@@ -15116,5 +15116,57 @@
     "cover": 494680,
     "url": "https://www.igdb.com/games/slots-and-daggers",
     "rating": ""
+  },
+  {
+    "airtableId": "recgX6tSAEiQM1Zef",
+    "title": "The Binding of Isaac: Rebirth",
+    "support": [
+      "PC"
+    ],
+    "genre": [
+      "Roguelike"
+    ],
+    "date": "2026-11-18",
+    "completed": true,
+    "igdbId": 7789,
+    "slug": "the-binding-of-isaac-rebirth",
+    "igdbName": "The Binding of Isaac: Rebirth",
+    "cover": 480506,
+    "url": "https://www.igdb.com/games/the-binding-of-isaac-rebirth",
+    "rating": 95.0
+  },
+  {
+    "airtableId": "recNJI2HAHl2VAwFV",
+    "title": "Dig! Dig! Dino!",
+    "support": [
+      "Playdate"
+    ],
+    "genre": "",
+    "date": "2026-11-19",
+    "completed": true,
+    "igdbId": 340847,
+    "slug": "dig-dig-dino",
+    "igdbName": "Dig! Dig! Dino!",
+    "cover": 452301,
+    "url": "https://www.igdb.com/games/dig-dig-dino",
+    "rating": ""
+  },
+  {
+    "airtableId": "recc5v7m5zCI1YB9k",
+    "title": "Fulcrum Defender",
+    "support": [
+      "Playdate"
+    ],
+    "genre": [
+      "Arcade"
+    ],
+    "date": "2026-11-20",
+    "completed": true,
+    "igdbId": 340846,
+    "slug": "fulcrum-defender",
+    "igdbName": "Fulcrum Defender",
+    "cover": 452326,
+    "url": "https://www.igdb.com/games/fulcrum-defender",
+    "rating": ""
   }
 ]
